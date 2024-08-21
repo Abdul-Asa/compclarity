@@ -38,13 +38,14 @@ export default function JobRow({
       return;
     }
     sendGAEvent("event", "user_data", {
-      event_name: "track_job",
+      event_type: "track_job",
       value: 1,
       job_id: job.jobId,
       job_title: job.title,
       company: job.company.name,
       job_location: job.city,
       job_level: job.level,
+      job_posted: job.addedDate,
     });
   };
 
@@ -107,13 +108,21 @@ export default function JobRow({
               onClick={(e) => {
                 e.stopPropagation();
                 sendGAEvent("event", "user_data", {
-                  event_name: "apply",
+                  event_type: "apply",
                   value: 1,
                   job_id: job.jobId,
                   job_title: job.title,
                   company: job.company.name,
                   job_location: job.city,
                   job_level: job.level,
+                  job_posted: job.addedDate,
+                });
+                sendGAEvent("event", "job_apply", {
+                  value: 1,
+                  job_id: job.jobId,
+                  job_title: job.title,
+                  company: job.company.name,
+                  job_posted: job.addedDate,
                 });
               }}
             >

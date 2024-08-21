@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache"
 import { formatter, memoize } from "./utils"
 import { URLSearchParams } from "url"
 
-const API_URL = process.env.API_V2_URL || ""
+const API_URL = API_URL || ""
 const OFFERS_API = API_URL + "/offers"
 const FINANCE_API = API_URL + "/finance"
 const JOBS_API = API_URL + "/jobs"
