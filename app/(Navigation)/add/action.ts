@@ -14,7 +14,7 @@ export async function submitFormData(
   await setTimeout(500)
 
   try {
-    const response = await fetch(API_UPLOAD || "", {
+    const response = await fetch(process.env.API_UPLOAD || "", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

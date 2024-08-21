@@ -106,18 +106,7 @@ export default function OfferRow({
               <span className="text-gray-900">
                 {offer.compDetails?.totalComp}
               </span>
-              {offer.verified ? (
-                <>
-                  <a
-                    tabIndex={0}
-                    className={`verified${idx} cursor-pointer`}
-                    data-tooltip-html="This offer has been manually<br/> verified via an offer letter"
-                  >
-                    <VerifiedSvg />
-                  </a>
-                  <Tooltip anchorSelect={`.verified${idx}`} />
-                </>
-              ) : null}
+              {offer.verified ? <VerifiedSvg /> : null}
             </div>
             <span className="text-xs"> {getMinimizedOfferStr()}</span>
           </a>
