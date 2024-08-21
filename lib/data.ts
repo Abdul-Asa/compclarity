@@ -102,7 +102,7 @@ export async function fetchAllFinanceOffersByCompany(
 
 export async function fetchOffer(id: string): Promise<Offer> {
   const apiOffer: Offer = await fetch(
-    `${API_URL}/offers/${id}`
+    `${process.env.API_V2_URL}/offers/${id}`
   ).then((res) => res.json())
 
   const offer = formatOffer(apiOffer)
@@ -111,7 +111,7 @@ export async function fetchOffer(id: string): Promise<Offer> {
 }
 
 export async function fetchCompanyByName(name: string): Promise<Company> {
-  const apiUrl = `${API_URL}/company?name=${name}`;
+  const apiUrl = `${process.env.API_V2_URL}/company?name=${name}`;
   try {
       const companies: Company[] = await fetch(apiUrl).then((res) => res.json());
 
@@ -130,7 +130,7 @@ export async function fetchCompanyByName(name: string): Promise<Company> {
 
 export async function fetchFinanceOffer(id: string): Promise<Offer> {
   const apiOffer: Offer = await fetch(
-    `${API_URL}/finance/offer/${id}`
+    `${process.env.API_V2_URL}/finance/offer/${id}`
   ).then((res) => res.json())
 
   const offer = formatOffer(apiOffer)
@@ -284,7 +284,7 @@ async function fetchApiWithParamsForCompanyJobs(
 
 export async function fetchJob(id: string): Promise<Job> {
   const apiJob: Job = await fetch(
-    `${API_URL}/jobs/${id}`
+    `${process.env.API_V2_URL}/jobs/${id}`
   ).then((res) => res.json())
 
   const job = formatJob(apiJob)
