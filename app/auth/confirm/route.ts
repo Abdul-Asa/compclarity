@@ -4,6 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 // Figure out how Amplify handles Next.js api routes
+// Add localhost to the allowed origins in the Supabase settings
 export async function GET(request: NextRequest) {
   console.log(request);
   const { searchParams } = new URL(request.url);
