@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 
+// Figure out how Amplify handles Next.js api routes
 export async function GET(request: NextRequest) {
   console.log(request);
   const { searchParams } = new URL(request.url);
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
     }
 
     redirectTo.pathname = "/error";
-    const response = NextResponse.redirect(redirectTo);
+    const response = NextResponse.redirect("https://compclarity.com/404");
 
     console.log(response);
     return response;
