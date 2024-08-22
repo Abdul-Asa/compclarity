@@ -66,9 +66,7 @@ export async function forgotPassword(formData: ForgotPasswordSchema) {
   const supabase = createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
     redirectTo:
-      process.env.NODE_ENV === "production"
-        ? "https://compclarity.com/password-reset"
-        : "http://localhost:3000/password-reset",
+      "https://compclarity.com/password-reset"
   });
 
   revalidatePath("/", "layout");
