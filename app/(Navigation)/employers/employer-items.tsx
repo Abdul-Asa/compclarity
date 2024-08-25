@@ -8,13 +8,15 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export const Heading = () => {
   return (
@@ -137,16 +139,6 @@ export const Features = () => {
 };
 
 export const ContactForm = () => {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the email to your backend
-    console.log("Submitted email:", email);
-    // Reset the email input
-    setEmail("");
-  };
-
   return (
     <section
       id="contact"
@@ -161,12 +153,13 @@ export const ContactForm = () => {
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
         Get in Touch to Learn How You Can Reach Top Talent
       </h2>
-      <form onSubmit={handleSubmit} className="flex justify-center  gap-4">
-        <Input type="email" placeholder="Email" className="w-80" />
-        <Button type="submit" className="text-white bg-emerald-700">
-          Submit
-        </Button>
-      </form>
+
+      <Link
+        href="mailto:contact@compclarity.com"
+        className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}
+      >
+        Submit
+      </Link>
     </section>
   );
 };
