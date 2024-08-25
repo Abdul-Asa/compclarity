@@ -1,0 +1,50 @@
+{
+  "jobs": [
+    {
+      "title": "Senior Software Engineer",
+      "description": "Join our innovative team and work on cutting-edge projects!",
+      "city": "London",
+      "countryCode": "UK",
+      "company": {
+        "name": "TechCorp",
+        "domain": "techcorp.com"
+      },
+      "level": "Senior",
+      "addedDate": "2023-05-15T00:00:00.000Z",
+      "jobId": "sponsored-001",
+      "link": "https://techcorp.com/careers",
+      "industry": "Technology"
+    },
+    {
+      "title": "Data Scientist",
+      "description": "Help us unlock insights from big data!",
+      "city": "Berlin",
+      "countryCode": "DE",
+      "company": {
+        "name": "DataDynamics",
+        "domain": "datadynamics.com"
+      },
+      "level": "Mid-Level",
+      "addedDate": "2023-05-14T00:00:00.000Z",
+      "jobId": "sponsored-002",
+      "link": "https://datadynamics.com/jobs",
+      "industry": "Technology"
+    },
+    {
+      "title": "Product Manager",
+      "description": "Drive the vision for our next-gen products!",
+      "city": "Amsterdam",
+      "countryCode": "NL",
+      "company": {
+        "name": "InnovateCo",
+        "domain": "innovateco.com"
+      },
+      "level": "Senior",
+      "addedDate": "2023-05-13T00:00:00.000Z",
+      "jobId": "sponsored-003",
+      "link": "https://innovateco.com/careers",
+      "industry": "Technology"
+    }
+  ],
+  "totalResults": 3
+}

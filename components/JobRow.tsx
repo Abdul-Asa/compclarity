@@ -7,20 +7,24 @@ import {
   ChevronUpIcon,
   Forward,
   Briefcase,
+  Star,
 } from "lucide-react";
 import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { sendGAEvent } from "@next/third-parties/google";
+import { Tooltip } from "react-tooltip";
 
 export default function JobRow({
   job,
   idx,
   signedIn,
+  isSponsored = false,
 }: {
   job: Job;
   idx: number;
   signedIn: boolean;
+  isSponsored?: boolean;
 }) {
   const [expanded, toggleExpanded] = useState(false);
 
@@ -92,8 +96,22 @@ export default function JobRow({
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <div className="line-clamp-3 text-gray-900 md:line-clamp-1">
-              {job.title}
+            <div className="flex items-center">
+              <div className="line-clamp-3 text-gray-900 md:line-clamp-1">
+                {job.title}
+              </div>
+              {isSponsored && (
+                <>
+                  <a
+                    tabIndex={0}
+                    className={`sponsored${idx} cursor-pointer ml-1`}
+                    data-tooltip-html="This is a sponsored job listing"
+                  >
+                    <Star className="h-4 w-4 text-yellow-500" />
+                  </a>
+                  <Tooltip anchorSelect={`.sponsored${idx}`} />
+                </>
+              )}
             </div>
             <span className="text-xs">{job.level}</span>
           </div>
@@ -145,7 +163,7 @@ export default function JobRow({
       </tr>
 
       {expanded ? (
-        <tr className="bg-white">
+        <tr>
           <td colSpan={5} className="p-3">
             <JobRowContent
               expanded={expanded}

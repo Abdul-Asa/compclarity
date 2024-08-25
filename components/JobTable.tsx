@@ -3,14 +3,17 @@
 import { JobsApiResponse } from "@/lib/types";
 import PaginationControl from "./PaginationControl";
 import JobRow from "./JobRow";
+import mockJobsResponse from "../lib/mock-data.json";
 
 export default function JobTable({
   jobsResponse,
   signedIn,
 }: {
-    jobsResponse: JobsApiResponse;
-    signedIn: boolean;
+  jobsResponse: JobsApiResponse;
+  signedIn: boolean;
 }) {
+  const sponsoredJobs = mockJobsResponse;
+
   return (
     <div className="flex flex-col justify-center items-center w-full lg:w-2/3 px-4">
       <table className="text-sm text-gray-500 text-center w-full">
@@ -46,6 +49,15 @@ export default function JobTable({
           </tr>
         </thead>
         <tbody className="text-sm">
+          {sponsoredJobs.jobs.map((job, jobIdx) => (
+            <JobRow
+              job={{ ...job, addedDate: new Date(job.addedDate) }}
+              idx={jobIdx}
+              key={`sponsored-${jobIdx}`}
+              signedIn={signedIn}
+              isSponsored
+            />
+          ))}
           {jobsResponse.jobs.map((job, jobIdx) => (
             <JobRow job={job} idx={jobIdx} key={jobIdx} signedIn={signedIn} />
           ))}
