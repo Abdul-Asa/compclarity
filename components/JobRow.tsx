@@ -163,7 +163,7 @@ export default function JobRow({
       </tr>
 
       {expanded ? (
-        <tr>
+        <tr className="bg-white">
           <td colSpan={5} className="p-3">
             <JobRowContent
               expanded={expanded}

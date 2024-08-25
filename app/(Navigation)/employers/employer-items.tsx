@@ -70,7 +70,7 @@ export const Stats = () => {
       className="p-5 mt-8 flex justify-center items-center flex-col gap-3 bg-white md:gap-8 border-2  border-black shadow-[8px_8px_0px_#047857]"
     >
       <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
-        Our <span className="text-emerald-700">audience</span>
+        Our audience
       </h1>
       <div className="flex flex-wrap justify-center gap-8 md:gap-16">
         {coolStats.map((stat, index) => (
@@ -174,7 +174,7 @@ export const ContactForm = () => {
         href="mailto:contact@compclarity.com"
         className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}
       >
-        Submit
+        Contact Us
       </Link>
     </section>
   );
