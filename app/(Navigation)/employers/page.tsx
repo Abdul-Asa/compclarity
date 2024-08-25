@@ -24,6 +24,7 @@ export default function EmployerPage() {
         <Heading />
         <Stats />
       </div>
+      <Separator className="mb-10" />
       <Features />
       <ContactForm />
       <Separator className="my-10" />
