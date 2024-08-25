@@ -6,7 +6,7 @@ import {
   LayoutDashboardIcon,
   PilcrowLeftIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/accordion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion"; // Add this import
 
 export const Heading = () => {
   return (
@@ -61,7 +63,12 @@ export const Stats = () => {
     },
   ];
   return (
-    <section className="p-5 mt-8 flex justify-center items-center flex-col gap-3 md:gap-8">
+    <motion.section
+      drag
+      dragMomentum={false}
+      dragConstraints={{ top: 4, left: 4, right: 4, bottom: 4 }}
+      className="p-5 mt-8 flex justify-center items-center flex-col gap-3 bg-white md:gap-8 border-2  border-black shadow-[8px_8px_0px_#047857]"
+    >
       <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
         Our <span className="text-emerald-700">audience</span>
       </h1>
@@ -78,7 +85,7 @@ export const Stats = () => {
           </div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -110,10 +117,19 @@ export const Features = () => {
     },
   ];
 
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
   return (
-    <div className="flex flex-col size-full items-center justify-center gap-5 p-6">
+    <motion.div
+      ref={ref} // Attach the ref
+      initial={{ y: 50, opacity: 0 }} // Initial state
+      animate={inView ? { y: 0, opacity: 1 } : {}} // Animate when in view
+      transition={{ duration: 0.5 }} // Transition settings
+      className="flex flex-col size-full items-center justify-center gap-5 p-6"
+    >
       <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
-        Our <span className="text-emerald-700">Offering</span>
+        What we <span className="text-emerald-700 inline">Offer</span>
       </h1>
       <h2 className="text-wrap mx-10 text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
         The most ambitious students and early-career professionals from Russell
@@ -121,23 +137,24 @@ export const Features = () => {
         companies. Being featured here means top emerging talent will have you
         on their radar.
       </h2>
-      <div className="grid grid-cols-1 border mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
+      <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
         {featureItems.map((item, index) => (
-          <div key={index} className="flex flex-col p-6 min-h-60 ">
-            <div className="flex flex-col md:flex-row gap-4 ">
+          <div key={index} className="flex flex-col h-full p-6 min-h-[309px]">
+            <div className="flex flex-col h-full justify-between items-center md:flex-row gap-4 ">
               {item.icon}
               <h1 className="flex-1 text-wrap text-4xl font-bold">
                 {item.title}
               </h1>
             </div>
-            <p className="mt-4 text-gray-600">{item.description}</p>
+            <p className="mt-4 h-full text-gray-600">{item.description}</p>
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
+//Edit this
 export const ContactForm = () => {
   return (
     <section
@@ -153,7 +170,6 @@ export const ContactForm = () => {
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
         Get in Touch to Learn How You Can Reach Top Talent
       </h2>
-
       <Link
         href="mailto:contact@compclarity.com"
         className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}
