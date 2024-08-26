@@ -128,10 +128,7 @@ export const Features = () => {
         What we offer
       </h1>
       <h2 className="text-wrap mx-10 text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        The most ambitious students and early-career professionals from Russell
-        Group universities visit CompClarity to explore opportunities at leading
-        companies. Being featured here means top emerging talent will have you
-        on their radar.
+      Ambitious students and early-career professionals use CompClarity to explore opportunities at leading companies. Advertising your job listings here ensures that top emerging talent will have you on their radar.
       </h2>
       <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
         {featureItems.map((item, index) => (
