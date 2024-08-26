@@ -73,7 +73,7 @@ export const JobRowContent = ({
             </div>
             <div className="flex flex-col text-xs">
               <CopyToClipboard
-                text={`http://compclarity.com/jobs/${job.jobId}`}
+                text={`https://compclarity.com/jobs/${job.jobId}`}
                 onCopy={() => {
                   toast({
                     title: "Link copied to clipboard.",
