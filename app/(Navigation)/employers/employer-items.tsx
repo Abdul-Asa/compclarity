@@ -4,6 +4,8 @@ import {
   BarChart,
   CircleArrowUp,
   LayoutDashboardIcon,
+  Users,
+  CircleDollarSign,
   PilcrowLeftIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -36,7 +38,7 @@ export const Heading = () => {
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
         Streamline your hiring process and discover exceptional early career candidates with
-        ease. We connect you with the right talent, so you can focus on the more exciting stuff.
+        ease. We showcase your job listings to the right talent, so you can focus on the more exciting stuff.
       </h2>
     </section>
   );
@@ -50,7 +52,7 @@ export const Stats = () => {
       title: "Monthly Unique Visitors",
     },
     {
-      num: 73,
+      num: 71,
       suffix: "%",
       title: "Click-Through Rate (on job posts)",
       disableAnimation: false,
@@ -92,22 +94,22 @@ export const Features = () => {
         "Ensure your job postings stand out by pinning them at the top of our job board, where they'll be seen by thousands of motivated job seekers. Pinned postings receive 3x more applications!",
     },
     {
-      icon: <LayoutDashboardIcon className="size-10 text-emerald-700" />,
-      title: "Analytics",
+      icon: <Users className="size-10 text-emerald-700" />,
+      title: "Find the Right Talent",
       description:
-        "Access detailed analytics on your sponsored listings, including clicks and application rates, enabling you to optimize your recruitment strategy. With our platform, you can ensure that you are always one step ahead in the competitive hiring landscape.",
-    },
-    {
-      icon: <PilcrowLeftIcon className="size-10 text-emerald-700" />,
-      title: "Engage Early-Career Talent",
-      description:
-        "Over 50% of our userbase are students and early-career professionals, making CompClarity the ideal platform to connect with fresh talent eager to bring new ideas and energy to your organization. ",
+        "The majority of CompClarity users are students and early-career professionals, making CompClarity the ideal platform to connect with fresh talent eager to bring new ideas and energy to your organization.",
     },
     {
       icon: <BarChart className="size-10 text-emerald-700" />,
-      title: "Wide Demographic",
+      title: "Analytics",
       description:
-        "Our advanced analytics and reporting tools provide you with deep insights into your hiring processes. You can track performance metrics, analyze trends, and make data-driven decisions to enhance your recruitment strategy.",
+        "Access detailed analytics on your sponsored listings, including clicks and application rates. With our platform, you can ensure that you are always one step ahead in the competitive hiring landscape.",
+    },
+    {
+      icon: <CircleDollarSign className="size-10 text-emerald-700" />,
+      title: "Cost-Effective Recruitment",
+      description:
+        "Maximize your recruitment budget by investing in sponsored listings that offer higher ROI through increased engagement and application rates.",
     },
   ];
 
@@ -168,7 +170,7 @@ export const ContactForm = () => {
         href="mailto:contact@compclarity.com"
         className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}
       >
-        Contact Us
+        Contact
       </Link>
     </section>
   );
@@ -195,7 +197,7 @@ export const FAQ = () => {
     {
       question: "Which locations do you support?",
       answer:
-        "Currently, we support only the UK and European regions.",
+        "Currently, CompClarity only supports the UK for job postings.",
     }
   ];
   return (
