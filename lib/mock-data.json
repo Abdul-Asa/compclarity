@@ -6,13 +6,13 @@
       "city": "London",
       "countryCode": "UK",
       "company": {
-        "name": "TechCorp",
-        "domain": "techcorp.com"
+        "name": "Acme Corp",
+        "domain": "acme.com"
       },
       "level": "Senior",
       "addedDate": "2023-05-15T00:00:00.000Z",
       "jobId": "sponsored-001",
-      "link": "https://techcorp.com/careers",
+      "link": "https://acme.com/careers",
       "industry": "Technology"
     },
     {

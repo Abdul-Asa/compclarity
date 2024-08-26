@@ -1,16 +1,8 @@
 "use client";
 import CountUp from "@/components/ui/count-up";
-import {
-  BarChart,
-  CircleArrowUp,
-  LayoutDashboardIcon,
-  Users,
-  CircleDollarSign,
-  PilcrowLeftIcon,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { BarChart, CircleArrowUp, Users, CircleDollarSign } from "lucide-react";
+import { useRef } from "react";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
@@ -19,8 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion"; // Add this import
+import { motion, useInView } from "framer-motion";
 
 export const Heading = () => {
   return (
@@ -37,8 +28,9 @@ export const Heading = () => {
         .
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Streamline your hiring process and discover exceptional early career candidates with
-        ease. We showcase your job listings to the right talent, so you can focus on the more exciting stuff.
+        Streamline your hiring process and discover exceptional early career
+        candidates with ease. We showcase your job listings to the right talent,
+        so you can focus on the more exciting stuff.
       </h2>
     </section>
   );
@@ -56,7 +48,7 @@ export const Stats = () => {
       suffix: "%",
       title: "Click-Through Rate (on job posts)",
       disableAnimation: false,
-    }
+    },
   ];
   return (
     <motion.section
@@ -118,17 +110,20 @@ export const Features = () => {
 
   return (
     <motion.div
-      ref={ref} // Attach the ref
-      initial={{ y: 50, opacity: 0 }} // Initial state
-      animate={inView ? { y: 0, opacity: 1 } : {}} // Animate when in view
-      transition={{ duration: 0.5 }} // Transition settings
+      ref={ref}
+      initial={{ y: 50, opacity: 0 }}
+      animate={inView ? { y: 0, opacity: 1 } : {}}
+      transition={{ duration: 0.5 }}
       className="flex flex-col size-full items-center justify-center gap-5 p-6"
     >
       <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
         What we offer
       </h1>
       <h2 className="text-wrap mx-10 text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-      Ambitious students and early-career professionals use CompClarity to explore opportunities at leading companies. Advertising your job listings here ensures that top emerging talent will have you on their radar.
+        Ambitious students and early-career professionals use CompClarity to
+        explore opportunities at leading companies. Advertising your job
+        listings here ensures that top emerging talent will have you on their
+        radar.
       </h2>
       <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
         {featureItems.map((item, index) => (
@@ -161,7 +156,7 @@ export const ContactForm = () => {
         with us.
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-      Don't let your perfect candidate slip away, get in touch today.
+        Don't let your perfect candidate slip away, get in touch today.
       </h2>
       <Link
         href="mailto:contact@compclarity.com"
@@ -176,8 +171,7 @@ export const ContactForm = () => {
 export const FAQ = () => {
   const faqItems = [
     {
-      question:
-        "What types of roles are best suited for sponsored listings?",
+      question: "What types of roles are best suited for sponsored listings?",
       answer:
         "Sponsored listings are particularly effective for reaching early-career talent, as our user base is primarily composed of students and recent graduates in STEM or finance related fields.",
     },
@@ -193,9 +187,8 @@ export const FAQ = () => {
     },
     {
       question: "Which locations do you support?",
-      answer:
-        "Currently, CompClarity only supports the UK for job postings.",
-    }
+      answer: "Currently, CompClarity only supports the UK for job postings.",
+    },
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">

@@ -4,6 +4,10 @@ import { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 
 // Edit the metadata for the page
+// Redesign contact form
+// Redefine routes
+// Make the Inview a separate component
+// Add the onclick function to CTA badge
 export const metadata: Metadata = {
   title: "CompClarity - Tech Salaries in the UK and EU",
   description:

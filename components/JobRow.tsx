@@ -19,14 +19,13 @@ export default function JobRow({
   job,
   idx,
   signedIn,
-  isSponsored = false,
 }: {
   job: Job;
   idx: number;
   signedIn: boolean;
-  isSponsored?: boolean;
 }) {
   const [expanded, toggleExpanded] = useState(false);
+  const isSponsored = job.jobId.startsWith("sponsored-");
 
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
 
@@ -75,6 +74,11 @@ export default function JobRow({
           )}
         </td>
         <td className="px-1 py-4">
+          {isSponsored ? (
+            <p className="text-[8px] md:text-xs">Promoted</p>
+          ) : null}
+        </td>
+        <td className=" py-4">
           <div>
             <div className="flex flex-col items-center justify-center">
               <a
@@ -100,18 +104,6 @@ export default function JobRow({
               <div className="line-clamp-3 text-gray-900 md:line-clamp-1">
                 {job.title}
               </div>
-              {isSponsored && (
-                <>
-                  <a
-                    tabIndex={0}
-                    className={`sponsored${idx} cursor-pointer ml-1`}
-                    data-tooltip-html="Promoted"
-                  >
-                    <Star className="h-4 w-4 text-yellow-500" />
-                  </a>
-                  <Tooltip anchorSelect={`.sponsored${idx}`} />
-                </>
-              )}
             </div>
             <span className="text-xs">{job.level}</span>
           </div>
@@ -164,7 +156,7 @@ export default function JobRow({
 
       {expanded ? (
         <tr className="bg-white">
-          <td colSpan={5} className="p-3">
+          <td colSpan={6} className="p-3">
             <JobRowContent
               expanded={expanded}
               job={job}
