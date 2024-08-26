@@ -82,7 +82,14 @@ const Footer = () => {
             onClick={() => trackFooter("email")}
           >
             contact@compclarity.com
-          </a>
+          </a> | {" "}
+          <a
+            href="/employers"
+            className="hover:underline"
+            onClick={() => trackFooter("employers")}
+          >
+            Employers
+          </a> 
         </small>
         <small>
           Logos provided by{" "}

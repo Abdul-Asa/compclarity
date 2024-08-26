@@ -105,7 +105,7 @@ export default function JobRow({
                   <a
                     tabIndex={0}
                     className={`sponsored${idx} cursor-pointer ml-1`}
-                    data-tooltip-html="This is a sponsored job listing"
+                    data-tooltip-html="Promoted"
                   >
                     <Star className="h-4 w-4 text-yellow-500" />
                   </a>

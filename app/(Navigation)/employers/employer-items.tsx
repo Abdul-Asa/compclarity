@@ -35,9 +35,8 @@ export const Heading = () => {
         .
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Streamline your hiring process and discover exceptional candidates with
-        ease. We connect you with the right talent, so you can focus on what
-        really matters – growing your business.
+        Streamline your hiring process and discover exceptional early career candidates with
+        ease. We connect you with the right talent, so you can focus on the more exciting stuff.
       </h2>
     </section>
   );
@@ -46,21 +45,16 @@ export const Heading = () => {
 export const Stats = () => {
   const coolStats = [
     {
-      num: 90,
-      suffix: "%",
-      title: "Conversion rate",
-      disableAnimation: false,
-    },
-    {
-      num: 130,
-      suffix: "k",
-      title: "Candidates to choose from",
-    },
-    {
-      num: 45000,
+      num: 20000,
       suffix: "+",
-      title: "Monthly active users",
+      title: "Monthly Unique Visitors",
     },
+    {
+      num: 73,
+      suffix: "%",
+      title: "Click-Through Rate (on job posts)",
+      disableAnimation: false,
+    }
   ];
   return (
     <motion.section
@@ -93,27 +87,27 @@ export const Features = () => {
   const featureItems = [
     {
       icon: <CircleArrowUp className="size-10 text-emerald-700" />,
-      title: "Personalized Offers",
+      title: "Increased Visibility",
       description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi vel expedita quam! Id voluptatum et, ad qui quaerat illo nisi odit tempore veritatis laborum assumenda aliquam nemo aliquid quos repudiandae.",
+        "Ensure your job postings stand out by pinning them at the top of our job board, where they'll be seen by thousands of motivated job seekers. Pinned postings receive 3x more applications!",
     },
     {
       icon: <LayoutDashboardIcon className="size-10 text-emerald-700" />,
       title: "Analytics",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, distinctio. vel tempora perferendis natus dolores rerum architecto?",
+        "Access detailed analytics on your sponsored listings, including clicks and application rates, enabling you to optimize your recruitment strategy. With our platform, you can ensure that you are always one step ahead in the competitive hiring landscape.",
     },
     {
       icon: <PilcrowLeftIcon className="size-10 text-emerald-700" />,
-      title: "Salary Benchmarking",
+      title: "Engage Early-Career Talent",
       description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum corrupti sapiente mollitia quod sequi ipsum repellat asperiores obcaecati, temporibus nesciunt aliquam, repellendus, totam ullam fuga tempore! Dolorum, distinctio? Dignissimos, nulla.",
+        "Over 50% of our userbase are students and early-career professionals, making CompClarity the ideal platform to connect with fresh talent eager to bring new ideas and energy to your organization. ",
     },
     {
       icon: <BarChart className="size-10 text-emerald-700" />,
       title: "Wide Demographic",
       description:
-        "Our advanced analytics and reporting tools provide you with deep insights into your hiring processes. You can track performance metrics, analyze trends, and make data-driven decisions to enhance your recruitment strategy. With our platform, you can ensure that you are always one step ahead in the competitive hiring landscape.",
+        "Our advanced analytics and reporting tools provide you with deep insights into your hiring processes. You can track performance metrics, analyze trends, and make data-driven decisions to enhance your recruitment strategy.",
     },
   ];
 
@@ -129,7 +123,7 @@ export const Features = () => {
       className="flex flex-col size-full items-center justify-center gap-5 p-6"
     >
       <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
-        What we <span className="text-emerald-700 inline">Offer</span>
+        What we offer
       </h1>
       <h2 className="text-wrap mx-10 text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
         The most ambitious students and early-career professionals from Russell
@@ -168,7 +162,7 @@ export const ContactForm = () => {
         with us .
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Get in Touch to Learn How You Can Reach Top Talent
+        Get in touch to learn how you can reach top talent
       </h2>
       <Link
         href="mailto:contact@compclarity.com"
