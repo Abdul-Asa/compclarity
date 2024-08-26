@@ -159,10 +159,10 @@ export const ContactForm = () => {
         <span className="inline-block text-emerald-700 transition hover:-translate-y-3">
           Advertise
         </span>{" "}
-        with us .
+        with us.
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Get in touch to learn how you can reach top talent
+      Don't let your perfect candidate slip away, get in touch today.
       </h2>
       <Link
         href="mailto:contact@compclarity.com"
@@ -177,45 +177,26 @@ export const ContactForm = () => {
 export const FAQ = () => {
   const faqItems = [
     {
-      question: "How many people use CompClarity?",
+      question:
+        "What types of roles are best suited for sponsored listings?",
       answer:
-        "1.5 million unique users use CompClarity every month. To put that number into perspective, there's approximately ~8 million tech professionals currently within the US. With one of the highest candidate volumes within tech, CompClarity can get your company brand and opportunities in front of a large segment of the industry.",
+        "Sponsored listings are particularly effective for reaching early-career talent, as our user base is primarily composed of students and recent graduates in STEM or finance related fields.",
     },
     {
-      question:
-        "What experience level are the candidates on the CompClarity platform?",
+      question: "How long will my job listing remain pinned?",
       answer:
-        "CompClarity has the attention of some of the most experienced professionals within the tech industry. 60%+ of CompClarity users are at the second level or above within their company. 27% of users are at the third level or above. 35% of users have greater than 7 years of experience.",
+        "Your job listing will remain pinned at the top of our job board for the duration of the sponsorship period you select. You can choose from various timeframes to suit your hiring needs. Contact us to learn more.",
+    },
+    {
+      question: "Can I sponsor multiple job listings at once?",
+      answer:
+        "Yes, you can sponsor multiple job listings simultaneously. Each listing will be prominently featured at the top of the job board, increasing visibility across your open positions.",
     },
     {
       question: "Which locations do you support?",
       answer:
-        "70% of our users are based out of the United States. While the US is our largest presence, we have significant presences across Canada, Europe, and India. If you'd like to learn more about a particular location, book some time with us here.",
-    },
-    {
-      question: "I have another question.",
-      answer: (
-        <a
-          href="#contact"
-          className="underline decoration-emerald-700"
-          onClick={(e) => {
-            e.preventDefault();
-            const element = document.getElementById("contact");
-            if (element) {
-              const elementRect = element.getBoundingClientRect();
-              const offset = window.innerHeight / 2 - elementRect.height / 2;
-              window.scrollTo({
-                top:
-                  element.getBoundingClientRect().top + window.scrollY - offset,
-                behavior: "smooth",
-              });
-            }
-          }}
-        >
-          Book time with us here.
-        </a>
-      ),
-    },
+        "Currently, we support only the UK and European regions.",
+    }
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
