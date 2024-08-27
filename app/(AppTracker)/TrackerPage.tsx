@@ -14,7 +14,7 @@ export default function TrackerPage() {
 const HeroSection = () => {
   return (
     <section className="mx-auto p-6 md:px-0">
-      <div className="flex w-full flex-col items-center justify-center gap-5 pt-10">
+      <div className="flex w-full flex-col items-center justify-center pt-10">
         <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-2xl font-bold tracking-tight transition lg:text-5xl">
           Track your{" "}
           <span className="inline-block text-emerald-700 transition hover:-translate-y-1">

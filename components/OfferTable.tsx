@@ -11,7 +11,7 @@ export default function OfferTable({
   offersResponse: OfferApiResponse;
 }) {
   return (
-    <div className="flex flex-col justify-center items-center w-full lg:w-2/3 px-4">
+    <div className="flex flex-col justify-center items-center w-full lg:w-2/3 2xl:w-5/6 px-4">
       <table className="text-sm text-gray-500 text-center w-full">
         <thead className="text-gray-700 bg-gray-50 border-b-2">
           <tr>

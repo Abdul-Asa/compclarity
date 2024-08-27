@@ -7,11 +7,13 @@ import {
   ChevronUpIcon,
   Forward,
   Briefcase,
+  Star,
 } from "lucide-react";
 import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { sendGAEvent } from "@next/third-parties/google";
+import { Tooltip } from "react-tooltip";
 
 export default function JobRow({
   job,
@@ -23,6 +25,7 @@ export default function JobRow({
   signedIn: boolean;
 }) {
   const [expanded, toggleExpanded] = useState(false);
+  const isSponsored = job.jobId.startsWith("sponsored-");
 
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
 
@@ -71,6 +74,11 @@ export default function JobRow({
           )}
         </td>
         <td className="px-1 py-4">
+          {isSponsored ? (
+            <p className="text-[8px] md:text-xs">Promoted</p>
+          ) : null}
+        </td>
+        <td className=" py-4">
           <div>
             <div className="flex flex-col items-center justify-center">
               <a
@@ -92,8 +100,10 @@ export default function JobRow({
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <div className="line-clamp-3 text-gray-900 md:line-clamp-1">
-              {job.title}
+            <div className="flex items-center">
+              <div className="line-clamp-3 text-gray-900 md:line-clamp-1">
+                {job.title}
+              </div>
             </div>
             <span className="text-xs">{job.level}</span>
           </div>
@@ -146,7 +156,7 @@ export default function JobRow({
 
       {expanded ? (
         <tr className="bg-white">
-          <td colSpan={5} className="p-3">
+          <td colSpan={6} className="p-3">
             <JobRowContent
               expanded={expanded}
               job={job}
