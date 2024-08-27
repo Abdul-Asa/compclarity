@@ -25,7 +25,7 @@ export default function JobRow({
   signedIn: boolean;
 }) {
   const [expanded, toggleExpanded] = useState(false);
-  const isSponsored = job.isSponsored || false;
+  const SponsoredJob = job.SponsoredJob || false;
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
 
   const handleClick = (e: any) => {
@@ -73,7 +73,7 @@ export default function JobRow({
           )}
         </td>
         <td className="px-1 py-4">
-          {isSponsored ? (
+          {SponsoredJob ? (
             <p className="text-[8px] md:text-xs">Promoted</p>
           ) : null}
         </td>
