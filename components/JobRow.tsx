@@ -25,8 +25,7 @@ export default function JobRow({
   signedIn: boolean;
 }) {
   const [expanded, toggleExpanded] = useState(false);
-  const isSponsored = job.jobId.startsWith("sponsored-");
-
+  const isSponsored = job.isSponsored || false;
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
 
   const handleClick = (e: any) => {
