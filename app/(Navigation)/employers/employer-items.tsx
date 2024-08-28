@@ -21,7 +21,7 @@ export const Heading = () => {
         <span className="inline-block text-emerald-700 transition hover:-translate-y-3">
           Top
         </span>{" "}
-        Talents,{" "}
+        Talent,{" "}
         <span className="inline-block text-emerald-700 transition hover:-translate-y-3">
           Effortlessly{" "}
         </span>
