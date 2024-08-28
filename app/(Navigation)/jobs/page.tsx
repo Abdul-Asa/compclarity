@@ -3,7 +3,6 @@ import JobTableControls from "@/components/JobTableControls";
 import { fetchAllJobs } from "@/lib/data";
 import JobTable from "@/components/JobTable";
 import { createClient } from "@/lib/supabase/server";
-import mockData from "@/lib/mock-data.json";
 
 export const metadata: Metadata = {
   title: "CompClarity - Jobs",
@@ -64,35 +63,17 @@ export default async function JobBoard({
     signedIn = true;
   }
 
-  const jobs =
-    currentPage === 1
-      ? [
-          ...mockData.jobs.map((job) => ({
-            ...job,
-            addedDate: new Date(job.addedDate),
-          })),
-          ...jobsResponse.jobs,
-        ]
-      : jobsResponse.jobs;
-
-  const totalResults =
-    currentPage === 1
-      ? jobsResponse.totalResults + mockData.jobs.length
-      : jobsResponse.totalResults;
-
-  const finalJobsResponse = { jobs, totalResults };
-
   return (
     <div className="flex flex-col justify-center items-center overflow-x-auto">
       <span className="text-center block sm:inline-block px-4 py-2">
         Explore the latest Tech & Finance job openings across the UK
       </span>
       <JobTableControls isCompanyPage={false} />
-      {finalJobsResponse.totalResults === 0 ? (
+      {jobsResponse.totalResults === 0 ? (
         <b className="text-center mb-14 mt-14">No jobs found</b>
       ) : (
         <>
-          <JobTable jobsResponse={finalJobsResponse} signedIn={signedIn} />
+          <JobTable jobsResponse={jobsResponse} signedIn={signedIn} />
         </>
       )}
     </div>

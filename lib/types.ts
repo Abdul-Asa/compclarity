@@ -71,7 +71,8 @@ type Job = {
   jobId: string;
   link: string;
   industry: string;
-}
+  sponsoredJob?: boolean;
+};
 
 type JobsApiResponse = {
   jobs: Job[];
