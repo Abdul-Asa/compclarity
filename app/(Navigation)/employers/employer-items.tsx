@@ -129,10 +129,13 @@ export const Features = () => {
       </h2>
       <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full md:p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
         {featureItems.map((item, index) => (
-          <div key={index} className="flex flex-col h-full p-6 min-h-[309px]">
+          <div
+            key={index}
+            className="flex flex-col h-full p-6 min-h-[309px] text-center md:text-left"
+          >
             <div className="flex flex-col h-full justify-between items-center md:flex-row gap-4 ">
               {item.icon}
-              <h1 className="flex-1 text-wrap text-4xl font-bold">
+              <h1 className="flex-1 text-wrap text-4xl font-bold ">
                 {item.title}
               </h1>
             </div>
