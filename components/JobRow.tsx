@@ -20,7 +20,7 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
       toast({
         title: "Not logged in!",
         description: "Please login to add or manage your applications.",
-        variant: "constructive",
+        variant: "destructive",
       });
       return;
     }
