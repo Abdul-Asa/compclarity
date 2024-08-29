@@ -10,14 +10,14 @@ export const metadata: Metadata = {
     title: "CompClarity",
     description:
       "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-    images: ["/og-image.png"],
+    images: ["/assets/og-image.png"],
   },
   openGraph: {
     title: "CompClarity",
     description:
       "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-    images: ["/og-image.png"],
-  },
+      images: ["/assets/og-image.png"],
+    },
   keywords: [
     "CompClarity",
     "Compensation",
