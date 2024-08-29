@@ -9,9 +9,9 @@ import { Separator } from "@/components/ui/separator";
 // Make the Inview a separate component
 // Add the onclick function to CTA badge
 export const metadata: Metadata = {
-  title: "CompClarity - Tech Salaries in the UK and EU",
+  title: "CompClarity - Employers",
   description:
-    "Your guide to fair pay from day one. Compare tech salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    "Boost your job postings with CompClarity's sponsored listings. Gain top visibility, attract motivated early-career talent, and increase applications efficiently.",
 };
 
 export default function EmployerPage() {

@@ -65,7 +65,7 @@ const MarqueeSection = () => {
     <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white">
       <div className="w-full">
         <h2 className="p-4 text-center font-bold md:text-3xl">
-          400+ community verified salaries from top companies
+          500+ community verified salaries from top companies
         </h2>
       </div>
 
