@@ -8,6 +8,7 @@ import { metadata as metadataConfig } from "@/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
+import { CSPostHogProvider } from "@/components/providers/posthog";
 
 const sg = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const os = Open_Sans({ subsets: ["latin"], variable: "--font-open" });
@@ -25,14 +26,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en">
-      <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-        <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
-          <Navbar user={data.user} />
-          {children}
-          <Footer />
-        </div>
-        <Toaster />
-      </body>
+      <CSPostHogProvider>
+        <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
+          <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
+            <Navbar user={data.user} />
+            {children}
+            <Footer />
+          </div>
+          <Toaster />
+        </body>
+      </CSPostHogProvider>
+
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       <Script
         id="WebSite Structured Data"
