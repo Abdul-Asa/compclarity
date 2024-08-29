@@ -10,7 +10,7 @@ import { updateUser } from "./actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/components/hooks/useToast";
 
 interface AccountFormProps {
   userData: {
@@ -67,27 +67,17 @@ export default function AccountForm({ userData }: AccountFormProps) {
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
           <Input id="firstName" {...register("firstName")} autoComplete="on" />
-          <p className="text-red-500 text-xs min-h-1 my-1">
-            {errors.firstName?.message}
-          </p>
+          <p className="text-red-500 text-xs min-h-1 my-1">{errors.firstName?.message}</p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="lastName">Last Name</Label>
           <Input id="lastName" {...register("lastName")} autoComplete="on" />
-          <p className="text-red-500 text-xs min-h-1 my-1">
-            {errors.lastName?.message}
-          </p>
+          <p className="text-red-500 text-xs min-h-1 my-1">{errors.lastName?.message}</p>
         </div>
       </div>
       <div>
         <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="on"
-          disabled
-          defaultValue={userData.email}
-        />
+        <Input id="email" type="email" autoComplete="on" disabled defaultValue={userData.email} />
       </div>
       <div className="flex flex-row-reverse justify-between pt-10">
         <SpinnerButton state={isSubmitting} type="submit" name="Save Changes" />

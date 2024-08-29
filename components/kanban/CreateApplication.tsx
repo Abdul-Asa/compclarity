@@ -1,13 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CreateApplicationSchema, Offer, Job } from "@/lib/types";
@@ -18,11 +11,8 @@ import { useForm } from "react-hook-form";
 import { createApplicationSchema } from "@/lib/validations/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
-import {
-  createApplicationCard,
-  getApplicationOffer,
-} from "@/app/(AppTracker)/tracker/actions";
-import { toast } from "../ui/use-toast";
+import { createApplicationCard, getApplicationOffer } from "@/app/(AppTracker)/tracker/actions";
+import { toast } from "../hooks/useToast";
 
 export default function CreateApplication() {
   const router = useRouter();
@@ -99,9 +89,7 @@ export default function CreateApplication() {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="my-2 bg-emerald-700 text-lg font-bold text-white">
-          Add Application
-        </Button>
+        <Button className="my-2 bg-emerald-700 text-lg font-bold text-white">Add Application</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
@@ -110,40 +98,22 @@ export default function CreateApplication() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+              <div className="space-y-2">
                 <Label htmlFor="company-name">Company</Label>
-                <Input
-                  id="company-name"
-                  placeholder="Enter company name"
-                  {...register("companyName")}
-                />
-                <p className="my-1 h-1 text-xs text-red-500">
-                  {errors.companyName ? errors.companyName.message : ""}
-                </p>
+                <Input id="company-name" placeholder="Enter company name" {...register("companyName")} />
+                <p className="my-1 h-1 text-xs text-red-500">{errors.companyName ? errors.companyName.message : ""}</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="position-title">Job Title</Label>
-                <Input
-                  id="position-title"
-                  placeholder="Enter position title"
-                  {...register("title")}
-                />
-                <p className="my-1 h-1 text-xs text-red-500">
-                  {errors.title ? errors.title.message : ""}
-                </p>
+                <Input id="position-title" placeholder="Enter position title" {...register("title")} />
+                <p className="my-1 h-1 text-xs text-red-500">{errors.title ? errors.title.message : ""}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  placeholder="Enter location"
-                  {...register("location")}
-                />
-                <p className="my-1 h-1 text-xs text-red-500">
-                  {errors.location ? errors.location.message : ""}
-                </p>
+                <Input id="location" placeholder="Enter location" {...register("location")} />
+                <p className="my-1 h-1 text-xs text-red-500">{errors.location ? errors.location.message : ""}</p>
               </div>
             </div>
             <div className="space-y-2">
@@ -153,22 +123,13 @@ export default function CreateApplication() {
                 {...register("dateApplied")}
                 id="date-of-application"
                 type="date"
-                max={
-                  new Date(Date.now() + 86400000).toISOString().split("T")[0]
-                }
+                max={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
               />
-              <p className="my-1 h-1 text-xs text-red-500">
-                {errors.dateApplied ? errors.dateApplied.message : ""}
-              </p>
+              <p className="my-1 h-1 text-xs text-red-500">{errors.dateApplied ? errors.dateApplied.message : ""}</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea
-                {...register("description")}
-                id="description"
-                placeholder="Any notes you may have"
-                className="min-h-[100px]"
-              />
+              <Textarea {...register("description")} id="description" placeholder="Any notes you may have" className="min-h-[100px]" />
             </div>
           </div>
           <DialogFooter className="flex flex-row gap-2">
