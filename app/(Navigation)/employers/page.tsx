@@ -9,15 +9,15 @@ import { Separator } from "@/components/ui/separator";
 // Make the Inview a separate component
 // Add the onclick function to CTA badge
 export const metadata: Metadata = {
-  title: "CompClarity - Tech Salaries in the UK and EU",
+  title: "CompClarity - Employers",
   description:
-    "Your guide to fair pay from day one. Compare tech salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    "Boost your job postings with CompClarity's sponsored listings. Gain top visibility, attract motivated early-career talent, and increase applications efficiently.",
 };
 
 export default function EmployerPage() {
   return (
     <main className="flex min-h-screen w-full flex-col scroll-smooth">
-      <div className="mx-auto flex h-[calc(100vh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
+      <div className="mx-auto flex md:h-[calc(100vh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
         <div className="group relative rounded-full border">
           <CTABadge
             intro="Ready to find your next great hire?"
@@ -28,7 +28,7 @@ export default function EmployerPage() {
         <Heading />
         <Stats />
       </div>
-      <Separator className="mt-10" />
+      <Separator />
       <Features />
       <ContactForm />
       <Separator className="my-10" />
