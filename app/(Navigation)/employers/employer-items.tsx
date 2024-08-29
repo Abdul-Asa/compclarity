@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion, useInView } from "framer-motion";
+import { useMediaQuery } from "@/components/hooks/useMediaQuery";
 
 export const Heading = () => {
   return (
@@ -50,12 +51,13 @@ export const Stats = () => {
       disableAnimation: false,
     },
   ];
+  const isMobile = useMediaQuery("mobile");
   return (
     <motion.section
-      drag
+      drag={!isMobile}
       dragMomentum={false}
       dragConstraints={{ top: 4, left: 4, right: 4, bottom: 4 }}
-      className="p-5 mt-8 flex justify-center items-center flex-col gap-3 bg-white md:gap-8 border-2  border-black shadow-[8px_8px_0px_#047857]"
+      className="p-5 my-8 flex justify-center items-center flex-col gap-3 bg-white md:gap-8 border-2  border-black shadow-[8px_8px_0px_#047857]"
     >
       <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
         Our audience
@@ -125,12 +127,15 @@ export const Features = () => {
         listings here ensures that top emerging talent will have you on their
         radar.
       </h2>
-      <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
+      <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full md:p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
         {featureItems.map((item, index) => (
-          <div key={index} className="flex flex-col h-full p-6 min-h-[309px]">
+          <div
+            key={index}
+            className="flex flex-col h-full p-6 min-h-[309px] text-center md:text-left"
+          >
             <div className="flex flex-col h-full justify-between items-center md:flex-row gap-4 ">
               {item.icon}
-              <h1 className="flex-1 text-wrap text-4xl font-bold">
+              <h1 className="flex-1 text-wrap text-4xl font-bold ">
                 {item.title}
               </h1>
             </div>
