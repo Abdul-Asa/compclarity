@@ -28,7 +28,7 @@ const getInitialAndAnimate = (fade: FadeDirection) => {
 
 export const TransitionView: React.FC<TransitionViewProps> = ({ className, fade = "up", children }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
+  const inView = useInView(ref, { once: true, margin: "0px 0px -10px 0px" });
   const { initial, animate } = getInitialAndAnimate(fade);
 
   return (

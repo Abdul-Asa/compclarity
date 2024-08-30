@@ -9,6 +9,7 @@ import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
 import { CSPostHogProvider } from "@/components/providers/posthog";
+import { ThemeProvider } from "@/components/Layout/ThemeProvider";
 
 const sg = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const os = Open_Sans({ subsets: ["latin"], variable: "--font-open" });
@@ -25,15 +26,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const { data } = await supabase.auth.getUser();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <CSPostHogProvider>
         <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-          <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
-            <Navbar user={data.user} />
-            {children}
-            <Footer />
-          </div>
-          <Toaster />
+          <ThemeProvider defaultTheme="light">
+            <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
+              <Navbar user={data.user} />
+              {children}
+              <Footer />
+            </div>
+            <Toaster />
+          </ThemeProvider>
         </body>
       </CSPostHogProvider>
 
