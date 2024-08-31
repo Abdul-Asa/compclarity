@@ -4,7 +4,7 @@ import { ResetPasswordSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/components/hooks/useToast";
 import { Eye } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { resetPasswordSchema } from "@/lib/validations/form";
@@ -51,8 +51,7 @@ export const PasswordResetForm = () => {
         console.log(error);
         toast({
           title: "Error",
-          description:
-            error.message || "An error occurred, please try again later.",
+          description: error.message || "An error occurred, please try again later.",
           variant: "destructive",
         });
       }
@@ -69,45 +68,26 @@ export const PasswordResetForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4  p-8  h-full w-full"
-    >
-      <div className="font-extrabold tracking-tight text-2xl">
-        Reset your Password
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4  p-8  h-full w-full">
+      <div className="font-extrabold tracking-tight text-2xl">Reset your Password</div>
       <div>
         <label htmlFor="password" className="block">
           New Password:
         </label>
         <div className="relative">
-          <Input
-            {...register("password")}
-            type={passwordVisible ? "text" : "password"}
-            className="border w-full"
-          />
-          <button
-            className="absolute right-3 top-1/2 -translate-y-1/2"
-            type="button"
-            onClick={() => setPasswordVisible(!passwordVisible)}
-          >
+          <Input {...register("password")} type={passwordVisible ? "text" : "password"} className="border w-full" />
+          <button className="absolute right-3 top-1/2 -translate-y-1/2" type="button" onClick={() => setPasswordVisible(!passwordVisible)}>
             <Eye size="12" color="gray" />
           </button>
         </div>
-        <p className="text-red-500 text-xs h-1 my-1">
-          {errors.password ? errors.password.message : ""}
-        </p>
+        <p className="text-red-500 text-xs h-1 my-1">{errors.password ? errors.password.message : ""}</p>
       </div>
       <div>
         <label htmlFor="confirmPassword" className="block">
           Confirm Password:
         </label>
         <div className="relative">
-          <Input
-            {...register("confirmPassword")}
-            type={confirmPasswordVisible ? "text" : "password"}
-            className="border w-full"
-          />
+          <Input {...register("confirmPassword")} type={confirmPasswordVisible ? "text" : "password"} className="border w-full" />
           <button
             className="absolute right-3 top-1/2 -translate-y-1/2"
             type="button"
@@ -116,16 +96,9 @@ export const PasswordResetForm = () => {
             <Eye size="12" color="gray" />
           </button>
         </div>
-        <p className="text-red-500 text-xs h-1 my-1">
-          {errors.confirmPassword ? errors.confirmPassword.message : ""}
-        </p>
+        <p className="text-red-500 text-xs h-1 my-1">{errors.confirmPassword ? errors.confirmPassword.message : ""}</p>
       </div>
-      <SpinnerButton
-        type="submit"
-        className="w-full"
-        name="Submit"
-        state={isSubmitting}
-      />
+      <SpinnerButton type="submit" className="w-full" name="Submit" state={isSubmitting} />
     </form>
   );
 };
