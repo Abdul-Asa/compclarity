@@ -11,7 +11,7 @@ export default function AddCompensationButton() {
       </div>
       <Link
         href={"/add"}
-        className="block w-60 rounded-lg bg-emerald-500 p-2 ps-10 text-center text-sm text-white shadow-md"
+        className="block w-60 rounded-lg bg-emerald-500 p-2 ps-10 text-center text-sm text-white shadow-md hover:bg-emerald-600"
       >
         Add Compensation
       </Link>
