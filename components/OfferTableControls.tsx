@@ -17,8 +17,8 @@ export default function OfferTableControls({
       <div className="flex flex-row items-center gap-3">
         <DropdownButton />
         <YoeDropdownButton />
-        <VerifiedFilterCheckbox />
       </div>
+      <VerifiedFilterCheckbox />
       <AddCompensationButton />
     </div>
   );
