@@ -40,9 +40,11 @@ export async function fetchAllOffers(
   verified: number,
   levels: Set<string>,
   sortBy: string | null,
-  sortDir: string | null
+  sortDir: string | null,
+  minYOE: number | null,
+  maxYOE: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir)
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE)
 
   const res = await fetchApiWithParams(params)
   res.offers.map((o) => formatOffer(o))
@@ -57,9 +59,11 @@ export async function fetchAllTechOffersByCompany(
   levels: Set<string>,
   sortBy: string | null,
   sortDir: string | null,
-  companyName: string
+  companyName: string,
+  minYOE: number | null,
+  maxYOE: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir)
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE)
 
   const res = await fetchApiWithParamsForCompany(params, companyName)
   res.offers.map((o) => formatOffer(o))
@@ -73,9 +77,11 @@ export async function fetchAllFinanceOffers(
   verified: number,
   levels: Set<string>,
   sortBy: string | null,
-  sortDir: string | null
+  sortDir: string | null,
+  minYOE: number | null,
+  maxYOE: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir)
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE)
 
   const res = await fetchFinanceApiWithParams(params)
   res.offers.map((o) => formatOffer(o))
@@ -90,9 +96,11 @@ export async function fetchAllFinanceOffersByCompany(
   levels: Set<string>,
   sortBy: string | null,
   sortDir: string | null,
-  companyName: string
+  companyName: string,
+  minYOE: number | null,
+  maxYOE: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir)
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE)
 
   const res = await fetchApiWithParamsForFinanceCompany(params, companyName)
   res.offers.map((o) => formatOffer(o))
@@ -172,7 +180,9 @@ function getUrlParams(
   verified: number,
   levels: Set<string>,
   sortBy: string | null,
-  sortDir: string | null
+  sortDir: string | null,
+  minYOE: number | null,
+  maxYOE: number | null
 ): URLSearchParams {
   const params = new URLSearchParams()
   params.append("page", page)
@@ -183,6 +193,14 @@ function getUrlParams(
   if (sortBy === "totalComp" && (sortDir === "asc" || sortDir == "desc")) {
     params.append("sortBy", "normTotalComp")
     params.append("sortDir", sortDir)
+  }
+
+  if (minYOE !== null) {
+    params.append("minYOE", minYOE.toString());
+  }
+
+  if (maxYOE !== null) {
+    params.append("maxYOE", maxYOE.toString());
   }
 
   return params

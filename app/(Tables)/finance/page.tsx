@@ -20,6 +20,8 @@ export default async function FinanceOffers({
     sortDir?: string;
     page?: string;
     verified?: number;
+    minYOE?: number;
+    maxYOE?: number;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
@@ -27,6 +29,9 @@ export default async function FinanceOffers({
   const sortBy = searchParams?.sortBy || null;
   const sortDir = searchParams?.sortDir || null;
   const verified = Number(searchParams?.verified) || 0;
+  const minYOE = Number(searchParams?.minYOE) || null;
+  const maxYOE = Number(searchParams?.maxYOE) || null;
+
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
     if (typeof searchParams.role === "string") {
@@ -35,6 +40,7 @@ export default async function FinanceOffers({
       roles = new Set<string>(searchParams.role);
     }
   }
+
   const offersResponse = await fetchAllFinanceOffers(
     (currentPage - 1).toString(),
     searchTerm,
@@ -42,6 +48,8 @@ export default async function FinanceOffers({
     roles,
     sortBy,
     sortDir,
+    minYOE,
+    maxYOE,
   );
 
   return (
