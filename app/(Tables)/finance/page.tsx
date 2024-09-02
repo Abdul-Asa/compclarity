@@ -1,16 +1,16 @@
+import type { Metadata } from "next";
 import OfferTable from "@/components/OfferTable";
 import OfferTableControls from "@/components/OfferTableControls";
+import { fetchAllFinanceOffers } from "@/lib/data";
 import RoleDropdownMenu from "@/components/RoleDropDown";
-import { fetchAllOffers } from "@/lib/data";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CompClarity - Tech Salaries in the UK and EU",
+  title: "CompClarity - Finance Salaries in the UK and EU",
   description:
-    "Your guide to fair pay from day one. Compare tech salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    "Your guide to fair pay from day one. Compare finance salaries across Europe and make informed career choices with comprehensive, community-driven data!",
 };
 
-export default async function Offers({
+export default async function FinanceOffers({
   searchParams,
 }: {
   searchParams?: {
@@ -20,6 +20,8 @@ export default async function Offers({
     sortDir?: string;
     page?: string;
     verified?: number;
+    minYOE?: number;
+    maxYOE?: number;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
@@ -27,6 +29,9 @@ export default async function Offers({
   const sortBy = searchParams?.sortBy || null;
   const sortDir = searchParams?.sortDir || null;
   const verified = Number(searchParams?.verified) || 0;
+  const minYOE = Number(searchParams?.minYOE) || null;
+  const maxYOE = Number(searchParams?.maxYOE) || null;
+
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
     if (typeof searchParams.role === "string") {
@@ -35,13 +40,16 @@ export default async function Offers({
       roles = new Set<string>(searchParams.role);
     }
   }
-  const offersResponse = await fetchAllOffers(
+
+  const offersResponse = await fetchAllFinanceOffers(
     (currentPage - 1).toString(),
     searchTerm,
     verified,
     roles,
     sortBy,
     sortDir,
+    minYOE,
+    maxYOE,
   );
 
   return (
@@ -54,7 +62,7 @@ export default async function Offers({
       <OfferTableControls isCompanyPage={false} />
       {offersResponse.totalResults === 0 ? (
         <b className="text-center mt-24 mb-24">
-          No tech salaries found
+          No finance salaries found
         </b>
         ) : (
           <>

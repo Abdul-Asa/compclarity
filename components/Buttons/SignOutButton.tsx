@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { toast } from "../ui/use-toast";
+import { toast } from "../hooks/useToast";
 
 interface SignOutButtonProps {}
 
@@ -18,10 +18,7 @@ export const SignOutButton = ({}: SignOutButtonProps) => {
     router.refresh();
   }
   return (
-    <button
-      className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700 shadow"
-      onClick={signOut}
-    >
+    <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700 shadow" onClick={signOut}>
       Sign Out
     </button>
   );

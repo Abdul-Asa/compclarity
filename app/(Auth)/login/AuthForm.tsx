@@ -6,23 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  AuthFormSchema,
-  ForgotPasswordSchema,
-  LoginFormSchema,
-  SignUpFormSchema,
-} from "@/lib/types";
+import { AuthFormSchema, ForgotPasswordSchema, LoginFormSchema, SignUpFormSchema } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  forgotPasswordSchema,
-  loginFormSchema,
-  signUpFormSchema,
-} from "@/lib/validations/form";
+import { forgotPasswordSchema, loginFormSchema, signUpFormSchema } from "@/lib/validations/form";
 import { forgotPassword, login, signup } from "./actions";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/components/hooks/useToast";
 
 interface AuthFormProps {
   type: "login" | "register" | "forgot-password";
@@ -40,13 +31,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
   } = useForm<AuthFormSchema>({
     //depending on the type of form, the schema will be different
     //the AuthFormSchema is a union of all the possible schemas
-    resolver: zodResolver(
-      type === "login"
-        ? loginFormSchema
-        : type === "register"
-          ? signUpFormSchema
-          : forgotPasswordSchema,
-    ),
+    resolver: zodResolver(type === "login" ? loginFormSchema : type === "register" ? signUpFormSchema : forgotPasswordSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -115,49 +100,26 @@ export const AuthForm = ({ type }: AuthFormProps) => {
   }, [reset, type]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="min-w-[90vw] p-2 sm:min-w-[500px]"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="min-w-[90vw] p-2 sm:min-w-[500px]">
       <Card className="mx-auto p-6">
         <div className="space-y-6">
           {type === "register" && (
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  {...register("firstName")}
-                  placeholder="John"
-                  autoComplete="on"
-                />
-                {"firstName" in errors && (
-                  <ErrorMessage message={errors.firstName?.message} />
-                )}{" "}
+                <Input id="firstName" {...register("firstName")} placeholder="John" autoComplete="on" />
+                {"firstName" in errors && <ErrorMessage message={errors.firstName?.message} />}{" "}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  {...register("lastName")}
-                  id="lastName"
-                  placeholder="Doe"
-                  autoComplete="on"
-                />
-                {"lastName" in errors && (
-                  <ErrorMessage message={errors.lastName?.message} />
-                )}
+                <Input {...register("lastName")} id="lastName" placeholder="Doe" autoComplete="on" />
+                {"lastName" in errors && <ErrorMessage message={errors.lastName?.message} />}
               </div>
             </div>
           )}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="on"
-              {...register("email")}
-              placeholder="email@example.com"
-            />
+            <Input id="email" type="email" autoComplete="on" {...register("email")} placeholder="email@example.com" />
             <ErrorMessage message={errors.email?.message} />
           </div>
           {type !== "forgot-password" && (
@@ -165,64 +127,32 @@ export const AuthForm = ({ type }: AuthFormProps) => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
                 {type === "login" && (
-                  <Link
-                    href="?type=forgot-password"
-                    className="text-sm underline"
-                    prefetch={false}
-                  >
+                  <Link href="?type=forgot-password" className="text-sm underline" prefetch={false}>
                     Forgot Password?
                   </Link>
                 )}
               </div>
               <div className="relative">
-                <Input
-                  id="password"
-                  autoComplete="current-password"
-                  {...register("password")}
-                  type={showPassword ? "text" : "password"}
-                />
+                <Input id="password" autoComplete="current-password" {...register("password")} type={showPassword ? "text" : "password"} />
                 {showPassword ? (
-                  <EyeOff
-                    onClick={() => setShowPassword(false)}
-                    size={20}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                  />
+                  <EyeOff onClick={() => setShowPassword(false)} size={20} className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer" />
                 ) : (
-                  <Eye
-                    onClick={() => setShowPassword(true)}
-                    size={20}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                  />
+                  <Eye onClick={() => setShowPassword(true)} size={20} className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer" />
                 )}
               </div>
-              {"password" in errors && (
-                <ErrorMessage message={errors.password?.message} />
-              )}
+              {"password" in errors && <ErrorMessage message={errors.password?.message} />}
             </div>
           )}
           <SpinnerButton
             type="submit"
             className="w-full"
             state={isSubmitting}
-            name={
-              type === "login"
-                ? "Login"
-                : type === "register"
-                  ? "Sign Up"
-                  : "Reset Password"
-            }
+            name={type === "login" ? "Login" : type === "register" ? "Sign Up" : "Reset Password"}
           />
         </div>
         <div className="mt-4 text-center text-sm">
-          {type === "login"
-            ? "Don't have an account? "
-            : type === "register"
-              ? "Already have an account? "
-              : "Remember your password? "}
-          <Link
-            href={`?type=${type === "login" ? "register" : "login"}`}
-            className="underline"
-          >
+          {type === "login" ? "Don't have an account? " : type === "register" ? "Already have an account? " : "Remember your password? "}
+          <Link href={`?type=${type === "login" ? "register" : "login"}`} className="underline">
             {type === "login" ? "Register" : "Login"}
           </Link>
         </div>
@@ -234,6 +164,4 @@ export const AuthForm = ({ type }: AuthFormProps) => {
 interface ErrorMessageProps {
   message?: string;
 }
-const ErrorMessage = ({ message }: ErrorMessageProps) => (
-  <p className="my-1 h-1 text-xs text-red-500">{message ? message : ""}</p>
-);
+const ErrorMessage = ({ message }: ErrorMessageProps) => <p className="my-1 h-1 text-xs text-red-500">{message ? message : ""}</p>;

@@ -1,35 +1,23 @@
 "use client";
 import CountUp from "@/components/ui/count-up";
 import { BarChart, CircleArrowUp, Users, CircleDollarSign } from "lucide-react";
-import { useRef } from "react";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
+import { useMediaQuery } from "@/components/hooks/useMediaQuery";
+import { TransitionView } from "@/components/ui/transition";
 
 export const Heading = () => {
   return (
     <section className="p-2 max-w-4xl text-center space-y-5 ">
       <h1 className="animate-fade-in text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
-        Find{" "}
-        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">
-          Top
-        </span>{" "}
-        Talent,{" "}
-        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">
-          Effortlessly{" "}
-        </span>
-        .
+        Find <span className="inline-block text-emerald-700 transition hover:-translate-y-3">Top</span> Talent,{" "}
+        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">Effortlessly </span>.
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Streamline your hiring process and discover exceptional early career
-        candidates with ease. We showcase your job listings to the right talent,
+        Streamline your hiring process and discover exceptional early career candidates with ease. We showcase your job listings to the right talent,
         so you can focus on the more exciting stuff.
       </h2>
     </section>
@@ -50,16 +38,15 @@ export const Stats = () => {
       disableAnimation: false,
     },
   ];
+  const isMobile = useMediaQuery("mobile");
   return (
     <motion.section
-      drag
+      drag={!isMobile}
       dragMomentum={false}
       dragConstraints={{ top: 4, left: 4, right: 4, bottom: 4 }}
-      className="p-5 mt-8 flex justify-center items-center flex-col gap-3 bg-white md:gap-8 border-2  border-black shadow-[8px_8px_0px_#047857]"
+      className="p-5 my-8 flex justify-center items-center flex-col gap-3 bg-white md:gap-8 border-2  border-black shadow-[8px_8px_0px_#047857]"
     >
-      <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
-        Our audience
-      </h1>
+      <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">Our audience</h1>
       <div className="flex flex-wrap justify-center gap-8 md:gap-16">
         {coolStats.map((stat, index) => (
           <div key={index} className="text-center">
@@ -105,63 +92,39 @@ export const Features = () => {
     },
   ];
 
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ y: 50, opacity: 0 }}
-      animate={inView ? { y: 0, opacity: 1 } : {}}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col size-full items-center justify-center gap-5 p-6"
-    >
-      <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">
-        What we offer
-      </h1>
+    <TransitionView className="flex flex-col size-full items-center justify-center gap-5 p-6">
+      <h1 className="text-wrap text-2xl md:text-5xl font-bold tracking-tight">What we offer</h1>
       <h2 className="text-wrap mx-10 text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Ambitious students and early-career professionals use CompClarity to
-        explore opportunities at leading companies. Advertising your job
-        listings here ensures that top emerging talent will have you on their
-        radar.
+        Ambitious students and early-career professionals use CompClarity to explore opportunities at leading companies. Advertising your job listings
+        here ensures that top emerging talent will have you on their radar.
       </h2>
-      <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
+      <div className="grid grid-cols-1 border bg-white mt-10 shadow-sm rounded-xl md:grid-cols-2 w-full md:p-6 md:[&>*:nth-child(even)]:border-l md:[&>*]:border-b md:[&>*:nth-last-child(-n+2)]:border-b-0">
         {featureItems.map((item, index) => (
-          <div key={index} className="flex flex-col h-full p-6 min-h-[309px]">
+          <div key={index} className="flex flex-col h-full p-6 min-h-[309px] text-center md:text-left">
             <div className="flex flex-col h-full justify-between items-center md:flex-row gap-4 ">
               {item.icon}
-              <h1 className="flex-1 text-wrap text-4xl font-bold">
-                {item.title}
-              </h1>
+              <h1 className="flex-1 text-wrap text-4xl font-bold ">{item.title}</h1>
             </div>
             <p className="mt-4 h-full text-gray-600">{item.description}</p>
           </div>
         ))}
       </div>
-    </motion.div>
+    </TransitionView>
   );
 };
 
 //Edit this
 export const ContactForm = () => {
   return (
-    <section
-      id="contact"
-      className="w-full max-w-screen-md text-center space-y-5 my-10 p-4  mx-auto bg-inherit"
-    >
+    <section id="contact" className="w-full max-w-screen-md text-center space-y-5 my-10 p-4  mx-auto bg-inherit">
       <h1 className="animate-fade-in text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
-        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">
-          Advertise
-        </span>{" "}
-        with us.
+        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">Advertise</span> with us.
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 transition delay-100 lg:text-lg">
         Don't let your perfect candidate slip away, get in touch today.
       </h2>
-      <Link
-        href="mailto:contact@compclarity.com"
-        className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}
-      >
+      <Link href="mailto:contact@compclarity.com" className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}>
         Contact
       </Link>
     </section>
@@ -193,16 +156,10 @@ export const FAQ = () => {
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">FAQ</h2>
-      <Accordion
-        type="multiple"
-        defaultValue={faqItems.map((_, index) => `item-${index}`)}
-        className="w-full"
-      >
+      <Accordion type="multiple" defaultValue={faqItems.map((_, index) => `item-${index}`)} className="w-full">
         {faqItems.map((item, index) => (
           <AccordionItem key={`item-${index}`} value={`item-${index}`}>
-            <AccordionTrigger className="text-left text-emerald-700">
-              {item.question}
-            </AccordionTrigger>
+            <AccordionTrigger className="text-left text-emerald-700">{item.question}</AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
         ))}

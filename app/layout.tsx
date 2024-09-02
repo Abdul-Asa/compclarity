@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
 import Script from "next/script";
-
 import { Open_Sans, Space_Grotesk, Courier_Prime } from "next/font/google";
-import "@/styles/globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
-
 import { rootStructuredData } from "@/config/structuredData";
 import { Toaster } from "@/components/ui/toaster";
 import { createClient } from "@/lib/supabase/server";
+import { metadata as metadataConfig } from "@/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
+import "@/styles/globals.css";
+import { CSPostHogProvider } from "@/components/providers/posthog";
 import { ThemeProvider } from "@/components/Layout/ThemeProvider";
 
 const sg = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
@@ -20,31 +19,27 @@ const cp = Courier_Prime({
   weight: "400",
 });
 
-export const metadata: Metadata = {
-  title: "CompClarity",
-  description:
-    "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-};
+export const metadata = metadataConfig;
 
-export default async function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
 
   return (
-    <html lang="en">
-      <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-        {/* <ThemeProvider attribute="class" defaultTheme="light" enableSystem> */}
-        <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
-          <Navbar user={data.user} />
-          {children}
-          <Footer />
-        </div>
+    <html lang="en" suppressHydrationWarning>
+      <CSPostHogProvider>
+        <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
+          <ThemeProvider defaultTheme="light">
+            <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
+              <Navbar user={data.user} />
+              {children}
+              <Footer />
+            </div>
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </CSPostHogProvider>
 
-        <Toaster />
-        {/* </ThemeProvider> */}
-      </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       <Script
         id="WebSite Structured Data"

@@ -5,7 +5,7 @@ import LogoImage from "./LogoImage";
 import Link from "next/link";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Flag, Share, Forward, Briefcase } from "lucide-react";
-import { toast } from "./ui/use-toast";
+import { toast } from "./hooks/useToast";
 import React from "react";
 import { FaUserTie, FaIndustry, FaLocationDot } from "react-icons/fa6";
 import { sendGAEvent } from "@next/third-parties/google";
@@ -18,13 +18,7 @@ interface JobRowContentProps {
   signedIn: boolean;
 }
 
-export const JobRowContent = ({
-  expanded = true,
-  job,
-  addedDateStr,
-  idx,
-  signedIn,
-}: JobRowContentProps) => {
+export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedIn }: JobRowContentProps) => {
   const handleClick = (e: any) => {
     e.stopPropagation();
     if (!signedIn) {

@@ -14,6 +14,8 @@ interface PageProps {
     sortDir?: string;
     page?: string;
     verified?: number;
+    minYOE?: number;
+    maxYOE?: number;
   };
 }
 
@@ -26,6 +28,9 @@ async function getCompanyOffers(
   const sortBy = searchParams?.sortBy || null;
   const sortDir = searchParams?.sortDir || null;
   const verified = Number(searchParams?.verified) || 0;
+  const minYOE = Number(searchParams?.minYOE) || null;
+  const maxYOE = Number(searchParams?.maxYOE) || null;
+
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
     if (typeof searchParams.role === "string") {
@@ -34,6 +39,7 @@ async function getCompanyOffers(
       roles = new Set<string>(searchParams.role);
     }
   }
+  
   const offersResponse = await fetchAllTechOffersByCompany(
     (currentPage - 1).toString(),
     searchTerm,
@@ -41,7 +47,9 @@ async function getCompanyOffers(
     roles,
     sortBy,
     sortDir,
-    companyName
+    companyName,
+    minYOE,
+    maxYOE,
   );
   return offersResponse;
 }
