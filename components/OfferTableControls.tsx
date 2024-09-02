@@ -1,5 +1,6 @@
 import AddCompensationButton from "./Buttons/AddCompensationButton";
 import DropdownButton from "./Buttons/DropdownButton";
+import YoeDropdownButton from "./Buttons/YoeDropdownButton";
 import SearchBar from "./SearchBar";
 import VerifiedFilterCheckbox from "./VerifiedFilterCheckbox";
 
@@ -15,8 +16,9 @@ export default function OfferTableControls({
       <SearchBar isCompanyPage={isCompanyPage} />
       <div className="flex flex-row items-center gap-3">
         <DropdownButton />
-        <VerifiedFilterCheckbox />
+        <YoeDropdownButton />
       </div>
+      <VerifiedFilterCheckbox />
       <AddCompensationButton />
     </div>
   );
