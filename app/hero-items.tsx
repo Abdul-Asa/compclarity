@@ -24,8 +24,7 @@ const HeroSection = () => {
         <span className="inline-block text-emerald-700 transition hover:-translate-y-3">day one</span>.
       </h1>
       <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        People work for money, so it&apos;s time we stop pretending otherwise. Compare salaries across the UK and EU and make informed career choices
-        with comprehensive data!
+      Uncover salary insights, find your next job, and track your applications all in one place.
       </h2>
       <div className="my-6 flex animate-fade-in gap-4">
         <Button className="bg-emerald-700 transition" asChild>
