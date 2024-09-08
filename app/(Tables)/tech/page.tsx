@@ -29,8 +29,8 @@ export default async function Offers({
   const sortBy = searchParams?.sortBy || null;
   const sortDir = searchParams?.sortDir || null;
   const verified = Number(searchParams?.verified) || 0;
-  const minYOE = Number(searchParams?.minYOE) || null;
-  const maxYOE = Number(searchParams?.maxYOE) || null;
+  const minYOE = searchParams?.minYOE !== undefined ? Number(searchParams.minYOE) : null;
+  const maxYOE = searchParams?.maxYOE !== undefined ? Number(searchParams.maxYOE) : null;
 
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
