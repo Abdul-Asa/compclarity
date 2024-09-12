@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "CompClarity",
     description:
       "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-    images: ["/assets/og.png"],
+    // images: ["/assets/og.png"],
   },
   keywords: [
     "CompClarity",
