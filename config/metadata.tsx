@@ -8,14 +8,14 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "CompClarity",
-    description:
-      "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    // description:
+    //   "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
     // images: ["/assets/og.png"],
   },
   openGraph: {
     title: "CompClarity",
-    description:
-      "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    // description:
+    //   "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
     // images: ["/assets/og.png"],
   },
   keywords: [
