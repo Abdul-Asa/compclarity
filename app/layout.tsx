@@ -4,7 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { rootStructuredData } from "@/config/structuredData";
 import { Toaster } from "@/components/ui/toaster";
 import { createClient } from "@/lib/supabase/server";
-import { metadata as metadataConfig } from "@/config/metadata";
+// import { metadata as metadataConfig } from "@/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
@@ -19,7 +19,44 @@ const cp = Courier_Prime({
   weight: "400",
 });
 
-export const metadata = metadataConfig;
+export const metadata = {
+  title: "CompClarity",
+  description:
+    "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+  metadataBase: new URL("https://compclarity.com"),
+  twitter: {
+    card: "summary_large_image",
+    title: "CompClarity",
+    description:
+      "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    // images: ["/assets/og.png"],
+  },
+  openGraph: {
+    title: "CompClarity",
+    description:
+      "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    // images: ["/assets/og.png"],
+  },
+  keywords: [
+    "CompClarity",
+    "Compensation",
+    "Salaries",
+    "Europe",
+    "Data",
+    "Transparency",
+    "Job Market",
+    "Career Choices",
+    "Internships",
+    "Jobs",
+    "Job Search",
+    "Job Listings",
+    "Job Postings",
+    "Job Descriptions",
+    "Job Applications",
+    "Interviews",
+    "Job Offers",
+  ],
+};
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const supabase = createClient();
