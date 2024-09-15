@@ -37,7 +37,7 @@ const page = async ({ params }: pageProps) => {
         <JobRowContent addedDateStr={addedDateStr} job={job} signedIn={signedIn} />
         <div className="mt-4 flex justify-center">
           <Link href="/jobs">
-            <button className="bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-black text-sm py-2 px-2 rounded mt-4">
+            <button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-black text-sm py-2 px-2 rounded mt-4">
               View All Jobs
             </button>
           </Link>
