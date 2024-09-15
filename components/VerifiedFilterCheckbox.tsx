@@ -26,12 +26,9 @@ export default function VerifiedFilterCheckbox() {
         onClick={handleFilter}
         checked={searchParams?.has("verified")}
         id="default-checkbox"
-        className="size-4  rounded"
+        className="size-4 rounded dark:border-gray-300"
       />
-      <label
-        htmlFor="default-checkbox"
-        className="ms-2 text-sm font-medium text-gray-900"
-      >
+      <label htmlFor="default-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-white">
         Verified
       </label>
     </div>

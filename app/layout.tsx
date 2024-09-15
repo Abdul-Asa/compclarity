@@ -30,7 +30,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <CSPostHogProvider>
         <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
           <ThemeProvider attribute="class" defaultTheme="light">
-            <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
+            <div className="flex min-h-screen w-full bg-[rgb(239,241,245)] dark:bg-[rgb(14,16,17)]  flex-col items-center justify-between font-space">
               <Navbar user={data.user} />
               {children}
               <Footer />

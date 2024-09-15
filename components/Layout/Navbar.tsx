@@ -30,14 +30,14 @@ const Navbar = ({ user }: { user?: User | null }) => {
     ]);
 
   return (
-    <nav className="flex w-full items-center justify-between border-b bg-white px-2 py-5 md:px-8">
+    <nav className="flex w-full items-center justify-between border-b dark:border-gray-500 bg-white dark:bg-black px-2 py-5 md:px-8">
       <Link href="/" replace className="flex items-center" onClick={() => trackNav("logo")}>
         <Image
           src="/assets/logo.png"
           alt="Logo"
           width={55}
           height={29}
-          className="mr-2 cursor-pointer hover:opacity-75"
+          className="mr-2 cursor-pointer hover:opacity-75 dark:invert"
         />
         <h1 className="hidden text-[24px] font-semibold md:inline-block">CompClarity</h1>
       </Link>
@@ -47,25 +47,31 @@ const Navbar = ({ user }: { user?: User | null }) => {
           <PopoverContent className="flex flex-col gap-4">
             <Link
               href="/tech"
-              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200"
+              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
+              dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
               onClick={() => trackNav("tech_salaries")}
             >
               <div className="flex text-lg font-medium">
                 <Computer className="mr-2 size-6" />
                 Tech
               </div>
-              <p className="font-open text-sm leading-tight text-muted-foreground">Latest tech salaries</p>
+              <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
+                Latest tech salaries
+              </p>
             </Link>
             <Link
               href="/finance"
-              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200"
+              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
+              dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
               onClick={() => trackNav("finance_salaries")}
             >
               <div className="flex text-lg font-medium">
                 <PoundSterling className="mr-2 size-6" />
                 Finance
               </div>
-              <p className="font-open text-sm leading-tight text-muted-foreground">Latest finance salaries</p>
+              <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
+                Latest finance salaries
+              </p>
             </Link>
           </PopoverContent>
         </Popover>
