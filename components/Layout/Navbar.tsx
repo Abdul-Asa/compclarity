@@ -19,6 +19,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
   const pathname = usePathname();
   // Close the menu when the route changes
   useEffect(() => {
+    setIsMobileMenuOpen(false);
     setIsPopoverOpen(false);
   }, [pathname]);
 
