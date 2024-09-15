@@ -9,15 +9,14 @@ import { sendGAEvent } from "@next/third-parties/google";
 import { usePathname } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { navigationMenuTriggerStyle } from "../ui/navigation-menu";
-import SalaryDropdownMenu from "../SalaryDropdownMenu";
+import { cn } from "@/lib/utils";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 
 const Navbar = ({ user }: { user?: User | null }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const pathname = usePathname();
   // Close the menu when the route changes
   useEffect(() => {
-    setIsMenuOpen(false);
     setIsPopoverOpen(false);
   }, [pathname]);
 
@@ -31,74 +30,52 @@ const Navbar = ({ user }: { user?: User | null }) => {
     ]);
 
   return (
-    <nav className="relative z-50 w-full border-white">
-      <div className="flex w-full items-center justify-between border-b bg-white px-2 py-5 md:px-8">
-        <Link
-          href="/"
-          replace
-          className="flex items-center"
-          onClick={() => trackNav("logo")}
-        >
-          <Image
-            src="/assets/logo.png"
-            alt="Logo"
-            width={55}
-            height={29}
-            className="mr-2 cursor-pointer hover:opacity-75"
-          />
-          <h1 className="hidden text-[24px] font-semibold md:inline-block">
-            CompClarity
-          </h1>
+    <nav className="flex w-full items-center justify-between border-b bg-white px-2 py-5 md:px-8">
+      <Link href="/" replace className="flex items-center" onClick={() => trackNav("logo")}>
+        <Image
+          src="/assets/logo.png"
+          alt="Logo"
+          width={55}
+          height={29}
+          className="mr-2 cursor-pointer hover:opacity-75"
+        />
+        <h1 className="hidden text-[24px] font-semibold md:inline-block">CompClarity</h1>
+      </Link>
+      <ul className="group hidden flex-1 list-none items-center justify-center space-x-1 lg:flex">
+        <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+          <PopoverTrigger className={navigationMenuTriggerStyle()}>Salaries</PopoverTrigger>
+          <PopoverContent className="flex flex-col gap-4">
+            <Link
+              href="/tech"
+              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200"
+              onClick={() => trackNav("tech_salaries")}
+            >
+              <div className="flex text-lg font-medium">
+                <Computer className="mr-2 size-6" />
+                Tech
+              </div>
+              <p className="font-open text-sm leading-tight text-muted-foreground">Latest tech salaries</p>
+            </Link>
+            <Link
+              href="/finance"
+              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200"
+              onClick={() => trackNav("finance_salaries")}
+            >
+              <div className="flex text-lg font-medium">
+                <PoundSterling className="mr-2 size-6" />
+                Finance
+              </div>
+              <p className="font-open text-sm leading-tight text-muted-foreground">Latest finance salaries</p>
+            </Link>
+          </PopoverContent>
+        </Popover>
+        <Link href="/jobs" className={navigationMenuTriggerStyle()} onClick={() => trackNav("jobs")}>
+          Jobs
         </Link>
-        <ul className="group hidden flex-1 list-none items-center justify-center space-x-1 lg:flex">
-          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-            <PopoverTrigger className={navigationMenuTriggerStyle()}>
-              Salaries
-            </PopoverTrigger>
-            <PopoverContent className="flex flex-col gap-4">
-              <Link
-                href="/tech"
-                className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200"
-                onClick={() => trackNav("tech_salaries")}
-              >
-                <div className="flex text-lg font-medium">
-                  <Computer className="mr-2 size-6" />
-                  Tech
-                </div>
-                <p className="font-open text-sm leading-tight text-muted-foreground">
-                  Latest tech salaries
-                </p>
-              </Link>
-              <Link
-                href="/finance"
-                className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200"
-                onClick={() => trackNav("finance_salaries")}
-              >
-                <div className="flex text-lg font-medium">
-                  <PoundSterling className="mr-2 size-6" />
-                  Finance
-                </div>
-                <p className="font-open text-sm leading-tight text-muted-foreground">
-                  Latest finance salaries
-                </p>
-              </Link>
-            </PopoverContent>
-          </Popover>
-          <Link
-            href="/jobs"
-            className={navigationMenuTriggerStyle()}
-            onClick={() => trackNav("jobs")}
-          >
-            Jobs
-          </Link>
-          <Link
-            href="/tracker"
-            className={navigationMenuTriggerStyle()}
-            onClick={() => trackNav("app_tracker")}
-          >
-            Tracker
-          </Link>
-          {/* <Popover>
+        <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
+          Tracker
+        </Link>
+        {/* <Popover>
             <PopoverTrigger className={navigationMenuTriggerStyle()}>
               Resources
             </PopoverTrigger>
@@ -135,89 +112,88 @@ const Navbar = ({ user }: { user?: User | null }) => {
               </Link>
             </PopoverContent>
           </Popover> */}
-          <Link
-            href="/about"
-            className={navigationMenuTriggerStyle()}
-            onClick={() => trackNav("about")}
-          >
-            About
-          </Link>
-        </ul>
+        <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
+          About
+        </Link>
+      </ul>
 
-        <div className="hidden w-[15%] justify-end lg:flex">
-          <Button
-            asChild
-            variant={"outline"}
-            size={"lg"}
-            className="border-2 border-black hover:bg-emerald-100"
-          >
-            {user ? (
-              <Link href="/account" onClick={() => trackNav("account")}>
-                Account
-              </Link>
-            ) : (
-              <Link href="/login" onClick={() => trackNav("login")}>
-                Login
-              </Link>
-            )}
-          </Button>
-        </div>
-
-        <div className="flex items-center lg:hidden">
-          <Button
-            variant={"ghost"}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Mobile Menu"
-          >
-            <svg
-              className="h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {isMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              )}
-            </svg>
-          </Button>
-        </div>
-      </div>
-      {isMenuOpen && (
-        <div className="absolute left-0 top-full flex w-full flex-col items-center gap-4 border-y border-b-2 bg-white py-4 shadow-border lg:hidden">
-          <SalaryDropdownMenu />
-          <Link href="/jobs" onClick={() => trackNav("jobs")}>
-            <span className="font-bold hover:underline">Jobs</span>
-          </Link>
-          <Link href="/tracker" onClick={() => trackNav("app_tracker")}>
-            <span className="font-bold hover:underline">Tracker</span>
-          </Link>
-          {/* <ResourcesDropdownMenu /> */}
-          <Link href="/about" onClick={() => trackNav("about")}>
-            <span className="font-bold hover:underline">About</span>
-          </Link>
+      <div className="hidden w-[15%] justify-end lg:flex">
+        <Button asChild variant={"outline"} size={"lg"} className="border-2 border-black hover:bg-emerald-100">
           {user ? (
             <Link href="/account" onClick={() => trackNav("account")}>
-              <span className="font-bold hover:underline">Account</span>
+              Account
             </Link>
           ) : (
             <Link href="/login" onClick={() => trackNav("login")}>
-              <span className="font-bold hover:underline">Login</span>
+              Login
             </Link>
           )}
+        </Button>
+      </div>
+
+      {/* Mobile menu */}
+      <details className="group flex lg:hidden select-none" aria-label="Menu">
+        <summary className="flex relative aspect-square h-[44px] list-none">
+          <div className="h-[2.5px] w-5 bg-black rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2 -translate-y-[4px] group-open:translate-y-0 group-open:rotate-45"></div>
+          <div className="h-[2.5px] w-5 bg-black rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2 translate-y-[4px] group-open:translate-y-0 group-open:-rotate-45"></div>
+        </summary>
+        <div
+          className={cn(
+            "absolute z-40 inset-x-0 flex flex-col justify-center px-4 bg-white top-[85px]",
+            "pointer-events-auto transition-all group-open:opacity-100 opacity-0 border-b-2 "
+          )}
+        >
+          <ul className="flex flex-col items-center md:text-center w-full">
+            <Accordion type="multiple" className="w-full mt-3">
+              <AccordionItem value="item-0">
+                <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
+                  Salaries
+                </AccordionTrigger>
+                <AccordionContent className="flex flex-col md:items-center pb-0 w-full">
+                  <Link
+                    href="/tech"
+                    className="text-lg font-medium  pl-10 md:pl-0 py-5 border-y w-full "
+                    onClick={() => trackNav("tech_salaries")}
+                  >
+                    Tech
+                  </Link>
+                  <Link
+                    href="/finance"
+                    className="text-lg  pl-10 md:pl-0 font-medium py-5 w-full "
+                    onClick={() => trackNav("finance_salaries")}
+                  >
+                    Finance
+                  </Link>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <Link href="/jobs" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("jobs")}>
+              Jobs
+            </Link>
+            <Link
+              href="/tracker"
+              className="text-lg font-medium py-5 border-b w-full"
+              onClick={() => trackNav("app_tracker")}
+            >
+              Tracker
+            </Link>
+            <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
+              About
+            </Link>
+          </ul>
+          <div className="flex w-full md:text-center justify-center">
+            {user ? (
+              <Link href="/account" className="text-lg font-medium py-5  w-full" onClick={() => trackNav("account")}>
+                Account
+              </Link>
+            ) : (
+              <Link href="/login" className="text-lg font-medium py-5  w-full" onClick={() => trackNav("login")}>
+                Login
+              </Link>
+            )}
+          </div>
         </div>
-      )}
+      </details>
     </nav>
   );
 };
