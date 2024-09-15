@@ -10,7 +10,16 @@ import Link from "next/link";
 import VerifiedSvg from "./VerifiedSvg";
 
 import { FaTransgender } from "react-icons/fa";
-import { FaUserTie, FaBriefcase, FaIndustry, FaGlobe, FaLaptop, FaGraduationCap, FaGift, FaCalendarDays } from "react-icons/fa6";
+import {
+  FaUserTie,
+  FaBriefcase,
+  FaIndustry,
+  FaGlobe,
+  FaLaptop,
+  FaGraduationCap,
+  FaGift,
+  FaCalendarDays,
+} from "react-icons/fa6";
 
 import { Tooltip } from "react-tooltip";
 
@@ -23,7 +32,7 @@ interface OfferRowContentProps {
 
 export const OfferRowContent = ({ expanded = true, offer, addedDateStr, idx }: OfferRowContentProps) => {
   return expanded ? (
-    <div className="flex flex-col items-center justify-center gap-4 rounded-lg px-4 font-open text-gray-500 sm:justify-between sm:px-0 lg:flex-row">
+    <div className="flex flex-col items-center justify-center gap-4 rounded-lg px-4 font-open text-gray-500 dark:text-gray-200 sm:justify-between sm:px-0 lg:flex-row">
       <div className="flex flex-col items-center gap-4 self-center sm:flex-row">
         <div className="flex shrink-0 flex-row items-center justify-center gap-4 border-b p-3 sm:flex-col sm:gap-2 sm:border-b-0 sm:border-r">
           <LogoImage companyDomain={offer.company.domain} size={"large"} />
@@ -68,7 +77,10 @@ export const OfferRowContent = ({ expanded = true, offer, addedDateStr, idx }: O
             <span className="text-left text-base font-bold">{offer.title}</span>
             {offer.verified ? (
               <>
-                <a className={`verified${idx} cursor-pointer`} data-tooltip-html="This offer has been manually<br/> verified via an offer letter">
+                <a
+                  className={`verified${idx} cursor-pointer`}
+                  data-tooltip-html="This offer has been manually<br/> verified via an offer letter"
+                >
                   <VerifiedSvg />
                 </a>
                 <Tooltip anchorSelect={`.verified${idx}`} />

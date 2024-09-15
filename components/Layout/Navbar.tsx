@@ -30,7 +30,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
     ]);
 
   return (
-    <nav className="flex w-full items-center justify-between border-b dark:border-gray-500 bg-white dark:bg-black px-2 py-5 md:px-8">
+    <nav className="flex w-full items-center justify-between border-b dark:border-gray-800 bg-white dark:bg-black px-2 py-5 md:px-8">
       <Link href="/" replace className="flex items-center" onClick={() => trackNav("logo")}>
         <Image
           src="/assets/logo.png"

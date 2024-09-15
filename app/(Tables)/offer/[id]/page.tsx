@@ -1,15 +1,13 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { OfferRowContent } from "@/components/OfferRowContent"
-import { fetchOffer, fetchFinanceOffer } from "@/lib/data"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { OfferRowContent } from "@/components/OfferRowContent";
+import { fetchOffer, fetchFinanceOffer } from "@/lib/data";
 
 interface pageProps {
-  params: { id: string }
+  params: { id: string };
 }
 
-export async function generateMetadata({
-  params,
-}: pageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: pageProps): Promise<Metadata> {
   let offer;
   try {
     offer = await fetchOffer(params.id);
@@ -20,7 +18,7 @@ export async function generateMetadata({
   return {
     title: `Offer Details - ${offer.company.name}`,
     description: `Check out how much a ${offer.title} earns at ${offer.company.name}! Brought to you by CompClarity, your guide to fair pay from day one.`,
-  }
+  };
 }
 
 const page = async ({ params }: pageProps) => {
@@ -35,20 +33,18 @@ const page = async ({ params }: pageProps) => {
 
   return (
     <>
-      <div className="bg-white p-16 sm:pr-40 sm:pl-40">
+      <div className="bg-white dark:bg-black dark:border-gray-700 dark:border p-16 sm:pr-40 sm:pl-40">
         <OfferRowContent addedDateStr={addedDateStr} offer={offer} />
         <div className="mt-4 flex justify-center">
           <Link href="/tech">
-            <button
-              className="bg-black hover:bg-gray-800 text-white text-sm py-2 px-2 rounded mt-4"
-            >
+            <button className="bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-black text-sm py-2 px-2 rounded mt-4">
               View All Salaries
             </button>
           </Link>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default page
+export default page;

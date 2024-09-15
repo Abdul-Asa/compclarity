@@ -16,7 +16,7 @@ const Footer = () => {
     ]);
 
   return (
-    <footer className="w-full border-t-2 border-white dark:border-gray-500 bg-emerald-700 dark:bg-emerald-900 py-5 text-white">
+    <footer className="w-full border-t-2 border-white dark:border-gray-800 bg-emerald-700 dark:bg-black py-5 text-white">
       <div className="flex flex-col items-center justify-center gap-2 text-base font-thin">
         <div className="mb-2 flex space-x-4">
           <Link
