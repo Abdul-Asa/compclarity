@@ -11,9 +11,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { navigationMenuTriggerStyle } from "../ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { ModeToggle } from "./ThemeProvider";
 
 const Navbar = ({ user }: { user?: User | null }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   // Close the menu when the route changes
   useEffect(() => {
@@ -138,15 +140,30 @@ const Navbar = ({ user }: { user?: User | null }) => {
       </div>
 
       {/* Mobile menu */}
-      <details className="group flex lg:hidden select-none" aria-label="Menu">
-        <summary className="flex relative aspect-square h-[44px] list-none">
-          <div className="h-[2.5px] w-5 bg-black rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2 -translate-y-[4px] group-open:translate-y-0 group-open:rotate-45"></div>
-          <div className="h-[2.5px] w-5 bg-black rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2 translate-y-[4px] group-open:translate-y-0 group-open:-rotate-45"></div>
-        </summary>
+      <div className="group flex items-center  lg:hidden select-none" aria-label="Menu">
+        <ModeToggle />
+        <button
+          className="flex relative aspect-square h-[44px] list-none"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <div
+            className={cn(
+              "h-[2.5px] w-5 bg-black dark:bg-white rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2",
+              isMobileMenuOpen ? "translate-y-0 rotate-45" : "-translate-y-[4px]"
+            )}
+          ></div>
+          <div
+            className={cn(
+              "h-[2.5px] w-5 bg-black dark:bg-white rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2",
+              isMobileMenuOpen ? "translate-y-0 -rotate-45" : "translate-y-[4px]"
+            )}
+          ></div>
+        </button>
         <div
           className={cn(
-            "absolute z-40 inset-x-0 flex flex-col justify-center px-4 bg-white top-[85px]",
-            "pointer-events-auto transition-all group-open:opacity-100 opacity-0 border-b-2 "
+            "absolute z-40 inset-x-0 flex flex-col justify-center px-4 bg-white dark:bg-black top-[85px]",
+            "pointer-events-auto transition-all border-b-2",
+            isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
           <ul className="flex flex-col items-center md:text-center w-full">
@@ -199,7 +216,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
             )}
           </div>
         </div>
-      </details>
+      </div>
     </nav>
   );
 };

@@ -3,6 +3,7 @@ import { Open_Sans, Space_Grotesk, Courier_Prime } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { rootStructuredData } from "@/config/structuredData";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "sonner";
 import { createClient } from "@/lib/supabase/server";
 import { metadata as metadataConfig } from "@/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
@@ -10,7 +11,6 @@ import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
 import { CSPostHogProvider } from "@/components/providers/posthog";
 import { ThemeProvider } from "@/components/Layout/ThemeProvider";
-import AnnouncementDrawer from "@/components/Layout/Announcement";
 
 const sg = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const os = Open_Sans({ subsets: ["latin"], variable: "--font-open" });
@@ -36,8 +36,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               {children}
               <Footer />
             </div>
-            <AnnouncementDrawer />
             <Toaster />
+            <SonnerToaster />
           </ThemeProvider>
         </body>
       </CSPostHogProvider>
