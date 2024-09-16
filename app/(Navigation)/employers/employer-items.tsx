@@ -72,25 +72,25 @@ export const Stats = () => {
 export const Features = () => {
   const featureItems = [
     {
-      icon: <CircleArrowUp className="size-10 text-emerald-700" />,
+      icon: <CircleArrowUp className="size-10 text-emerald-700 dark:text-emerald-500" />,
       title: "Increased Visibility",
       description:
         "Ensure your job postings stand out by pinning them at the top of our job board, where they'll be seen by thousands of motivated job seekers. Pinned postings receive 3x more applications!",
     },
     {
-      icon: <Users className="size-10 text-emerald-700" />,
+      icon: <Users className="size-10 text-emerald-700 dark:text-emerald-500" />,
       title: "Find the Right Talent",
       description:
         "The majority of CompClarity users are students and early-career professionals, making CompClarity the ideal platform to connect with fresh talent eager to bring new ideas and energy to your organization.",
     },
     {
-      icon: <BarChart className="size-10 text-emerald-700" />,
+      icon: <BarChart className="size-10 text-emerald-700 dark:text-emerald-500" />,
       title: "Analytics",
       description:
         "Access detailed analytics on your sponsored listings, including clicks and application rates. With our platform, you can ensure that you are always one step ahead in the competitive hiring landscape.",
     },
     {
-      icon: <CircleDollarSign className="size-10 text-emerald-700" />,
+      icon: <CircleDollarSign className="size-10 text-emerald-700 dark:text-emerald-500" />,
       title: "Cost-Effective Recruitment",
       description:
         "Maximize your recruitment budget by investing in sponsored listings that offer higher ROI through increased engagement and application rates.",
@@ -124,7 +124,10 @@ export const ContactForm = () => {
   return (
     <section id="contact" className="w-full max-w-screen-md text-center space-y-5 my-10 p-4  mx-auto bg-inherit">
       <h1 className="animate-fade-in text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
-        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">Advertise</span> with us.
+        <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
+          Advertise
+        </span>{" "}
+        with us.
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
         Don't let your perfect candidate slip away, get in touch today.
@@ -164,7 +167,9 @@ export const FAQ = () => {
       <Accordion type="multiple" defaultValue={faqItems.map((_, index) => `item-${index}`)} className="w-full">
         {faqItems.map((item, index) => (
           <AccordionItem key={`item-${index}`} value={`item-${index}`}>
-            <AccordionTrigger className="text-left text-emerald-700">{item.question}</AccordionTrigger>
+            <AccordionTrigger className="text-left text-emerald-700 dark:text-emerald-500">
+              {item.question}
+            </AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
         ))}

@@ -89,8 +89,8 @@ const Footer = () => {
             Clearbit
           </Link>
         </small>
-        <small onClick={() => trackFooter("privacy_policy")} className="flex items-center gap-2">
-          <ModeToggle /> | <PrivacyPolicyLink />
+        <small onClick={() => trackFooter("privacy_policy")}>
+          <PrivacyPolicyLink />
         </small>
       </div>
     </footer>
