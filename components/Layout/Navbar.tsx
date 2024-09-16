@@ -1,5 +1,5 @@
 "use client";
-import { Computer, PoundSterling } from "lucide-react";
+import { Book, Computer, FileText, PoundSterling } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,12 +15,14 @@ import { ModeToggle } from "./ThemeProvider";
 
 const Navbar = ({ user }: { user?: User | null }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isPopoverOpen2, setIsPopoverOpen2] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   // Close the menu when the route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsPopoverOpen(false);
+    setIsPopoverOpen2(false);
   }, [pathname]);
 
   const trackNav = (label: string) =>
@@ -84,49 +86,46 @@ const Navbar = ({ user }: { user?: User | null }) => {
         <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
           Tracker
         </Link>
-        {/* <Popover>
-            <PopoverTrigger className={navigationMenuTriggerStyle()}>
-              Resources
-            </PopoverTrigger>
-            <PopoverContent className="flex w-fit flex-col gap-1">
-              <Link
-                href="https://www.techacademia.co.uk"
-                onClick={() => trackNav("tech_academia")}
-                target="_blank"
-              >
-                <div className="flex justify-center border-b p-2 text-lg hover:text-emerald-700">
-                  <School className="mr-3 size-6" />
-                  Tech Academia
-                </div>
-              </Link>
-              <Link
-                href="https://discord.gg/AuAvjpTTnm"
-                onClick={() => trackNav("discord")}
-                target="_blank"
-              >
-                <div className="flex justify-center border-b p-2 text-lg hover:text-emerald-700">
-                  <FaDiscord className="mr-3 size-6" />
-                  Discord
-                </div>
-              </Link>
-              <Link
-                href="https://compclarity.substack.com/"
-                onClick={() => trackNav("blog")}
-                target="_blank"
-              >
-                <div className="flex justify-center border-b p-2 text-lg hover:text-emerald-700">
-                  <Newspaper className="mr-3 size-6" />
-                  Blog
-                </div>
-              </Link>
-            </PopoverContent>
-          </Popover> */}
+        <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
+          <PopoverTrigger className={navigationMenuTriggerStyle()}>Products</PopoverTrigger>
+          <PopoverContent className="flex flex-col gap-4">
+            <Link
+              href="/cv"
+              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
+              dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
+              onClick={() => trackNav("cv_service")}
+            >
+              <div className="flex text-lg font-medium">
+                <FileText className="mr-2 size-6" />
+                CV Crafting
+              </div>
+              <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
+                Craft a perfect CV for your dream job
+              </p>
+            </Link>
+            <Link
+              href="/e-book"
+              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
+              dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
+              onClick={() => trackNav("e_book")}
+            >
+              <div className="flex text-lg font-medium">
+                <Book className="mr-2 size-6" />
+                Tech Internship Guide
+              </div>
+              <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
+                Step-by-step application strategies
+              </p>
+            </Link>
+          </PopoverContent>
+        </Popover>
         <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
           About
         </Link>
       </ul>
 
-      <div className="hidden w-[15%] justify-end lg:flex">
+      <div className="hidden w-[15%] justify-end gap-2 lg:flex">
+        <ModeToggle />
         <Button asChild variant={"outline"} size={"lg"} className="border-2 border-black hover:bg-emerald-100">
           {user ? (
             <Link href="/account" onClick={() => trackNav("account")}>
@@ -203,7 +202,30 @@ const Navbar = ({ user }: { user?: User | null }) => {
             </Link>
             <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
               About
-            </Link>
+            </Link>{" "}
+            <Accordion type="multiple" className="w-full mt-3">
+              <AccordionItem value="item-0">
+                <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
+                  Products
+                </AccordionTrigger>
+                <AccordionContent className="flex flex-col md:items-center pb-0 w-full">
+                  <Link
+                    href="/cv"
+                    className="text-lg font-medium  pl-10 md:pl-0 py-5 border-y w-full "
+                    onClick={() => trackNav("cv_service")}
+                  >
+                    CV Crafting
+                  </Link>
+                  <Link
+                    href="/e-book"
+                    className="text-lg  pl-10 md:pl-0 font-medium py-5 w-full "
+                    onClick={() => trackNav("e_book")}
+                  >
+                    Tech Internship Guide
+                  </Link>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </ul>
           <div className="flex w-full md:text-center justify-center">
             {user ? (

@@ -15,9 +15,10 @@ export const metadata: Metadata = {
 
 export default async function EbookPage() {
   const data = await fetch(
-    "https://compclarity.gumroad.com/product_reviews?product_id=5r9qxjz_IWzLdk_Rhqya8A%3D%3D&page=1"
+    "https://compclarity.gumroad.com/product_reviews?product_id=5r9qxjz_IWzLdk_Rhqya8A%3D%3D"
   ).then((res) => res.json());
 
+  //fallback to 4.9 rating if no reviews are found
   const reviews = data.reviews || [
     {
       rating: 4.9,
@@ -94,7 +95,7 @@ export default async function EbookPage() {
             </ul>
             <div className="text-3xl font-bold mb-4">{cardContent.price}</div>
             <Link
-              href="https://compclarity.gumroad.com/l/tech-internship-guide"
+              href="https://compclarity.gumroad.com/l/guide"
               className={cn(buttonVariants({ variant: "default" }), " bg-emerald-700")}
               target="_blank"
             >
