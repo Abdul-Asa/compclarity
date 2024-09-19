@@ -16,14 +16,7 @@ type AppItemProps = {
 };
 
 export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: application.id,
     data: {
       type: "Application",
@@ -46,10 +39,9 @@ export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
     "4": { verb: "rejected", dateKey: "date_rejected" },
   };
 
-  const levelInfo =
-    todoLevelVerbs[application.todo_level as keyof typeof todoLevelVerbs];
+  const levelInfo = todoLevelVerbs[application.todo_level as keyof typeof todoLevelVerbs];
   let shownDate = `${levelInfo.verb} on ${dateFormatter(
-    application[levelInfo.dateKey as keyof typeof application] as string,
+    application[levelInfo.dateKey as keyof typeof application] as string
   )}`;
 
   return (
@@ -57,11 +49,7 @@ export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
       style={style}
       className={cn(
         "w-[250px] font-open sm:w-[350px]",
-        isOverlay
-          ? "ring-2 ring-primary"
-          : isDragging
-            ? "opacity-30 ring-2"
-            : "",
+        isOverlay ? "ring-2 ring-primary" : isDragging ? "opacity-30 ring-2" : ""
       )}
       ref={setNodeRef}
     >
@@ -72,7 +60,7 @@ export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
           {...listeners}
           className={cn(
             "-ml-2 h-auto p-1 text-secondary-foreground/50",
-            isDragging ? "cursor-grabbing" : "cursor-grab",
+            isDragging ? "cursor-grabbing" : "cursor-grab"
           )}
         >
           <span className="sr-only">Application</span>
@@ -81,14 +69,10 @@ export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
         <EditApplication application={application} />
       </CardHeader>
       <CardContent className="flex flex-col pb-0">
-        <CardTitle className="truncate py-1 text-lg font-semibold">
-          {application.title}
-        </CardTitle>
+        <CardTitle className="truncate py-1 text-lg font-semibold">{application.title}</CardTitle>
         <Separator />
         <div className="flex flex-col justify-center py-1">
-          <span className="line-clamp-3 text-gray-900 md:line-clamp-1">
-            {application.company}
-          </span>
+          <span className="line-clamp-3 text-gray-900 dark:text-gray-200 md:line-clamp-1">{application.company}</span>
           <span className="text-xs">{application.location}</span>
         </div>
 
