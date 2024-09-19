@@ -17,7 +17,7 @@ export function Announcement() {
             closeButton: "bg-white",
           },
           id: "welcome-toast",
-          duration: Infinity,
+          duration: 5000,
           description: "Toggle to your preferred theme using the button in the navbar.",
           onDismiss: () => {
             // Set session storage to indicate the announcement has been displayed
