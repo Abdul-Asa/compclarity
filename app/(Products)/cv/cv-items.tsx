@@ -68,6 +68,7 @@ export const Pricing = () => {
       isFree: true,
       discount: "Get feedback from an active community",
       cta: "Join the Discord",
+      link: "https://discord.gg/AuAvjpTTnm",
       isAvailable: true,
       features: [
         "Get feedback from an active community",
@@ -137,6 +138,11 @@ export const Pricing = () => {
                 variant={tier.isAvailable ? "default" : "secondary"}
                 className="mb-6 bg-emerald-700 text-white"
                 disabled={!tier.isAvailable}
+                onClick={() => {
+                  if (tier.isAvailable) {
+                    window.open(tier.link, "_blank");
+                  }
+                }}
               >
                 {tier.cta}
               </Button>
