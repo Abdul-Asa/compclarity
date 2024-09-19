@@ -3,6 +3,7 @@ import { Open_Sans, Space_Grotesk, Courier_Prime } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { rootStructuredData } from "@/config/structuredData";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "sonner";
 import { createClient } from "@/lib/supabase/server";
 import { metadata as metadataConfig } from "@/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
@@ -29,13 +30,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en" suppressHydrationWarning>
       <CSPostHogProvider>
         <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-          <ThemeProvider defaultTheme="light">
-            <div className="flex min-h-screen w-full flex-col items-center justify-between font-space">
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <div className="flex min-h-screen w-full bg-[rgb(239,241,245)] dark:bg-[rgb(14,16,17)]  flex-col items-center justify-between font-space">
               <Navbar user={data.user} />
               {children}
               <Footer />
             </div>
             <Toaster />
+            <SonnerToaster />
           </ThemeProvider>
         </body>
       </CSPostHogProvider>

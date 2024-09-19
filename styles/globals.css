@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(239, 241, 245);
-}
-
 .app {
   grid-template-rows: 1fr auto;
 }

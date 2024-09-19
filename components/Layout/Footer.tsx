@@ -3,6 +3,7 @@ import { FaDiscord, FaLinkedin, FaInstagram, FaXTwitter, FaTiktok, FaBlog } from
 import PrivacyPolicyLink from "../PrivacyPolicyLink";
 import Link from "next/link";
 import { sendGAEvent } from "@next/third-parties/google";
+import { ModeToggle } from "./ThemeProvider";
 
 const Footer = () => {
   const trackFooter = (label: string) =>
@@ -15,19 +16,39 @@ const Footer = () => {
     ]);
 
   return (
-    <footer className="w-full border-t-2 border-white bg-emerald-700 py-5 text-white">
+    <footer className="w-full border-t-2 border-white dark:border-gray-800 bg-emerald-700 dark:bg-black py-5 text-white">
       <div className="flex flex-col items-center justify-center gap-2 text-base font-thin">
         <div className="mb-2 flex space-x-4">
-          <Link href="https://discord.gg/AuAvjpTTnm" target="_blank" onClick={() => trackFooter("discord")} aria-label="Discord">
+          <Link
+            href="https://discord.gg/AuAvjpTTnm"
+            target="_blank"
+            onClick={() => trackFooter("discord")}
+            aria-label="Discord"
+          >
             <FaDiscord size={24} />
           </Link>
-          <Link href="https://www.linkedin.com/company/compclarity" target="_blank" onClick={() => trackFooter("linkedin")} aria-label="LinkedIn">
+          <Link
+            href="https://www.linkedin.com/company/compclarity"
+            target="_blank"
+            onClick={() => trackFooter("linkedin")}
+            aria-label="LinkedIn"
+          >
             <FaLinkedin size={24} />
           </Link>
-          <Link href="https://www.instagram.com/comp.clarity" target="_blank" onClick={() => trackFooter("instagram")} aria-label="Instagram">
+          <Link
+            href="https://www.instagram.com/comp.clarity"
+            target="_blank"
+            onClick={() => trackFooter("instagram")}
+            aria-label="Instagram"
+          >
             <FaInstagram size={24} />
           </Link>
-          <Link href="https://compclarity.substack.com" target="_blank" onClick={() => trackFooter("blog")} aria-label="Blog">
+          <Link
+            href="https://compclarity.substack.com"
+            target="_blank"
+            onClick={() => trackFooter("blog")}
+            aria-label="Blog"
+          >
             <FaBlog size={24} />
           </Link>
           {/* <Link
@@ -59,7 +80,12 @@ const Footer = () => {
         </small>
         <small>
           Logos provided by{" "}
-          <Link href="https://clearbit.com" target="_blank" className="hover:underline" onClick={() => trackFooter("logo_dev")}>
+          <Link
+            href="https://clearbit.com"
+            target="_blank"
+            className="hover:underline"
+            onClick={() => trackFooter("logo_dev")}
+          >
             Clearbit
           </Link>
         </small>

@@ -9,13 +9,7 @@ import { usePathname } from "next/navigation";
 import { OfferRowContent } from "./OfferRowContent";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
-export default function OfferRow({
-  offer,
-  idx,
-}: {
-  offer: Offer;
-  idx: number;
-}) {
+export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) {
   const [expanded, toggleExpanded] = useState(false);
   const pathname = usePathname();
   const isForFinance = pathname.endsWith("finance");
@@ -41,45 +35,39 @@ export default function OfferRow({
         key={idx}
         className={
           "cursor-pointer border-b " +
-          (expanded ? "bg-gray-50" : "bg-white hover:bg-gray-50")
+          (expanded
+            ? "bg-gray-50 dark:bg-black"
+            : "bg-white hover:bg-gray-50 dark:bg-black dark:hover:bg-gray-800 dark:border-gray-800")
         }
       >
         <td className="px-2">
-          {expanded ? (
-            <ChevronUpIcon className="h-5 w-5" />
-          ) : (
-            <ChevronDownIcon className="h-5 w-5" />
-          )}
+          {expanded ? <ChevronUpIcon className="h-5 w-5" /> : <ChevronDownIcon className="h-5 w-5" />}
         </td>
         <td className="px-1 py-4">
           <div>
             <div className="flex flex-col items-center justify-center">
               {isForFinance ? (
                 <a
-                  href={`/company/${offer.company.name
-                    .replace(/\s+/g, "-")
-                    .toLowerCase()}/salaries/finance`}
+                  href={`/company/${offer.company.name.replace(/\s+/g, "-").toLowerCase()}/salaries/finance`}
                   onClick={(e) => e.stopPropagation()}
                   className="hover:underline"
                 >
-                  <span className="line-clamp-3 text-gray-900 md:line-clamp-1">
+                  <span className="line-clamp-3 dark:text-white text-gray-900 md:line-clamp-1">
                     {offer.company.name}
                   </span>
                 </a>
               ) : (
                 <a
-                  href={`/company/${offer.company.name
-                    .replace(/\s+/g, "-")
-                    .toLowerCase()}/salaries`}
+                  href={`/company/${offer.company.name.replace(/\s+/g, "-").toLowerCase()}/salaries`}
                   onClick={(e) => e.stopPropagation()}
                   className="hover:underline"
                 >
-                  <span className="line-clamp-3 text-gray-900 md:line-clamp-1">
+                  <span className="line-clamp-3 text-gray-900 dark:text-white md:line-clamp-1">
                     {offer.company.name}
                   </span>
                 </a>
               )}
-              <span className="text-xs">
+              <span className="text-xs dark:text-gray-300">
                 {offer.city}, {offer.countryCode} | {addedDateStr}
               </span>
             </div>
@@ -87,10 +75,8 @@ export default function OfferRow({
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <div className="line-clamp-3 text-gray-900 md:line-clamp-1">
-              {offer.title}
-            </div>
-            <div className="text-xs">
+            <div className="line-clamp-3 text-gray-900 dark:text-white md:line-clamp-1">{offer.title}</div>
+            <div className="text-xs dark:text-gray-300">
               {offer.offerYear} | {offer.yoe}
             </div>
           </div>
@@ -103,9 +89,7 @@ export default function OfferRow({
             }
           >
             <div className="flex flex-row items-center justify-center gap-1">
-              <span className="text-gray-900">
-                {offer.compDetails?.totalComp}
-              </span>
+              <span className="text-gray-900 dark:text-white">{offer.compDetails?.totalComp}</span>
               {offer.verified ? (
                 <>
                   <a
@@ -119,7 +103,7 @@ export default function OfferRow({
                 </>
               ) : null}
             </div>
-            <span className="text-xs"> {getMinimizedOfferStr()}</span>
+            <span className="text-xs dark:text-gray-300"> {getMinimizedOfferStr()}</span>
           </a>
           {offer.level == "Intern" ? (
             <Tooltip anchorSelect={`.pro-rata${idx}`}>
@@ -133,14 +117,9 @@ export default function OfferRow({
       </tr>
 
       {expanded ? (
-        <tr className="bg-white">
+        <tr className="bg-white dark:bg-black">
           <td colSpan={5} className="p-3">
-            <OfferRowContent
-              expanded={expanded}
-              offer={offer}
-              addedDateStr={addedDateStr}
-              idx={idx}
-            />
+            <OfferRowContent expanded={expanded} offer={offer} addedDateStr={addedDateStr} idx={idx} />
           </td>
         </tr>
       ) : null}

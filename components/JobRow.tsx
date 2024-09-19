@@ -45,11 +45,18 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
       <tr
         onClick={() => toggleExpanded(!expanded)}
         key={idx}
-        className={"cursor-pointer border-b " + (expanded ? "bg-gray-50" : "bg-white hover:bg-gray-50")}
+        className={
+          "cursor-pointer border-b " +
+          (expanded
+            ? "bg-gray-50 dark:bg-black"
+            : "bg-white hover:bg-gray-50 dark:bg-black dark:hover:bg-gray-800 dark:border-gray-800")
+        }
       >
-        <td className="px-2">{expanded ? <ChevronUpIcon className="h-5 w-5" /> : <ChevronDownIcon className="h-5 w-5" />}</td>
+        <td className="px-2">
+          {expanded ? <ChevronUpIcon className="h-5 w-5" /> : <ChevronDownIcon className="h-5 w-5" />}
+        </td>
         <td className="px-1 py-4">{sponsoredJob ? <p className="text-[8px] md:text-xs">Promoted</p> : null}</td>
-        <td className=" py-4">
+        <td className="py-4">
           <div>
             <div className="flex flex-col items-center justify-center">
               <a
@@ -57,9 +64,9 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
                 onClick={(e) => e.stopPropagation()}
                 className="hover:underline"
               >
-                <span className="line-clamp-3 text-gray-900 md:line-clamp-1">{job.company.name}</span>
+                <span className="line-clamp-3 text-gray-900 dark:text-white md:line-clamp-1">{job.company.name}</span>
               </a>
-              <span className="text-xs">
+              <span className="text-xs dark:text-gray-300">
                 {job.city}, {job.countryCode} | {addedDateStr}
               </span>
             </div>
@@ -68,9 +75,9 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center">
-              <div className="line-clamp-3 text-gray-900 md:line-clamp-1">{job.title}</div>
+              <div className="line-clamp-3 text-gray-900 dark:text-white md:line-clamp-1">{job.title}</div>
             </div>
-            <span className="text-xs">{job.level}</span>
+            <span className="text-xs dark:text-gray-300">{job.level}</span>
           </div>
         </td>
         <td className="px-1 py-4">
@@ -120,7 +127,7 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
       </tr>
 
       {expanded ? (
-        <tr className="bg-white">
+        <tr className="bg-white dark:bg-black">
           <td colSpan={6} className="p-3">
             <JobRowContent expanded={expanded} job={job} addedDateStr={addedDateStr} idx={idx} signedIn={signedIn} />
           </td>

@@ -19,10 +19,7 @@ interface PageProps {
   };
 }
 
-async function getCompanyOffers(
-  companyName: string,
-  searchParams?: PageProps["searchParams"]
-) {
+async function getCompanyOffers(companyName: string, searchParams?: PageProps["searchParams"]) {
   const currentPage = Number(searchParams?.page) || 1;
   const searchTerm = searchParams?.search || "";
   const sortBy = searchParams?.sortBy || null;
@@ -39,7 +36,7 @@ async function getCompanyOffers(
       roles = new Set<string>(searchParams.role);
     }
   }
-  
+
   const offersResponse = await fetchAllTechOffersByCompany(
     (currentPage - 1).toString(),
     searchTerm,
@@ -49,14 +46,12 @@ async function getCompanyOffers(
     sortDir,
     companyName,
     minYOE,
-    maxYOE,
+    maxYOE
   );
   return offersResponse;
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const companyName = decodeURI(params.companyName).replace(/-/g, " ");
   const companyDetails = await getCompany(companyName);
 
@@ -79,38 +74,29 @@ async function getCompany(companyName: string) {
 const Page = async ({ params, searchParams }: PageProps) => {
   const companyName = decodeURI(params.companyName).replace(/-/g, " ");
   const companyDetails = await getCompany(companyName);
-  const offersResponse = await getCompanyOffers(
-    companyDetails.name,
-    searchParams
-  );
+  const offersResponse = await getCompanyOffers(companyDetails.name, searchParams);
   const path = `company/${params.companyName}/salaries`;
 
   return (
     <>
       <div className="flex flex-col items-center justify-center p-4">
-        <div className="bg-white flex flex-col w-full md:w-2/3 p-4 md:p-8 rounded-lg items-center mb-2">
+        <div className="bg-white dark:bg-black dark:border-gray-700 dark:border flex flex-col w-full md:w-2/3 p-4 md:p-8 rounded-lg items-center mb-2">
           <CompanyHeader companyDetails={companyDetails} />
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row">
-            &nbsp;
-            <RoleDropdownMenu
-              companyPath={path}
-              forCompany={true}
-              companyParams={params.companyName}
-            />
-            &nbsp;Salaries in Europe
+          &nbsp;
+          <RoleDropdownMenu companyPath={path} forCompany={true} companyParams={params.companyName} />
+          &nbsp;Salaries in Europe
         </div>
         <OfferTableControls isCompanyPage={true} />
         {offersResponse.totalResults === 0 ? (
-          <b className="text-center mt-4">
-            No tech salaries found for {companyDetails.name}
-          </b>
-          ) : (
-            <>
-              <OfferTable offersResponse={offersResponse} />
-            </>
+          <b className="text-center mt-4">No tech salaries found for {companyDetails.name}</b>
+        ) : (
+          <>
+            <OfferTable offersResponse={offersResponse} />
+          </>
         )}
       </div>
     </>

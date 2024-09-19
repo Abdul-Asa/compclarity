@@ -43,9 +43,9 @@ export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedI
   };
 
   return expanded ? (
-    <div className="flex flex-col items-center justify-center gap-4 rounded-lg px-4 font-open text-gray-500 sm:justify-between sm:px-0 lg:flex-row">
+    <div className="flex flex-col items-center justify-center gap-4 rounded-lg px-4 font-open text-gray-500 dark:text-gray-200 sm:justify-between sm:px-0 lg:flex-row">
       <div className="flex flex-col items-start gap-4 self-center sm:flex-row">
-        <div className="flex shrink-0 flex-row items-center justify-center gap-4 border-b p-3 sm:flex-col sm:gap-2 sm:border-b-0 sm:border-r">
+        <div className="flex shrink-0 flex-row items-center justify-center gap-4 border-b p-3 sm:flex-col sm:gap-2 sm:border-b-0 sm:border-r dark:border-gray-700">
           <LogoImage companyDomain={job.company.domain} size={"large"} />
           <div className="flex flex-col items-center justify-center gap-2 text-center text-xs">
             <span>{job.company.name}</span>
@@ -127,7 +127,7 @@ export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedI
           </div>
         </div>
         <div className="flex flex-col items-start">
-          <b className="text-sm">{job.title}</b>
+          <b className="text-sm dark:text-white">{job.title}</b>
 
           <div className="flex flex-row items-center gap-2">
             <FaUserTie className="h-3 w-3" />
@@ -149,7 +149,7 @@ export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedI
           <br />
 
           <div className="flex flex-col items-start text-left">
-            <b className="text-sm">Job Description</b>
+            <b className="text-sm dark:text-white">Job Description</b>
             {job.description.split("\\n").map((line, index) => (
               <React.Fragment key={index}>
                 <p>{line}</p>

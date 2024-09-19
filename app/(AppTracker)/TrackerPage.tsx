@@ -17,11 +17,11 @@ const HeroSection = () => {
       <div className="flex w-full flex-col items-center justify-center pt-10">
         <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-2xl font-bold tracking-tight transition lg:text-5xl">
           Track your{" "}
-          <span className="inline-block text-emerald-700 transition hover:-translate-y-1">
+          <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-1">
             job applications
           </span>{" "}
           like a{" "}
-          <span className="inline-block text-emerald-700 transition hover:-translate-y-1">
+          <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-1">
             pro
           </span>
           .
@@ -43,42 +43,25 @@ const FeatureSection = () => {
     <div className="flex w-full flex-col gap-28 pb-20 pt-0 md:p-20">
       <div className="flex w-full flex-col items-center justify-center gap-2 md:flex-row md:gap-10">
         <div className="flex w-full max-w-md flex-col justify-center p-4">
-          <h2 className="py-4 text-lg font-bold lg:text-2xl">
-            Create an Application to Track
-          </h2>
+          <h2 className="py-4 text-lg font-bold lg:text-2xl">Create an Application to Track</h2>
           <p className="font-open">
-            No more spreadsheets. Keep all your job applications organized in
-            one place. Our application tracker helps you stay on top of your job
-            search.
+            No more spreadsheets. Keep all your job applications organized in one place. Our application tracker helps
+            you stay on top of your job search.
           </p>
         </div>
         <div className="flex rounded-sm border-2 border-emerald-700 p-1">
-          <Image
-            src="/assets/create.png"
-            alt="Feature 1"
-            width={500}
-            height={500}
-            unoptimized
-          />
+          <Image src="/assets/create.png" alt="Feature 1" width={500} height={500} unoptimized />
         </div>
       </div>
       <div className="flex w-full flex-col-reverse items-center justify-center gap-2 md:flex-row md:gap-10">
         <div className="flex rounded-sm border-2 border-emerald-700 p-1">
-          <Image
-            src="/assets/tracker.png"
-            alt="Feature 1"
-            width={900}
-            height={300}
-            unoptimized
-          />
+          <Image src="/assets/tracker.png" alt="Feature 1" width={900} height={300} unoptimized />
         </div>
         <div className="flex w-full max-w-md flex-col justify-center p-4">
-          <h2 className="py-4 text-lg font-bold lg:text-2xl">
-            Update Your Application Status with Ease
-          </h2>
+          <h2 className="py-4 text-lg font-bold lg:text-2xl">Update Your Application Status with Ease</h2>
           <p className="font-open">
-            Drag and drop your applications to update their status. Keep track
-            of your progress and never miss a deadline.
+            Drag and drop your applications to update their status. Keep track of your progress and never miss a
+            deadline.
           </p>
         </div>
       </div>

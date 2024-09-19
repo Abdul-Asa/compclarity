@@ -69,9 +69,16 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-white p-8 rounded-lg shadow-md w-full max-w-xl">
-        <button className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 shadow" onClick={toggleSalaryChoice} type="button">
+    <div className="flex items-center justify-center bg-[inherit]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-4 bg-white dark:bg-black dark:text-white dark:border dark:border-gray-800  p-8 rounded-lg shadow-md w-full max-w-xl"
+      >
+        <button
+          className="bg-black text-white dark:border py-2 px-4 rounded hover:bg-gray-800 shadow"
+          onClick={toggleSalaryChoice}
+          type="button"
+        >
           {"< Back"}
         </button>
 
@@ -98,7 +105,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
             <label htmlFor="country" className="block">
               Country:
             </label>
-            <select id="countryCode" {...register("countryCode")} className="border w-full">
+            <select id="countryCode" {...register("countryCode")} className="border w-full dark:bg-black">
               {euCountries.map(({ code, name }) => (
                 <option key={code} value={code}>
                   {name}
@@ -114,7 +121,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
           <label htmlFor="arrangement" className="block">
             Arrangement:
           </label>
-          <select id="arrangement" {...register("arrangement")} className="border w-full">
+          <select id="arrangement" {...register("arrangement")} className="border w-full dark:bg-black">
             <option value="">Select an option...</option>
             <option value="In-office">In-office</option>
             <option value="Hybrid">Hybrid</option>
@@ -161,7 +168,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
             <label htmlFor="level" className="block">
               Level:
             </label>
-            <select id="level" {...register("level")} className="border w-full" defaultValue="">
+            <select id="level" {...register("level")} className="border w-full dark:bg-black" defaultValue="">
               <option value="" disabled>
                 Select your level
               </option>
@@ -190,7 +197,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
               className="border"
               onWheel={(event) => event.currentTarget.blur()}
             />
-            <select {...register("baseSalaryCurrency")} className="border ml-2">
+            <select {...register("baseSalaryCurrency")} className="border ml-2 dark:bg-black">
               {currencies.map((currency, index) => (
                 <option key={index} value={currency}>
                   {currency}
@@ -216,7 +223,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
               className="border"
               onWheel={(event) => event.currentTarget.blur()}
             />
-            <select {...register("signOnBonusCurrency")} className="border ml-2">
+            <select {...register("signOnBonusCurrency")} className="border ml-2 dark:bg-black">
               {currencies.map((currency, index) => (
                 <option key={index} value={currency}>
                   {currency}
@@ -240,7 +247,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
               className="border"
               onWheel={(event) => event.currentTarget.blur()}
             />
-            <select {...register("annualBonusCurrency", { required: true })} className="border ml-2">
+            <select {...register("annualBonusCurrency", { required: true })} className="border ml-2 dark:bg-black">
               {currencies.map((currency, index) => (
                 <option key={index} value={currency}>
                   {currency}
@@ -273,7 +280,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
               className="border"
               onWheel={(event) => event.currentTarget.blur()}
             />
-            <select {...register("equityCurrency")} className="border ml-2">
+            <select {...register("equityCurrency")} className="border ml-2 dark:bg-black">
               {currencies.map((currency, index) => (
                 <option key={index} value={currency}>
                   {currency}
@@ -286,7 +293,9 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
         {/* Percentages of equity */}
         {rsu > 0 ? (
           <div>
-            <p className="text-sm mt-1 text-gray-500">Allocate the percentage of equity per year (needs to add up to 100%):</p>
+            <p className="text-sm mt-1 text-gray-500">
+              Allocate the percentage of equity per year (needs to add up to 100%):
+            </p>
             {errors.percentage ? <p className="text-red-500 text-sm mt-1">{errors.percentage.message}</p> : null}
             {fields.map((field, index) => (
               <div key={field.id}>
@@ -363,7 +372,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
           <label htmlFor="education" className="block">
             Highest Education:
           </label>
-          <select id="education" {...register("education")} className="border w-full">
+          <select id="education" {...register("education")} className="border w-full dark:bg-black">
             <option value="">No response</option>
             <option value="Highschool">High School/Sixth Form</option>
             <option value="Bachelor's">Bachelor&apos;s</option>
@@ -378,7 +387,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
             <label htmlFor="gender" className="block">
               Gender:
             </label>
-            <select id="gender" {...register("gender")} className="border w-full">
+            <select id="gender" {...register("gender")} className="border w-full dark:bg-black">
               <option value="">No response</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -389,7 +398,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
             <label htmlFor="ethnicity" className="block">
               Ethnicity:
             </label>
-            <select id="ethnicity" {...register("ethnicity")} className="border w-full">
+            <select id="ethnicity" {...register("ethnicity")} className="border w-full dark:bg-black">
               <option value="">No response</option>
               <option value="White">White</option>
               <option value="Asian">Asian</option>

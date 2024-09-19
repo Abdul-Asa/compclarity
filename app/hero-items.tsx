@@ -6,7 +6,14 @@ import svgToDataUri from "mini-svg-data-uri";
 import { useEffect, useRef, useState } from "react";
 import Marquee from "@/components/ui/marquee";
 import { Separator } from "@/components/ui/separator";
-import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,23 +23,30 @@ import { TransitionView } from "@/components/ui/transition";
 const HeroSection = () => {
   return (
     <section className="mx-auto flex h-[calc(100vh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
-      <div className="group relative rounded-full bg-emerald-700">
+      <div className="group relative rounded-full bg-emerald-700 ">
         <CTABadge intro="HEY!" main="View on desktop for the best experience 😎" link="" />
       </div>
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
-        Your <span className="inline-block text-emerald-700 transition hover:-translate-y-3">guide</span> to fair pay from{" "}
-        <span className="inline-block text-emerald-700 transition hover:-translate-y-3">day one</span>.
+        Your{" "}
+        <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
+          guide
+        </span>{" "}
+        to fair pay from{" "}
+        <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
+          day one
+        </span>
+        .
       </h1>
-      <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-      Uncover salary insights, find your next job, and track your applications all in one place.
+      <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
+        Uncover salary insights, find your next job, and track your applications all in one place.
       </h2>
       <div className="my-6 flex animate-fade-in gap-4">
-        <Button className="bg-emerald-700 transition" asChild>
+        <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
           <Link href="/tech">
             View&nbsp;<strong>Tech</strong>&nbsp;Salaries
           </Link>
         </Button>
-        <Button className="bg-emerald-700 transition" asChild>
+        <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
           <Link href="/finance">
             View&nbsp;<strong>Finance</strong>&nbsp;Salaries
           </Link>
@@ -43,7 +57,7 @@ const HeroSection = () => {
 };
 const MarqueeSection = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white">
+    <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
       <div className="w-full">
         <h2 className="p-4 text-center font-bold md:text-3xl">500+ community verified salaries from top companies</h2>
       </div>
@@ -65,8 +79,8 @@ const FeatureSection = () => {
       <div className="mt-16 sm:text-center">
         <h2 className="p-4 text-xl font-bold md:text-2xl lg:text-5xl">The best way to accelerate your career</h2>
         <p className="max-w-4xl px-4 font-open lg:text-lg">
-          CompClarity is a platform that allows you to compare salaries across Europe. Find companies to target and work your way towards your dream
-          role. No more spending years at a dead-end job.
+          CompClarity is a platform that allows you to compare salaries across Europe. Find companies to target and work
+          your way towards your dream role. No more spending years at a dead-end job.
         </p>
       </div>
       <Separator className="block h-0.5 md:hidden" />
@@ -75,8 +89,8 @@ const FeatureSection = () => {
           <div className="flex w-full max-w-md flex-col justify-center p-4">
             <h2 className="py-4 text-lg font-bold lg:text-2xl">Discover Transparent Salary Data</h2>
             <p className="font-open">
-              Gain insights into salaries across industries and roles. Make informed career decisions with accurate, up-to-date salary information
-              collected from thousands of professionals.
+              Gain insights into salaries across industries and roles. Make informed career decisions with accurate,
+              up-to-date salary information collected from thousands of professionals.
             </p>
             <Button className="my-6 w-fit bg-emerald-700" asChild>
               <Link href="/tech">Explore Salaries</Link>
@@ -93,7 +107,8 @@ const FeatureSection = () => {
           <div className="flex w-full max-w-md flex-col justify-center p-4">
             <h2 className="py-4 text-lg font-bold lg:text-2xl">Find Your Next Opportunity</h2>
             <p className="font-open">
-              Explore job listings tailored to your skills and interests. Our job board connects you with top employers looking for talent like yours.
+              Explore job listings tailored to your skills and interests. Our job board connects you with top employers
+              looking for talent like yours.
             </p>
 
             <Button className="my-6 w-fit bg-emerald-700" asChild>
@@ -105,8 +120,8 @@ const FeatureSection = () => {
           <div className="flex w-full max-w-md flex-col justify-center p-4">
             <h2 className="py-4 text-lg font-bold lg:text-2xl">Stay Organized with Our Application Tracker</h2>
             <p className="font-open">
-              Keep track of all your job applications in one place. Never miss a follow-up with our intuitive tracker that helps you manage your job
-              search efficiently.
+              Keep track of all your job applications in one place. Never miss a follow-up with our intuitive tracker
+              that helps you manage your job search efficiently.
             </p>
             <Button className="my-6 w-fit bg-emerald-700" asChild>
               <Link href="/tracker">Get Started</Link>
@@ -175,10 +190,13 @@ const TestimonialSection = () => {
                 <div
                   className={cn(
                     "h-65 relative transform border-2 border-black transition duration-300 ease-in-out sm:min-w-60",
-                    current === index + 1 ? "-translate-y-4 scale-110 bg-emerald-700 text-white" : "bg-white text-black"
+                    current === index + 1
+                      ? "-translate-y-4 scale-110 bg-emerald-700 text-white"
+                      : "bg-white text-black dark:bg-gray-800 dark:text-white"
                   )}
                   style={{
-                    clipPath: " polygon(50px 0%, calc(100% - 50px) 0%, 100% 50px, 100% 100%, calc(100% - 50px) 100%, 50px 100%, 0px 100%, 0px 0px)",
+                    clipPath:
+                      " polygon(50px 0%, calc(100% - 50px) 0%, 100% 50px, 100% 100%, calc(100% - 50px) 100%, 50px 100%, 0px 100%, 0px 0px)",
                   }}
                   onClick={() => {
                     if (!carouselApi) return;
@@ -197,7 +215,12 @@ const TestimonialSection = () => {
                   />
 
                   <div className="p-7">
-                    <Avatar className={cn("mb-2 size-10 rounded-none border-2", current === index + 1 ? "border-white" : "border-black")}>
+                    <Avatar
+                      className={cn(
+                        "mb-2 size-10 rounded-none border-2",
+                        current === index + 1 ? "border-white" : "border-black"
+                      )}
+                    >
                       <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
                       <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
                     </Avatar>
@@ -235,8 +258,9 @@ const SubscribeSection = () => {
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-3xl font-bold tracking-tight transition lg:text-6xl">
         Stay up to date with the latest salary trends
       </h1>
-      <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 transition delay-100 lg:text-lg">
-        Join our Discord community to stay up to date with the latest salary trends and to connect with other professionals in the industry.
+      <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
+        Join our Discord community to stay up to date with the latest salary trends and to connect with other
+        professionals in the industry.
       </h2>
       <Button size={"lg"} className="bg-emerald-700" asChild>
         <Link href="https://discord.gg/AuAvjpTTnm" className="my-6">
