@@ -24,7 +24,7 @@ const HeroSection = () => {
   return (
     <section className="mx-auto flex h-[calc(100vh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
       <div className="group relative rounded-full bg-emerald-700 ">
-        <CTABadge intro="HEY!" main="View on desktop for the best experience 😎" link="" />
+        <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
       </div>
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
         Your{" "}
