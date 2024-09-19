@@ -29,10 +29,8 @@ interface TrackerProps {
 }
 
 export default function Kanban({ initialData }: TrackerProps) {
-  const [applicationState, setApplicationState] =
-    useState<ApplicationObject[]>(initialData);
-  const [activeApplication, setActiveApplication] =
-    useState<ApplicationObject | null>(null);
+  const [applicationState, setApplicationState] = useState<ApplicationObject[]>(initialData);
+  const [activeApplication, setActiveApplication] = useState<ApplicationObject | null>(null);
   const [prevColumn, setPrevColumn] = useState<string | null>(null);
   // const scrollContainerRef = useRef<HTMLDivElement>(null); // Add this line
 
@@ -59,16 +57,9 @@ export default function Kanban({ initialData }: TrackerProps) {
   // Update the db state with kanban snapshot when dragging ends
   async function onDragEnd(event: DragEndEvent) {
     if (!hasSortableData(event.active)) return;
-    const snapShot: ApplicationObject[] = getKanbanSnapshot(
-      sortApplications(applicationState)
-    );
+    const snapShot: ApplicationObject[] = getKanbanSnapshot(sortApplications(applicationState));
     updateApplications(snapShot);
-    if (
-      activeApplication &&
-      prevColumn &&
-      activeApplication.todo_level === "3" &&
-      prevColumn !== "3"
-    ) {
+    if (activeApplication && prevColumn && activeApplication.todo_level === "3" && prevColumn !== "3") {
       triggerConfetti({ duration: 1400 });
     }
     setActiveApplication(null);
@@ -101,14 +92,8 @@ export default function Kanban({ initialData }: TrackerProps) {
         const overIndex = app.findIndex((t) => t.id === overId);
         const activeApp = app[activeIndex];
         const overApp = app[overIndex];
-        if (
-          activeApp &&
-          overApp &&
-          activeApp.todo_level !== overApp.todo_level
-        ) {
-          overId === "3"
-            ? (activeApp.completed = true)
-            : (activeApp.completed = false);
+        if (activeApp && overApp && activeApp.todo_level !== overApp.todo_level) {
+          overId === "3" ? (activeApp.completed = true) : (activeApp.completed = false);
           // Update the todo_level and date updated of the application
           activeApp.todo_level = overApp.todo_level;
           // Check the active card date_screened, if it's null set it to today
@@ -137,9 +122,7 @@ export default function Kanban({ initialData }: TrackerProps) {
         const activeIndex = app.findIndex((t) => t.id === activeId);
         const activeApp = app[activeIndex];
         if (activeApp) {
-          overId === "3"
-            ? (activeApp.completed = true)
-            : (activeApp.completed = false);
+          overId === "3" ? (activeApp.completed = true) : (activeApp.completed = false);
           // Update the todo_level and date updated of the application
           activeApp.todo_level = overId as string;
           // Check the active card date_screened, if it's null set it to today
@@ -181,22 +164,14 @@ export default function Kanban({ initialData }: TrackerProps) {
           {defaultColumns.map((column, index) => {
             const cards = sortApplications(applicationState);
             const columnCards = cards[index] || [];
-            return (
-              <Column
-                key={index}
-                column={column}
-                applicationCards={columnCards}
-              />
-            );
+            return <Column key={index} column={column} applicationCards={columnCards} />;
           })}
           {/* This is the overlay that will be shown when dragging an application card */}
           {typeof window !== "undefined" &&
             "document" in window &&
             createPortal(
               <DragOverlay>
-                {activeApplication && (
-                  <ApplicationCard application={activeApplication} isOverlay />
-                )}
+                {activeApplication && <ApplicationCard application={activeApplication} isOverlay />}
               </DragOverlay>,
               document.body
             )}
