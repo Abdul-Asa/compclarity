@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, FileText, Pen, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
+import { link } from "fs";
 
 export const HeroSection = () => {
   return (
@@ -84,6 +85,7 @@ export const Pricing = () => {
       isFree: false,
       cta: "Get this package",
       isPopular: true,
+      link: "/cv/cv-writing",
       isAvailable: true,
       features: [
         "Access to Compclarity Internship Handbook",
@@ -99,6 +101,7 @@ export const Pricing = () => {
       isFree: false,
       cta: "Coming soon",
       isAvailable: false,
+      link: "/cv-writing-2",
       features: [
         "Access to Compclarity Internship Handbook",
         "3 x Software Engineer resume templates",
@@ -205,23 +208,25 @@ export const HowItWorks = () => {
 export const FAQ = () => {
   const faqItems = [
     {
-      question: "What types of roles are best suited for sponsored listings?",
-      answer:
-        "Sponsored listings are particularly effective for reaching early-career talent, as our user base is primarily composed of students and recent graduates in STEM or finance related fields.",
+      question: "What differentiates you from other resume review/career coaching services?",
+      answer: "Cuz we love you😘 ",
     },
     {
-      question: "How long will my job listing remain pinned?",
-      answer:
-        "Your job listing will remain pinned at the top of our job board for the duration of the sponsorship period you select. You can choose from various timeframes to suit your hiring needs. Contact us to learn more.",
+      question: "I'm not applying to a tech company - will this still be helpful to me?",
+      answer: "Probably not, give us your money tho",
     },
     {
-      question: "Can I sponsor multiple job listings at once?",
-      answer:
-        "Yes, you can sponsor multiple job listings simultaneously. Each listing will be prominently featured at the top of the job board, increasing visibility across your open positions.",
+      question: "Why should I buy this?",
+      answer: "Cuz I said so? 🤨",
     },
     {
-      question: "Which locations do you support?",
-      answer: "Currently, CompClarity only supports the UK for job postings.",
+      question:
+        "I'm an aspiring software engineer but am starting with no knowledge of programming or Computer Science - can I still get help?",
+      answer: "You're cooked💀",
+    },
+    {
+      question: "But...but I have more questions!",
+      answer: "Great, feel free to contact us at blah blah blah",
     },
   ];
   return (

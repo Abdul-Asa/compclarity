@@ -26,7 +26,7 @@ export default function About() {
         </p>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <h2 className="uppercase underline text-emerald-700 dark:text-emerald-500">How It Works</h2>
+        <h2 className="uppercase w-full text-center underline text-emerald-700 dark:text-emerald-500">How It Works</h2>
         <p className="center font-open mt-3 whitespace-pre-line text-pretty text-center text-sm leading-loose">
           CompClarity is built on the foundation of community-driven data sharing. Users are encouraged to share a
           breakdown of their salaries, including base pay, bonuses, stock options, and other benefits. This
