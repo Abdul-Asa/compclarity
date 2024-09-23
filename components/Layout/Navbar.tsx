@@ -1,5 +1,5 @@
 "use client";
-import { Book, Computer, FileText, PoundSterling } from "lucide-react";
+import { ChevronDown, Computer, PoundSterling } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -48,7 +48,13 @@ const Navbar = ({ user }: { user?: User | null }) => {
       </Link>
       <ul className="group hidden flex-1 list-none items-center justify-center space-x-1 lg:flex">
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-          <PopoverTrigger className={navigationMenuTriggerStyle()}>Salaries</PopoverTrigger>
+          <PopoverTrigger className={navigationMenuTriggerStyle()}>
+            Salaries{" "}
+            <ChevronDown
+              className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
+              aria-hidden="true"
+            />
+          </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-4">
             <Link
               href="/tech"
@@ -86,39 +92,6 @@ const Navbar = ({ user }: { user?: User | null }) => {
         <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
           Tracker
         </Link>
-        {/* <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
-          <PopoverTrigger className={navigationMenuTriggerStyle()}>Products</PopoverTrigger>
-          <PopoverContent className="flex flex-col gap-4">
-            <Link
-              href="/cv"
-              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
-              dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
-              onClick={() => trackNav("cv_service")}
-            >
-              <div className="flex text-lg font-medium">
-                <FileText className="mr-2 size-6" />
-                CV Crafting
-              </div>
-              <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
-                Craft a perfect CV for your dream job
-              </p>
-            </Link>
-            <Link
-              href="/e-book"
-              className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
-              dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
-              onClick={() => trackNav("e_book")}
-            >
-              <div className="flex text-lg font-medium">
-                <Book className="mr-2 size-6" />
-                Tech Internship Guide
-              </div>
-              <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
-                Step-by-step application strategies
-              </p>
-            </Link>
-          </PopoverContent>
-        </Popover> */}
         <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
           About
         </Link>

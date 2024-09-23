@@ -36,9 +36,7 @@ export const salaryFormSchema = z.object({
   offerMonth: z
     .number({ invalid_type_error: "Please specify the month" })
     .min(1, { message: "Please specify the month" }),
-  offerYear: z
-    .number({ invalid_type_error: "Please specify the year" })
-    .min(1, { message: "Please specify the year" }),
+  offerYear: z.number({ invalid_type_error: "Please specify the year" }).min(1, { message: "Please specify the year" }),
   education: z.string(),
   gender: z.string(),
   ethnicity: z.string(),
@@ -49,16 +47,12 @@ export const signUpFormSchema = z.object({
   firstName: z.string().min(1, { message: "First name cannot be empty" }),
   lastName: z.string().min(1, { message: "Last name cannot be empty" }),
   email: z.string().email(),
-  password: z
-    .string()
-    .min(6, { message: "Password must have a length of at least 6." }),
+  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
 });
 
 export const loginFormSchema = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .min(6, { message: "Password must have a length of at least 6." }),
+  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
 });
 
 export const forgotPasswordSchema = z.object({
@@ -66,12 +60,8 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
-  password: z
-    .string()
-    .min(6, { message: "Password must have a length of at least 6." }),
-  confirmPassword: z
-    .string()
-    .min(6, { message: "Password must have a length of at least 6." }),
+  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
+  confirmPassword: z.string().min(6, { message: "Password must have a length of at least 6." }),
 });
 
 export const updateUserSchema = z.object({
@@ -82,9 +72,7 @@ export const updateUserSchema = z.object({
 export const createApplicationSchema = z.object({
   companyName: z.string().min(1, { message: "Company name cannot be empty" }),
   title: z.string().min(1, { message: "Title cannot be empty" }),
-  dateApplied: z
-    .string()
-    .min(1, { message: "Date of application cannot be empty" }),
+  dateApplied: z.string().min(1, { message: "Date of application cannot be empty" }),
   location: z.string().min(1, { message: "Location cannot be empty" }),
   description: z.string().optional(),
 });
@@ -100,4 +88,34 @@ export const updateApplicationSchema = z.object({
   dateInterviewed: z.string().optional(),
   dateOffered: z.string().optional(),
   dateRejected: z.string().optional(),
+});
+
+// For CV files
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 10; // 10MB
+const ACCEPTED_FILE_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+  "application/x-latex",
+];
+
+const fileSchema = z
+  .any()
+  .refine((file) => {
+    if (!(file instanceof FileList)) return true; // Allow empty input
+    return file[0]?.size <= MAX_UPLOAD_SIZE;
+  }, "File size must be less than 10MB")
+  .refine((file) => {
+    if (!(file instanceof FileList)) return true; // Allow empty input
+    return ACCEPTED_FILE_TYPES.includes(file[0]?.type);
+  }, "File must be a PDF, DOC, DOCX, TXT, or LaTeX document");
+
+export const cvServiceSchema = z.object({
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  cvFile: fileSchema,
+  extraInformation: z.string().optional(),
+  service: z.enum(["cv-writing", "interview-coaching"]),
 });

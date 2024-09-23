@@ -1,37 +1,20 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { CVServiceForm } from "./CVForm";
 
-interface pageProps {
+interface PageProps {
   params: { id: string };
 }
 
-// Edit the metadata for the page
-export async function generateMetadata({ params }: pageProps): Promise<Metadata> {
-  if (params.id == "cv-writing") {
-    return {
-      title: `CompClarity - CV Writing`,
-      description: `Get your CV professionally written by CompClarity and land your dream job!`,
-    };
-  } else if (params.id == "interview-coaching") {
-    return {
-      title: `CompClarity - Interview Coaching`,
-      description: `Ace your interviews with CompClarity's expert coaching services!`,
-    };
-  } else {
-    return {
-      title: `CompClarity - CV & Interview Services`,
-      description: `Get your CV professionally written and ace your interviews with CompClarity's expert coaching services!`,
-    };
-  }
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const title = params.id === "cv-writing" ? "CV Writing" : "Interview Coaching";
+  return {
+    title: `CompClarity - ${title}`,
+    description: `Get professional ${title.toLowerCase()} services from CompClarity and boost your career prospects!`,
+  };
 }
 
-const page = async ({ params }: pageProps) => {
-  return (
-    <div className="bg-white dark:bg-black dark:border-gray-700 dark:border p-16 sm:pr-40 sm:pl-40">
-      {params.id == "cv-writing" && <h1>CV Writing</h1>}
-      {params.id == "interview-coaching" && <h1>Interview Coaching</h1>}
-    </div>
-  );
+const Page = async ({ params }: PageProps) => {
+  return <CVServiceForm serviceId={params.id} />;
 };
 
-export default page;
+export default Page;

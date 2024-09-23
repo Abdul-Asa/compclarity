@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   createApplicationSchema,
+  cvServiceSchema,
   forgotPasswordSchema,
   loginFormSchema,
   resetPasswordSchema,
@@ -12,8 +13,7 @@ import {
 import countryToCurrency from "country-to-currency";
 import { Database } from "./supabase/types";
 
-export type CurrencyCode =
-  (typeof countryToCurrency)[keyof typeof countryToCurrency];
+export type CurrencyCode = (typeof countryToCurrency)[keyof typeof countryToCurrency];
 
 type Company = {
   name: string;
@@ -92,13 +92,11 @@ export type SalaryFormSchema = z.infer<typeof salaryFormSchema>;
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 export type LoginFormSchema = z.infer<typeof loginFormSchema>;
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
-export type AuthFormSchema =
-  | SignUpFormSchema
-  | LoginFormSchema
-  | ForgotPasswordSchema;
+export type AuthFormSchema = SignUpFormSchema | LoginFormSchema | ForgotPasswordSchema;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 export type CreateApplicationSchema = z.infer<typeof createApplicationSchema>;
 export type UpdateApplicationSchema = z.infer<typeof updateApplicationSchema>;
 export type ApplicationObject = Database["public"]["Tables"]["todos"]["Row"];
 export type ApplicationSorted = Record<string, ApplicationObject[]>;
+export type CVServiceSchema = z.infer<typeof cvServiceSchema>;

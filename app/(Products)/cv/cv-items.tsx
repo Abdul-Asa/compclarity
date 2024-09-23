@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, FileText, Pen, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
-import { link } from "fs";
+import { useRouter } from "next/navigation";
 
 export const HeroSection = () => {
   return (
@@ -42,6 +42,42 @@ export const HeroSection = () => {
 };
 
 export const MarqueeSection = () => {
+  const companies = [
+    {
+      name: "Wise",
+      icon: "/assets/wise.svg",
+    },
+    {
+      name: "Meta",
+      icon: "/assets/meta.svg",
+    },
+    {
+      name: "Amazon",
+      icon: "/assets/amazon.svg",
+    },
+    {
+      name: "BoA",
+      icon: "/assets/boa.svg",
+    },
+
+    {
+      name: "Samsara",
+      icon: "/assets/samsara.svg",
+    },
+    {
+      name: "Citadel",
+      icon: "/assets/citadel.svg",
+    },
+    {
+      name: "Spotify",
+      icon: "/assets/spotify.svg",
+    },
+
+    {
+      name: "Palantir",
+      icon: "/assets/palantir.svg",
+    },
+  ];
   return (
     <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
       <div className="w-full">
@@ -61,8 +97,11 @@ export const MarqueeSection = () => {
 };
 
 export const Pricing = () => {
+  const router = useRouter();
+
   const pricingTiers = [
     {
+      id: "service-1",
       title: "CV review - Discord community",
       price: 0,
       originalPrice: 0,
@@ -78,6 +117,7 @@ export const Pricing = () => {
       ],
     },
     {
+      id: "service-2",
       title: "CV writing from a FANG employee",
       price: 18,
       originalPrice: 29,
@@ -94,6 +134,7 @@ export const Pricing = () => {
       ],
     },
     {
+      id: "service-3",
       title: "Full CV writing service",
       price: 39,
       originalPrice: 59,
@@ -101,7 +142,7 @@ export const Pricing = () => {
       isFree: false,
       cta: "Coming soon",
       isAvailable: false,
-      link: "/cv-writing-2",
+      link: "/cv-full-package",
       features: [
         "Access to Compclarity Internship Handbook",
         "3 x Software Engineer resume templates",
@@ -119,8 +160,8 @@ export const Pricing = () => {
         Get the perfect CV with just a small fraction of your potential salary.
       </p>
       <div className="grid pt-10  md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {pricingTiers.map((tier, index) => (
-          <Card key={index} className="flex flex-col">
+        {pricingTiers.map((tier) => (
+          <Card key={tier.id} className="flex flex-col">
             <CardHeader>
               <CardTitle className="text-xl">{tier.title}</CardTitle>
             </CardHeader>
@@ -143,7 +184,7 @@ export const Pricing = () => {
                 disabled={!tier.isAvailable}
                 onClick={() => {
                   if (tier.isAvailable) {
-                    window.open(tier.link, "_blank");
+                    router.push(tier.link);
                   }
                 }}
               >
@@ -245,43 +286,6 @@ export const FAQ = () => {
     </div>
   );
 };
-
-const companies = [
-  {
-    name: "Wise",
-    icon: "/assets/wise.svg",
-  },
-  {
-    name: "Meta",
-    icon: "/assets/meta.svg",
-  },
-  {
-    name: "Amazon",
-    icon: "/assets/amazon.svg",
-  },
-  {
-    name: "BoA",
-    icon: "/assets/boa.svg",
-  },
-
-  {
-    name: "Samsara",
-    icon: "/assets/samsara.svg",
-  },
-  {
-    name: "Citadel",
-    icon: "/assets/citadel.svg",
-  },
-  {
-    name: "Spotify",
-    icon: "/assets/spotify.svg",
-  },
-
-  {
-    name: "Palantir",
-    icon: "/assets/palantir.svg",
-  },
-];
 
 //I'll come back to this
 export const PDF = () => {
