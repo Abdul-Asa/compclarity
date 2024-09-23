@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { date, z } from "zod";
 
 // Form validation schemas
@@ -91,31 +92,24 @@ export const updateApplicationSchema = z.object({
 });
 
 // For CV files
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 10; // 10MB
-const ACCEPTED_FILE_TYPES = [
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "text/plain",
-  "application/x-latex",
-];
-
-const fileSchema = z
-  .any()
-  .refine((file) => {
-    if (!(file instanceof FileList)) return true; // Allow empty input
-    return file[0]?.size <= MAX_UPLOAD_SIZE;
-  }, "File size must be less than 10MB")
-  .refine((file) => {
-    if (!(file instanceof FileList)) return true; // Allow empty input
-    return ACCEPTED_FILE_TYPES.includes(file[0]?.type);
-  }, "File must be a PDF, DOC, DOCX, TXT, or LaTeX document");
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
+const ACCEPTED_FILE_TYPES = {
+  "application/pdf": [".pdf"],
+  "application/msword": [".doc"],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+  "text/plain": [".txt"],
+  "application/x-latex": [".tex", ".latex"],
+};
 
 export const cvServiceSchema = z.object({
-  fullName: z.string().min(1, "Full name is required"),
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  cvFile: fileSchema,
+  firstName: z.string().min(3, { message: "Minimum 3 characters" }),
+  lastName: z.string().min(3, { message: "Minimum 3 characters" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  phoneNumber: z
+    .string()
+    .min(1, { message: "Phone number is required" })
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+  cvFile: z.array(z.instanceof(File)).refine((files) => files.length > 0),
   extraInformation: z.string().optional(),
   service: z.enum(["cv-writing", "interview-coaching"]),
 });

@@ -39,7 +39,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             </div>
             <Announcement />
             <Toaster />
-            <SonnerToaster />
+            <SonnerToaster richColors />
           </ThemeProvider>
         </body>
       </CSPostHogProvider>

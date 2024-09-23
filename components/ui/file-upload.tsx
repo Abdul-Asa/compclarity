@@ -133,8 +133,8 @@ export function FileUploader(props: FileUploaderProps) {
       setFiles(updatedFiles);
 
       if (rejectedFiles.length > 0) {
-        rejectedFiles.forEach(({ file }) => {
-          toast.error(`File ${file.name} was rejected`);
+        rejectedFiles.forEach(({ file, errors }) => {
+          toast.error(`File ${file.name} was rejected: ${errors[0].code}`);
         });
       }
 
