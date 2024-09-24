@@ -123,7 +123,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
           About
         </Link> */}
         <Link href="https://compclarity.gumroad.com/l/guide" className={navigationMenuTriggerStyle()} onClick={() => trackNav("guide")} target="_blank"> 
-          Guide
+          SWE Guide
         </Link>
       </ul>
 
@@ -207,7 +207,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
               About
             </Link> */}
             <Link href="https://compclarity.gumroad.com/l/guide" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("guide")} target="_blank">
-              Guide
+              SWE Guide
             </Link>
             {" "}
             {/* <Accordion type="multiple" className="w-full mt-3">
