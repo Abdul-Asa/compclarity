@@ -14,8 +14,7 @@ const getPriceId = async (service: string) => {
 
 export async function POST(request: NextRequest) {
   const res = await request.json();
-  //   const priceId = await getPriceId(res.service);
-  const origin = new URL(request.url).origin;
+  const priceId = await getPriceId(res.service);
   //   const session = await stripe.checkout.sessions.create({
   //       ui_mode: "embedded",
   //       customer_email: res.email,
@@ -35,5 +34,5 @@ export async function POST(request: NextRequest) {
   //   res.status(err.statusCode || 500).json(err.message);
   // }
 
-  return NextResponse.json({ message: `checkout session created from ${origin}` });
+  return NextResponse.json({ message: JSON.stringify(res, null, 2), priceId });
 }
