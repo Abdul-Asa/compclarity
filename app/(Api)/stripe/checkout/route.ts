@@ -15,24 +15,27 @@ const getPriceId = async (service: string) => {
 export async function POST(request: NextRequest) {
   const res = await request.json();
   const priceId = await getPriceId(res.service);
-  //   const session = await stripe.checkout.sessions.create({
-  //       ui_mode: "embedded",
-  //       customer_email: res.email,
-  //       line_items: [
-  //       {
-  //           price: priceId,
-  //           quantity: 1,
-  //       },
-  //       ],
-  //       mode: "payment",
-  //       return_url: `${request.url}/return?session_id={CHECKOUT_SESSION_ID}`,
-  //       automatic_tax: { enabled: true },
-  //   });
 
-  //   res.send({clientSecret: session.client_secret});
-  // } catch (err) {
-  //   res.status(err.statusCode || 500).json(err.message);
-  // }
+  try {
+    const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded",
+      customer_email: res.email,
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      return_url: `${res.origin}?session_id={CHECKOUT_SESSION_ID}`,
+      automatic_tax: { enabled: true },
+    });
 
-  return NextResponse.json({ message: JSON.stringify(request, null, 2), priceId });
+    return NextResponse.json({ clientSecret: session.client_secret, session });
+  } catch (err) {
+    if (err instanceof Error) {
+      return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
+  }
 }

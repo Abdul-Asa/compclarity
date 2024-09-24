@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { cvServiceSchema } from "@/lib/validations/form";
 import { Controller, useForm } from "react-hook-form";
 import { CVServiceSchema } from "@/lib/types";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import getStripe from "@/lib/stripe/load-stripe";
+import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 interface CVServiceFormProps {
   serviceId: string;
 }
@@ -31,7 +36,16 @@ const steps: StepperItem[] = [
 
 export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [response, setResponse] = useState<string | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const stripePromise = getStripe();
+  const query = useSearchParams();
+
+  useEffect(() => {
+    const sessionId = query.get("session_id");
+    if (sessionId) {
+      setCurrentStep(2);
+    }
+  }, [query]);
 
   const {
     register,
@@ -47,100 +61,117 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   });
 
   const onSubmit = async (data: CVServiceSchema) => {
+    setCurrentStep(1);
     const response = await fetch("/stripe/checkout", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        origin: window.location.href,
+      }),
     });
-    const serverResponse = await response.json();
-    setResponse(serverResponse.message);
+    const res = await response.json();
+    if (res.error) {
+      toast.error(res.error);
+      setCurrentStep(0);
+    } else {
+      setClientSecret(res.clientSecret);
+    }
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col">
       <Stepper steps={steps} currentStep={currentStep} />
       <div className="flex-1 flex justify-center container mx-auto p-5">
-        <div className="bg-white dark:bg-black flex flex-col max-w-screen-md items-center w-full p-4 rounded-sm md:p-10">
-          <div className="flex flex-col gap-2 text-center">
-            <h1 className="text-2xl font-bold">{fromUrlFriendly(serviceId).toUpperCase()}</h1>
-            <p>
-              Our CV writing service is designed to help you stand out in the job market. Our team of experts will work
-              with you to create a CV that highlights your skills and experience, and makes you stand out from the
-              competition.
-            </p>
-          </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 justify-between mt-10 size-full">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input id="firstName" placeholder="John" {...register("firstName")} />
-                <p className="text-red-500 text-sm h-4">{errors.firstName?.message}</p>
+        <AnimatePresence>
+          {currentStep === 0 && (
+            <div className="bg-white dark:bg-black flex flex-col max-w-screen-md items-center w-full p-4 rounded-sm md:p-10">
+              <div className="flex flex-col gap-2 text-center">
+                <h1 className="text-2xl font-bold">{fromUrlFriendly(serviceId).toUpperCase()}</h1>
+                <p>
+                  Our CV writing service is designed to help you stand out in the job market. Our team of experts will
+                  work with you to create a CV that highlights your skills and experience, and makes you stand out from
+                  the competition.
+                </p>
               </div>
-              <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input id="lastName" placeholder="Doe" {...register("lastName")} />
-                <p className="text-red-500 text-sm h-4">{errors.lastName?.message}</p>
-              </div>
-              <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" placeholder="john.doe@example.com" {...register("email")} />
-                <p className="text-red-500 text-sm h-4">{errors.email?.message}</p>
-              </div>
-              <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
-                <Label htmlFor="phone">Phone</Label>
-                <Controller
-                  name="phoneNumber"
-                  control={control}
-                  render={({ field }) => <PhoneInput placeholder="+44 7123 456789" {...field} />}
-                />
-                <p className="text-red-500 text-sm h-4">{errors.phoneNumber?.message}</p>
-              </div>
-              <div className="flex flex-col gap-2 col-span-2">
-                <Label htmlFor="file">Upload your CV</Label>
-                <Controller
-                  name="cvFile"
-                  control={control}
-                  render={({ field }) => (
-                    <FileUploader
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      maxFileCount={2}
-                      maxSize={1024 * 1024 * 2} // 2MB
-                      accept={{
-                        "application/pdf": [".pdf"],
-                        "application/msword": [".doc"],
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-                        "text/plain": [".txt"],
-                        "application/x-latex": [".tex", ".latex"],
-                      }}
+              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 justify-between mt-10 size-full">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input id="firstName" placeholder="John" {...register("firstName")} />
+                    <p className="text-red-500 text-sm h-4">{errors.firstName?.message}</p>
+                  </div>
+                  <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input id="lastName" placeholder="Doe" {...register("lastName")} />
+                    <p className="text-red-500 text-sm h-4">{errors.lastName?.message}</p>
+                  </div>
+                  <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" placeholder="john.doe@example.com" {...register("email")} />
+                    <p className="text-red-500 text-sm h-4">{errors.email?.message}</p>
+                  </div>
+                  <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Controller
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field }) => <PhoneInput placeholder="+44 7123 456789" {...field} />}
                     />
-                  )}
-                />
-              </div>
-              <div className="flex flex-col gap-2 col-span-2">
-                <Label htmlFor="info">Additional Information</Label>
-                <Textarea
-                  id="info"
-                  placeholder="Tell us a little bit about yourself"
-                  rows={4}
-                  {...register("extraInformation")}
-                />
-              </div>
+                    <p className="text-red-500 text-sm h-4">{errors.phoneNumber?.message}</p>
+                  </div>
+                  <div className="flex flex-col gap-2 col-span-2">
+                    <Label htmlFor="file">Upload your CV</Label>
+                    <Controller
+                      name="cvFile"
+                      control={control}
+                      render={({ field }) => (
+                        <FileUploader
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          maxFileCount={2}
+                          maxSize={1024 * 1024 * 2} // 2MB
+                          accept={{
+                            "application/pdf": [".pdf"],
+                            "application/msword": [".doc"],
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+                            "text/plain": [".txt"],
+                            "application/x-latex": [".tex", ".latex"],
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 col-span-2">
+                    <Label htmlFor="info">Additional Information</Label>
+                    <Textarea
+                      id="info"
+                      placeholder="Tell us a little bit about yourself"
+                      rows={4}
+                      {...register("extraInformation")}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    className="w-full lg:w-60 bg-emerald-500 dark:bg-emerald-700 text-white"
+                    disabled={!isValid}
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Proceed to Payment
+                  </Button>
+                </div>
+              </form>
             </div>
-            <div className="flex justify-end">
-              <Button
-                className="w-full lg:w-60 bg-emerald-500 dark:bg-emerald-700 text-white"
-                disabled={!isValid}
-                onClick={(e) => {
-                  setCurrentStep(1);
-                  handleSubmit(onSubmit)(e);
-                }}
-              >
-                Proceed to Payment
-              </Button>
+          )}
+          {currentStep === 1 && (
+            <div id="checkout" className="w-full border-2  p-1 ">
+              <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
             </div>
-          </form>
-          {response && <p>{response}</p>}
-        </div>
+          )}
+          {currentStep === 2 && <div>Payment successful:{query.get("session_id")}</div>}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -149,7 +180,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
 const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: number }) => {
   return (
     <div className="flex items-center md:flex-row flex-col relativelg:px-10 px-2 border-b shadow-sm bg-white dark:bg-black dark:border-gray-800 border-gray-200 py-4 select-none">
-      <Link href="/dashboard" className={buttonVariants({ variant: "ghost" })}>
+      <Link href="/cv" className={buttonVariants({ variant: "ghost" })}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         <span className="hidden md:block">Back to products</span>
         <span className="md:hidden">Products</span>
