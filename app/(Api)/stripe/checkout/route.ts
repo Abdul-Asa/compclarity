@@ -34,5 +34,5 @@ export async function POST(request: NextRequest) {
   //   res.status(err.statusCode || 500).json(err.message);
   // }
 
-  return NextResponse.json({ message: JSON.stringify(res, null, 2), priceId });
+  return NextResponse.json({ message: JSON.stringify(request, null, 2), priceId });
 }
