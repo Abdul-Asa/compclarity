@@ -119,9 +119,9 @@ const Navbar = ({ user }: { user?: User | null }) => {
             </Link>
           </PopoverContent>
         </Popover> */}
-        <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
+        {/* <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
           About
-        </Link>
+        </Link> */}
         <Link href="https://compclarity.gumroad.com/l/guide" className={navigationMenuTriggerStyle()} onClick={() => trackNav("guide")} target="_blank"> 
           Guide
         </Link>
@@ -203,9 +203,9 @@ const Navbar = ({ user }: { user?: User | null }) => {
             >
               Tracker
             </Link>
-            <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
+            {/* <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
               About
-            </Link>
+            </Link> */}
             <Link href="https://compclarity.gumroad.com/l/guide" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("guide")} target="_blank">
               Guide
             </Link>
