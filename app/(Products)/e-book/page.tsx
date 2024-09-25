@@ -41,7 +41,7 @@ export default async function EbookPage() {
 
   return (
     <div className="flex w-full flex-col scroll-smooth">
-      <div className="mx-auto flex flex-col md:flex-row w-full items-center md:h-[calc(100vh-100px)] justify-center container gap-20 p-6 md:px-0 py-20">
+      <div className="mx-auto flex flex-col md:flex-row w-full items-center md:h-[calc(100vh-100px)] justify-center container gap-20 p-6 md:px-10 py-20">
         <div className="flex flex-col  justify-center gap-5">
           <h1 className="animate-fade-in text-left text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
             <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">

@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 export const HeroSection = () => {
   return (
-    <div className="mx-auto flex flex-col md:flex-row w-full items-center min-h-screen md:min-h-fit md:h-[calc(100vh-150px)] justify-center container gap-20 p-6 md:px-0">
+    <div className="mx-auto flex flex-col md:flex-row w-full items-center min-h-screen md:min-h-fit md:h-[calc(100vh-150px)] justify-center container gap-20 p-6 md:px-10">
       <div className="flex flex-col items-center justify-center gap-5">
         <div className="group relative rounded-full border self-start">
           <CTABadge intro="Ready to land that dream job?" link="#pricing" target="_self" />

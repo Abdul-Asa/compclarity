@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Check, CreditCard, User } from "lucide-react";
 import Link from "next/link";
-import { cn, fromUrlFriendly } from "@/lib/utils";
+import { cn, fromUrlFriendly, toUrlFriendly } from "@/lib/utils";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { FileUploader } from "@/components/ui/file-upload";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,10 +16,13 @@ import { CVServiceSchema } from "@/lib/types";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import getStripe from "@/lib/stripe/load-stripe";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
+import { Skeleton } from "@/components/ui/skeleton";
+import { createClient } from "@/lib/supabase/client";
 interface CVServiceFormProps {
   serviceId: string;
+  session?: any;
 }
 
 interface StepperItem {
@@ -34,18 +37,16 @@ const steps: StepperItem[] = [
   { id: 2, text: "Complete", icon: <Check /> },
 ];
 
-export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const stripePromise = getStripe();
-  const query = useSearchParams();
+export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
+  const [currentStep, setCurrentStep] = useState(session ? 2 : 0);
+  const [clientSecret, setClientSecret] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const sessionId = query.get("session_id");
-    if (sessionId) {
-      setCurrentStep(2);
-    }
-  }, [query]);
+    if (!session) return;
+    if (session.status === "open") setCurrentStep(1);
+    else setCurrentStep(2);
+  }, [session]);
 
   const {
     register,
@@ -61,12 +62,30 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   });
 
   const onSubmit = async (data: CVServiceSchema) => {
-    setCurrentStep(1);
+    setLoading(true);
+    // Upload files to supabase storage first
+    const supabase = createClient();
+    const files = data.cvFile;
+    const fileNames = files.map((file: File) => `${data.email}-${Date.now()}-${toUrlFriendly(file.name)}`);
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileName = fileNames[i];
+      const { error } = await supabase.storage.from("file_storage").upload(`cvs/${fileName}`, file);
+      if (error) {
+        toast.error(error.message);
+        setCurrentStep(0);
+        setLoading(false);
+        return;
+      }
+    }
+
     const response = await fetch("/stripe/checkout", {
       method: "POST",
       body: JSON.stringify({
         ...data,
         origin: window.location.href,
+        fileNames,
       }),
     });
     const res = await response.json();
@@ -75,7 +94,9 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
       setCurrentStep(0);
     } else {
       setClientSecret(res.clientSecret);
+      setCurrentStep(1);
     }
+    setLoading(false);
   };
 
   return (
@@ -154,23 +175,39 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                 <div className="flex justify-end">
                   <Button
                     className="w-full lg:w-60 bg-emerald-500 dark:bg-emerald-700 text-white"
-                    disabled={!isValid}
+                    disabled={!isValid || loading}
                     onClick={handleSubmit(onSubmit)}
                   >
-                    Proceed to Payment
+                    {loading ? "Loading..." : "Proceed to Payment"}
                   </Button>
                 </div>
               </form>
             </div>
           )}
-          {currentStep === 1 && (
-            <div id="checkout" className="w-full border-2  p-1 ">
-              <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
+          {currentStep === 1 && <PaymentForm clientSecret={clientSecret} />}
+          {currentStep === 2 && (
+            <div className=" bg-white dark:bg-black w-full p-4 flex justify-center items-center ">
+              <div className=" flex flex-col justify-center gap-2 text-center rounded-sm p-10">
+                <h1 className="text-2xl font-bold">
+                  {session.status === "complete" ? "Thank you for your purchase! " : "Payment failed"}
+                </h1>
+
+                {session.status === "complete" ? (
+                  <p>
+                    You may contact us at <a href="mailto:contact@compclarity.com">contact@compclarity.com</a> for any
+                    questions.
+                  </p>
+                ) : (
+                  <p>Payment failed. Please try again.</p>
+                )}
+                <Link href="/cv" className={buttonVariants({ variant: "ghost" })}>
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  <span className="hidden md:block">Back to products</span>
+                  <span className="md:hidden">Products</span>
+                </Link>
+              </div>
             </div>
           )}
-          {currentStep === 2 && <div>Payment successful:{query.get("session_id")}</div>}
         </AnimatePresence>
       </div>
     </div>
@@ -213,6 +250,21 @@ const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: nu
         </div>
       </div>
       <div />
+    </div>
+  );
+};
+
+const PaymentForm = ({ clientSecret }: { clientSecret: string }) => {
+  const stripePromise = getStripe();
+  const { theme } = useTheme();
+
+  if (clientSecret === "") return <Skeleton className="w-full h-full" />;
+
+  return (
+    <div id="checkout" className="w-full border-2 p-1 stripe-issue">
+      <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+        <EmbeddedCheckout />
+      </EmbeddedCheckoutProvider>
     </div>
   );
 };
