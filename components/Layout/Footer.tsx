@@ -43,14 +43,6 @@ const Footer = () => {
           >
             <FaInstagram size={24} />
           </Link>
-          <Link
-            href="https://compclarity.substack.com"
-            target="_blank"
-            onClick={() => trackFooter("blog")}
-            aria-label="Blog"
-          >
-            <FaBlog size={24} />
-          </Link>
           {/* <Link
             href="https://twitter.com/CompClarity"
             target="_blank"
@@ -59,14 +51,14 @@ const Footer = () => {
           >
             <FaXTwitter size={24} />
           </Link> */}
-          {/* <Link
+          <Link
             href="https://www.tiktok.com/@cscareers"
             target="_blank"
             onClick={() => trackFooter("tiktok")}
             aria-label="Tiktok"
           >
             <FaTiktok size={24} />
-          </Link> */}
+          </Link>
         </div>
         <small className="flex flex-wrap justify-center items-center gap-x-2">
           <span>&#169; CompClarity 2024</span>|
