@@ -11,6 +11,7 @@ import { Check, FileText, Pen, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export const HeroSection = () => {
   return (
@@ -34,6 +35,9 @@ export const HeroSection = () => {
             Tired of getting that rejection email? We can help. Our team of experts will work with you to create a
             standout CV that showcases your experience and strengths that will get you noticed by employers.
           </h2>
+          <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
+            <Link href="#pricing">Get Started</Link>
+          </Button>
         </div>
       </div>
       <img src="/assets/cv.svg" alt="CV" className="" />

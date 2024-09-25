@@ -62,8 +62,12 @@ const Footer = () => {
         </div>
         <small className="flex flex-wrap justify-center items-center gap-x-2">
           <span>&#169; CompClarity 2024</span>|
+          <a href="/about" className="hover:underline" onClick={() => trackFooter("about")}>
+            About
+          </a>{" "}
+          |
           <a href="mailto:contact@compclarity.com" className="hover:underline" onClick={() => trackFooter("email")}>
-            contact@compclarity.com
+            Contact
           </a>
           |
           <a href="/employers" className="hover:underline" onClick={() => trackFooter("employers")}>
