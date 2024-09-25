@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, Computer, PoundSterling } from "lucide-react";
+import { Book, ChevronDown, Computer, FileText, PoundSterling } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -92,7 +92,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
         <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
           Tracker
         </Link>
-        {/* <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
+        <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
           <PopoverTrigger className={navigationMenuTriggerStyle()}>Products</PopoverTrigger>
           <PopoverContent className="flex flex-col gap-4">
             <Link
@@ -124,18 +124,18 @@ const Navbar = ({ user }: { user?: User | null }) => {
               </p>
             </Link>
           </PopoverContent>
-        </Popover> */}
+        </Popover>
         {/* <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
           About
         </Link> */}
-        <Link
+        {/* <Link
           href="https://compclarity.gumroad.com/l/guide"
           className={navigationMenuTriggerStyle()}
           onClick={() => trackNav("guide")}
           target="_blank"
         >
           SWE Guide
-        </Link>
+        </Link> */}
       </ul>
 
       <div className="hidden w-[15%] justify-end gap-2 lg:flex">

@@ -16,7 +16,11 @@ export async function POST(request: Request) {
     signature,
     process.env.STRIPE_WEBHOOK_SECRET
   );
-  if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
+  if (
+    event.type === "checkout.session.completed" ||
+    event.type === "checkout.session.async_payment_succeeded" ||
+    event.type === "payment_intent.succeeded"
+  ) {
     const sessionId = event.data.object.id;
     console.log("sessionId", sessionId);
     const supabase = createClient();
