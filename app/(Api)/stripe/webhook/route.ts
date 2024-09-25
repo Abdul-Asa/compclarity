@@ -16,30 +16,20 @@ export async function POST(request: Request) {
     signature,
     process.env.STRIPE_WEBHOOK_SECRET
   );
+  if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
+    const sessionId = event.data.object.id;
+    console.log("sessionId", sessionId);
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("payments")
+      .update({ session_status: "completed" })
+      .eq("session_id", sessionId);
 
-  switch (event.type) {
-    case "payment_intent.succeeded":
-      const session = await stripe.checkout.sessions.list({
-        payment_intent: event.data.object.id,
-      });
-
-      const sessionId = session[0].id;
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("payments")
-        .update({ session_status: "complete" })
-        .eq("session_id", sessionId)
-        .select();
-
-      console.log("data", data);
-      if (error) {
-        console.error(error);
-        return new Response("Error updating payment status", { status: 500 });
-      }
-      break;
-
-    default:
-      console.log(`Unhandled event type: ${event.type}`);
+    if (error) {
+      console.error("Error updating payment status:", error);
+      return new Response("Error updating payment status", { status: 500 });
+    }
   }
+
   return Response.json({ received: true });
 }

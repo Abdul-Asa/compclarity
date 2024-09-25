@@ -21,7 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/lib/supabase/client";
 interface CVServiceFormProps {
   serviceId: string;
-  session?: any;
+  session: any;
 }
 
 interface StepperItem {
@@ -56,8 +56,11 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
 
   // useEffect(
   //   function checkSessionStatus() {
-  //     if (!session) return;
-  //     if (session.status === "open") setCurrentStep(1);
+  //     if (!session){
+  //        setCurrentStep(0);
+  //     }else if (session.status === "open") {
+  //       setCurrentStep(1);
+  //     }
   //     else {
   //       updatePaymentStatus();
   //       setCurrentStep(2);
@@ -204,7 +207,7 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
             </div>
           )}
           {currentStep === 1 && <PaymentForm clientSecret={clientSecret} />}
-          {currentStep === 2 && (
+          {currentStep === 2 && session && (
             <div className=" bg-white dark:bg-black w-full p-4 flex justify-center items-center ">
               <div className=" flex flex-col justify-center gap-2 text-center rounded-sm p-10">
                 <h1 className="text-2xl font-bold">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CVServiceForm } from "./CVForm";
+
 interface PageProps {
   params: { id: string };
   searchParams: { [key: string]: string | undefined };
@@ -13,17 +14,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+async function getStripeSession(sessionId: string | undefined) {
+  if (!sessionId) return null;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout?session_id=${sessionId}`);
+  return response.json();
+}
+
 const Page = async ({ params, searchParams }: PageProps) => {
-  const session = searchParams?.session_id
-    ? await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout?session_id=${searchParams.session_id}`).then(
-        (res) => res.json()
-      )
-    : null;
-  if (session) {
-    return <CVServiceForm serviceId={params.id} session={session} />;
-  } else {
-    return <CVServiceForm serviceId={params.id} />;
-  }
+  const session = await getStripeSession(searchParams.session_id);
+  return <CVServiceForm serviceId={params.id} session={session} />;
 };
 
 export default Page;
