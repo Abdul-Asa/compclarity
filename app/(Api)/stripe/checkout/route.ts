@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { toUrlFriendly } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -17,7 +16,7 @@ const getPriceId = async (service: string) => {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const priceId = await getPriceId(body.service);
-
+  const supabase = createClient();
   //Save the data to the database
 
   try {
@@ -34,9 +33,6 @@ export async function POST(request: NextRequest) {
       return_url: `${body.origin}?session_id={CHECKOUT_SESSION_ID}`,
       automatic_tax: { enabled: true },
     });
-
-    const supabase = createClient();
-
     const { error: supabaseError } = await supabase.from("payments").insert({
       full_name: body.firstName + " " + body.lastName,
       email: body.email,
@@ -51,7 +47,6 @@ export async function POST(request: NextRequest) {
     if (supabaseError) {
       throw new Error(supabaseError.message);
     }
-
     return NextResponse.json({
       clientSecret: session.client_secret,
       session,

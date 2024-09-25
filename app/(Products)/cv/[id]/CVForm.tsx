@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Check, CreditCard, User } from "lucide-react";
+import { ArrowLeft, Check, CreditCard, Loader2, User } from "lucide-react";
 import Link from "next/link";
 import { cn, fromUrlFriendly, toUrlFriendly } from "@/lib/utils";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -17,7 +17,6 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe
 import getStripe from "@/lib/stripe/load-stripe";
 import { toast } from "sonner";
 import { AnimatePresence } from "framer-motion";
-import { useTheme } from "next-themes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/lib/supabase/client";
 interface CVServiceFormProps {
@@ -42,11 +41,30 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!session) return;
-    if (session.status === "open") setCurrentStep(1);
-    else setCurrentStep(2);
-  }, [session]);
+  const updatePaymentStatus = async () => {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("payments")
+      .update({ session_status: "complete" })
+      .eq("session_id", session.id)
+      .select();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+  };
+
+  // useEffect(
+  //   function checkSessionStatus() {
+  //     if (!session) return;
+  //     if (session.status === "open") setCurrentStep(1);
+  //     else {
+  //       updatePaymentStatus();
+  //       setCurrentStep(2);
+  //     }
+  //   },
+  //   [session]
+  // );
 
   const {
     register,
@@ -80,6 +98,7 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
       }
     }
 
+    // Initialize Stripe Checkout
     const response = await fetch("/stripe/checkout", {
       method: "POST",
       body: JSON.stringify({
@@ -102,7 +121,7 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
   return (
     <div className="min-h-screen w-full flex flex-col">
       <Stepper steps={steps} currentStep={currentStep} />
-      <div className="flex-1 flex justify-center container mx-auto p-5">
+      <div className="flex-1 flex justify-center container relative mx-auto p-5">
         <AnimatePresence>
           {currentStep === 0 && (
             <div className="bg-white dark:bg-black flex flex-col max-w-screen-md items-center w-full p-4 rounded-sm md:p-10">
@@ -256,9 +275,13 @@ const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: nu
 
 const PaymentForm = ({ clientSecret }: { clientSecret: string }) => {
   const stripePromise = getStripe();
-  const { theme } = useTheme();
 
-  if (clientSecret === "") return <Skeleton className="w-full h-full" />;
+  if (clientSecret === "")
+    return (
+      <div className=" bg-white dark:bg-black flex w-full min-h-full items-center justify-center">
+        <Loader2 className="animate-spin size-20" />
+      </div>
+    );
 
   return (
     <div id="checkout" className="w-full border-2 p-1 stripe-issue">
