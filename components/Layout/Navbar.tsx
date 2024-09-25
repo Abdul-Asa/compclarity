@@ -93,7 +93,13 @@ const Navbar = ({ user }: { user?: User | null }) => {
           Tracker
         </Link>
         <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
-          <PopoverTrigger className={navigationMenuTriggerStyle()}>Products</PopoverTrigger>
+          <PopoverTrigger className={navigationMenuTriggerStyle()}>
+            Products{" "}
+            <ChevronDown
+              className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
+              aria-hidden="true"
+            />
+          </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-4">
             <Link
               href="/cv"
