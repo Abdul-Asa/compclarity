@@ -19,12 +19,19 @@ export async function POST(request: Request) {
 
   switch (event.type) {
     case "payment_intent.succeeded":
+      const session = await stripe.checkout.sessions.list({
+        payment_intent: event.data.object.id,
+      });
+
+      const sessionId = session[0].id;
       const supabase = createClient();
-      console.log("event.data.object.id", event.data.object);
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("payments")
         .update({ session_status: "complete" })
-        .eq("session_id", event.data.object.id);
+        .eq("session_id", sessionId)
+        .select();
+
+      console.log("data", data);
       if (error) {
         console.error(error);
         return new Response("Error updating payment status", { status: 500 });
