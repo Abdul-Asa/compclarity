@@ -32,7 +32,7 @@ export const HeroSection = () => {
             in one go.
           </h1>
           <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-            Tired of getting that rejection email? We can help. Our team of experts will work with you to create a
+            Tired of not even passing the CV screening stage? We can help. Our team of experts will work with you to create a
             standout CV that showcases your experience and strengths that will get you noticed by employers.
           </h2>
           <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
@@ -106,7 +106,7 @@ export const Pricing = () => {
   const pricingTiers = [
     {
       id: "service-1",
-      title: "CV review - Discord community",
+      title: "CV Review",
       price: 0,
       originalPrice: 0,
       isFree: true,
@@ -115,32 +115,32 @@ export const Pricing = () => {
       link: "https://discord.gg/AuAvjpTTnm",
       isAvailable: true,
       features: [
-        "Get feedback from an active community",
-        "Access to multiple CVs templates",
+        "Get feedback on your CV from our community",
+        "Access to generic CV templates",
         "CV writing tips and resources",
       ],
     },
     {
       id: "service-2",
-      title: "CV writing from a FANG employee",
-      price: 18,
-      originalPrice: 29,
-      discount: "70% off - Limited time offer!",
+      title: "Silver CV writing package",
+      price: 19,
+      originalPrice: 38,
+      discount: "50% off - Limited time offer!",
       isFree: false,
       cta: "Get this package",
       isPopular: true,
       link: "/cv/cv-writing",
       isAvailable: true,
       features: [
-        "Access to Compclarity Internship Handbook",
-        "1 x Software Engineer resume templates",
-        "Bonus - 3 x Software Engineer resume references from the community. You get a total of 4 references!",
+        "Access to your own dedicated CV writer (someone who has worked at FAANG companies)",
+        "2 day turnaround",
+        "Access to CompClarity's SWE Guide worth £11.99",
       ],
     },
     {
       id: "service-3",
-      title: "Full CV writing service",
-      price: 39,
+      title: "Gold CV writing package",
+      price: 29,
       originalPrice: 59,
       discount: "50% off - Limited time offer!",
       isFree: false,
@@ -148,10 +148,9 @@ export const Pricing = () => {
       isAvailable: false,
       link: "/cv-full-package",
       features: [
-        "Access to Compclarity Internship Handbook",
-        "3 x Software Engineer resume templates",
-        "2 x Cover letter templates in Google Doc format",
-        "Access to private community - Referrals and network connections",
+        "Everything in the Silver Package",
+        "Cover letter templates tailored to your CV",
+        "Access to private community - referrals and network connections",
         "Free updates. We continuously improve our materials",
       ],
     },
@@ -159,7 +158,7 @@ export const Pricing = () => {
 
   return (
     <section id="pricing" className="container space-y-4 mx-auto px-4 py-16">
-      <h2 className=" text-xl font-bold md:text-2xl text-center lg:text-5xl">Get Shortlisted into your dream job</h2>
+      <h2 className=" text-xl font-bold md:text-2xl text-center lg:text-5xl">Get shortlisted into your dream job</h2>
       <p className=" text-center text-gray-600 dark:text-gray-200">
         Get the perfect CV with just a small fraction of your potential salary.
       </p>
@@ -254,25 +253,17 @@ export const FAQ = () => {
   const faqItems = [
     {
       question: "What differentiates you from other resume review/career coaching services?",
-      answer: "Cuz we love you😘 ",
+      answer: "Cuz we love you and care about your success 😘",
     },
     {
-      question: "I'm not applying to a tech company - will this still be helpful to me?",
-      answer: "Probably not, give us your money tho",
-    },
-    {
-      question: "Why should I buy this?",
-      answer: "Cuz I said so? 🤨",
+      question: "I'm not applying to a tech company, will this still be helpful to me?",
+      answer: "Probably not, give us your money tho (jk, finance services coming soon)",
     },
     {
       question:
-        "I'm an aspiring software engineer but am starting with no knowledge of programming or Computer Science - can I still get help?",
-      answer: "You're cooked💀",
-    },
-    {
-      question: "But...but I have more questions!",
-      answer: "Great, feel free to contact us at blah blah blah",
-    },
+        "I'm an aspiring software engineer but am starting with no knowledge of programming or computer science, can I still get help?",
+      answer: "You're cooked 💀",
+    }
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">

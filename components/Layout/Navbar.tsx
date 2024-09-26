@@ -94,7 +94,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
         </Link>
         <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
           <PopoverTrigger className={navigationMenuTriggerStyle()}>
-            Products{" "}
+            Services{" "}
             <ChevronDown
               className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
               aria-hidden="true"
@@ -234,7 +234,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
             {/* <Accordion type="multiple" className="w-full mt-3">
               <AccordionItem value="item-0">
                 <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
-                  Products
+                  Services
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col md:items-center pb-0 w-full">
                   <Link

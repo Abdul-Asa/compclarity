@@ -21,7 +21,7 @@ export default async function EbookPage() {
   //fallback to 4.9 rating if no reviews are found
   const reviews = data.reviews || [
     {
-      rating: 4.9,
+      rating: 5,
     },
   ];
 
@@ -35,8 +35,8 @@ export default async function EbookPage() {
       "Resume and cover letter templates",
       "Interview preparation tips",
     ],
-    price: "£13.99",
-    buttonText: "Get the Guide",
+    price: "£11.99",
+    buttonText: "Get the guide",
   };
 
   return (
