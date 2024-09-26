@@ -161,7 +161,7 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
                 </div>
                 <div className="flex flex-col gap-2 col-span-2">
                   <Label htmlFor="file" className="flex items-center gap-2">
-                    Upload your current CV{" "}
+                    Upload your current CV (if you have one){" "}
                     <span className="text-xs text-gray-500">
                       <InfoIcon
                         className="inline-block h-4 w-4"
@@ -223,8 +223,8 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
 
               {session.status === "complete" ? (
                 <p>
-                  You may contact us at <a href="mailto:contact@compclarity.com">contact@compclarity.com</a> for any
-                  questions.
+                  We will email you with more info within the next 48 hours, you don't need to do anything.
+                  You can contact us at <a href="mailto:contact@compclarity.com">contact@compclarity.com</a> if needed.
                 </p>
               ) : (
                 <p>Payment failed. Please try again.</p>
