@@ -126,7 +126,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
                 Tech Internship Guide
               </div>
               <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
-                Step-by-step application strategies
+                Get your first SWE internship
               </p>
             </Link>
           </PopoverContent>

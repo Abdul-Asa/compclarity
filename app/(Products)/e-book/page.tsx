@@ -31,9 +31,12 @@ export default async function EbookPage() {
   const cardContent = {
     title: "Tech Internship Guide",
     features: [
-      "Step-by-step application strategies",
-      "Resume and cover letter templates",
+      "Insights into the application process",
+      "CV and cover letter guidance",
       "Interview preparation tips",
+      "Networking advice",
+      "Increasing return offer odds",
+      "After sales support",
     ],
     price: "£11.99",
     buttonText: "Get the guide",
@@ -53,16 +56,16 @@ export default async function EbookPage() {
             </span>
           </h1>{" "}
           <p className="text-xl ">
-            Get insider tips and strategies from industry experts. Learn how to stand out and secure top tech
-            internships.
+            Get insider tips and strategies for the internship application process. Learn how to stand out and secure
+            internships at top tech companies.
           </p>{" "}
           <div className="flex items-center space-x-4 j">
-            <Image src="/assets/dave.jpeg" alt="Profile" width={80} height={80} className="rounded-3xl" />
+            <Image src="/assets/elliot.jpeg" alt="Profile" width={80} height={80} className="rounded-3xl" />
             <div>
               <p className=" font-medium">
                 "This guide was a game-changer for my internship search. Highly recommend!"
               </p>
-              <p className="">— Abdullah, Software Engineering Intern at Google</p>
+              <p className="">— Elliot, Software Engineer at JPMorgan</p>
             </div>
           </div>
         </div>{" "}
