@@ -99,7 +99,10 @@ export const cvServiceSchema = z.object({
     .string()
     .min(1, { message: "Phone number is required" })
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-  cvFile: z.array(z.instanceof(File)).refine((files) => files.length > 0),
+  cvFile: z
+    .array(z.instanceof(File))
+    .refine((files) => files.length > 0)
+    .optional(),
   extraInformation: z.string().optional(),
   service: z.enum(["cv-writing", "cv-full-package"]),
 });

@@ -82,6 +82,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   const uploadFilesToSupabase = async (data: CVServiceSchema) => {
     const supabase = createClient();
     const files = data.cvFile;
+    if (!files) return [];
     const fileNames = files.map((file: File) => `${data.email}/${Date.now()}/${toUrlFriendly(file.name)}`);
 
     for (let i = 0; i < files.length; i++) {
