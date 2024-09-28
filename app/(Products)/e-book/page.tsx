@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 // Edit the metadata for the page
 export const metadata: Metadata = {
-  title: "CompClarity - CV",
+  title: "CompClarity - Tech Internship Guide",
   description:
-    "Streamline your hiring process and discover exceptional early career candidates with ease. We showcase your job listings to the right talent, so you can focus on the more exciting stuff.",
+    "Access to CompClarity's Guide to landing your first Software Engineering internship. Get insider tips and strategies for the internship application process.",
 };
 
 export default async function EbookPage() {
@@ -34,8 +34,8 @@ export default async function EbookPage() {
       "Insights into the application process",
       "CV and cover letter guidance",
       "Interview preparation tips",
-      "Networking advice",
-      "Increasing return offer odds",
+      "Tips for standing out",
+      "Return offer advice",
       "After sales support",
     ],
     price: "£11.99",

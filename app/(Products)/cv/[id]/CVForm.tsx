@@ -168,7 +168,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                 </div>
                 <div className="flex flex-col gap-2 col-span-2">
                   <Label htmlFor="file" className="flex items-center gap-2">
-                    Upload your current CV (if you have one){" "}
+                    Upload your current CV{" "}
                     <span className="text-xs text-gray-500">
                       <InfoIcon
                         className="inline-block h-4 w-4"

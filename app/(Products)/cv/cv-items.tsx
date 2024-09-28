@@ -164,7 +164,7 @@ export const HowItWorks = () => {
       icon: Send,
       title: "1. Send us your details",
       description:
-        "With the email you used for payment, send us your details. Let us know your work experience, education, and skills.",
+        "Submit your existing CV. Let us know your work experience, education, and skills.",
     },
     {
       icon: FileText,
@@ -200,18 +200,21 @@ export const HowItWorks = () => {
 export const FAQ = () => {
   const faqItems = [
     {
+      question: "Do I need an existing CV to begin?",
+      answer: "Yes, we will need it to transform your existing CV to a masterpiece.",
+    },
+    {
+      question: "Do you offer any revisions after the CV is delivered?",
+      answer: "Yes, we offer up to two rounds of revisions to ensure you're completely satisfied with the final product.",
+    },
+    {
+      question: "Will you format my CV according to the latest industry standards?",
+      answer: "Yes, we stay up to date with the latest CV formats and industry expectations to ensure your CV looks professional and modern.",
+    },
+    {
       question: "What differentiates you from other resume review/career coaching services?",
       answer: "Cuz we love you and care about your success 😘",
-    },
-    {
-      question: "I'm not applying to a tech company, will this still be helpful to me?",
-      answer: "Probably not, give us your money tho (jk, finance services coming soon)",
-    },
-    {
-      question:
-        "I'm an aspiring software engineer but am starting with no knowledge of programming or computer science, can I still get help?",
-      answer: "You're cooked 💀",
-    },
+    }
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
