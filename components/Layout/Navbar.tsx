@@ -231,7 +231,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
             >
               SWE Guide
             </Link>{" "}
-            {/* <Accordion type="multiple" className="w-full mt-3">
+            <Accordion type="multiple" className="w-full mt-3">
               <AccordionItem value="item-0">
                 <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
                   Services
@@ -253,7 +253,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
                   </Link>
                 </AccordionContent>
               </AccordionItem>
-            </Accordion> */}
+            </Accordion>
           </ul>
           <div className="flex w-full md:text-center justify-center">
             {user ? (
