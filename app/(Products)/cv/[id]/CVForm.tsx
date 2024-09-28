@@ -54,7 +54,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   });
 
   useEffect(() => {
-    if (!isDirty) return;
+    if (!isDirty || currentStep === 2) return;
 
     function beforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -65,7 +65,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
     return () => {
       window.removeEventListener("beforeunload", beforeUnload);
     };
-  }, [isDirty]);
+  }, [isDirty, currentStep]);
 
   const fetchCheckoutSession = async () => {
     setLoading(true);
