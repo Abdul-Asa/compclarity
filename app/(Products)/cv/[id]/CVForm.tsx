@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Check, CreditCard, InfoIcon, Loader2, User } from "lucide-react";
 import Link from "next/link";
-import { cn, fromUrlFriendly, toUrlFriendly } from "@/lib/utils";
+import { cn, toUrlFriendly } from "@/lib/utils";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { FileUploader } from "@/components/ui/file-upload";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,74 +18,71 @@ import getStripe from "@/lib/stripe/load-stripe";
 import { toast } from "sonner";
 import { Tooltip } from "react-tooltip";
 import { createClient } from "@/lib/supabase/client";
+import { getTier } from "../product";
+import { useRouter } from "next/navigation";
+
 interface CVServiceFormProps {
   serviceId: string;
-  session: any;
+  // session: any;
 }
 
-interface StepperItem {
-  id: number;
-  text: string;
-  icon?: React.ReactNode;
-}
-
-const steps: StepperItem[] = [
-  { id: 0, text: "Information", icon: <User /> },
-  { id: 1, text: "Payment", icon: <CreditCard /> },
-  { id: 2, text: "Complete", icon: <Check /> },
-];
-
-export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
-  const [currentStep, setCurrentStep] = useState(session ? 2 : 0);
+export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
+  const router = useRouter();
+  const [currentStep, setCurrentStep] = useState(0);
   const [clientSecret, setClientSecret] = useState("");
+  const [sessionId, setSessionId] = useState("");
   const [loading, setLoading] = useState(false);
+  const service = getTier(serviceId);
 
-  const updatePaymentStatus = async () => {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("payments")
-      .update({ session_status: "complete" })
-      .eq("session_id", session.id)
-      .select();
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-  };
-
-  useEffect(
-    function checkSessionStatus() {
-      if (!session) {
-        setCurrentStep(0);
-      } else if (session.status === "open") {
-        setCurrentStep(1);
-      } else {
-        updatePaymentStatus();
-        setCurrentStep(2);
-      }
-    },
-    [session]
-  );
+  if (!service) {
+    router.replace("/404");
+    return null;
+  }
 
   const {
     register,
     handleSubmit,
+    getValues,
     control,
-    formState: { isValid, errors },
+    formState: { isValid, errors, isDirty },
   } = useForm<CVServiceSchema>({
     resolver: zodResolver(cvServiceSchema),
     defaultValues: {
-      service: serviceId as "cv-writing" | "interview-coaching",
+      service: serviceId as "cv-writing" | "cv-full-package",
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (data: CVServiceSchema) => {
+  useEffect(() => {
+    if (!isDirty) return;
+
+    function beforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+    }
+
+    window.addEventListener("beforeunload", beforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnload);
+    };
+  }, [isDirty]);
+
+  const fetchCheckoutSession = async () => {
     setLoading(true);
-    // Upload files to supabase storage first
+    const response = await fetch("/stripe/checkout", {
+      method: "POST",
+      body: JSON.stringify({ service, origin: window.location.href, email: getValues("email") }),
+    });
+    const data = await response.json();
+    setClientSecret(data.clientSecret);
+    setSessionId(data.sessionId);
+    setLoading(false);
+  };
+
+  const uploadFilesToSupabase = async (data: CVServiceSchema) => {
     const supabase = createClient();
     const files = data.cvFile;
-    const fileNames = files.map((file: File) => `${data.email}-${Date.now()}-${toUrlFriendly(file.name)}`);
+    const fileNames = files.map((file: File) => `${data.email}/${Date.now()}/${toUrlFriendly(file.name)}`);
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -93,30 +90,43 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
       const { error } = await supabase.storage.from("file_storage").upload(`cvs/${fileName}`, file);
       if (error) {
         toast.error(error.message);
-        setCurrentStep(0);
-        setLoading(false);
         return;
       }
     }
+    return fileNames;
+  };
 
-    // Initialize Stripe Checkout
-    const response = await fetch("/stripe/checkout", {
-      method: "POST",
-      body: JSON.stringify({
-        ...data,
-        origin: window.location.href,
-        fileNames,
-      }),
+  const saveDataToSupabase = async (data: CVServiceSchema, fileNames: string[]) => {
+    const supabase = createClient();
+    const { error } = await supabase.from("payments").insert({
+      full_name: data.firstName + " " + data.lastName,
+      email: data.email,
+      phone: data.phoneNumber,
+      file_names: fileNames,
+      service: serviceId,
+      status: "open",
+      session_id: sessionId,
+      additional_info: data.extraInformation,
     });
-    const res = await response.json();
-    if (res.error) {
-      toast.error(res.error);
-      setCurrentStep(0);
-    } else {
-      setClientSecret(res.clientSecret);
-      setCurrentStep(1);
+    if (error) {
+      toast.error(error.message);
+      return;
     }
-    setLoading(false);
+  };
+
+  const onSubmit = async (data: CVServiceSchema) => {
+    const fileNames = await uploadFilesToSupabase(data);
+    if (!fileNames) {
+      toast.error("Failed to upload files");
+      return;
+    }
+    await saveDataToSupabase(data, fileNames)
+      .then(() => {
+        setCurrentStep(2);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   };
 
   return (
@@ -126,12 +136,8 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
         {currentStep === 0 && (
           <div className="bg-white dark:bg-black flex flex-col max-w-screen-md items-center w-full p-4 rounded-sm md:p-10">
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-2xl font-bold">{fromUrlFriendly(serviceId).toUpperCase()}</h1>
-              <p>
-                Our CV writing service is designed to help you stand out in the job market. Our team of experts will
-                work with you to create a CV that highlights your skills and experience, and makes you stand out from
-                the competition.
-              </p>
+              <h1 className="text-2xl font-bold">{service.title}</h1>
+              <p>{service.description}</p>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 justify-between mt-10 size-full">
               <div className="grid grid-cols-2 gap-4">
@@ -203,33 +209,34 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
               </div>
               <div className="flex justify-end">
                 <Button
+                  type="button"
                   className="w-full lg:w-60 bg-emerald-500 dark:bg-emerald-700 text-white"
-                  disabled={!isValid || loading}
-                  onClick={handleSubmit(onSubmit)}
+                  disabled={!isValid}
+                  onClick={() => {
+                    setCurrentStep(1);
+                    fetchCheckoutSession();
+                  }}
                 >
-                  {loading ? "Loading..." : "Proceed to Payment"}
+                  {loading ? <Loader2 className="animate-spin size-4" /> : "Proceed to Payment"}
                 </Button>
               </div>
             </form>
           </div>
         )}
-        {currentStep === 1 && <PaymentForm clientSecret={clientSecret} />}
-        {currentStep === 2 && session && (
+        {currentStep === 1 && <PaymentForm clientSecret={clientSecret} onComplete={() => onSubmit(getValues())} />}
+        {currentStep === 2 && (
           <div className=" bg-white dark:bg-black w-full p-4 flex justify-center items-center ">
-            <div className=" flex flex-col justify-center gap-2 text-center rounded-sm p-10">
-              <h1 className="text-2xl font-bold">
-                {session.status === "complete" ? "Thank you for your purchase! " : "Payment failed"}
-              </h1>
-
-              {session.status === "complete" ? (
-                <p>
-                  We will email you with more info within the next 48 hours, you don't need to do anything.
-                  You can contact us at <a href="mailto:contact@compclarity.com">contact@compclarity.com</a> if needed.
-                </p>
-              ) : (
-                <p>Payment failed. Please try again.</p>
-              )}
-              <Link href="/cv" className={buttonVariants({ variant: "ghost" })}>
+            <div className=" flex flex-col justify-center gap-2 text-center rounded-sm max-w-screen-md">
+              <h1 className="text-2xl font-bold">Thank you for your purchase!</h1>
+              <p>
+                We will email you with more info within the next 48 hours, you don't need to do anything. You can
+                contact us at{" "}
+                <a className="underline" href="mailto:contact@compclarity.com">
+                  contact@compclarity.com
+                </a>{" "}
+                if needed.
+              </p>
+              <Link href="/cv" className={buttonVariants({ variant: "ghost", className: "w-fit self-center" })}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 <span className="hidden md:block">Back to services</span>
                 <span className="md:hidden">Services</span>
@@ -242,6 +249,17 @@ export const CVServiceForm = ({ serviceId, session }: CVServiceFormProps) => {
   );
 };
 
+interface StepperItem {
+  id: number;
+  text: string;
+  icon?: React.ReactNode;
+}
+
+const steps: StepperItem[] = [
+  { id: 0, text: "Information", icon: <User /> },
+  { id: 1, text: "Payment", icon: <CreditCard /> },
+  { id: 2, text: "Complete", icon: <Check /> },
+];
 const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: number }) => {
   return (
     <div className="flex items-center md:flex-row flex-col relativelg:px-10 px-2 border-b shadow-sm bg-white dark:bg-black dark:border-gray-800 border-gray-200 py-4 select-none">
@@ -282,19 +300,25 @@ const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: nu
   );
 };
 
-const PaymentForm = ({ clientSecret }: { clientSecret: string }) => {
+const PaymentForm = ({ clientSecret, onComplete }: { clientSecret: string; onComplete: () => void }) => {
   const stripePromise = getStripe();
 
   if (clientSecret === "")
     return (
-      <div className=" bg-white dark:bg-black flex w-full min-h-full items-center justify-center">
+      <div className="bg-white dark:bg-black flex w-full min-h-full items-center justify-center">
         <Loader2 className="animate-spin size-20" />
       </div>
     );
 
   return (
     <div id="checkout" className="w-full border-2 p-1 stripe-issue">
-      <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+      <EmbeddedCheckoutProvider
+        stripe={stripePromise}
+        options={{
+          clientSecret,
+          onComplete,
+        }}
+      >
         <EmbeddedCheckout />
       </EmbeddedCheckoutProvider>
     </div>

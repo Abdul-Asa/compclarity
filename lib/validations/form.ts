@@ -91,16 +91,6 @@ export const updateApplicationSchema = z.object({
   dateRejected: z.string().optional(),
 });
 
-// For CV files
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
-const ACCEPTED_FILE_TYPES = {
-  "application/pdf": [".pdf"],
-  "application/msword": [".doc"],
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-  "text/plain": [".txt"],
-  "application/x-latex": [".tex", ".latex"],
-};
-
 export const cvServiceSchema = z.object({
   firstName: z.string().min(3, { message: "Minimum 3 characters" }),
   lastName: z.string().min(3, { message: "Minimum 3 characters" }),
@@ -111,5 +101,5 @@ export const cvServiceSchema = z.object({
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   cvFile: z.array(z.instanceof(File)).refine((files) => files.length > 0),
   extraInformation: z.string().optional(),
-  service: z.enum(["cv-writing", "interview-coaching"]),
+  service: z.enum(["cv-writing", "cv-full-package"]),
 });

@@ -18,10 +18,9 @@ export type Database = {
           full_name: string
           id: number
           phone: string | null
-          price: string
           service: string
-          session_id: string
-          session_status: string
+          session_id: string | null
+          status: string
         }
         Insert: {
           additional_info?: string | null
@@ -31,10 +30,9 @@ export type Database = {
           full_name: string
           id?: number
           phone?: string | null
-          price: string
           service: string
-          session_id: string
-          session_status: string
+          session_id?: string | null
+          status: string
         }
         Update: {
           additional_info?: string | null
@@ -44,10 +42,9 @@ export type Database = {
           full_name?: string
           id?: number
           phone?: string | null
-          price?: string
           service?: string
-          session_id?: string
-          session_status?: string
+          session_id?: string | null
+          status?: string
         }
         Relationships: []
       }

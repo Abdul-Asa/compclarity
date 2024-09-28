@@ -2,55 +2,47 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const getPriceId = async (service: string) => {
-  let lookupKey = "CV_service_1";
-  if (service === "interview-coaching") {
-    lookupKey = "CV_service_2";
-  }
-  const prices = await stripe.prices.list({
-    lookup_keys: [lookupKey],
-  });
-  return prices.data[0].id;
-};
+// const getPriceId = async (service: string) => {
+//   let lookupKey = "CV_service_1";
+//   if (service === "interview-coaching") {
+//     lookupKey = "CV_service_2";
+//   }
+//   const prices = await stripe.prices.list({
+//     lookup_keys: [lookupKey],
+//   });
+//   return prices.data[0].id;
+// };
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const priceId = await getPriceId(body.service);
-  const supabase = createClient();
-  //Save the data to the database
+  const { email, service, origin } = await request.json();
+
+  let object: any = {
+    line_items: [
+      {
+        price_data: {
+          currency: "gbp",
+          product_data: {
+            name: service.title,
+          },
+          unit_amount: service.price * 100,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    ui_mode: "embedded",
+    redirect_on_completion: "if_required",
+    return_url: `${origin}?session_id={CHECKOUT_SESSION_ID}`,
+    automatic_tax: { enabled: true },
+  };
+
+  if (email !== "") {
+    object.customer_email = email;
+  }
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded",
-      customer_email: body.email,
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      return_url: `${body.origin}?session_id={CHECKOUT_SESSION_ID}`,
-      automatic_tax: { enabled: true },
-    });
-    const { error: supabaseError } = await supabase.from("payments").insert({
-      full_name: body.firstName + " " + body.lastName,
-      email: body.email,
-      phone: body.phoneNumber,
-      file_names: body.fileNames,
-      service: body.service,
-      price: priceId,
-      session_id: session.id,
-      session_status: session.status,
-      additional_info: body.additionalInfo,
-    });
-    if (supabaseError) {
-      throw new Error(supabaseError.message);
-    }
-    return NextResponse.json({
-      clientSecret: session.client_secret,
-      session,
-    });
+    const session = await stripe.checkout.sessions.create(object);
+    return NextResponse.json({ clientSecret: session.client_secret, sessionId: session.id });
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json({ error: err.message }, { status: 500 });

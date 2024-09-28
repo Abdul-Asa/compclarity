@@ -24,10 +24,7 @@ export async function POST(request: Request) {
     const sessionId = event.data.object.id;
     console.log("sessionId", sessionId);
     const supabase = createClient();
-    const { error } = await supabase
-      .from("payments")
-      .update({ session_status: "completed" })
-      .eq("session_id", sessionId);
+    const { error } = await supabase.from("payments").update({ status: "completed" }).eq("session_id", sessionId);
 
     if (error) {
       console.error("Error updating payment status:", error);

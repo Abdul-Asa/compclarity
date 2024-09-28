@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { pricingTiers } from "./product";
 
 export const HeroSection = () => {
   return (
@@ -32,8 +33,8 @@ export const HeroSection = () => {
             in one go.
           </h1>
           <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-            Tired of not even passing the CV screening stage? We can help. Our team of experts will work with you to create a
-            standout CV that showcases your experience and strengths that will get you noticed by employers.
+            Tired of not even passing the CV screening stage? We can help. Our team of experts will work with you to
+            create a standout CV that showcases your experience and strengths that will get you noticed by employers.
           </h2>
           <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
             <Link href="#pricing">Get Started</Link>
@@ -102,59 +103,6 @@ export const MarqueeSection = () => {
 
 export const Pricing = () => {
   const router = useRouter();
-
-  const pricingTiers = [
-    {
-      id: "service-1",
-      title: "CV Review",
-      price: 0,
-      originalPrice: 0,
-      isFree: true,
-      discount: "Get feedback from an active community",
-      cta: "Join the Discord",
-      link: "https://discord.gg/AuAvjpTTnm",
-      isAvailable: true,
-      features: [
-        "Get feedback on your CV from our community",
-        "Access to generic CV templates",
-        "CV writing tips and resources",
-      ],
-    },
-    {
-      id: "service-2",
-      title: "Silver CV writing package",
-      price: 19,
-      originalPrice: 38,
-      discount: "50% off - Limited time offer!",
-      isFree: false,
-      cta: "Get this package",
-      isPopular: true,
-      link: "/cv/cv-writing",
-      isAvailable: true,
-      features: [
-        "Access to your own dedicated CV writer (someone who has worked at FAANG companies)",
-        "2 day turnaround",
-        "Access to CompClarity's SWE Guide worth £11.99",
-      ],
-    },
-    {
-      id: "service-3",
-      title: "Gold CV writing package",
-      price: 29,
-      originalPrice: 59,
-      discount: "50% off - Limited time offer!",
-      isFree: false,
-      cta: "Coming soon",
-      isAvailable: false,
-      link: "/cv-full-package",
-      features: [
-        "Everything in the Silver Package",
-        "Cover letter templates tailored to your CV",
-        "Access to private community - referrals and network connections",
-        "Free updates. We continuously improve our materials",
-      ],
-    },
-  ];
 
   return (
     <section id="pricing" className="container space-y-4 mx-auto px-4 py-16">
@@ -263,7 +211,7 @@ export const FAQ = () => {
       question:
         "I'm an aspiring software engineer but am starting with no knowledge of programming or computer science, can I still get help?",
       answer: "You're cooked 💀",
-    }
+    },
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
