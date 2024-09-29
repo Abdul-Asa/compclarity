@@ -92,7 +92,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
         <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
           Tracker
         </Link>
-        <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
+        {/* <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
           <PopoverTrigger className={navigationMenuTriggerStyle()}>
             Services{" "}
             <ChevronDown
@@ -130,18 +130,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
               </p>
             </Link>
           </PopoverContent>
-        </Popover>
-        {/* <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
-          About
-        </Link> */}
-        {/* <Link
-          href="https://compclarity.gumroad.com/l/guide"
-          className={navigationMenuTriggerStyle()}
-          onClick={() => trackNav("guide")}
-          target="_blank"
-        >
-          SWE Guide
-        </Link> */}
+        </Popover> */}
       </ul>
 
       <div className="hidden w-[15%] justify-end gap-2 lg:flex">
@@ -220,18 +209,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
             >
               Tracker
             </Link>
-            {/* <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
-              About
-            </Link> */}
-            <Link
-              href="https://compclarity.gumroad.com/l/guide"
-              className="text-lg font-medium py-5 border-b w-full"
-              onClick={() => trackNav("guide")}
-              target="_blank"
-            >
-              SWE Guide
-            </Link>{" "}
-            <Accordion type="multiple" className="w-full mt-3">
+            {/* <Accordion type="multiple" className="w-full mt-3">
               <AccordionItem value="item-0">
                 <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
                   Services
@@ -253,7 +231,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
                   </Link>
                 </AccordionContent>
               </AccordionItem>
-            </Accordion>
+            </Accordion> */}
           </ul>
           <div className="flex w-full md:text-center justify-center">
             {user ? (

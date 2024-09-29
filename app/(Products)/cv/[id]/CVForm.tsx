@@ -202,7 +202,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                   <Label htmlFor="info">Additional Information</Label>
                   <Textarea
                     id="info"
-                    placeholder="Any additional information i.e.  LinkedIn profile, GitHub, etc."
+                    placeholder="Any additional information i.e. LinkedIn, GitHub, etc. or Word/Latex requirement"
                     rows={4}
                     {...register("extraInformation")}
                   />

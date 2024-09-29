@@ -32,12 +32,12 @@ export const Heading = () => {
 export const Stats = () => {
   const coolStats = [
     {
-      num: 20000,
+      num: 15000,
       suffix: "+",
       title: "Monthly Unique Visitors",
     },
     {
-      num: 71,
+      num: 77,
       suffix: "%",
       title: "Click-Through Rate (on job posts)",
       disableAnimation: false,
