@@ -10,10 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import { Check, FileText, Pen, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { pricingTiers } from "./product";
 
 export const HeroSection = () => {
   return (
-    <div className="mx-auto flex flex-col md:flex-row w-full items-center min-h-screen md:min-h-fit md:h-[calc(100vh-150px)] justify-center container gap-20 p-6 md:px-0">
+    <div className="mx-auto flex flex-col md:flex-row w-full items-center min-h-screen md:min-h-fit md:h-[calc(100vh-150px)] justify-center container gap-20 p-6 md:px-10">
       <div className="flex flex-col items-center justify-center gap-5">
         <div className="group relative rounded-full border self-start">
           <CTABadge intro="Ready to land that dream job?" link="#pricing" target="_self" />
@@ -30,9 +33,12 @@ export const HeroSection = () => {
             in one go.
           </h1>
           <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-            Tired of getting that rejection email? We can help. Our team of experts will work with you to create a
-            standout CV that showcases your experience and strengths that will get you noticed by employers.
+            Tired of not even passing the CV screening stage? We can help. Our team of experts will work with you to
+            create a standout CV that showcases your experience and strengths that will get you noticed by employers.
           </h2>
+          <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
+            <Link href="#pricing">Get Started</Link>
+          </Button>
         </div>
       </div>
       <img src="/assets/cv.svg" alt="CV" className="" />
@@ -41,10 +47,46 @@ export const HeroSection = () => {
 };
 
 export const MarqueeSection = () => {
+  const companies = [
+    {
+      name: "Wise",
+      icon: "/assets/wise.svg",
+    },
+    {
+      name: "Meta",
+      icon: "/assets/meta.svg",
+    },
+    {
+      name: "Amazon",
+      icon: "/assets/amazon.svg",
+    },
+    {
+      name: "BoA",
+      icon: "/assets/boa.svg",
+    },
+
+    {
+      name: "Samsara",
+      icon: "/assets/samsara.svg",
+    },
+    {
+      name: "Citadel",
+      icon: "/assets/citadel.svg",
+    },
+    {
+      name: "Spotify",
+      icon: "/assets/spotify.svg",
+    },
+
+    {
+      name: "Palantir",
+      icon: "/assets/palantir.svg",
+    },
+  ];
   return (
     <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
       <div className="w-full">
-        <h2 className="p-4 text-center font-bold md:text-3xl">Our users now work at</h2>
+        <h2 className="p-4 text-center font-bold md:text-3xl">Our members work at</h2>
       </div>
 
       <Marquee className="w-full p-4">
@@ -60,64 +102,17 @@ export const MarqueeSection = () => {
 };
 
 export const Pricing = () => {
-  const pricingTiers = [
-    {
-      title: "CV review - Discord community",
-      price: 0,
-      originalPrice: 0,
-      isFree: true,
-      discount: "Get feedback from an active community",
-      cta: "Join the Discord",
-      link: "https://discord.gg/AuAvjpTTnm",
-      isAvailable: true,
-      features: [
-        "Get feedback from an active community",
-        "Access to multiple CVs templates",
-        "CV writing tips and resources",
-      ],
-    },
-    {
-      title: "CV writing from a FANG employee",
-      price: 18,
-      originalPrice: 29,
-      discount: "70% off - Limited time offer!",
-      isFree: false,
-      cta: "Get this package",
-      isPopular: true,
-      isAvailable: true,
-      features: [
-        "Access to Compclarity Internship Handbook",
-        "1 x Software Engineer resume templates",
-        "Bonus - 3 x Software Engineer resume references from the community. You get a total of 4 references!",
-      ],
-    },
-    {
-      title: "Full CV writing service",
-      price: 39,
-      originalPrice: 59,
-      discount: "50% off - Limited time offer!",
-      isFree: false,
-      cta: "Coming soon",
-      isAvailable: false,
-      features: [
-        "Access to Compclarity Internship Handbook",
-        "3 x Software Engineer resume templates",
-        "2 x Cover letter templates in Google Doc format",
-        "Access to private community - Referrals and network connections",
-        "Free updates. We continuously improve our materials",
-      ],
-    },
-  ];
+  const router = useRouter();
 
   return (
     <section id="pricing" className="container space-y-4 mx-auto px-4 py-16">
-      <h2 className=" text-xl font-bold md:text-2xl text-center lg:text-5xl">Get Shortlisted into your dream job</h2>
+      <h2 className=" text-xl font-bold md:text-2xl text-center lg:text-5xl">Get shortlisted into your dream job</h2>
       <p className=" text-center text-gray-600 dark:text-gray-200">
         Get the perfect CV with just a small fraction of your potential salary.
       </p>
       <div className="grid pt-10  md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {pricingTiers.map((tier, index) => (
-          <Card key={index} className="flex flex-col">
+        {pricingTiers.map((tier) => (
+          <Card key={tier.id} className="flex flex-col">
             <CardHeader>
               <CardTitle className="text-xl">{tier.title}</CardTitle>
             </CardHeader>
@@ -140,7 +135,7 @@ export const Pricing = () => {
                 disabled={!tier.isAvailable}
                 onClick={() => {
                   if (tier.isAvailable) {
-                    window.open(tier.link, "_blank");
+                    router.push(tier.link);
                   }
                 }}
               >
@@ -169,7 +164,7 @@ export const HowItWorks = () => {
       icon: Send,
       title: "1. Send us your details",
       description:
-        "With the email you used for payment, send us your details. Let us know your work experience, education, and skills.",
+        "Submit your existing CV. Let us know your work experience, education, and skills.",
     },
     {
       icon: FileText,
@@ -205,24 +200,21 @@ export const HowItWorks = () => {
 export const FAQ = () => {
   const faqItems = [
     {
-      question: "What types of roles are best suited for sponsored listings?",
-      answer:
-        "Sponsored listings are particularly effective for reaching early-career talent, as our user base is primarily composed of students and recent graduates in STEM or finance related fields.",
+      question: "Do I need an existing CV to begin?",
+      answer: "Yes, we will need it to transform your existing CV to a masterpiece.",
     },
     {
-      question: "How long will my job listing remain pinned?",
-      answer:
-        "Your job listing will remain pinned at the top of our job board for the duration of the sponsorship period you select. You can choose from various timeframes to suit your hiring needs. Contact us to learn more.",
+      question: "Do you offer any revisions after the CV is delivered?",
+      answer: "Yes, we offer up to two rounds of revisions to ensure you're completely satisfied with the final product.",
     },
     {
-      question: "Can I sponsor multiple job listings at once?",
-      answer:
-        "Yes, you can sponsor multiple job listings simultaneously. Each listing will be prominently featured at the top of the job board, increasing visibility across your open positions.",
+      question: "Will you format my CV according to the latest industry standards?",
+      answer: "Yes, we stay up to date with the latest CV formats and industry expectations to ensure your CV looks professional and modern.",
     },
     {
-      question: "Which locations do you support?",
-      answer: "Currently, CompClarity only supports the UK for job postings.",
-    },
+      question: "What differentiates you from other resume review/career coaching services?",
+      answer: "Cuz we love you and care about your success 😘",
+    }
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
@@ -240,43 +232,6 @@ export const FAQ = () => {
     </div>
   );
 };
-
-const companies = [
-  {
-    name: "Wise",
-    icon: "/assets/wise.svg",
-  },
-  {
-    name: "Meta",
-    icon: "/assets/meta.svg",
-  },
-  {
-    name: "Amazon",
-    icon: "/assets/amazon.svg",
-  },
-  {
-    name: "BoA",
-    icon: "/assets/boa.svg",
-  },
-
-  {
-    name: "Samsara",
-    icon: "/assets/samsara.svg",
-  },
-  {
-    name: "Citadel",
-    icon: "/assets/citadel.svg",
-  },
-  {
-    name: "Spotify",
-    icon: "/assets/spotify.svg",
-  },
-
-  {
-    name: "Palantir",
-    icon: "/assets/palantir.svg",
-  },
-];
 
 //I'll come back to this
 export const PDF = () => {

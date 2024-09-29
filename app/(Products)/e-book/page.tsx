@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 // Edit the metadata for the page
 export const metadata: Metadata = {
-  title: "CompClarity - CV",
+  title: "CompClarity - Tech Internship Guide",
   description:
-    "Streamline your hiring process and discover exceptional early career candidates with ease. We showcase your job listings to the right talent, so you can focus on the more exciting stuff.",
+    "Access to CompClarity's Guide to landing your first Software Engineering internship. Get insider tips and strategies for the internship application process.",
 };
 
 export default async function EbookPage() {
@@ -21,7 +21,7 @@ export default async function EbookPage() {
   //fallback to 4.9 rating if no reviews are found
   const reviews = data.reviews || [
     {
-      rating: 4.9,
+      rating: 5,
     },
   ];
 
@@ -31,17 +31,20 @@ export default async function EbookPage() {
   const cardContent = {
     title: "Tech Internship Guide",
     features: [
-      "Step-by-step application strategies",
-      "Resume and cover letter templates",
+      "Insights into the application process",
+      "CV and cover letter guidance",
       "Interview preparation tips",
+      "Tips for standing out",
+      "Return offer advice",
+      "After sales support",
     ],
-    price: "£13.99",
-    buttonText: "Get the Guide",
+    price: "£11.99",
+    buttonText: "Get the guide",
   };
 
   return (
     <div className="flex w-full flex-col scroll-smooth">
-      <div className="mx-auto flex flex-col md:flex-row w-full items-center md:h-[calc(100vh-100px)] justify-center container gap-20 p-6 md:px-0 py-20">
+      <div className="mx-auto flex flex-col md:flex-row w-full items-center md:h-[calc(100vh-100px)] justify-center container gap-20 p-6 md:px-10 py-20">
         <div className="flex flex-col  justify-center gap-5">
           <h1 className="animate-fade-in text-left text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
             <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
@@ -53,16 +56,16 @@ export default async function EbookPage() {
             </span>
           </h1>{" "}
           <p className="text-xl ">
-            Get insider tips and strategies from industry experts. Learn how to stand out and secure top tech
-            internships.
+            Get insider tips and strategies for the internship application process. Learn how to stand out and secure
+            internships at top tech companies.
           </p>{" "}
           <div className="flex items-center space-x-4 j">
-            <Image src="/assets/dave.jpeg" alt="Profile" width={80} height={80} className="rounded-3xl" />
+            <Image src="/assets/elliot.jpeg" alt="Profile" width={80} height={80} className="rounded-3xl" />
             <div>
               <p className=" font-medium">
                 "This guide was a game-changer for my internship search. Highly recommend!"
               </p>
-              <p className="">— Abdullah, Software Engineering Intern at Google</p>
+              <p className="">— Elliot, Software Engineer at JPMorgan</p>
             </div>
           </div>
         </div>{" "}

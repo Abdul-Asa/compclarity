@@ -1,5 +1,5 @@
 "use client";
-import { Book, Computer, FileText, PoundSterling } from "lucide-react";
+import { Book, ChevronDown, Computer, FileText, PoundSterling } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -48,7 +48,13 @@ const Navbar = ({ user }: { user?: User | null }) => {
       </Link>
       <ul className="group hidden flex-1 list-none items-center justify-center space-x-1 lg:flex">
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-          <PopoverTrigger className={navigationMenuTriggerStyle()}>Salaries</PopoverTrigger>
+          <PopoverTrigger className={navigationMenuTriggerStyle()}>
+            Salaries{" "}
+            <ChevronDown
+              className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
+              aria-hidden="true"
+            />
+          </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-4">
             <Link
               href="/tech"
@@ -87,7 +93,13 @@ const Navbar = ({ user }: { user?: User | null }) => {
           Tracker
         </Link>
         {/* <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
-          <PopoverTrigger className={navigationMenuTriggerStyle()}>Products</PopoverTrigger>
+          <PopoverTrigger className={navigationMenuTriggerStyle()}>
+            Services{" "}
+            <ChevronDown
+              className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
+              aria-hidden="true"
+            />
+          </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-4">
             <Link
               href="/cv"
@@ -114,17 +126,11 @@ const Navbar = ({ user }: { user?: User | null }) => {
                 Tech Internship Guide
               </div>
               <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
-                Step-by-step application strategies
+                Get your first SWE internship
               </p>
             </Link>
           </PopoverContent>
         </Popover> */}
-        {/* <Link href="/about" className={navigationMenuTriggerStyle()} onClick={() => trackNav("about")}>
-          About
-        </Link> */}
-        <Link href="https://compclarity.gumroad.com/l/guide" className={navigationMenuTriggerStyle()} onClick={() => trackNav("guide")} target="_blank"> 
-          SWE Guide
-        </Link>
       </ul>
 
       <div className="hidden w-[15%] justify-end gap-2 lg:flex">
@@ -203,17 +209,10 @@ const Navbar = ({ user }: { user?: User | null }) => {
             >
               Tracker
             </Link>
-            {/* <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
-              About
-            </Link> */}
-            <Link href="https://compclarity.gumroad.com/l/guide" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("guide")} target="_blank">
-              SWE Guide
-            </Link>
-            {" "}
             {/* <Accordion type="multiple" className="w-full mt-3">
               <AccordionItem value="item-0">
                 <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
-                  Products
+                  Services
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col md:items-center pb-0 w-full">
                   <Link

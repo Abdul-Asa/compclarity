@@ -11,6 +11,7 @@ import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
 import { CSPostHogProvider } from "@/components/providers/posthog";
 import { ThemeProvider } from "@/components/Layout/ThemeProvider";
+import { Announcement } from "@/components/Layout/Announcement";
 
 const sg = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const os = Open_Sans({ subsets: ["latin"], variable: "--font-open" });
@@ -36,8 +37,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               {children}
               <Footer />
             </div>
+            <Announcement />
             <Toaster />
-            <SonnerToaster />
+            <SonnerToaster richColors />
           </ThemeProvider>
         </body>
       </CSPostHogProvider>

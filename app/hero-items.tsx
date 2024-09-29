@@ -24,7 +24,7 @@ const HeroSection = () => {
   return (
     <section className="mx-auto flex h-[calc(100vh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
       <div className="group relative rounded-full bg-emerald-700 ">
-        <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
+        <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="/cv" />
       </div>
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
         Your{" "}
@@ -40,7 +40,7 @@ const HeroSection = () => {
       <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
         Uncover salary insights, find your next job, and track your applications all in one place.
       </h2>
-      <div className="my-6 flex animate-fade-in gap-4">
+      <div className="my-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
         <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
           <Link href="/tech">
             View&nbsp;<strong>Tech</strong>&nbsp;Salaries

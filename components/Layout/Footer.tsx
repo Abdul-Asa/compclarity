@@ -60,15 +60,16 @@ const Footer = () => {
             <FaTiktok size={24} />
           </Link>
         </div>
-        <small>
-          &#169; CompClarity 2024 |{" "}
+        <small className="flex flex-wrap justify-center items-center gap-x-2">
+          <span>&#169; CompClarity 2024</span>|
           <a href="/about" className="hover:underline" onClick={() => trackFooter("about")}>
             About
-          </a>{" "} | {" "}
+          </a>{" "}
+          |
           <a href="mailto:contact@compclarity.com" className="hover:underline" onClick={() => trackFooter("email")}>
             Contact
-          </a>{" "}
-          |{" "}
+          </a>
+          |
           <a href="/employers" className="hover:underline" onClick={() => trackFooter("employers")}>
             Employers
           </a>

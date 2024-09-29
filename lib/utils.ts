@@ -33,6 +33,7 @@ export const formatter = (currency: CurrencyCode): Intl.NumberFormat => {
   });
 };
 
+// Returns a date in UK format
 export const dateFormatter = (date: string): string => {
   if (!date) return new Date().toLocaleDateString("en-UK");
   return new Date(date).toLocaleDateString("en-UK");
@@ -66,3 +67,47 @@ export const getKanbanSnapshot = (sortedApplications: ApplicationSorted): Applic
 
   return snapshot;
 };
+
+// Returns a string of the bytes in a more readable format
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number;
+    sizeType?: "accurate" | "normal";
+  } = {}
+) {
+  const { decimals = 0, sizeType = "normal" } = opts;
+
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const accurateSizes = ["Bytes", "KiB", "MiB", "GiB", "TiB"];
+  if (bytes === 0) return "0 Byte";
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
+    sizeType === "accurate" ? (accurateSizes[i] ?? "Bytest") : (sizes[i] ?? "Bytes")
+  }`;
+}
+/**
+ * Converts a string to a URL-friendly format by replacing spaces with hyphens
+ * and converting to lowercase.
+ * @param str - The string to convert.
+ * @returns The URL-friendly string.
+ */
+export function toUrlFriendly(str: string): string {
+  return str
+    .trim()
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .toLowerCase(); // Convert to lowercase
+}
+
+/**
+ * Converts a URL-friendly string back to a regular string by replacing hyphens
+ * with spaces and capitalizing the first letter of each word.
+ * @param str - The URL-friendly string to convert.
+ * @returns The regular string.
+ */
+export function fromUrlFriendly(str: string): string {
+  return str
+    .split("-") // Split by hyphens
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter
+    .join(" "); // Join back with spaces
+}
