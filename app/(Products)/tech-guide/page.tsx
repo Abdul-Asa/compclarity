@@ -75,7 +75,7 @@ export default async function EbookPage() {
             <div className="flex items-center mb-4">
               <StarRating rating={averageRating} activeColor="rgb(34 197 94)" />
               <span className="ml-2 text-gray-600">
-                ({averageRating}) - {reviews.length} reviews
+                16 reviews
               </span>
             </div>
             <ul className="space-y-2 mb-6">
