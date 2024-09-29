@@ -92,7 +92,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
         <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
           Tracker
         </Link>
-        {/* <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
+        <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
           <PopoverTrigger className={navigationMenuTriggerStyle()}>
             Services{" "}
             <ChevronDown
@@ -116,7 +116,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
               </p>
             </Link>
             <Link
-              href="/e-book"
+              href="/tech-guide"
               className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
               dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
               onClick={() => trackNav("e_book")}
@@ -130,7 +130,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
               </p>
             </Link>
           </PopoverContent>
-        </Popover> */}
+        </Popover>
       </ul>
 
       <div className="hidden w-[15%] justify-end gap-2 lg:flex">
@@ -209,7 +209,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
             >
               Tracker
             </Link>
-            {/* <Accordion type="multiple" className="w-full mt-3">
+            <Accordion type="multiple" className="w-full mt-3">
               <AccordionItem value="item-0">
                 <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">
                   Services
@@ -223,7 +223,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
                     CV Crafting
                   </Link>
                   <Link
-                    href="/e-book"
+                    href="/tech-guide"
                     className="text-lg  pl-10 md:pl-0 font-medium py-5 w-full "
                     onClick={() => trackNav("e_book")}
                   >
@@ -231,7 +231,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
                   </Link>
                 </AccordionContent>
               </AccordionItem>
-            </Accordion> */}
+            </Accordion>
           </ul>
           <div className="flex w-full md:text-center justify-center">
             {user ? (
