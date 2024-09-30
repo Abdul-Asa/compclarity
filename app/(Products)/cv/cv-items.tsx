@@ -86,7 +86,7 @@ export const MarqueeSection = () => {
   return (
     <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
       <div className="w-full">
-        <h2 className="p-4 text-center font-bold md:text-3xl">Our users work at</h2>
+        <h2 className="p-4 text-center font-bold md:text-3xl">Our members work at</h2>
       </div>
 
       <Marquee className="w-full p-4">

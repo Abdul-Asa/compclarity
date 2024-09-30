@@ -59,7 +59,7 @@ export default async function EbookPage() {
             Get insider tips and strategies for the internship application process. Learn how to stand out and secure
             internships at top tech companies.
           </p>{" "}
-          <div className="flex items-center space-x-4 j">
+          {/* <div className="flex items-center space-x-4 j">
             <Image src="/assets/elliot.jpeg" alt="Profile" width={80} height={80} className="rounded-3xl" />
             <div>
               <p className=" font-medium">
@@ -67,7 +67,7 @@ export default async function EbookPage() {
               </p>
               <p className="">— Elliot, Software Engineer at JPMorgan</p>
             </div>
-          </div>
+          </div> */}
         </div>{" "}
         <Card className="w-full max-w-md mx-auto">
           <CardContent className="p-6">
@@ -75,7 +75,7 @@ export default async function EbookPage() {
             <div className="flex items-center mb-4">
               <StarRating rating={averageRating} activeColor="rgb(34 197 94)" />
               <span className="ml-2 text-gray-600">
-                ({averageRating}) - {reviews.length} reviews
+                16 reviews
               </span>
             </div>
             <ul className="space-y-2 mb-6">
