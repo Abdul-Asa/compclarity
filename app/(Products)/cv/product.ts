@@ -50,10 +50,10 @@ export const pricingTiers = [
       "Everything in the Silver Package",
       "Cover letter templates tailored to your CV",
       "LinkedIn profile optimisation",
-      "Access to private community - referrals and network connections"
+      "Access to private community - referrals and network connections",
     ],
     description:
-      "Our CV writing service is designed to help you stand out in the job market. Our team of experts will work with you to create a CV that highlights your skills and experience, and makes you stand out from the competition",
+      "The best package for those who want to stand out in the job market. Our team of experts will work with you to tailor your CV and LinkedIn profile to your specific needs.",
   },
 ];
 

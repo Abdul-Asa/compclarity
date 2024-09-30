@@ -223,14 +223,14 @@ const Navbar = ({ user }: { user?: User | null }) => {
             {/* <Link href="/about" className="text-lg font-medium py-5 border-b w-full" onClick={() => trackNav("about")}>
               About
             </Link> */}
-            <Link
+            {/* <Link
               href="https://compclarity.gumroad.com/l/guide"
               className="text-lg font-medium py-5 border-b w-full"
               onClick={() => trackNav("guide")}
               target="_blank"
             >
               SWE Guide
-            </Link>{" "}
+            </Link>{" "} */}
             <Accordion type="multiple" className="w-full mt-3">
               <AccordionItem value="item-0">
                 <AccordionTrigger className="text-lg font-medium py-5 w-full md:justify-center  text-center">

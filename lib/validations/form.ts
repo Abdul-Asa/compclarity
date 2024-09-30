@@ -1,5 +1,5 @@
 import { isValidPhoneNumber } from "react-phone-number-input";
-import { date, z } from "zod";
+import { z } from "zod";
 
 // Form validation schemas
 
@@ -78,7 +78,6 @@ export const createApplicationSchema = z.object({
   description: z.string().optional(),
 });
 
-// Update application schema will have either dateApplied or dateUpdated
 export const updateApplicationSchema = z.object({
   companyName: z.string().min(1, { message: "Company name cannot be empty" }),
   title: z.string().min(1, { message: "Title cannot be empty" }),
@@ -99,10 +98,7 @@ export const cvServiceSchema = z.object({
     .string()
     .min(1, { message: "Phone number is required" })
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-  cvFile: z
-    .array(z.instanceof(File))
-    .refine((files) => files.length > 0)
-    .optional(),
+  cvFile: z.array(z.instanceof(File)).refine((files) => files.length > 0),
   extraInformation: z.string().optional(),
   service: z.enum(["cv-writing", "cv-full-package"]),
 });
