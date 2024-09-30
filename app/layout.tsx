@@ -37,7 +37,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               {children}
               <Footer />
             </div>
-            {/* <Announcement /> */}
+            <Announcement />
             <Toaster />
             <SonnerToaster richColors />
           </ThemeProvider>
