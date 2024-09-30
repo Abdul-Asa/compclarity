@@ -5,7 +5,7 @@ export const pricingTiers = [
     price: 0,
     originalPrice: 0,
     isFree: true,
-    discount: "Get feedback from an active community",
+    discount: "",
     cta: "Join the Discord",
     link: "https://discord.gg/AuAvjpTTnm",
     isAvailable: true,
