@@ -14,14 +14,14 @@ export function Announcement() {
     if (!hasDisplayed) {
       // Set a timeout to display the toast
       const timeoutId = setTimeout(() => {
-        toast("🌑 Dark Mode is here!", {
+        toast("📢 New services offered", {
           closeButton: true,
           classNames: {
             closeButton: "bg-white",
           },
           id: "welcome-toast",
           duration: 5000,
-          description: "Toggle to your preferred theme using the button in the navbar.",
+          description: "From our Tech Internship Guide to CV Writing Services, we've got you covered!",
           onAutoClose: () => {
             sessionStorage.setItem("announcementDisplayed", "true");
           },
