@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           additional_info: string | null
           created_at: string | null
+          discord: string | null
           email: string
           file_names: string[] | null
           full_name: string
@@ -25,6 +26,7 @@ export type Database = {
         Insert: {
           additional_info?: string | null
           created_at?: string | null
+          discord?: string | null
           email: string
           file_names?: string[] | null
           full_name: string
@@ -37,6 +39,7 @@ export type Database = {
         Update: {
           additional_info?: string | null
           created_at?: string | null
+          discord?: string | null
           email?: string
           file_names?: string[] | null
           full_name?: string

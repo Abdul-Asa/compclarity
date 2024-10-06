@@ -97,7 +97,9 @@ export const cvServiceSchema = z.object({
   phoneNumber: z
     .string()
     .min(1, { message: "Phone number is required" })
-    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+    .optional(),
+  discordUsername: z.string().min(3, { message: "Minimum 3 characters" }).optional(),
   cvFile: z.array(z.instanceof(File)).refine((files) => files.length > 0),
   extraInformation: z.string().optional(),
   service: z.enum(["cv-writing", "cv-full-package"]),

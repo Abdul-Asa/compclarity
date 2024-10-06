@@ -103,6 +103,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
       full_name: data.firstName + " " + data.lastName,
       email: data.email,
       phone: data.phoneNumber,
+      discord: data.discordUsername,
       file_names: fileNames,
       service: serviceId,
       status: "open",
@@ -158,13 +159,18 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                   <p className="text-red-500 text-sm h-4">{errors.email?.message}</p>
                 </div>
                 <div className="flex col-span-2 md:col-span-1 flex-col gap-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">Phone (Optional)</Label>
                   <Controller
                     name="phoneNumber"
                     control={control}
                     render={({ field }) => <PhoneInput placeholder="+44 7123 456789" {...field} />}
                   />
                   <p className="text-red-500 text-sm h-4">{errors.phoneNumber?.message}</p>
+                </div>
+                <div className="flex flex-col gap-2 col-span-2">
+                  <Label htmlFor="discord">Discord (Optional)</Label>
+                  <Input id="discord" placeholder="JohnDoe#1234" {...register("discordUsername")} />
+                  <p className="text-red-500 text-sm h-4">{errors.discordUsername?.message}</p>
                 </div>
                 <div className="flex flex-col gap-2 col-span-2">
                   <Label htmlFor="file" className="flex items-center gap-2">
