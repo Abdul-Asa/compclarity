@@ -32,7 +32,7 @@ export const Heading = () => {
 export const Stats = () => {
   const coolStats = [
     {
-      num: 15000,
+      num: 20000,
       suffix: "+",
       title: "Monthly Unique Visitors",
     },
