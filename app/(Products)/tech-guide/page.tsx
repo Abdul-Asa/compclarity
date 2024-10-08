@@ -5,6 +5,7 @@ import StarRating from "@/components/ui/star-rating";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { fetchViewers } from "@/lib/data";
 
 // Edit the metadata for the page
 export const metadata: Metadata = {
@@ -14,19 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function EbookPage() {
-  const data = await fetch(
-    "https://compclarity.gumroad.com/product_reviews?product_id=5r9qxjz_IWzLdk_Rhqya8A%3D%3D"
-  ).then((res) => res.json());
+  const viewCount = await fetchViewers();
 
-  //fallback to 4.9 rating if no reviews are found
-  const reviews = data.reviews || [
-    {
-      rating: 5,
-    },
-  ];
-
-  const averageRating =
-    reviews.reduce((sum: number, review: { rating: number }) => sum + review.rating, 0) / reviews.length;
+  const averageRating = 5;
 
   const cardContent = {
     title: "Tech Internship Guide",
@@ -74,9 +65,7 @@ export default async function EbookPage() {
             <h2 className="text-2xl font-bold mb-4">{cardContent.title}</h2>
             <div className="flex items-center mb-4">
               <StarRating rating={averageRating} activeColor="rgb(34 197 94)" />
-              <span className="ml-2 text-gray-600">
-                19 reviews
-              </span>
+              <span className="ml-2 text-gray-600">19 reviews ({viewCount} people viewing)</span>
             </div>
             <ul className="space-y-2 mb-6">
               {cardContent.features.map((feature, index) => (
