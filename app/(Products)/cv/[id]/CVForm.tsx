@@ -168,7 +168,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                   <p className="text-red-500 text-sm h-4">{errors.phoneNumber?.message}</p>
                 </div>
                 <div className="flex flex-col gap-2 col-span-2">
-                  <Label htmlFor="discord">Discord (Optional)</Label>
+                  <Label htmlFor="discord">Discord Username</Label>
                   <Input id="discord" placeholder="JohnDoe#1234" {...register("discordUsername")} />
                   <p className="text-red-500 text-sm h-4">{errors.discordUsername?.message}</p>
                 </div>
