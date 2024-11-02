@@ -14,6 +14,7 @@ interface PageProps {
     sortDir?: string;
     page?: string;
     industries?: string[] | string;
+    size?: number;
   };
 }
 
@@ -42,6 +43,7 @@ async function getCompanyJobs(companyName: string, searchParams?: PageProps["sea
   const searchTerm = searchParams?.search || "";
   const sortBy = searchParams?.sortBy || null;
   const sortDir = searchParams?.sortDir || null;
+  const size = searchParams?.size !== undefined ? Number(searchParams.size) : null;
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
     if (typeof searchParams.role === "string") {
@@ -66,7 +68,8 @@ async function getCompanyJobs(companyName: string, searchParams?: PageProps["sea
     sortBy,
     sortDir,
     companyName,
-    industryTypes
+    industryTypes,
+    size
   );
   return jobsResponse;
 }

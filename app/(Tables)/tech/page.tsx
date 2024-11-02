@@ -22,6 +22,7 @@ export default async function Offers({
     verified?: number;
     minYOE?: number;
     maxYOE?: number;
+    size?: number;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
@@ -31,6 +32,7 @@ export default async function Offers({
   const verified = Number(searchParams?.verified) || 0;
   const minYOE = searchParams?.minYOE !== undefined ? Number(searchParams.minYOE) : null;
   const maxYOE = searchParams?.maxYOE !== undefined ? Number(searchParams.maxYOE) : null;
+  const size = searchParams?.size !== undefined ? Number(searchParams.size) : null;
 
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
@@ -49,6 +51,7 @@ export default async function Offers({
     sortDir,
     minYOE,
     maxYOE,
+    size,
   );
 
   return (

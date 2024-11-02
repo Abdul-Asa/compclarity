@@ -10,14 +10,14 @@ export default function PageResultsButton() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const pageSizeOptions: string[] = ["10", "25", "50", "100"];
-  const initialPageSize = searchParams.get("pageSize") || "10";
+  const pageSizeOptions: string[] = ["10", "25", "50", "75", "100"];
+  const initialPageSize = searchParams.get("size") || "10";
   const [pageSize, setPageSize] = useState<string>(initialPageSize);
 
   const handlePageSizeChange = (value: string) => {
     setPageSize(value);
     const params = new URLSearchParams(searchParams.toString());
-    params.set("pageSize", value);
+    params.set("size", value);
     params.set("page", "0");
     replace(`${pathname}?${params.toString()}`);
   };

@@ -16,6 +16,7 @@ interface PageProps {
     verified?: number;
     minYOE?: number;
     maxYOE?: number;
+    size?: number;
   };
 }
 
@@ -27,6 +28,7 @@ async function getCompanyOffers(companyName: string, searchParams?: PageProps["s
   const verified = Number(searchParams?.verified) || 0;
   const minYOE = searchParams?.minYOE !== undefined ? Number(searchParams.minYOE) : null;
   const maxYOE = searchParams?.maxYOE !== undefined ? Number(searchParams.maxYOE) : null;
+  const size = searchParams?.size !== undefined ? Number(searchParams.size) : null;
 
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
@@ -45,7 +47,8 @@ async function getCompanyOffers(companyName: string, searchParams?: PageProps["s
     sortDir,
     companyName,
     minYOE,
-    maxYOE
+    maxYOE,
+    size,
   );
   return offersResponse;
 }

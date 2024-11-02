@@ -9,7 +9,8 @@ export default function PaginationControl({ results }: { results: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
-  const totalPages = Math.ceil(results / 10);
+  const pageSize = Number(searchParams.get("size")) || 10
+  const totalPages = Math.ceil(results / pageSize);
   const lastPage = Math.min(Math.max(currentPage + 2, 5), totalPages);
   const firstPage = Math.max(1, lastPage - 4);
 
@@ -29,7 +30,7 @@ export default function PaginationControl({ results }: { results: number }) {
         <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
           Showing{" "}
           <span className="font-semibold text-gray-900 dark:text-gray-100">
-            {(currentPage - 1) * 10 + 1}-{Math.min(currentPage * 10, results)}
+            {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, results)}
           </span>
           &nbsp;of&nbsp;
           <span className="font-semibold text-gray-900 dark:text-gray-100">{results}</span>
