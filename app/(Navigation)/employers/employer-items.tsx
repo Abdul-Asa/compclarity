@@ -22,6 +22,7 @@ export const Heading = () => {
         .
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
+      Noticed your company's salary being posted? That means your next hire is already looking at you.
         Streamline your hiring process and discover exceptional early career candidates with ease. We showcase your job
         listings to the right talent, so you can focus on the more exciting stuff.
       </h2>

@@ -41,10 +41,10 @@ export async function fetchAllOffers(
   sortBy: string | null,
   sortDir: string | null,
   minYOE: number | null,
-  maxYOE: number | null
+  maxYOE: number | null,
+  resultSize: number | null,
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE);
-
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
   const res = await fetchApiWithParams(params);
   res.offers.map((o) => formatOffer(o));
 
@@ -60,9 +60,10 @@ export async function fetchAllTechOffersByCompany(
   sortDir: string | null,
   companyName: string,
   minYOE: number | null,
-  maxYOE: number | null
+  maxYOE: number | null,
+  resultSize: number | null,
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE);
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
 
   const res = await fetchApiWithParamsForCompany(params, companyName);
   res.offers.map((o) => formatOffer(o));
@@ -78,9 +79,10 @@ export async function fetchAllFinanceOffers(
   sortBy: string | null,
   sortDir: string | null,
   minYOE: number | null,
-  maxYOE: number | null
+  maxYOE: number | null,
+  resultSize: number | null,
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE);
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
 
   const res = await fetchFinanceApiWithParams(params);
   res.offers.map((o) => formatOffer(o));
@@ -97,9 +99,10 @@ export async function fetchAllFinanceOffersByCompany(
   sortDir: string | null,
   companyName: string,
   minYOE: number | null,
-  maxYOE: number | null
+  maxYOE: number | null,
+  resultSize: number | null,
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE);
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
 
   const res = await fetchApiWithParamsForFinanceCompany(params, companyName);
   res.offers.map((o) => formatOffer(o));
@@ -173,12 +176,14 @@ function getUrlParams(
   sortBy: string | null,
   sortDir: string | null,
   minYOE: number | null,
-  maxYOE: number | null
+  maxYOE: number | null,
+  resultSize: number | null,
 ): URLSearchParams {
   const params = new URLSearchParams();
   params.append("page", page);
   params.append("search", search);
   if (verified) params.append("verified", "1");
+  if (resultSize !== null) params.append("size", resultSize.toString())
   levels.forEach((l) => params.append("levels", l));
 
   if (sortBy === "totalComp" && (sortDir === "asc" || sortDir == "desc")) {
@@ -242,11 +247,13 @@ function getUrlParamsForJob(
   levels: Set<string>,
   sortBy: string | null,
   sortDir: string | null,
-  industry: Set<string>
+  industry: Set<string>,
+  resultSize: number | null,
 ): URLSearchParams {
   const params = new URLSearchParams();
   params.append("page", page);
   params.append("search", search);
+  if (resultSize !== null) params.append("size", resultSize.toString())
   levels.forEach((l) => params.append("levels", l));
   industry.forEach((i) => params.append("industries", i));
 
@@ -264,9 +271,10 @@ export async function fetchAllJobs(
   levels: Set<string>,
   sortBy: string | null,
   sortDir: string | null,
-  industry: Set<string>
+  industry: Set<string>,
+  resultSize: number | null,
 ): Promise<JobsApiResponse> {
-  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry);
+  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry, resultSize);
 
   const res = await fetchJobsApiWithParams(params);
   res.jobs.map((o) => formatJob(o));
@@ -297,9 +305,10 @@ export async function fetchAllJobsByCompany(
   sortBy: string | null,
   sortDir: string | null,
   companyName: string,
-  industry: Set<string>
+  industry: Set<string>,
+  resultSize: number | null,
 ): Promise<JobsApiResponse> {
-  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry);
+  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry, resultSize);
 
   const res = await fetchApiWithParamsForCompanyJobs(params, companyName);
   res.jobs.map((o) => formatJob(o));

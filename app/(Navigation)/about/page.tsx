@@ -18,7 +18,8 @@ export default function About() {
           <i>Your Guide to Fair Pay from Day One</i>
         </p>
         <p className="center font-open mt-3 whitespace-pre-line text-pretty text-center text-sm leading-loose">
-          People work for money, so it&apos;s time we stop pretending otherwise. In a world where salary discussions are
+        Salary transparency isn't just about comparing paychecks, it's ensuring you're fairly compensated as your colleagues for the same role within the same company.
+        In a world where salary discussions are
           shrouded in secrecy, CompClarity shines a light of transparency, empowering professionals with the knowledge
           they need to navigate their careers. Our platform is dedicated to demystifying compensation packages across
           the tech and finance industries in Europe, ensuring that you have all the information required to know your
