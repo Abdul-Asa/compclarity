@@ -11,7 +11,11 @@ export default function PageResultsButton() {
   const { replace } = useRouter();
 
   const pageSizeOptions: string[] = ["10", "25", "50", "75", "100"];
-  const initialPageSize = searchParams.get("size") || "10";
+
+  const initialPageSize = pageSizeOptions.includes(searchParams.get("size") || "10")
+    ? searchParams.get("size") || "10"
+    : "10";
+
   const [pageSize, setPageSize] = useState<string>(initialPageSize);
 
   const handlePageSizeChange = (value: string) => {

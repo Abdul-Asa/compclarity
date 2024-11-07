@@ -2,21 +2,37 @@
 
 import Link from "next/link";
 import { range } from "@/lib/utils";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import PageResultsButton from "./Buttons/PageResultsButton";
+import { useEffect } from "react";
 
 export default function PaginationControl({ results }: { results: number }) {
+  const { replace } = useRouter();
+  const validPageSizes = [10, 25, 50, 75, 100];
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
-  const pageSize = Number(searchParams.get("size")) || 10
+  const pageSize = validPageSizes.includes(Number(searchParams.get("size"))) ? Number(searchParams.get("size")) : 10;
   const totalPages = Math.ceil(results / pageSize);
   const lastPage = Math.min(Math.max(currentPage + 2, 5), totalPages);
   const firstPage = Math.max(1, lastPage - 4);
 
+  useEffect(() => {
+    const urlPageSize = Number(searchParams.get("size"));
+    if (!validPageSizes.includes(urlPageSize)) {
+      const params = new URLSearchParams(searchParams);
+      params.set("size", "10"); 
+      params.set("page", "0");
+      replace(`${pathname}?${params.toString()}`);
+    }
+  }, [searchParams, pathname, replace]);
+
   const createPageURL = (pageNumber: number | string): string => {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
+    if (!validPageSizes.includes(Number(searchParams.get("size")))) {
+      params.set("size", "10"); 
+    }
     return `${pathname}?${params.toString()}`;
   };
 
