@@ -20,12 +20,14 @@ export default async function JobBoard({
     sortDir?: string;
     page?: string;
     industries?: string[] | string;
+    size?: number;
   };
 }) {
   const currentPage = Number(searchParams?.page) || 1;
   const searchTerm = searchParams?.search || "";
   const sortBy = searchParams?.sortBy || null;
   const sortDir = searchParams?.sortDir || null;
+  const size = searchParams?.size !== undefined ? Number(searchParams.size) : null;
 
   let roles = new Set<string>();
   if (searchParams?.role !== undefined) {
@@ -51,7 +53,8 @@ export default async function JobBoard({
     roles,
     sortBy,
     sortDir,
-    industryTypes
+    industryTypes,
+    size
   );
 
   let signedIn = false;

@@ -2,19 +2,37 @@
 
 import Link from "next/link";
 import { range } from "@/lib/utils";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import PageResultsButton from "./Buttons/PageResultsButton";
+import { useEffect } from "react";
 
 export default function PaginationControl({ results }: { results: number }) {
+  const { replace } = useRouter();
+  const validPageSizes = [10, 25, 50, 75, 100];
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
-  const totalPages = Math.ceil(results / 10);
+  const pageSize = validPageSizes.includes(Number(searchParams.get("size"))) ? Number(searchParams.get("size")) : 10;
+  const totalPages = Math.ceil(results / pageSize);
   const lastPage = Math.min(Math.max(currentPage + 2, 5), totalPages);
   const firstPage = Math.max(1, lastPage - 4);
+
+  useEffect(() => {
+    const urlPageSize = Number(searchParams.get("size"));
+    if (!validPageSizes.includes(urlPageSize)) {
+      const params = new URLSearchParams(searchParams);
+      params.set("size", "10"); 
+      params.set("page", "0");
+      replace(`${pathname}?${params.toString()}`);
+    }
+  }, [searchParams, pathname, replace]);
 
   const createPageURL = (pageNumber: number | string): string => {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
+    if (!validPageSizes.includes(Number(searchParams.get("size")))) {
+      params.set("size", "10"); 
+    }
     return `${pathname}?${params.toString()}`;
   };
 
@@ -23,14 +41,19 @@ export default function PaginationControl({ results }: { results: number }) {
       className="flex items-center flex-col flex-wrap md:flex-row justify-center sm:justify-between pt-4 sm:w-full"
       aria-label="Table navigation"
     >
-      <div className="text-sm font-normal text-gray-500 dark:text-gray-300 mb-4 md:mb-0 block md:inline">
-        Showing{" "}
-        <span className="font-semibold text-gray-900 dark:text-gray-100">
-          {(currentPage - 1) * 10 + 1}-{Math.min(currentPage * 10, results)}
-        </span>
-        &nbsp;of&nbsp;
-        <span className="font-semibold text-gray-900 dark:text-gray-100">{results}</span>
+
+    <div className="flex items-center space-x-4 mb-4 md:mb-0">
+        <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
+          Showing{" "}
+          <span className="font-semibold text-gray-900 dark:text-gray-100">
+            {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, results)}
+          </span>
+          &nbsp;of&nbsp;
+          <span className="font-semibold text-gray-900 dark:text-gray-100">{results}</span>
+        </div>
+        <PageResultsButton />
       </div>
+      
       <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
         {currentPage > 1 ? (
           <li key={"Prev"}>
