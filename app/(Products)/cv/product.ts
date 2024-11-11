@@ -30,7 +30,6 @@ export const pricingTiers = [
     features: [
       "Access to your own dedicated CV writer (someone who is working in the industry)",
       "2 day turnaround",
-      "Access to CompClarity's Tech Internship Guide worth £11.99",
     ],
     description:
       "Our CV writing service is designed to help you stand out in the job market. Our team of experts will work with you to create a CV that highlights your skills and experience, and makes you stand out from the competition",
