@@ -14,14 +14,14 @@ export function Announcement() {
     if (!hasDisplayed) {
       // Set a timeout to display the toast
       const timeoutId = setTimeout(() => {
-        toast("📢 New services offered", {
+        toast("📢 Share your salary!", {
           closeButton: true,
           classNames: {
             closeButton: "bg-white",
           },
           id: "welcome-toast",
           duration: 5000,
-          description: "From our Tech Internship Guide to CV Writing Services, we've got you covered!",
+          description: "Received an offer this year? Share your salary to help improve transparency for all!",
           onAutoClose: () => {
             sessionStorage.setItem("announcementDisplayed", "true");
           },
