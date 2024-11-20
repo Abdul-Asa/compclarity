@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  coverLetterSchema,
   createApplicationSchema,
   cvServiceSchema,
   forgotPasswordSchema,
@@ -100,3 +101,4 @@ export type UpdateApplicationSchema = z.infer<typeof updateApplicationSchema>;
 export type ApplicationObject = Database["public"]["Tables"]["todos"]["Row"];
 export type ApplicationSorted = Record<string, ApplicationObject[]>;
 export type CVServiceSchema = z.infer<typeof cvServiceSchema>;
+export type CoverLetterSchema = z.infer<typeof coverLetterSchema>;

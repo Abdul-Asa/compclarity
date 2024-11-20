@@ -14,6 +14,7 @@ import { forgotPassword, login, signup } from "./actions";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/hooks/useToast";
+import { ErrorMessage } from "@/components/ui/error-message";
 
 interface AuthFormProps {
   type: "login" | "register" | "forgot-password";
@@ -31,7 +32,9 @@ export const AuthForm = ({ type }: AuthFormProps) => {
   } = useForm<AuthFormSchema>({
     //depending on the type of form, the schema will be different
     //the AuthFormSchema is a union of all the possible schemas
-    resolver: zodResolver(type === "login" ? loginFormSchema : type === "register" ? signUpFormSchema : forgotPasswordSchema),
+    resolver: zodResolver(
+      type === "login" ? loginFormSchema : type === "register" ? signUpFormSchema : forgotPasswordSchema
+    ),
     defaultValues: {
       email: "",
       password: "",
@@ -133,11 +136,24 @@ export const AuthForm = ({ type }: AuthFormProps) => {
                 )}
               </div>
               <div className="relative">
-                <Input id="password" autoComplete="current-password" {...register("password")} type={showPassword ? "text" : "password"} />
+                <Input
+                  id="password"
+                  autoComplete="current-password"
+                  {...register("password")}
+                  type={showPassword ? "text" : "password"}
+                />
                 {showPassword ? (
-                  <EyeOff onClick={() => setShowPassword(false)} size={20} className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer" />
+                  <EyeOff
+                    onClick={() => setShowPassword(false)}
+                    size={20}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                  />
                 ) : (
-                  <Eye onClick={() => setShowPassword(true)} size={20} className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer" />
+                  <Eye
+                    onClick={() => setShowPassword(true)}
+                    size={20}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                  />
                 )}
               </div>
               {"password" in errors && <ErrorMessage message={errors.password?.message} />}
@@ -151,7 +167,11 @@ export const AuthForm = ({ type }: AuthFormProps) => {
           />
         </div>
         <div className="mt-4 text-center text-sm">
-          {type === "login" ? "Don't have an account? " : type === "register" ? "Already have an account? " : "Remember your password? "}
+          {type === "login"
+            ? "Don't have an account? "
+            : type === "register"
+              ? "Already have an account? "
+              : "Remember your password? "}
           <Link href={`?type=${type === "login" ? "register" : "login"}`} className="underline">
             {type === "login" ? "Register" : "Login"}
           </Link>
@@ -160,8 +180,3 @@ export const AuthForm = ({ type }: AuthFormProps) => {
     </form>
   );
 };
-
-interface ErrorMessageProps {
-  message?: string;
-}
-const ErrorMessage = ({ message }: ErrorMessageProps) => <p className="my-1 h-1 text-xs text-red-500">{message ? message : ""}</p>;
