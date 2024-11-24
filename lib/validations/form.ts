@@ -135,7 +135,7 @@ export const coverLetterSchema = z.object({
     .min(1, { message: "New role cannot be empty" })
     .max(30, { message: "Maximum 30 characters allowed" }),
   Words: z
-    .number()
+    .number({ invalid_type_error: "Word limit cannot be empty" })
     .min(1, { message: "Word limit cannot be empty" })
     .max(300, { message: "Maximum 300 words allowed" })
     .transform((val) => val.toString()),
