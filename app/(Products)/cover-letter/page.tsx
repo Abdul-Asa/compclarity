@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy, Share, Wand2 } from "lucide-react";
+import { Copy, Wand2 } from "lucide-react";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { useState } from "react";
 import { CoverLetterSchema } from "@/lib/types";
 import { Label } from "@/components/ui/label";
-// import { generateCoverLetter } from "./action";
+import { generateCoverLetter } from "./action";
 
 export default function CoverLetter() {
   const [generatedContent, setGeneratedContent] = useState("");
@@ -28,8 +28,8 @@ export default function CoverLetter() {
   });
 
   const onSubmit = async (data: CoverLetterSchema) => {
-    // const response = await generateCoverLetter(data);
-    setGeneratedContent("test");
+    const response = await generateCoverLetter(data);
+    setGeneratedContent(response.response);
   };
 
   return (
