@@ -20,6 +20,7 @@ frontend:
         - echo "STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY" >> .env
         - echo "STRIPE_WEBHOOK_SECRET=$STRIPE_WEBHOOK_SECRET" >> .env
         - echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env
+        - echo "GPT_API_KEY=$GPT_API_KEY" >> .env
         - npm run build
   artifacts:
     baseDirectory: .next
