@@ -46,7 +46,7 @@ export default function CoverLetter() {
         </p>
 
         <div className="flex flex-col lg:flex-row gap-4 w-full mt-8">
-          <div className="flex-1 pt-0 p-6">
+          <div className="flex-1 px-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Card className="p-6">
                 <h2 className="text-lg font-semibold mb-6">Education</h2>
