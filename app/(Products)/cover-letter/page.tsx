@@ -12,7 +12,7 @@ import { ErrorMessage } from "@/components/ui/error-message";
 import { useState } from "react";
 import { CoverLetterSchema } from "@/lib/types";
 import { Label } from "@/components/ui/label";
-import { generateCoverLetter } from "./action";
+// import { generateCoverLetter } from "./action";
 
 export default function CoverLetter() {
   const [generatedContent, setGeneratedContent] = useState("");
@@ -28,8 +28,8 @@ export default function CoverLetter() {
   });
 
   const onSubmit = async (data: CoverLetterSchema) => {
-    const response = await generateCoverLetter(data);
-    setGeneratedContent(response.response);
+    // const response = await generateCoverLetter(data);
+    setGeneratedContent("test");
   };
 
   return (
