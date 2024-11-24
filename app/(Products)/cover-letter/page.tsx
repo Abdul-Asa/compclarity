@@ -16,6 +16,7 @@ import { generateCoverLetter } from "./action";
 
 export default function CoverLetter() {
   const [generatedContent, setGeneratedContent] = useState("");
+  const [copySuccess, setCopySuccess] = useState(false);
   const {
     register,
     handleSubmit,
@@ -30,6 +31,18 @@ export default function CoverLetter() {
   const onSubmit = async (data: CoverLetterSchema) => {
     const response = await generateCoverLetter(data);
     setGeneratedContent(response.response);
+  };
+
+  const handleCopy = async () => {
+    if (typeof window !== "undefined") {
+      try {
+        await navigator.clipboard.writeText(generatedContent);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000); // Reset after 2 seconds
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
+    }
   };
 
   return (
@@ -141,7 +154,13 @@ export default function CoverLetter() {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Generated Cover Letter</h2>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(generatedContent)}>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleCopy}
+                    aria-label="Copy to clipboard"
+                    title={copySuccess ? "Copied!" : "Copy to clipboard"}
+                  >
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
