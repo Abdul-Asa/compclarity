@@ -52,12 +52,12 @@ export default function CoverLetter() {
                 <h2 className="text-lg font-semibold mb-6">Education</h2>
                 <div className="space-y-4">
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="university">University Name</Label>
-                    <Input id="university" {...register("University")} placeholder="University name" />
+                    <Label htmlFor="university">University name</Label>
+                    <Input id="university" {...register("University")} placeholder="Name of university" />
                     <ErrorMessage message={errors.University?.message} />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="subject">Subject Studied</Label>
+                    <Label htmlFor="subject">Subject studied</Label>
                     <Input id="subject" {...register("Subject")} placeholder="Subject studied" />
                     <ErrorMessage message={errors.Subject?.message} />
                   </div>
@@ -68,23 +68,23 @@ export default function CoverLetter() {
                 <h2 className="text-lg font-semibold mb-6">Past Experience</h2>
                 <div className="space-y-4">
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="pastCompany">Past Company</Label>
+                    <Label htmlFor="pastCompany">Past company name</Label>
                     <Input id="pastCompany" {...register("PastCompany")} placeholder="Past company" />
                     <ErrorMessage message={errors.PastCompany?.message} />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="pastRole">Past Role</Label>
+                    <Label htmlFor="pastRole">Past role title</Label>
                     <Input id="pastRole" {...register("PastRole")} placeholder="Past role" />
                     <ErrorMessage message={errors.PastRole?.message} />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="experience">Relevant Experience</Label>
+                    <Label htmlFor="experience">Relevant experience</Label>
                     <Textarea
                       id="experience"
                       {...register("Experience")}
-                      placeholder="Relevant experience"
+                      placeholder="Short sentence about what you did in your past role"
                       className="min-h-[100px]"
                     />
                     <ErrorMessage message={errors.Experience?.message} />
@@ -96,19 +96,19 @@ export default function CoverLetter() {
                 <h2 className="text-lg font-semibold mb-6">New Experience</h2>
                 <div className="space-y-4">
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="newCompany">Company Applying To</Label>
+                    <Label htmlFor="newCompany">Company you're applying to</Label>
                     <Input id="newCompany" {...register("NewCompany")} placeholder="Company applying to" />
                     <ErrorMessage message={errors.NewCompany?.message} />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="newRole">Role Applying For</Label>
+                    <Label htmlFor="newRole">Role you're applying for</Label>
                     <Input id="newRole" {...register("NewRole")} placeholder="Role applying for" />
                     <ErrorMessage message={errors.NewRole?.message} />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="words">Word Limit (Max 300)</Label>
+                    <Label htmlFor="words">Word limit (Max 300)</Label>
                     <Input
                       id="words"
                       type="number"

@@ -125,7 +125,7 @@ export const coverLetterSchema = z.object({
   Experience: z
     .string()
     .min(1, { message: "Experience cannot be empty" })
-    .max(30, { message: "Maximum 30 characters allowed" }),
+    .max(100, { message: "Maximum 100 characters allowed" }),
   NewCompany: z
     .string()
     .min(1, { message: "New company cannot be empty" })
