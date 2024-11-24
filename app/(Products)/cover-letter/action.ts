@@ -7,5 +7,7 @@ export async function generateCoverLetter(formData: CoverLetterSchema) {
     body: JSON.stringify(formData),
   });
 
+  console.log(request);
+
   return request.json();
 }
