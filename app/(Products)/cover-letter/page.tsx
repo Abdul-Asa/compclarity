@@ -46,7 +46,7 @@ export default function CoverLetter() {
         </p>
 
         <div className="flex flex-col lg:flex-row gap-4 w-full mt-8">
-          <div className="flex-1 p-6">
+          <div className="flex-1 pt-0 p-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Card className="p-6">
                 <h2 className="text-lg font-semibold mb-6">Education</h2>
@@ -141,11 +141,8 @@ export default function CoverLetter() {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Generated Cover Letter</h2>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(generatedContent)}>
                     <Copy className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <Share className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
