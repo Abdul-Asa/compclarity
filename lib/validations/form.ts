@@ -106,12 +106,37 @@ export const cvServiceSchema = z.object({
 });
 
 export const coverLetterSchema = z.object({
-  University: z.string().min(1, { message: "University cannot be empty" }),
-  Subject: z.string().min(1, { message: "Subject cannot be empty" }),
-  PastCompany: z.string().min(1, { message: "Past company cannot be empty" }),
-  PastRole: z.string().min(1, { message: "Past role cannot be empty" }),
-  Experience: z.string().min(1, { message: "Experience cannot be empty" }),
-  NewCompany: z.string().min(1, { message: "New company cannot be empty" }),
-  NewRole: z.string().min(1, { message: "New role cannot be empty" }),
-  Words: z.number().min(1, { message: "Word limit cannot be empty" }),
+  University: z
+    .string()
+    .min(1, { message: "University cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  Subject: z
+    .string()
+    .min(1, { message: "Subject cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  PastCompany: z
+    .string()
+    .min(1, { message: "Past company cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  PastRole: z
+    .string()
+    .min(1, { message: "Past role cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  Experience: z
+    .string()
+    .min(1, { message: "Experience cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  NewCompany: z
+    .string()
+    .min(1, { message: "New company cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  NewRole: z
+    .string()
+    .min(1, { message: "New role cannot be empty" })
+    .max(30, { message: "Maximum 30 characters allowed" }),
+  Words: z
+    .number()
+    .min(1, { message: "Word limit cannot be empty" })
+    .max(300, { message: "Maximum 300 words allowed" })
+    .transform((val) => val.toString()),
 });

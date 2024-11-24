@@ -23,7 +23,7 @@ export default function CoverLetter() {
   } = useForm<CoverLetterSchema>({
     resolver: zodResolver(coverLetterSchema),
     defaultValues: {
-      Words: 300,
+      Words: "300",
     },
   });
 
@@ -50,56 +50,77 @@ export default function CoverLetter() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Card className="p-6">
                 <h2 className="text-lg font-semibold mb-6">Education</h2>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="university">University Name</Label>
-                  <Input id="university" {...register("University")} placeholder="University name" />
-                  <ErrorMessage message={errors.University?.message} />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="subject">Subject Studied</Label>
-                  <Input id="subject" {...register("Subject")} placeholder="Subject studied" />
-                  <ErrorMessage message={errors.Subject?.message} />
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="university">University Name</Label>
+                    <Input id="university" {...register("University")} placeholder="University name" />
+                    <ErrorMessage message={errors.University?.message} />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="subject">Subject Studied</Label>
+                    <Input id="subject" {...register("Subject")} placeholder="Subject studied" />
+                    <ErrorMessage message={errors.Subject?.message} />
+                  </div>
                 </div>
               </Card>
 
               <Card className="p-6">
                 <h2 className="text-lg font-semibold mb-6">Past Experience</h2>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="pastCompany">Past Company</Label>
-                  <Input id="pastCompany" {...register("PastCompany")} placeholder="Past company" />
-                  <ErrorMessage message={errors.PastCompany?.message} />
-                </div>
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="pastCompany">Past Company</Label>
+                    <Input id="pastCompany" {...register("PastCompany")} placeholder="Past company" />
+                    <ErrorMessage message={errors.PastCompany?.message} />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="pastRole">Past Role</Label>
-                  <Input id="pastRole" {...register("PastRole")} placeholder="Past role" />
-                  <ErrorMessage message={errors.PastRole?.message} />
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="pastRole">Past Role</Label>
+                    <Input id="pastRole" {...register("PastRole")} placeholder="Past role" />
+                    <ErrorMessage message={errors.PastRole?.message} />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="experience">Relevant Experience</Label>
-                  <Textarea
-                    id="experience"
-                    {...register("Experience")}
-                    placeholder="Relevant experience"
-                    className="min-h-[100px]"
-                  />
-                  <ErrorMessage message={errors.Experience?.message} />
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="experience">Relevant Experience</Label>
+                    <Textarea
+                      id="experience"
+                      {...register("Experience")}
+                      placeholder="Relevant experience"
+                      className="min-h-[100px]"
+                    />
+                    <ErrorMessage message={errors.Experience?.message} />
+                  </div>
                 </div>
               </Card>
 
               <Card className="p-6">
                 <h2 className="text-lg font-semibold mb-6">New Experience</h2>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="newCompany">Company Applying To</Label>
-                  <Input id="newCompany" {...register("NewCompany")} placeholder="Company applying to" />
-                  <ErrorMessage message={errors.NewCompany?.message} />
-                </div>
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="newCompany">Company Applying To</Label>
+                    <Input id="newCompany" {...register("NewCompany")} placeholder="Company applying to" />
+                    <ErrorMessage message={errors.NewCompany?.message} />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="newRole">Role Applying For</Label>
-                  <Input id="newRole" {...register("NewRole")} placeholder="Role applying for" />
-                  <ErrorMessage message={errors.NewRole?.message} />
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="newRole">Role Applying For</Label>
+                    <Input id="newRole" {...register("NewRole")} placeholder="Role applying for" />
+                    <ErrorMessage message={errors.NewRole?.message} />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="words">Word Limit (Max 300)</Label>
+                    <Input
+                      id="words"
+                      type="number"
+                      {...register("Words", {
+                        valueAsNumber: true,
+                        max: 300,
+                      })}
+                      placeholder="Word limit"
+                      max={300}
+                    />
+                    <ErrorMessage message={errors.Words?.message} />
+                  </div>
                 </div>
               </Card>
 
