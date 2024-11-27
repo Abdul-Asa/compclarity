@@ -1,3 +1,5 @@
+"use client";
+
 import { CoverLetterForm } from "./CoverLetterForm";
 
 export default function CoverLetter() {
