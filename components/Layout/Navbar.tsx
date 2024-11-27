@@ -129,7 +129,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
                 Craft a perfect cover letter for your dream job
               </p>
             </Link>
-            {/* <Link
+            <Link
               href="/tech-guide"
               className="flex w-full flex-col gap-3 rounded-md border border-transparent bg-gradient-to-bl from-muted/20 to-muted p-3 hover:border-gray-300 hover:via-emerald-50 hover:to-emerald-200
               dark:hover:from-emerald-950 dark:to-muted dark:hover:border-gray-300 dark:hover:via-emerald-800 dark:hover:to-emerald-700"
@@ -142,7 +142,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
               <p className="font-open text-sm leading-tight text-muted-foreground dark:text-gray-200">
                 Get your first SWE internship
               </p>
-            </Link> */}
+            </Link>
           </PopoverContent>
         </Popover>
       </ul>
@@ -236,13 +236,13 @@ const Navbar = ({ user }: { user?: User | null }) => {
                   >
                     CV Crafting
                   </Link>
-                  {/* <Link
+                  <Link
                     href="/tech-guide"
                     className="text-lg  pl-10 md:pl-0 font-medium py-5 w-full "
                     onClick={() => trackNav("e_book")}
                   >
                     Tech Internship Guide
-                  </Link> */}
+                  </Link>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
