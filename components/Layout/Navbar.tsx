@@ -35,7 +35,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
     ]);
 
   return (
-    <div className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-sm bg-background/90">
+    <div className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-sm bg-white/90 dark:bg-black/90">
       <nav className="flex items-center justify-between px-2 py-4 md:px-8 ">
         <Link href="/" replace className="flex items-center" onClick={() => trackNav("logo")}>
           <Image
