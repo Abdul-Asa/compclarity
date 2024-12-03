@@ -22,10 +22,10 @@ const config = {
           DEFAULT: "hsl(var(--brand))",
           dark: "hsl(var(--brand-dark))",
           grey: "hsl(var(--brand-grey))",
-          "light-grey": "hsl(var(--brand-light-grey))",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        border: "hsl(var(--border))",
       },
       borderRadius: {
         lg: "var(--radius)",

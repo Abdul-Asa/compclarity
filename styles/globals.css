@@ -9,7 +9,7 @@
     --brand-light: 160 84% 39%;
     --brand-dark: 162 86% 16%;
     --brand-grey: 0deg 0% 53.7%;
-    --brand-light-grey: 0deg 0% 70.6%;
+    --border: 0deg 0% 87.5%;
     --radius: 1rem;
   }
 
@@ -20,7 +20,7 @@
     --brand-light: 160 84% 39%;
     --brand-dark: 162 86% 16%;
     --brand-grey: 0deg 0% 53.7%;
-    --brand-light-grey: 0deg 0% 70.6%;
+    --border: 0deg 0% 25%;
   }
 }
 

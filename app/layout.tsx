@@ -31,9 +31,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en" suppressHydrationWarning>
       <CSPostHogProvider>
         <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-          <ThemeProvider attribute="class" defaultTheme="light">
+          <ThemeProvider attribute="class" enableSystem>
             <PostHogPageView />
-            <div className="flex min-h-screen w-full bg-[rgb(239,241,245)] dark:bg-[rgb(14,16,17)]  flex-col items-center justify-between font-space">
+            <div className="flex relative min-h-screen w-full bg-background flex-col items-center justify-between font-space text-foreground">
               <Navbar user={data.user} />
               {children}
               <Footer />
