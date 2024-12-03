@@ -11,13 +11,8 @@ export default function NotFound() {
       <Magnet padding={40}>
         <h1 className="cursor-help text-8xl font-bold">404</h1>
       </Magnet>
-      <p className="text-center">
-        Oops! You’ve stumbled onto a 404. Let’s get you back to clarity.
-      </p>
-      <Link
-        href="/"
-        className={cn(buttonVariants(), "bg-emerald-700 transition")}
-      >
+      <p className="text-center">Oops! You’ve stumbled onto a 404. Let’s get you back to clarity.</p>
+      <Link href="/" className={cn(buttonVariants(), "bg-emerald-700 transition")}>
         Return Home
       </Link>
     </div>
