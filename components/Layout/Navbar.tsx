@@ -115,7 +115,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
 
         <div className="hidden w-[15%] justify-end gap-2 lg:flex">
           <ModeToggle />
-          <Button asChild size={"lg"}>
+          <Button asChild size={"lg"} variant={"outline"}>
             {user ? (
               <Link href="/account" onClick={() => trackNav("account")}>
                 Account

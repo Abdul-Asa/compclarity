@@ -5,9 +5,9 @@
   :root {
     --background: 0deg 0% 98.8%;
     --foreground: 240 10% 3.9%;
-    --brand: 153.1deg 60.2% 52.7%;
+    --brand: 162 94% 24%;
     --brand-light: 160 84% 39%;
-    --brand-dark: 162 86% 16%;
+    --brand-dark: 162 94% 24%;
     --brand-grey: 0deg 0% 53.7%;
     --border: 0deg 0% 87.5%;
     --radius: 1rem;
@@ -16,7 +16,7 @@
   .dark {
     --background: 0deg 0% 7.1%;
     --foreground: 0deg 0% 98%;
-    --brand: 153.1deg 60.2% 52.7%;
+    --brand: 160 84% 39%;
     --brand-light: 160 84% 39%;
     --brand-dark: 162 86% 16%;
     --brand-grey: 0deg 0% 53.7%;
