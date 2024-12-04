@@ -203,6 +203,13 @@ const Navbar = ({ user }: { user?: User | null }) => {
                       CV Crafting
                     </Link>
                     <Link
+                      href="/cover-letter"
+                      className="text-lg font-medium  pl-10 md:pl-0 py-5 border-y w-full "
+                      onClick={() => trackNav("cover_letter")}
+                    >
+                      Cover Letter
+                    </Link>
+                    <Link
                       href="/tech-guide"
                       className="text-lg  pl-10 md:pl-0 font-medium py-5 w-full "
                       onClick={() => trackNav("e_book")}
