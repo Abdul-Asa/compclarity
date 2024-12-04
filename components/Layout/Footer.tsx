@@ -4,8 +4,14 @@ import PrivacyPolicyLink from "../PrivacyPolicyLink";
 import Link from "next/link";
 import { sendGAEvent } from "@next/third-parties/google";
 import { ModeToggle } from "./ThemeProvider";
+import { ArrowUp } from "lucide-react";
+import { Button } from "../ui/button";
 
 const Footer = () => {
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const trackFooter = (label: string) =>
     sendGAEvent([
       {
@@ -73,6 +79,19 @@ const Footer = () => {
           <a href="/employers" className="hover:underline" onClick={() => trackFooter("employers")}>
             Employers
           </a>
+          |
+          <Button
+            onClick={handleScrollToTop}
+            onKeyDown={(e) => e.key === "Enter" && handleScrollToTop()}
+            className=" bg-white/10 hover:bg-white/20 transition-colors size-6 rounded-[4px]"
+            aria-label="Scroll to top of page"
+            title="Go to top"
+            size="icon"
+            variant={"outline"}
+            tabIndex={0}
+          >
+            <ArrowUp />
+          </Button>
         </small>
         <small>
           Logos provided by{" "}

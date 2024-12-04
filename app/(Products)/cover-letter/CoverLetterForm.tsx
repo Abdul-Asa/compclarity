@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { RegisterOptions, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { coverLetterSchema } from "@/lib/validations/form";
 import { CoverLetterSchema } from "@/lib/types";
@@ -13,10 +13,13 @@ import { Label } from "@/components/ui/label";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { Copy, Wand2 } from "lucide-react";
 import { generateCoverLetter } from "./action";
+import { User } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
-export function CoverLetterForm() {
+export function CoverLetterForm({ user }: { user: User | null }) {
   const [generatedContent, setGeneratedContent] = useState("");
   const [copySuccess, setCopySuccess] = useState(false);
+  const [hasShownAuthWarning, setHasShownAuthWarning] = useState(false);
 
   const {
     register,
@@ -29,7 +32,26 @@ export function CoverLetterForm() {
     },
   });
 
+  const handleInputChange = () => {
+    if (!user && !hasShownAuthWarning) {
+      toast.error("Please sign in to generate a cover letter");
+      setHasShownAuthWarning(true);
+    }
+  };
+
+  const registerWithAuth = (
+    name: keyof CoverLetterSchema,
+    options?: RegisterOptions<CoverLetterSchema, keyof CoverLetterSchema>
+  ) => ({
+    ...register(name, options),
+    onChange: handleInputChange,
+  });
+
   const onSubmit = async (data: CoverLetterSchema) => {
+    if (!user) {
+      toast.error("Please sign in to generate a cover letter");
+      return;
+    }
     const response = await generateCoverLetter(data);
     setGeneratedContent(response.response);
   };
@@ -53,15 +75,14 @@ export function CoverLetterForm() {
           <Card className="p-6">
             <h2 className="text-lg font-semibold mb-6">Education</h2>
             <div className="space-y-4">
-              {/* Education fields */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="university">University name</Label>
-                <Input id="university" {...register("University")} placeholder="Name of university" />
+                <Input id="university" {...registerWithAuth("University")} placeholder="Name of university" />
                 <ErrorMessage message={errors.University?.message} />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="subject">Subject studied</Label>
-                <Input id="subject" {...register("Subject")} placeholder="Subject studied" />
+                <Input id="subject" {...registerWithAuth("Subject")} placeholder="Subject studied" />
                 <ErrorMessage message={errors.Subject?.message} />
               </div>
             </div>
@@ -70,16 +91,15 @@ export function CoverLetterForm() {
           <Card className="p-6">
             <h2 className="text-lg font-semibold mb-6">Past Experience</h2>
             <div className="space-y-4">
-              {/* Past Experience fields */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="pastCompany">Past company name</Label>
-                <Input id="pastCompany" {...register("PastCompany")} placeholder="Past company" />
+                <Input id="pastCompany" {...registerWithAuth("PastCompany")} placeholder="Past company" />
                 <ErrorMessage message={errors.PastCompany?.message} />
               </div>
 
               <div className="flex flex-col gap-2">
                 <Label htmlFor="pastRole">Past role title</Label>
-                <Input id="pastRole" {...register("PastRole")} placeholder="Past role" />
+                <Input id="pastRole" {...registerWithAuth("PastRole")} placeholder="Past role" />
                 <ErrorMessage message={errors.PastRole?.message} />
               </div>
 
@@ -87,7 +107,7 @@ export function CoverLetterForm() {
                 <Label htmlFor="experience">Relevant experience</Label>
                 <Textarea
                   id="experience"
-                  {...register("Experience")}
+                  {...registerWithAuth("Experience")}
                   placeholder="Short sentence about what you did in your past role"
                   className="min-h-[100px]"
                 />
@@ -99,16 +119,15 @@ export function CoverLetterForm() {
           <Card className="p-6">
             <h2 className="text-lg font-semibold mb-6">New Experience</h2>
             <div className="space-y-4">
-              {/* New Experience fields */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="newCompany">Company you're applying to</Label>
-                <Input id="newCompany" {...register("NewCompany")} placeholder="Company applying to" />
+                <Input id="newCompany" {...registerWithAuth("NewCompany")} placeholder="Company applying to" />
                 <ErrorMessage message={errors.NewCompany?.message} />
               </div>
 
               <div className="flex flex-col gap-2">
                 <Label htmlFor="newRole">Role you're applying for</Label>
-                <Input id="newRole" {...register("NewRole")} placeholder="Role applying for" />
+                <Input id="newRole" {...registerWithAuth("NewRole")} placeholder="Role applying for" />
                 <ErrorMessage message={errors.NewRole?.message} />
               </div>
 
@@ -117,7 +136,7 @@ export function CoverLetterForm() {
                 <Input
                   id="words"
                   type="number"
-                  {...register("Words", {
+                  {...registerWithAuth("Words", {
                     valueAsNumber: true,
                     max: 300,
                   })}
@@ -157,7 +176,7 @@ export function CoverLetterForm() {
               </Button>
             </div>
           </div>
-          <div className="flex-1 min-h-[400px] bg-muted rounded-lg p-4">
+          <div className="flex-1 min-h-[400px] bg-gray-100 dark:bg-gray-900 rounded-lg p-4">
             {generatedContent || "Your cover letter will appear here..."}
           </div>
         </div>
