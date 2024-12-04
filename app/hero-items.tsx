@@ -26,7 +26,7 @@ const HeroSection = () => {
       <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
         Your <span className="inline-block text-brand transition hover:-translate-y-3">guide</span> to fair pay from{" "}
-        <span className="inline-block text-brand transition hover:-translate-y-3">day one</span>. .
+        <span className="inline-block text-brand transition hover:-translate-y-3">day one</span>.
       </h1>
       <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
         Uncover salary insights, find your next job, and track your applications all in one place.
@@ -171,7 +171,7 @@ const TestimonialSection = () => {
     <section className="mx-auto flex w-full flex-col items-center justify-center gap-5">
       <h2 className="p-4 text-center text-lg font-bold md:text-2xl lg:text-5xl">What others are saying</h2>
       <div
-        className="flex w-full flex-col items-center justify-center border-y-2 border-emerald-700 bg-gradient-to-tr py-4 md:py-10"
+        className="flex w-full flex-col items-center justify-center border-y-2 border-brand bg-gradient-to-tr py-4 md:py-10"
         style={{
           backgroundImage: `url("${svgToDataUri(
             `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="green"><path d="M0 .5H31.5V32"/></svg>`

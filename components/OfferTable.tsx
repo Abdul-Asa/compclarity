@@ -9,7 +9,7 @@ export default function OfferTable({ offersResponse }: { offersResponse: OfferAp
   return (
     <div className="flex flex-col justify-center items-center w-full lg:w-2/3 2xl:w-5/6 px-4">
       <table className="text-sm text-gray-500 dark:text-gray-100 text-center w-full ">
-        <thead className="text-gray-700 bg-gray-50 border-b-2 dark:bg-black dark:text-gray-100 dark:border-gray-700">
+        <thead className="text-gray-700 bg-gray-50 border-b-2 dark:bg-black dark:text-gray-100 dark:border-border">
           <tr>
             <th scope="col"></th>
             <th scope="col" className="px-1 py-4 w-1/3">

@@ -49,7 +49,7 @@ export default function RoleDropdownMenu({ companyPath, forCompany, companyParam
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute left-1/2 mt-2 min-w-max origin-top -translate-x-1/2 transform divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-900 shadow-lg ring-1 ring-black/5 focus:outline-none">
+        <Menu.Items className="absolute left-1/2 mt-2 min-w-max origin-top -translate-x-1/2 transform divide-y divide-gray-100 rounded-md bg-white dark:bg-black shadow-lg ring-1 ring-border focus:outline-none">
           <div className="px-1 py-1">
             <Menu.Item>
               {({ active }) => (
