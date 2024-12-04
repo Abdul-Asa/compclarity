@@ -42,6 +42,7 @@ export default async function Offers({
       roles = new Set<string>(searchParams.role);
     }
   }
+
   const offersResponse = await fetchAllOffers(
     (currentPage - 1).toString(),
     searchTerm,
@@ -51,7 +52,7 @@ export default async function Offers({
     sortDir,
     minYOE,
     maxYOE,
-    size,
+    size
   );
 
   return (
@@ -63,14 +64,12 @@ export default async function Offers({
       </div>
       <OfferTableControls isCompanyPage={false} />
       {offersResponse.totalResults === 0 ? (
-        <b className="text-center mt-24 mb-24">
-          No tech salaries found
-        </b>
-        ) : (
-          <>
-            <OfferTable offersResponse={offersResponse} />
-          </>
-        )}
+        <b className="text-center mt-24 mb-24">No tech salaries found</b>
+      ) : (
+        <>
+          <OfferTable offersResponse={offersResponse} />
+        </>
+      )}
     </div>
   );
 }

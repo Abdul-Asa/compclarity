@@ -48,7 +48,7 @@ async function getCompanyOffers(companyName: string, searchParams?: PageProps["s
     companyName,
     minYOE,
     maxYOE,
-    size,
+    size
   );
   return offersResponse;
 }
@@ -82,7 +82,7 @@ const Page = async ({ params, searchParams }: PageProps) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center p-4">
-        <div className="bg-white dark:bg-black dark:border-gray-700 dark:border flex flex-col w-full md:w-2/3 p-4 md:p-8 rounded-lg items-center mb-2">
+        <div className="bg-white dark:bg-black dark:border-border dark:border flex flex-col w-full md:w-2/3 p-4 md:p-8 rounded-lg items-center mb-2">
           <CompanyHeader companyDetails={companyDetails} />
         </div>
       </div>

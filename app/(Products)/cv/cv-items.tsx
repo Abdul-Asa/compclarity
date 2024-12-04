@@ -130,8 +130,7 @@ export const Pricing = () => {
               </div>
               <p className="text-red-700 mb-4 dark:text-red-500">{tier.discount}</p>
               <Button
-                variant={tier.isAvailable ? "default" : "secondary"}
-                className="mb-6 bg-emerald-700 text-white"
+                className="mb-6 bg-brand text-white"
                 disabled={!tier.isAvailable}
                 onClick={() => {
                   if (tier.isAvailable) {
@@ -163,8 +162,7 @@ export const HowItWorks = () => {
     {
       icon: Send,
       title: "1. Send us your details",
-      description:
-        "Submit your existing CV. Let us know your work experience, education, and skills.",
+      description: "Submit your existing CV. Let us know your work experience, education, and skills.",
     },
     {
       icon: FileText,
@@ -205,16 +203,18 @@ export const FAQ = () => {
     },
     {
       question: "Do you offer any revisions after the CV is delivered?",
-      answer: "Yes, we offer up to two rounds of revisions to ensure you're completely satisfied with the final product.",
+      answer:
+        "Yes, we offer up to two rounds of revisions to ensure you're completely satisfied with the final product.",
     },
     {
       question: "Will you format my CV according to the latest industry standards?",
-      answer: "Yes, we stay up to date with the latest CV formats and industry expectations to ensure your CV looks professional and modern.",
+      answer:
+        "Yes, we stay up to date with the latest CV formats and industry expectations to ensure your CV looks professional and modern.",
     },
     {
       question: "What differentiates you from other resume review/career coaching services?",
       answer: "Cuz we love you and care about your success 😘",
-    }
+    },
   ];
   return (
     <div className="w-full max-w-3xl mx-auto p-6">

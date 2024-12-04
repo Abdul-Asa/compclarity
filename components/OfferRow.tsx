@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 
 import { OfferRowContent } from "./OfferRowContent";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { toUrlFriendly } from "@/lib/utils";
 
 export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) {
   const [expanded, toggleExpanded] = useState(false);
@@ -37,7 +38,7 @@ export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) 
           "cursor-pointer border-b " +
           (expanded
             ? "bg-gray-50 dark:bg-black"
-            : "bg-white hover:bg-gray-50 dark:bg-black dark:hover:bg-gray-800 dark:border-gray-800")
+            : "bg-white hover:bg-gray-50 dark:bg-black dark:hover:bg-gray-800 border-border")
         }
       >
         <td className="px-2">
@@ -48,7 +49,7 @@ export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) 
             <div className="flex flex-col items-center justify-center">
               {isForFinance ? (
                 <a
-                  href={`/company/${offer.company.name.replace(/\s+/g, "-").toLowerCase()}/salaries/finance`}
+                  href={`/company/${toUrlFriendly(offer.company.name)}/salaries/finance`}
                   onClick={(e) => e.stopPropagation()}
                   className="hover:underline"
                 >
@@ -58,7 +59,7 @@ export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) 
                 </a>
               ) : (
                 <a
-                  href={`/company/${offer.company.name.replace(/\s+/g, "-").toLowerCase()}/salaries`}
+                  href={`/company/${toUrlFriendly(offer.company.name)}/salaries`}
                   onClick={(e) => e.stopPropagation()}
                   className="hover:underline"
                 >

@@ -2,19 +2,13 @@
 
 import { PlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 export default function AddCompensationButton() {
   return (
-    <div className="relative">
-      <div className="rtl:inset-r-0 pointer-events-none absolute inset-y-0 left-0 flex items-center ps-3 rtl:right-0">
-        <PlusIcon className="h-5 w-5 text-white" />
-      </div>
-      <Link
-        href={"/add"}
-        className="block w-60 rounded-lg bg-emerald-500 dark:bg-emerald-600 p-2 ps-10 text-center text-sm text-white shadow-md hover:bg-emerald-600 dark:hover:bg-emerald-700"
-      >
-        Add Compensation
-      </Link>
-    </div>
+    <Button className="relative w-60 text-white bg-emerald-700">
+      <PlusIcon className="size-5" />
+      <Link href={"/add"}>Add Compensation</Link>
+    </Button>
   );
 }

@@ -1,23 +1,21 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
-import Image from "next/image"
-import { useState } from "react"
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function LogoImage({
   companyDomain,
   size,
   className,
 }: {
-  companyDomain: string
-  size: string
-  className?: string
+  companyDomain: string;
+  size: string;
+  className?: string;
 }) {
-  const [src, setSrc] = useState(
-    `https://logo.clearbit.com/${companyDomain}?size=${200}`
-  )
+  const [src, setSrc] = useState(`https://logo.clearbit.com/${companyDomain}?size=${200}`);
 
-  const dimensions = size === 'large' ? { width: 100, height: 100 } : { width: 45, height: 45 };
+  const dimensions = size === "large" ? { width: 100, height: 100 } : { width: 45, height: 45 };
 
   return (
     <Image

@@ -1,8 +1,12 @@
-"use client";
-
+import { createClient } from "@/lib/supabase/server";
 import { CoverLetterForm } from "./CoverLetterForm";
 
-export default function CoverLetter() {
+export default async function CoverLetter() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <div className="flex min-h-screen w-full p-4">
       <div className="flex-1 flex justify-center container relative flex-col items-center mx-auto p-5">
@@ -16,7 +20,7 @@ export default function CoverLetter() {
           Generate a cover letter in seconds with our AI-powered cover letter generator.
         </p>
 
-        <CoverLetterForm />
+        <CoverLetterForm user={user} />
       </div>
     </div>
   );

@@ -33,7 +33,7 @@ const page = async ({ params }: pageProps) => {
 
   return (
     <>
-      <div className="bg-white dark:bg-black dark:border-gray-700 dark:border p-16 sm:pr-40 sm:pl-40">
+      <div className="bg-white dark:bg-black dark:border-border dark:border p-16 sm:pr-40 sm:pl-40">
         <OfferRowContent addedDateStr={addedDateStr} offer={offer} />
         <div className="mt-4 flex justify-center">
           <Link href="/tech">

@@ -22,33 +22,24 @@ import { TransitionView } from "@/components/ui/transition";
 
 const HeroSection = () => {
   return (
-    <section className="mx-auto flex h-[calc(100vh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
-      <div className="group relative rounded-full bg-emerald-700 ">
-        <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
-      </div>
+    <section className="mx-auto flex min-h-[calc(100dvh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
+      <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
-        Your{" "}
-        <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
-          guide
-        </span>{" "}
-        to fair pay from{" "}
-        <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
-          day one
-        </span>
-        .
+        Your <span className="inline-block text-brand transition hover:-translate-y-3">guide</span> to fair pay from{" "}
+        <span className="inline-block text-brand transition hover:-translate-y-3">day one</span>.
       </h1>
       <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
         Uncover salary insights, find your next job, and track your applications all in one place.
       </h2>
       <div className="my-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
+        <Button asChild>
           <Link href="/tech">
-            View&nbsp;<strong>Tech</strong>&nbsp;Salaries
+            View <b>Tech</b> Salaries
           </Link>
         </Button>
-        <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
+        <Button asChild>
           <Link href="/finance">
-            View&nbsp;<strong>Finance</strong>&nbsp;Salaries
+            View <b>Finance</b> Salaries
           </Link>
         </Button>
       </div>
@@ -57,7 +48,7 @@ const HeroSection = () => {
 };
 const MarqueeSection = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
+    <section className="flex w-full flex-col items-center justify-center bg-brand-dark text-white">
       <div className="w-full">
         <h2 className="p-4 text-center font-bold md:text-3xl">500+ community verified salaries from top companies</h2>
       </div>
@@ -92,17 +83,23 @@ const FeatureSection = () => {
               Gain insights into salaries across industries and roles. Make informed career decisions with accurate,
               up-to-date salary information collected from thousands of professionals.
             </p>
-            <Button className="my-6 w-fit bg-emerald-700" asChild>
+            <Button className="my-6 w-fit " asChild>
               <Link href="/tech">Explore Salaries</Link>
             </Button>
           </div>
           <div className="flex rounded-sm border-2 border-emerald-700 p-1">
-            <Image src="/assets/salary.png" alt="Feature 1" width={900} height={500} unoptimized />
+            <Image
+              src="/assets/salary.png"
+              alt="Compare Salaries with CompClarity"
+              width={900}
+              height={500}
+              unoptimized
+            />
           </div>
         </TransitionView>
         <TransitionView className="flex w-full flex-col-reverse items-center justify-center gap-2 md:flex-row md:gap-10">
           <div className="flex rounded-sm border-2 border-emerald-700 p-1">
-            <Image src="/assets/jobs.png" alt="Feature 1" width={800} height={300} unoptimized />
+            <Image src="/assets/jobs.png" alt="CompClarity Job Board" width={800} height={300} unoptimized />
           </div>
           <div className="flex w-full max-w-md flex-col justify-center p-4">
             <h2 className="py-4 text-lg font-bold lg:text-2xl">Find Your Next Opportunity</h2>
@@ -111,7 +108,7 @@ const FeatureSection = () => {
               looking for talent like yours.
             </p>
 
-            <Button className="my-6 w-fit bg-emerald-700" asChild>
+            <Button className="my-6 w-fit" asChild>
               <Link href="/jobs">Discover Jobs</Link>
             </Button>
           </div>
@@ -123,12 +120,18 @@ const FeatureSection = () => {
               Keep track of all your job applications in one place. Never miss a follow-up with our intuitive tracker
               that helps you manage your job search efficiently.
             </p>
-            <Button className="my-6 w-fit bg-emerald-700" asChild>
+            <Button className="my-6 w-fit" asChild>
               <Link href="/tracker">Get Started</Link>
             </Button>
           </div>
           <div className="flex rounded-sm border-2 border-emerald-700 p-1">
-            <Image src="/assets/tracker.png" alt="Feature 1" width={900} height={300} unoptimized />
+            <Image
+              src="/assets/tracker.png"
+              alt="CompClarity Application Tracker"
+              width={900}
+              height={300}
+              unoptimized
+            />
           </div>
         </TransitionView>
       </div>
@@ -168,7 +171,7 @@ const TestimonialSection = () => {
     <section className="mx-auto flex w-full flex-col items-center justify-center gap-5">
       <h2 className="p-4 text-center text-lg font-bold md:text-2xl lg:text-5xl">What others are saying</h2>
       <div
-        className="flex w-full flex-col items-center justify-center border-y-2 border-emerald-700 bg-gradient-to-tr py-4 md:py-10"
+        className="flex w-full flex-col items-center justify-center border-y-2 border-brand bg-gradient-to-tr py-4 md:py-10"
         style={{
           backgroundImage: `url("${svgToDataUri(
             `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="green"><path d="M0 .5H31.5V32"/></svg>`
@@ -191,7 +194,7 @@ const TestimonialSection = () => {
                   className={cn(
                     "h-65 relative transform border-2 border-black transition duration-300 ease-in-out sm:min-w-60",
                     current === index + 1
-                      ? "-translate-y-4 scale-110 bg-emerald-700 text-white"
+                      ? "-translate-y-4 scale-110 bg-brand text-white"
                       : "bg-white text-black dark:bg-gray-800 dark:text-white"
                   )}
                   style={{
@@ -234,13 +237,11 @@ const TestimonialSection = () => {
           </CarouselContent>
           <div className="flex justify-center gap-10 text-lg">
             <CarouselPrevious
-              variant={"ghost"}
-              className="rounded-none bg-transparent hover:bg-emerald-700 hover:text-white"
+              className="rounded-none hover:bg-brand bg-brand/80 border-brand text-white"
               handleClick={() => autoPlay.current.reset()}
             />
             <CarouselNext
-              variant={"ghost"}
-              className="rounded-none bg-transparent hover:bg-emerald-700 hover:text-white"
+              className="rounded-none hover:bg-brand bg-brand/80 border-brand text-white"
               handleClick={() => autoPlay.current.reset()}
             />
           </div>
@@ -252,7 +253,7 @@ const TestimonialSection = () => {
 const SubscribeSection = () => {
   return (
     <TransitionView className="mx-auto flex w-full flex-col items-center justify-center gap-5 p-6 py-20 md:px-0">
-      <div className="group relative rounded-full bg-emerald-700">
+      <div className="group relative rounded-full bg-brand">
         <CTABadge intro="Join us!" main="Subscribe to our newsletter 📬" link="https://compclarity.substack.com/" />
       </div>
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-3xl font-bold tracking-tight transition lg:text-6xl">
@@ -262,7 +263,7 @@ const SubscribeSection = () => {
         Join our Discord community to stay up to date with the latest salary trends and to connect with other
         professionals in the industry.
       </h2>
-      <Button size={"lg"} className="bg-emerald-700" asChild>
+      <Button size={"lg"} asChild>
         <Link href="https://discord.gg/AuAvjpTTnm" className="my-6">
           Chat on Discord
         </Link>

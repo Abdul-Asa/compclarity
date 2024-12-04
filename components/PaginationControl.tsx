@@ -21,7 +21,7 @@ export default function PaginationControl({ results }: { results: number }) {
     const urlPageSize = Number(searchParams.get("size"));
     if (!validPageSizes.includes(urlPageSize)) {
       const params = new URLSearchParams(searchParams);
-      params.set("size", "10"); 
+      params.set("size", "10");
       params.set("page", "0");
       replace(`${pathname}?${params.toString()}`);
     }
@@ -31,7 +31,7 @@ export default function PaginationControl({ results }: { results: number }) {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
     if (!validPageSizes.includes(Number(searchParams.get("size")))) {
-      params.set("size", "10"); 
+      params.set("size", "10");
     }
     return `${pathname}?${params.toString()}`;
   };
@@ -41,8 +41,7 @@ export default function PaginationControl({ results }: { results: number }) {
       className="flex items-center flex-col flex-wrap md:flex-row justify-center sm:justify-between pt-4 sm:w-full"
       aria-label="Table navigation"
     >
-
-    <div className="flex items-center space-x-4 mb-4 md:mb-0">
+      <div className="flex items-center space-x-4 mb-4 md:mb-0">
         <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
           Showing{" "}
           <span className="font-semibold text-gray-900 dark:text-gray-100">
@@ -53,7 +52,7 @@ export default function PaginationControl({ results }: { results: number }) {
         </div>
         <PageResultsButton />
       </div>
-      
+
       <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
         {currentPage > 1 ? (
           <li key={"Prev"}>

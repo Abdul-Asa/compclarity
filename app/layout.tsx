@@ -9,7 +9,7 @@ import { metadata as metadataConfig } from "@/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
-import { CSPostHogProvider } from "@/components/providers/posthog";
+import { CSPostHogProvider, PostHogPageView } from "@/components/providers/posthog";
 import { ThemeProvider } from "@/components/Layout/ThemeProvider";
 import { Announcement } from "@/components/Layout/Announcement";
 
@@ -31,8 +31,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en" suppressHydrationWarning>
       <CSPostHogProvider>
         <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <div className="flex min-h-screen w-full bg-[rgb(239,241,245)] dark:bg-[rgb(14,16,17)]  flex-col items-center justify-between font-space">
+          <ThemeProvider attribute="class" enableSystem>
+            <PostHogPageView />
+            <div className="flex relative min-h-screen w-full bg-background flex-col items-center justify-between font-space text-foreground">
               <Navbar user={data.user} />
               {children}
               <Footer />

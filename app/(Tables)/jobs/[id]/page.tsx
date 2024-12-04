@@ -3,6 +3,7 @@ import Link from "next/link";
 import { JobRowContent } from "@/components/JobRowContent";
 import { fetchJob } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/button";
 
 interface pageProps {
   params: { id: string };
@@ -33,14 +34,12 @@ const page = async ({ params }: pageProps) => {
 
   return (
     <>
-      <div className="bg-white dark:bg-black dark:border-gray-700 dark:border p-16 sm:pr-40 sm:pl-40">
+      <div className="bg-white dark:bg-black dark:border-border dark:border p-16 sm:pr-40 sm:pl-40">
         <JobRowContent addedDateStr={addedDateStr} job={job} signedIn={signedIn} />
         <div className="mt-4 flex justify-center">
-          <Link href="/jobs">
-            <button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-black text-sm py-2 px-2 rounded mt-4">
-              View All Jobs
-            </button>
-          </Link>
+          <Button variant={"outline"} asChild>
+            <Link href="/jobs">View All Jobs</Link>
+          </Button>
         </div>
       </div>
     </>
