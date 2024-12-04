@@ -14,7 +14,7 @@ import { ErrorMessage } from "@/components/ui/error-message";
 import { Copy, Wand2 } from "lucide-react";
 import { generateCoverLetter } from "./action";
 import { User } from "@supabase/supabase-js";
-import { toast } from "sonner";
+import { toast } from "@/components/hooks/useToast";
 
 export function CoverLetterForm({ user }: { user: User | null }) {
   const [generatedContent, setGeneratedContent] = useState("");
@@ -34,7 +34,10 @@ export function CoverLetterForm({ user }: { user: User | null }) {
 
   const handleInputChange = () => {
     if (!user && !hasShownAuthWarning) {
-      toast.error("Please sign in to generate a cover letter");
+      toast({
+        title: "Please sign in to generate a cover letter",
+        variant: "destructive",
+      });
       setHasShownAuthWarning(true);
     }
   };
@@ -49,7 +52,10 @@ export function CoverLetterForm({ user }: { user: User | null }) {
 
   const onSubmit = async (data: CoverLetterSchema) => {
     if (!user) {
-      toast.error("Please sign in to generate a cover letter");
+      toast({
+        title: "Please sign in to generate a cover letter",
+        variant: "destructive",
+      });
       return;
     }
     const response = await generateCoverLetter(data);
