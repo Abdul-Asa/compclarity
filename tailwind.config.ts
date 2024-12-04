@@ -75,6 +75,10 @@ const config = {
             transform: "translateY(calc(-100% - var(--gap)))",
           },
         },
+        "text-slide": {
+          "0%, 20%": { transform: "translateX(0)" },
+          "80%, 100%": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -82,6 +86,7 @@ const config = {
         "fade-in": "fade-animation 0.6s both",
         marquee: "marquee 200s linear infinite",
         "marquee-vertical": "marquee-vertical 200s linear infinite",
+        "text-slide": "text-slide 12s linear infinite",
       },
     },
   },

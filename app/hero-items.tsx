@@ -22,7 +22,7 @@ import { TransitionView } from "@/components/ui/transition";
 
 const HeroSection = () => {
   return (
-    <section className="mx-auto flex h-[calc(100svh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
+    <section className="mx-auto flex min-h-[calc(100dvh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
       <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
         Your <span className="inline-block text-brand transition hover:-translate-y-3">guide</span> to fair pay from{" "}
@@ -34,12 +34,12 @@ const HeroSection = () => {
       <div className="my-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
         <Button asChild>
           <Link href="/tech">
-            View&nbsp;<strong>Tech</strong>&nbsp;Salaries
+            View <b>Tech</b> Salaries
           </Link>
         </Button>
         <Button asChild>
           <Link href="/finance">
-            View&nbsp;<strong>Finance</strong>&nbsp;Salaries
+            View <b>Finance</b> Salaries
           </Link>
         </Button>
       </div>
@@ -48,7 +48,7 @@ const HeroSection = () => {
 };
 const MarqueeSection = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-brand text-white">
+    <section className="flex w-full flex-col items-center justify-center bg-brand-dark text-white">
       <div className="w-full">
         <h2 className="p-4 text-center font-bold md:text-3xl">500+ community verified salaries from top companies</h2>
       </div>
