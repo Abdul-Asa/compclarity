@@ -78,10 +78,18 @@ export function CoverLetterForm({ user }: { user: User | null }) {
       return;
     }
 
-    await supabase
+    const { error: updateError } = await supabase
       .from("users")
       .update({ tokens: tokenData.tokens - 20 })
       .eq("id", user.id);
+
+    if (updateError) {
+      toast({
+        title: "Error, please try again later",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const response = await generateCoverLetter(data);
     setGeneratedContent(response.response);
