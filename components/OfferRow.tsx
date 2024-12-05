@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 import { OfferRowContent } from "./OfferRowContent";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { toUrlFriendly } from "@/lib/utils";
+import { cn, toUrlFriendly } from "@/lib/utils";
 
 export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) {
   const [expanded, toggleExpanded] = useState(false);
@@ -42,7 +42,11 @@ export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) 
         }
       >
         <td className="px-2">
-          {expanded ? <ChevronUpIcon className="h-5 w-5" /> : <ChevronDownIcon className="h-5 w-5" />}
+          <button>
+            <ChevronDownIcon
+              className={cn("h-5 w-5 transition-transform ease-out duration-200", expanded ? "rotate-180" : "")}
+            />
+          </button>
         </td>
         <td className="px-1 py-4">
           <div>
@@ -93,13 +97,13 @@ export default function OfferRow({ offer, idx }: { offer: Offer; idx: number }) 
               <span className="text-gray-900 dark:text-white">{offer.compDetails?.totalComp}</span>
               {offer.verified ? (
                 <>
-                  <a
+                  <button
                     tabIndex={0}
                     className={`verified${idx} cursor-pointer`}
                     data-tooltip-html="This offer has been manually<br/> verified via an offer letter"
                   >
                     <VerifiedSvg />
-                  </a>
+                  </button>
                   <Tooltip anchorSelect={`.verified${idx}`} />
                 </>
               ) : null}
