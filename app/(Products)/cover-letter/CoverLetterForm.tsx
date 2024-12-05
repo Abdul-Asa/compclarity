@@ -15,11 +15,13 @@ import { Copy, Wand2 } from "lucide-react";
 import { generateCoverLetter } from "./action";
 import { User } from "@supabase/supabase-js";
 import { toast } from "@/components/hooks/useToast";
+import { createClient } from "@/lib/supabase/client";
 
 export function CoverLetterForm({ user }: { user: User | null }) {
   const [generatedContent, setGeneratedContent] = useState("");
   const [copySuccess, setCopySuccess] = useState(false);
   const [hasShownAuthWarning, setHasShownAuthWarning] = useState(false);
+  const supabase = createClient();
 
   const {
     register,
@@ -58,6 +60,29 @@ export function CoverLetterForm({ user }: { user: User | null }) {
       });
       return;
     }
+    const { data: tokenData, error } = await supabase.from("users").select("tokens").single();
+
+    if (error) {
+      toast({
+        title: "Error, please try again later",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (tokenData.tokens <= 0) {
+      toast({
+        title: "You have no tokens left. Please try again tomorrow.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    await supabase
+      .from("users")
+      .update({ tokens: tokenData.tokens - 20 })
+      .eq("id", user.id);
+
     const response = await generateCoverLetter(data);
     setGeneratedContent(response.response);
   };
