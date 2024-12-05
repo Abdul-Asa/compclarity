@@ -80,7 +80,7 @@ export function CoverLetterForm({ user }: { user: User | null }) {
 
     const { error: updateError } = await supabase
       .from("users")
-      .update({ tokens: tokenData.tokens - 20 })
+      .update({ tokens: tokenData.tokens - 1 })
       .eq("id", user.id);
 
     if (updateError) {
