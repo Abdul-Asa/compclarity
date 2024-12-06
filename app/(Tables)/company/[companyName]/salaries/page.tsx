@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${companyDetails.name} Salaries in the UK and EU`,
-    description: `Compare tech salaries for ${companyDetails.name} in the UK and EU!`,
+    description: `Compare tech salaries for ${companyDetails.name} in the UK and EU! Find out how much ${companyDetails.name} pays for roles like Software Engineer Intern, Data Scientist, and more!`,
   };
 }
 
