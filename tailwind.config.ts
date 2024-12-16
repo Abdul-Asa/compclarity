@@ -12,9 +12,15 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        space: ["var(--font-space)"],
-        open: ["var(--font-open)"],
-        courier: ["var(--font-courier)"],
+        space: [
+          "var(--font-space)",
+        ],
+        open: [
+          "var(--font-open)",
+        ],
+        courier: [
+          "var(--font-courier)",
+        ],
       },
       colors: {
         brand: {
@@ -26,6 +32,43 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         border: "hsl(var(--border))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        chart: {
+          "1": "hsl(var(--chart-1))",
+          "2": "hsl(var(--chart-2))",
+          "3": "hsl(var(--chart-3))",
+          "4": "hsl(var(--chart-4))",
+          "5": "hsl(var(--chart-5))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -75,10 +118,6 @@ const config = {
             transform: "translateY(calc(-100% - var(--gap)))",
           },
         },
-        "text-slide": {
-          "0%, 20%": { transform: "translateX(0)" },
-          "80%, 100%": { transform: "translateX(-100%)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -86,7 +125,6 @@ const config = {
         "fade-in": "fade-animation 0.6s both",
         marquee: "marquee 200s linear infinite",
         "marquee-vertical": "marquee-vertical 200s linear infinite",
-        "text-slide": "text-slide 12s linear infinite",
       },
     },
   },
