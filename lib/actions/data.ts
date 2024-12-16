@@ -5,9 +5,9 @@ import {
   JobsApiResponse,
   Offer,
   OfferApiResponse,
-} from "./types";
+} from "../validation/types";
 import { unstable_noStore as noStore } from "next/cache";
-import { formatter, memoize } from "./utils";
+import { formatter, memoize } from "../utils";
 import { URLSearchParams } from "url";
 
 const API_URL = process.env.API_V2_URL || "";

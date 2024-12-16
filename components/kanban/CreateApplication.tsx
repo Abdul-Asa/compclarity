@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CreateApplicationSchema, Offer, Job } from "@/lib/types";
+import { CreateApplicationSchema, Offer, Job } from "@/lib/validation/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
-import { createApplicationSchema } from "@/lib/validations/form";
+import { createApplicationSchema } from "@/lib/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { createApplicationCard, getApplicationOffer } from "@/app/(AppTracker)/tracker/actions";
@@ -129,7 +129,12 @@ export default function CreateApplication() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea {...register("description")} id="description" placeholder="Any notes you may have" className="min-h-[100px]" />
+              <Textarea
+                {...register("description")}
+                id="description"
+                placeholder="Any notes you may have"
+                className="min-h-[100px]"
+              />
             </div>
           </div>
           <DialogFooter className="flex flex-row gap-2">

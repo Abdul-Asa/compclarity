@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { OfferRowContent } from "@/components/OfferRowContent";
-import { fetchOffer, fetchFinanceOffer } from "@/lib/data";
+import { fetchOffer, fetchFinanceOffer } from "@/lib/actions/data";
 
 interface pageProps {
   params: { id: string };

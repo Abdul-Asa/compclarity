@@ -1,11 +1,11 @@
 import Script from "next/script";
 import { Open_Sans, Space_Grotesk, Courier_Prime } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { rootStructuredData } from "@/config/structuredData";
+import { rootStructuredData } from "@/lib/config/structuredData";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import { createClient } from "@/lib/supabase/server";
-import { metadata as metadataConfig } from "@/config/metadata";
+import { metadata as metadataConfig } from "@/lib/config/metadata";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";

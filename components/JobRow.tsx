@@ -1,6 +1,6 @@
 "use client";
 
-import { Job } from "@/lib/types";
+import { Job } from "@/lib/validation/types";
 import { useEffect, useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star } from "lucide-react";
 import { JobRowContent } from "./JobRowContent";

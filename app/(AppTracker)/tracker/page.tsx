@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Kanban from "@/components/kanban/Kanban";
 import CreateApplication from "@/components/kanban/CreateApplication";
-import { ApplicationObject } from "@/lib/types";
+import { ApplicationObject } from "@/lib/validation/types";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Offer } from "@/lib/types";
+import { Offer } from "@/lib/validation/types";
 import { RsuBreakdown } from "./RsuBreakdown";
 import LogoImage from "./LogoImage";
 import CopyToClipboard from "react-copy-to-clipboard";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Company } from "@/lib/types";
+import { Company } from "@/lib/validation/types";
 import LogoImage from "./LogoImage";
 import { CompanyPageOptions } from "./CompanyPageOptions";
 

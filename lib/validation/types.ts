@@ -10,11 +10,12 @@ import {
   signUpFormSchema,
   updateApplicationSchema,
   updateUserSchema,
-} from "@/lib/validations/form";
+} from "@/lib/validation/schema";
 import countryToCurrency from "country-to-currency";
-import { Database } from "./supabase/types";
+import { Database } from "../supabase/types";
 
-export type CurrencyCode = (typeof countryToCurrency)[keyof typeof countryToCurrency];
+export type CurrencyCode =
+  (typeof countryToCurrency)[keyof typeof countryToCurrency];
 
 type Company = {
   name: string;
@@ -85,7 +86,7 @@ type OfferApiResponse = {
   totalResults: number;
 };
 
-export type { Offer, Company, OfferApiResponse, Job, JobsApiResponse };
+export type { Company, Job, JobsApiResponse, Offer, OfferApiResponse };
 
 export type Func<T = any> = (...args: T[]) => any;
 
@@ -93,7 +94,10 @@ export type SalaryFormSchema = z.infer<typeof salaryFormSchema>;
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
 export type LoginFormSchema = z.infer<typeof loginFormSchema>;
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
-export type AuthFormSchema = SignUpFormSchema | LoginFormSchema | ForgotPasswordSchema;
+export type AuthFormSchema =
+  | SignUpFormSchema
+  | LoginFormSchema
+  | ForgotPasswordSchema;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 export type CreateApplicationSchema = z.infer<typeof createApplicationSchema>;

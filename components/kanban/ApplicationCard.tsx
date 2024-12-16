@@ -8,7 +8,7 @@ import { cn, dateFormatter } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import EditApplication from "./EditApplicationModal";
-import { ApplicationObject } from "@/lib/types";
+import { ApplicationObject } from "@/lib/validation/types";
 
 type AppItemProps = {
   application: ApplicationObject;

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { RegisterOptions, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { coverLetterSchema } from "@/lib/validations/form";
-import { CoverLetterSchema } from "@/lib/types";
+import { coverLetterSchema } from "@/lib/validation/schema";
+import { CoverLetterSchema } from "@/lib/validation/types";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

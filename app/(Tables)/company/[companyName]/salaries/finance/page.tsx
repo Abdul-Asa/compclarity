@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { fetchAllFinanceOffersByCompany, fetchCompanyByName } from "@/lib/data";
+import { fetchAllFinanceOffersByCompany, fetchCompanyByName } from "@/lib/actions/data";
 import OfferTableControls from "@/components/OfferTableControls";
 import OfferTable from "@/components/OfferTable";
 import { CompanyHeader } from "@/components/CompanyHeader";

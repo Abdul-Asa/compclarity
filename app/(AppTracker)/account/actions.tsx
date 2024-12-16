@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { UpdateUserSchema } from "@/lib/types";
+import { UpdateUserSchema } from "@/lib/validation/types";
 import { redirect } from "next/navigation";
 
 export async function updateUser(formData: UpdateUserSchema) {

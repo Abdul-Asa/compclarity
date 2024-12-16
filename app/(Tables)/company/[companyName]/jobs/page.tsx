@@ -1,5 +1,5 @@
 import { CompanyHeader } from "@/components/CompanyHeader";
-import { fetchCompanyByName, fetchAllJobsByCompany } from "@/lib/data";
+import { fetchCompanyByName, fetchAllJobsByCompany } from "@/lib/actions/data";
 import { Metadata } from "next";
 import JobTableControls from "@/components/JobTableControls";
 import JobTable from "@/components/JobTable";

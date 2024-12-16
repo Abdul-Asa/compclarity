@@ -1,13 +1,13 @@
 "use client";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
-import { ResetPasswordSchema } from "@/lib/types";
+import { ResetPasswordSchema } from "@/lib/validation/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "@/components/hooks/useToast";
 import { Eye } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { resetPasswordSchema } from "@/lib/validations/form";
+import { resetPasswordSchema } from "@/lib/validation/schema";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 
@@ -76,7 +76,11 @@ export const PasswordResetForm = () => {
         </label>
         <div className="relative">
           <Input {...register("password")} type={passwordVisible ? "text" : "password"} className="border w-full" />
-          <button className="absolute right-3 top-1/2 -translate-y-1/2" type="button" onClick={() => setPasswordVisible(!passwordVisible)}>
+          <button
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+            type="button"
+            onClick={() => setPasswordVisible(!passwordVisible)}
+          >
             <Eye size="12" color="gray" />
           </button>
         </div>
@@ -87,7 +91,11 @@ export const PasswordResetForm = () => {
           Confirm Password:
         </label>
         <div className="relative">
-          <Input {...register("confirmPassword")} type={confirmPasswordVisible ? "text" : "password"} className="border w-full" />
+          <Input
+            {...register("confirmPassword")}
+            type={confirmPasswordVisible ? "text" : "password"}
+            className="border w-full"
+          />
           <button
             className="absolute right-3 top-1/2 -translate-y-1/2"
             type="button"

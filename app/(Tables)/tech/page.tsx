@@ -1,7 +1,7 @@
 import OfferTable from "@/components/OfferTable";
 import OfferTableControls from "@/components/OfferTableControls";
 import RoleDropdownMenu from "@/components/RoleDropDown";
-import { fetchAllOffers } from "@/lib/data";
+import { fetchAllOffers } from "@/lib/actions/data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Job } from "@/lib/types";
+import { Job } from "@/lib/validation/types";
 import LogoImage from "./LogoImage";
 import Link from "next/link";
 import CopyToClipboard from "react-copy-to-clipboard";

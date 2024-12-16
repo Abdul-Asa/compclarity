@@ -7,7 +7,7 @@ import {
   ForgotPasswordSchema,
   LoginFormSchema,
   SignUpFormSchema,
-} from "@/lib/types";
+} from "@/lib/validation/types";
 
 export async function login(formData: LoginFormSchema) {
   const supabase = createClient();
@@ -24,11 +24,12 @@ export async function login(formData: LoginFormSchema) {
       error: true,
       message: error.message,
     };
-  } else
+  } else {
     return {
       error: false,
       message: "Login successful",
     };
+  }
 }
 
 export async function signup(formData: SignUpFormSchema) {
@@ -54,21 +55,21 @@ export async function signup(formData: SignUpFormSchema) {
       error: true,
       message: error.message,
     };
-  } else
+  } else {
     return {
       error: false,
       message:
         "Sign up successful. Please check your email (including spam) to verify your account.",
     };
+  }
 }
 
 export async function forgotPassword(formData: ForgotPasswordSchema) {
   const supabase = createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
-    redirectTo:
-      process.env.NODE_ENV === "production"
-        ? "https://compclarity.com/password-reset"
-        : "http://localhost:3000/password-reset",
+    redirectTo: process.env.NODE_ENV === "production"
+      ? "https://compclarity.com/password-reset"
+      : "http://localhost:3000/password-reset",
   });
 
   revalidatePath("/", "layout");
@@ -78,9 +79,11 @@ export async function forgotPassword(formData: ForgotPasswordSchema) {
       error: true,
       message: error.message,
     };
-  } else
+  } else {
     return {
       error: false,
-      message: "Password reset email sent. Please check your email (including spam).",
+      message:
+        "Password reset email sent. Please check your email (including spam).",
     };
+  }
 }

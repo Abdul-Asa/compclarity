@@ -1,4 +1,4 @@
-import { CurrencyCode } from "@/lib/types";
+import { CurrencyCode } from "@/lib/validation/types";
 import { formatter } from "@/lib/utils";
 import TimelineBar from "./TimelineBar";
 

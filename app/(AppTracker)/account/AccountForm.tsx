@@ -2,8 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UpdateUserSchema } from "@/lib/types";
-import { updateUserSchema } from "@/lib/validations/form";
+import { UpdateUserSchema } from "@/lib/validation/types";
+import { updateUserSchema } from "@/lib/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { updateUser } from "./actions";

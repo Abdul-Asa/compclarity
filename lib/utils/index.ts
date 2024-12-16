@@ -5,7 +5,7 @@ import {
   ApplicationSorted,
   CurrencyCode,
   Func,
-} from "../types";
+} from "../validation/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

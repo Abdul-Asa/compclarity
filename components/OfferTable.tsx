@@ -1,6 +1,6 @@
 "use client";
 
-import { OfferApiResponse } from "@/lib/types";
+import { OfferApiResponse } from "@/lib/validation/types";
 import OfferRow from "./OfferRow";
 import SortButton from "./Buttons/SortButton";
 import PaginationControl from "./PaginationControl";

@@ -3,9 +3,9 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { submitFormData } from "@/app/(Navigation)/add/action";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { salaryFormSchema } from "@/lib/validations/form";
-import { SalaryFormSchema } from "@/lib/types";
-import { currencies, months, years, euCountries } from "@/config";
+import { salaryFormSchema } from "@/lib/validation/schema";
+import { SalaryFormSchema } from "@/lib/validation/types";
+import { currencies, months, years, euCountries } from "@/lib/config";
 import { toast } from "@/components/hooks/useToast";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 

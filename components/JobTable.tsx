@@ -1,6 +1,6 @@
 "use client";
 
-import { JobsApiResponse } from "@/lib/types";
+import { JobsApiResponse } from "@/lib/validation/types";
 import PaginationControl from "./PaginationControl";
 import JobRow from "./JobRow";
 

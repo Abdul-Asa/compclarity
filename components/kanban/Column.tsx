@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { ApplicationCard } from "./ApplicationCard";
-import { ApplicationObject } from "@/lib/types";
+import { ApplicationObject } from "@/lib/validation/types";
 
 interface ColumnProps {
   column: { title: string; id: string };
@@ -31,8 +31,7 @@ export function Column({ column, applicationCards }: ColumnProps) {
     >
       <CardHeader className="flex flex-row items-center justify-center border-b-2 p-1 text-left font-semibold sm:p-3">
         <h1 className="font-bold sm:text-2xl">
-          {column.title}{" "}
-          <span className="font-medium">[{applicationCards.length}]</span>
+          {column.title} <span className="font-medium">[{applicationCards.length}]</span>
         </h1>
       </CardHeader>
       <ScrollArea>

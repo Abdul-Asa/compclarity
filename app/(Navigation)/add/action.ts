@@ -1,17 +1,17 @@
-"use server"
+"use server";
 
-import { setTimeout } from "timers/promises"
-import { SalaryFormSchema } from "@/lib/types"
+import { setTimeout } from "timers/promises";
+import { SalaryFormSchema } from "@/lib/validation/types";
 
 export async function submitFormData(
-  formData: SalaryFormSchema
+  formData: SalaryFormSchema,
 ): Promise<{ success: boolean }> {
-  const loggedContent = `Submitted form data: ${JSON.stringify(formData)}`
+  const loggedContent = `Submitted form data: ${JSON.stringify(formData)}`;
   // console.log(loggedContent)
 
   // Simulating a 500ms delay to make the spinning animation
   // show for the submission button.
-  await setTimeout(500)
+  await setTimeout(500);
 
   try {
     const response = await fetch(process.env.API_UPLOAD || "", {
@@ -20,17 +20,17 @@ export async function submitFormData(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
-    })
+    });
 
     if (response.ok) {
-      console.log("Request sent successfully")
-      return { success: true }
+      console.log("Request sent successfully");
+      return { success: true };
     } else {
-      console.error("Error sending request:", response.statusText)
-      return { success: false }
+      console.error("Error sending request:", response.statusText);
+      return { success: false };
     }
   } catch (error) {
-    console.error("Error sending request:", error)
-    return { success: false }
+    console.error("Error sending request:", error);
+    return { success: false };
   }
 }

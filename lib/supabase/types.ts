@@ -119,6 +119,7 @@ export type Database = {
           id: string
           last_name: string
           phonenumber: string | null
+          signup_flow: boolean
           tokens: number
         }
         Insert: {
@@ -128,6 +129,7 @@ export type Database = {
           id: string
           last_name: string
           phonenumber?: string | null
+          signup_flow?: boolean
           tokens?: number
         }
         Update: {
@@ -137,6 +139,7 @@ export type Database = {
           id?: string
           last_name?: string
           phonenumber?: string | null
+          signup_flow?: boolean
           tokens?: number
         }
         Relationships: []

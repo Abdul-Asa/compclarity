@@ -1,6 +1,6 @@
 "use client";
 
-import { Offer } from "@/lib/types";
+import { Offer } from "@/lib/validation/types";
 import VerifiedSvg from "./VerifiedSvg";
 import { Tooltip } from "react-tooltip";
 import { useEffect, useState } from "react";

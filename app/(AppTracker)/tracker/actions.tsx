@@ -1,11 +1,7 @@
 "use server";
-import { fetchJob } from "@/lib/data";
+import { fetchJob } from "@/lib/actions/data";
 import { createClient } from "@/lib/supabase/server";
-import {
-  ApplicationObject,
-  CreateApplicationSchema,
-  UpdateApplicationSchema,
-} from "@/lib/types";
+import { ApplicationObject, CreateApplicationSchema, UpdateApplicationSchema } from "@/lib/validation/types";
 import { revalidatePath } from "next/cache";
 
 export async function getApplicationOffer(id: string) {
@@ -77,10 +73,7 @@ export async function createApplicationCard(formData: CreateApplicationSchema) {
   }
 }
 
-export async function updateApplicationCard(
-  formData: UpdateApplicationSchema,
-  id: number
-) {
+export async function updateApplicationCard(formData: UpdateApplicationSchema, id: number) {
   const supabase = createClient();
   const userInfo = await supabase.auth.getUser();
   if (userInfo.error || !userInfo.data.user) {
@@ -117,11 +110,7 @@ export async function updateApplicationCard(
     updateObject.date_rejected = formData.dateRejected;
   }
 
-  const { error } = await supabase
-    .from("todos")
-    .update(updateObject)
-    .eq("id", id)
-    .eq("user_id", userInfo.data.user.id);
+  const { error } = await supabase.from("todos").update(updateObject).eq("id", id).eq("user_id", userInfo.data.user.id);
 
   revalidatePath("/", "layout");
   if (error) {
@@ -147,11 +136,7 @@ export async function deleteApplicationCard(id: number) {
     };
   }
 
-  const { error } = await supabase
-    .from("todos")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", userInfo.data.user.id);
+  const { error } = await supabase.from("todos").delete().eq("id", id).eq("user_id", userInfo.data.user.id);
 
   revalidatePath("/tracker", "layout");
   if (error) {
@@ -179,10 +164,7 @@ export async function updateApplications(applications: ApplicationObject[]) {
     };
   }
 
-  const { error } = await supabase
-    .from("todos")
-    .upsert(applications)
-    .eq("user_id", userInfo.data.user.id);
+  const { error } = await supabase.from("todos").upsert(applications).eq("user_id", userInfo.data.user.id);
 
   // revalidatePath("/tracker", "layout");
   if (error) {

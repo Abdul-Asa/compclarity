@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JobRowContent } from "@/components/JobRowContent";
-import { fetchJob } from "@/lib/data";
+import { fetchJob } from "@/lib/actions/data";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 

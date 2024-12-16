@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import JobTableControls from "@/components/JobTableControls";
-import { fetchAllJobs } from "@/lib/data";
+import { fetchAllJobs } from "@/lib/actions/data";
 import JobTable from "@/components/JobTable";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "CompClarity - Jobs",
-  description:
-    "Explore the latest job openings from the tech and finance industry across the UK and EU!",
+  description: "Explore the latest job openings from the tech and finance industry across the UK and EU!",
 };
 
 export default async function JobBoard({

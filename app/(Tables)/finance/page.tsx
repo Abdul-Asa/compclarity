@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import OfferTable from "@/components/OfferTable";
 import OfferTableControls from "@/components/OfferTableControls";
-import { fetchAllFinanceOffers } from "@/lib/data";
+import { fetchAllFinanceOffers } from "@/lib/actions/data";
 import RoleDropdownMenu from "@/components/RoleDropDown";
 
 export const metadata: Metadata = {
@@ -52,7 +52,7 @@ export default async function FinanceOffers({
     sortDir,
     minYOE,
     maxYOE,
-    size,
+    size
   );
 
   return (
@@ -64,14 +64,12 @@ export default async function FinanceOffers({
       </div>
       <OfferTableControls isCompanyPage={false} />
       {offersResponse.totalResults === 0 ? (
-        <b className="text-center mt-24 mb-24">
-          No finance salaries found
-        </b>
-        ) : (
-          <>
-            <OfferTable offersResponse={offersResponse} />
-          </>
-        )}
+        <b className="text-center mt-24 mb-24">No finance salaries found</b>
+      ) : (
+        <>
+          <OfferTable offersResponse={offersResponse} />
+        </>
+      )}
     </div>
   );
 }

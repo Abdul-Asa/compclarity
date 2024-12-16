@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Company } from "@/lib/types";
+import { Company } from "@/lib/validation/types";
 
 interface CompanyPageOptionsProps {
   companyDetails: Company;

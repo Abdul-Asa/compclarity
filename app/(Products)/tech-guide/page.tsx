@@ -5,7 +5,7 @@ import StarRating from "@/components/ui/star-rating";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { fetchViewers } from "@/lib/data";
+import { fetchViewers } from "@/lib/actions/data";
 
 // Edit the metadata for the page
 export const metadata: Metadata = {
