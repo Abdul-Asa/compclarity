@@ -38,3 +38,63 @@ export const metadata: Metadata = {
     "Job Offers",
   ],
 };
+
+// {
+//   metadataBase: new URL(baseUrl),
+//   title: {
+//     default: "Midday | Run your business smarter",
+//     template: "%s | Midday",
+//   },
+//   description:
+//     "Midday provides you with greater insight into your business and automates the boring tasks, allowing you to focus on what you love to do instead.",
+//   openGraph: {
+//     title: "Midday | Run your business smarter",
+//     description:
+//       "Midday provides you with greater insight into your business and automates the boring tasks, allowing you to focus on what you love to do instead.",
+//     url: baseUrl,
+//     siteName:
+//       "Midday provides you with greater insight into your business and automates the boring tasks, allowing you to focus on what you love to do instead.",
+//     locale: "en_US",
+//     type: "website",
+//     images: [
+//       {
+//         url: "https://cdn.midday.ai/opengraph-image.jpg",
+//         width: 800,
+//         height: 600,
+//       },
+//       {
+//         url: "https://cdn.midday.ai/opengraph-image.jpg",
+//         width: 1800,
+//         height: 1600,
+//       },
+//     ],
+//   },
+//   twitter: {
+//     title: "Midday | Run your business smarter",
+//     description:
+//       "Midday provides you with greater insight into your business and automates the boring tasks, allowing you to focus on what you love to do instead.",
+//     images: [
+//       {
+//         url: "https://cdn.midday.ai/opengraph-image.jpg",
+//         width: 800,
+//         height: 600,
+//       },
+//       {
+//         url: "https://cdn.midday.ai/opengraph-image.jpg",
+//         width: 1800,
+//         height: 1600,
+//       },
+//     ],
+//   },
+//   robots: {
+//     index: true,
+//     follow: true,
+//     googleBot: {
+//       index: true,
+//       follow: true,
+//       "max-video-preview": -1,
+//       "max-image-preview": "large",
+//       "max-snippet": -1,
+//     },
+//   },
+// };

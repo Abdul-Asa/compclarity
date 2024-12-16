@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@/components/hooks/user/useUser";
+import { useUser } from "@/lib/hooks/useUser";
 import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import posthog from "posthog-js";

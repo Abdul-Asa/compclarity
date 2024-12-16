@@ -18,7 +18,7 @@ import { coordinateGetter, hasSortableData } from "./lib";
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import { arrayMove } from "@dnd-kit/sortable";
-import { updateApplications } from "../../app/(AppTracker)/tracker/actions";
+import { updateApplications } from "../../app/(Layout)/(AppTracker)/tracker/actions";
 import { ApplicationCard } from "./ApplicationCard";
 import { ApplicationObject } from "@/lib/validation/types";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";

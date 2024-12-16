@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { updateApplicationCard, deleteApplicationCard } from "@/app/(AppTracker)/tracker/actions";
+import { updateApplicationCard, deleteApplicationCard } from "@/app/(Layout)/(AppTracker)/tracker/actions";
 import { toast } from "../hooks/useToast";
 
 interface EditApplicationProps {

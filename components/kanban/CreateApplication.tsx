@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { createApplicationSchema } from "@/lib/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
-import { createApplicationCard, getApplicationOffer } from "@/app/(AppTracker)/tracker/actions";
+import { createApplicationCard, getApplicationOffer } from "@/app/(Layout)/(AppTracker)/tracker/actions";
 import { toast } from "../hooks/useToast";
 
 export default function CreateApplication() {
