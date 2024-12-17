@@ -238,11 +238,11 @@ const TestimonialSection = () => {
           <div className="flex justify-center gap-10 text-lg">
             <CarouselPrevious
               className="rounded-none hover:bg-brand bg-brand/80 border-brand text-white"
-              handleClick={() => autoPlay.current.reset()}
+              onClick={() => autoPlay.current.reset()}
             />
             <CarouselNext
               className="rounded-none hover:bg-brand bg-brand/80 border-brand text-white"
-              handleClick={() => autoPlay.current.reset()}
+              onClick={() => autoPlay.current.reset()}
             />
           </div>
         </Carousel>

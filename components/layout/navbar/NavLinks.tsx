@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Book, ChevronDown, Computer, FileText, PoundSterling } from "lucide-react";
 import { navigationMenuTriggerStyle } from "../../ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import React from "react";
 
 export type NavLink = {
   title: string;
@@ -36,11 +36,11 @@ export const navLinks: NavLink[] = [
   {
     title: "Services",
     children: [
-      { title: "CV Crafting", href: "/cv", description: "Craft a perfect CV for your dream job", icon: FileText },
+      { title: "CV Crafting", href: "/cv", description: "Craft the perfect CV", icon: FileText },
       {
         title: "Cover Letter",
         href: "/cover-letter",
-        description: "Craft a perfect cover letter for your dream job",
+        description: "Craft the perfect cover letter",
         icon: FileText,
       },
       { title: "Tech Internship Guide", href: "/tech-guide", description: "Get your first SWE internship", icon: Book },
@@ -49,12 +49,12 @@ export const navLinks: NavLink[] = [
 ];
 
 export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) => {
-  if (!link.children) {
+  if (!link.children && mobile) {
     return (
       <Link
         key={link.title}
         href={link.href || "#"}
-        className={cn(mobile ? "flex w-full items-center p-4 text-lg hover:bg-accent" : navigationMenuTriggerStyle())}
+        className="text-lg font-medium  pl-10 md:pl-0 py-5 border-b w-full"
         onClick={onLinkClick}
       >
         {link.icon && <link.icon className="mr-2 h-4 w-4" />}
@@ -63,27 +63,36 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
     );
   }
 
+  if (!link.children) {
+    return (
+      <Link key={link.title} href={link.href || "#"} className={navigationMenuTriggerStyle()} onClick={onLinkClick}>
+        {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+        {link.title}
+      </Link>
+    );
+  }
+
   if (mobile) {
     return (
-      <div key={link.title} className="w-full">
-        <div className="flex w-full items-center p-4 text-lg">
-          {link.title}
-          <ChevronDown className="ml-2 h-4 w-4" />
-        </div>
-        <div className="ml-4 flex flex-col">
-          {link.children.map((child) => (
-            <Link
-              key={child.href}
-              href={child.href || "#"}
-              className="flex items-center p-4 text-lg hover:bg-accent"
-              onClick={onLinkClick}
-            >
-              {child.icon && <child.icon className="mr-2 h-4 w-4" />}
-              {child.title}
-            </Link>
-          ))}
-        </div>
-      </div>
+      <Accordion type="multiple" className="w-full">
+        <AccordionItem value={`item-${link.title}`}>
+          <AccordionTrigger className="text-lg font-medium py-5 md:justify-center w-full text-center">
+            {link.title}
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col pb-0">
+            {link.children.map((child) => (
+              <Link
+                key={child.href}
+                href={child.href || "#"}
+                className={cn("text-lg font-medium py-5 w-full text-center", "border-t")}
+                onClick={onLinkClick}
+              >
+                {child.title}
+              </Link>
+            ))}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     );
   }
 
@@ -93,18 +102,18 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
         {link.title}
         <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-3">
+      <PopoverContent className="flex flex-col gap-3 w-[300px]">
         {link.children.map((child) => (
           <Link
             key={child.href}
             href={child.href || "#"}
-            className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
+            className="transition-all duration-200 flex items-center w-full gap-3 rounded-sm border border-border p-3 hover:border-primary hover:bg-primary-light/30"
             onClick={onLinkClick}
           >
-            {child.icon && <child.icon className="h-4 w-4" />}
-            <div>
+            {child.icon && <child.icon className="size-8 mr-1" />}
+            <div className="flex flex-col">
               <div className="font-medium">{child.title}</div>
-              <p className="text-sm text-muted-foreground">{child.description}</p>
+              <p className="font-open text-sm leading-tight text-muted-foreground">{child.description}</p>
             </div>
           </Link>
         ))}
@@ -113,18 +122,16 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
   );
 };
 
-const NavigationItems = ({ links, mobile = false }: { links: NavLink[]; mobile?: boolean }) => {
-  const pathname = usePathname();
-  const [, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
-
+const NavigationItems = ({ mobile = false }: { mobile?: boolean }) => {
   return (
-    <ul className={cn("list-none", mobile ? "w-full" : "hidden lg:flex items-center space-x-1")}>
-      {links.map((link) => (
-        <li key={link.title}>{renderNavLink({ link, mobile, onLinkClick: () => setIsMobileMenuOpen(false) })}</li>
+    <ul
+      className={cn(
+        "list-none",
+        mobile ? "flex flex-col items-center md:text-center w-full" : "hidden lg:flex items-center space-x-1"
+      )}
+    >
+      {navLinks.map((link) => (
+        <React.Fragment key={link.title}>{renderNavLink({ link, mobile })}</React.Fragment>
       ))}
     </ul>
   );

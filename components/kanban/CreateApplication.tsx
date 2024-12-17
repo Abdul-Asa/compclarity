@@ -12,7 +12,7 @@ import { createApplicationSchema } from "@/lib/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { createApplicationCard, getApplicationOffer } from "@/app/(Layout)/(AppTracker)/tracker/actions";
-import { toast } from "../hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 
 export default function CreateApplication() {
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function CreateApplication() {
       toast({
         title: "Success",
         description: "Application created successfully",
-        variant: "constructive",
+        variant: "default",
       });
       setModalOpen(false);
       reset();

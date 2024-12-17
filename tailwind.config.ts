@@ -31,7 +31,12 @@ const config = {
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
-  			border: 'hsl(var(--border))',
+  			border: {
+				DEFAULT: 'hsl(var(--border))',
+				light: 'hsl(var(--border-light))',
+				dark: 'hsl(var(--border-dark))',
+			},
+  			neutral: 'hsl(var(--neutral))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -42,7 +47,9 @@ const config = {
   			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				foreground: 'hsl(var(--primary-foreground))',
+  				light: 'hsl(var(--primary-light))',
+  				dark: 'hsl(var(--primary-dark))'
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
@@ -58,7 +65,7 @@ const config = {
   			},
   			destructive: {
   				DEFAULT: 'hsl(var(--destructive))',
-  				foreground: 'hsl(var(--destructive-foreground))'
+  				secondary: 'hsl(var(--destructive-secondary))'
   			},
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',

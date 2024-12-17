@@ -20,7 +20,7 @@ import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { updateApplicationCard, deleteApplicationCard } from "@/app/(Layout)/(AppTracker)/tracker/actions";
-import { toast } from "../hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 
 interface EditApplicationProps {
   application: ApplicationObject;
@@ -149,7 +149,7 @@ export default function EditApplication({ application }: EditApplicationProps) {
       toast({
         title: "Success",
         description: message,
-        variant: "constructive",
+        variant: "default",
       });
       console.log(message);
     }
@@ -169,7 +169,7 @@ export default function EditApplication({ application }: EditApplicationProps) {
       toast({
         title: "Success",
         description: message,
-        variant: "constructive",
+        variant: "default",
       });
     }
     closeModal();

@@ -4,7 +4,7 @@ import { Offer } from "@/lib/validation/types";
 import { RsuBreakdown } from "./RsuBreakdown";
 import LogoImage from "./LogoImage";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { toast } from "../hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 import { Flag, Share } from "lucide-react";
 import Link from "next/link";
 import VerifiedSvg from "./VerifiedSvg";
@@ -60,7 +60,7 @@ export const OfferRowContent = ({ expanded = true, offer, addedDateStr, idx }: O
                 onCopy={() => {
                   toast({
                     title: "Link copied to clipboard.",
-                    variant: "constructive",
+                    variant: "default",
                   });
                 }}
               >

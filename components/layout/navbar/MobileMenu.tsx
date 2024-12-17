@@ -9,14 +9,12 @@ import NavigationItems from "./NavLinks";
 export function MobileMenu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleToggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
   return (
-    <div className="group flex items-center lg:hidden select-none" aria-label="Menu">
+    <div className="group flex items-center gap-2 lg:hidden select-none" aria-label="Menu">
       <ModeToggle />
       <button
-        className="flex relative aspect-square h-[44px] list-none"
-        onClick={handleToggleMenu}
+        className="flex relative aspect-square h-11 list-none"
+        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
         aria-expanded={isMobileMenuOpen}
         aria-label="Toggle menu"
       >
@@ -40,12 +38,12 @@ export function MobileMenu() {
           isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
-        {/* <NavigationItems mobile /> */}
+        <NavigationItems mobile />
         <div className="flex w-full justify-center border-t">
           <Link
             href="/login"
             className="text-lg font-medium py-5 w-full text-center hover:bg-accent"
-            onClick={handleToggleMenu}
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           >
             Login
           </Link>

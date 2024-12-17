@@ -1,10 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import TrackerPage from "./TrackerPage";
 
-export default async function layout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const supabase = createClient();
+export default async function layout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const supabase = await createClient();
 
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
@@ -13,9 +11,7 @@ export default async function layout({
 
   return (
     <div className="my-1 flex w-full flex-col items-center justify-center">
-      <main className="mx-auto my-5 flex max-w-[98vw] items-center justify-center">
-        {children}
-      </main>
+      <main className="mx-auto my-5 flex max-w-[98vw] items-center justify-center">{children}</main>
     </div>
   );
 }

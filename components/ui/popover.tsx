@@ -11,7 +11,7 @@ interface PopoverProps extends React.ComponentPropsWithoutRef<typeof PopoverPrim
 }
 
 const Popover = React.forwardRef<React.ElementRef<typeof PopoverPrimitive.Root>, PopoverProps>(
-  ({ children, closeOnRouteChange = true, ...props }) => {
+  ({ children, closeOnRouteChange = true, ...props }, ref) => {
     const [open, setOpen] = React.useState(true);
     const pathname = usePathname();
 
