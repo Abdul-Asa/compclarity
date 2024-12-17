@@ -12,41 +12,17 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const trackFooter = (label: string) =>
-    sendGAEvent([
-      {
-        action: "click",
-        category: "footer",
-        label: label,
-      },
-    ]);
-
   return (
-    <footer className="w-full border-t-2 border-border bg-brand dark:bg-black py-5 text-white">
+    <footer className="w-full border-t-2 border-border bg-primary dark:bg-black py-5 text-white">
       <div className="flex flex-col items-center justify-center gap-2 text-base font-thin">
         <div className="mb-2 flex space-x-4">
-          <Link
-            href="https://discord.gg/AuAvjpTTnm"
-            target="_blank"
-            onClick={() => trackFooter("discord")}
-            aria-label="Discord"
-          >
+          <Link href="https://discord.gg/AuAvjpTTnm" target="_blank" aria-label="Discord">
             <FaDiscord size={24} />
           </Link>
-          <Link
-            href="https://www.linkedin.com/company/compclarity"
-            target="_blank"
-            onClick={() => trackFooter("linkedin")}
-            aria-label="LinkedIn"
-          >
+          <Link href="https://www.linkedin.com/company/compclarity" target="_blank" aria-label="LinkedIn">
             <FaLinkedin size={24} />
           </Link>
-          <Link
-            href="https://www.instagram.com/comp.clarity"
-            target="_blank"
-            onClick={() => trackFooter("instagram")}
-            aria-label="Instagram"
-          >
+          <Link href="https://www.instagram.com/comp.clarity" target="_blank" aria-label="Instagram">
             <FaInstagram size={24} />
           </Link>
           {/* <Link
@@ -57,33 +33,28 @@ const Footer = () => {
           >
             <FaXTwitter size={24} />
           </Link> */}
-          <Link
-            href="https://www.tiktok.com/@cscareers"
-            target="_blank"
-            onClick={() => trackFooter("tiktok")}
-            aria-label="Tiktok"
-          >
+          <Link href="https://www.tiktok.com/@cscareers" target="_blank" aria-label="Tiktok">
             <FaTiktok size={24} />
           </Link>
         </div>
         <small className="flex flex-wrap justify-center items-center gap-x-2">
           <span>&#169; CompClarity 2024</span>|
-          <a href="/about" className="hover:underline" onClick={() => trackFooter("about")}>
+          <a href="/about" className="hover:underline">
             About
           </a>{" "}
           |
-          <a href="mailto:contact@compclarity.com" className="hover:underline" onClick={() => trackFooter("email")}>
+          <a href="mailto:contact@compclarity.com" className="hover:underline">
             Contact
           </a>
           |
-          <a href="/employers" className="hover:underline" onClick={() => trackFooter("employers")}>
+          <a href="/employers" className="hover:underline">
             Employers
           </a>
           |
           <Button
             onClick={handleScrollToTop}
             onKeyDown={(e) => e.key === "Enter" && handleScrollToTop()}
-            className=" bg-white/10 hover:bg-white/20 transition-colors size-6 rounded-[4px]"
+            className=" border-white/70 hover:border-white transition-colors size-6 rounded-[4px]"
             aria-label="Scroll to top of page"
             title="Go to top"
             size="icon"
@@ -95,16 +66,11 @@ const Footer = () => {
         </small>
         <small>
           Logos provided by{" "}
-          <Link
-            href="https://clearbit.com"
-            target="_blank"
-            className="hover:underline"
-            onClick={() => trackFooter("logo_dev")}
-          >
+          <Link href="https://clearbit.com" target="_blank" className="hover:underline">
             Clearbit
           </Link>
         </small>
-        <small onClick={() => trackFooter("privacy_policy")}>
+        <small>
           <PrivacyPolicyLink />
         </small>
       </div>

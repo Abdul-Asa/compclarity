@@ -71,7 +71,7 @@ export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedI
                 onCopy={() => {
                   toast({
                     title: "Link copied to clipboard.",
-                    variant: "constructive",
+                    variant: "default",
                   });
                 }}
               >

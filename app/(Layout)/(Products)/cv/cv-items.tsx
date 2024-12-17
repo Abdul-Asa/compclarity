@@ -130,7 +130,7 @@ export const Pricing = () => {
               </div>
               <p className="text-red-700 mb-4 dark:text-red-500">{tier.discount}</p>
               <Button
-                className="mb-6 bg-brand text-white"
+                className="mb-6 bg-primary text-white"
                 disabled={!tier.isAvailable}
                 onClick={() => {
                   if (tier.isAvailable) {

@@ -10,7 +10,7 @@ import {
 } from "@/lib/validation/types";
 
 export async function login(formData: LoginFormSchema) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase.auth.signInWithPassword(formData);
 
@@ -33,7 +33,7 @@ export async function login(formData: LoginFormSchema) {
 }
 
 export async function signup(formData: SignUpFormSchema) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const signUpData = {
     email: formData.email,
@@ -65,7 +65,7 @@ export async function signup(formData: SignUpFormSchema) {
 }
 
 export async function forgotPassword(formData: ForgotPasswordSchema) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
     redirectTo: process.env.NODE_ENV === "production"
       ? "https://compclarity.com/password-reset"

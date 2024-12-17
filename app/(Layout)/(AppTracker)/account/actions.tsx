@@ -5,7 +5,7 @@ import { UpdateUserSchema } from "@/lib/validation/types";
 import { redirect } from "next/navigation";
 
 export async function updateUser(formData: UpdateUserSchema) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   if (!data?.user) {
     return {
@@ -36,7 +36,7 @@ export async function updateUser(formData: UpdateUserSchema) {
 }
 
 export async function deleteUser(userId: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
   redirect("/login");

@@ -25,7 +25,7 @@ const page = async ({ params }: pageProps) => {
 
   let signedIn = false;
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
 
   if (!error && data?.user) {

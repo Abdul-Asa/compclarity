@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star } from "lucide-react";
 import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
-import { toast } from "@/components/hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 import { sendGAEvent } from "@next/third-parties/google";
 
 export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; signedIn: boolean }) {

@@ -1,13 +1,13 @@
 "use client";
 
 import { useForm, useFieldArray } from "react-hook-form";
-import { submitFormData } from "@/app/(Navigation)/add/action";
+import { submitFormData } from "@/app/(Layout)/(Navigation)/add/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { salaryFormSchema } from "@/lib/validation/schema";
 import { SalaryFormSchema } from "@/lib/validation/types";
 import { currencies, months, years, euCountries } from "@/lib/config";
-import { toast } from "@/components/hooks/useToast";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
+import { toast } from "@/lib/hooks/useToast";
 
 interface FormProps {
   toggleSalaryChoice: () => void;
@@ -55,7 +55,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
         toast({
           title: "Thank you for your submission!",
           description: "Your response has been recorded, it will be published in a few days if it passes our checks.",
-          variant: "constructive",
+          variant: "default",
         });
         reset();
       } else {

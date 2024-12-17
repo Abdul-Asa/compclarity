@@ -69,8 +69,8 @@ export default function DropdownButton({ isIndustyDropDown, isForJobs }: Dropdow
       onChange={isIndustyDropDown ? handleIndustryFilter : handleFilter}
       multiple
     >
-      <div className="relative z-10 mt-1">
-        <Listbox.Button className="relative w-full cursor-default rounded-md bg-white dark:bg-black border-border py-2 pl-3 pr-10 text-left shadow-md focus:outline-none border focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+      <div className="relative z-10 ">
+        <Listbox.Button className="relative w-full cursor-default rounded-md bg-white dark:bg-black border-border py-2 pl-3 pr-10 text-left shadow-md focus:outline-none border focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
           <span className="block truncate text-sm">{isIndustyDropDown ? "Filter by Industry" : "Filter by Level"}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -82,7 +82,7 @@ export default function DropdownButton({ isIndustyDropDown, isForJobs }: Dropdow
               <Listbox.Option
                 key={roleIdx}
                 className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${active && "bg-brand-light/50 "}`
+                  `relative cursor-default select-none py-2 pl-10 pr-4 ${active && "bg-primary-light/50 "}`
                 }
                 value={role.id}
               >

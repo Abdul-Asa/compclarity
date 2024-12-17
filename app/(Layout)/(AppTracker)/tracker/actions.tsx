@@ -20,7 +20,7 @@ export async function getApplicationOffer(id: string) {
 }
 
 export async function createApplicationCard(formData: CreateApplicationSchema) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const userInfo = await supabase.auth.getUser();
   if (userInfo.error || !userInfo.data.user) {
     return {
@@ -74,7 +74,7 @@ export async function createApplicationCard(formData: CreateApplicationSchema) {
 }
 
 export async function updateApplicationCard(formData: UpdateApplicationSchema, id: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const userInfo = await supabase.auth.getUser();
   if (userInfo.error || !userInfo.data.user) {
     return {
@@ -127,7 +127,7 @@ export async function updateApplicationCard(formData: UpdateApplicationSchema, i
   }
 }
 export async function deleteApplicationCard(id: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const userInfo = await supabase.auth.getUser();
   if (userInfo.error || !userInfo.data.user) {
     return {
@@ -155,7 +155,7 @@ export async function deleteApplicationCard(id: number) {
 
 // Update multiple applications at once (for reordering)
 export async function updateApplications(applications: ApplicationObject[]) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const userInfo = await supabase.auth.getUser();
   if (userInfo.error || !userInfo.data.user) {
     return {

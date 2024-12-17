@@ -25,8 +25,8 @@ const HeroSection = () => {
     <section className="mx-auto flex min-h-[calc(100dvh-150px)] w-full flex-col items-center justify-center gap-5 p-6 md:px-0">
       <CTABadge intro="Hey!" main="Welcome to the first step in securing your dream job 😎" link="" />
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-5xl font-bold tracking-tight transition lg:text-8xl">
-        Your <span className="inline-block text-brand transition hover:-translate-y-3">guide</span> to fair pay from{" "}
-        <span className="inline-block text-brand transition hover:-translate-y-3">day one</span>.
+        Your <span className="inline-block text-primary transition hover:-translate-y-3">guide</span> to fair pay from{" "}
+        <span className="inline-block text-primary transition hover:-translate-y-3">day one</span>.
       </h1>
       <h2 className="max-w-3xl animate-fade-in text-wrap text-center font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
         Uncover salary insights, find your next job, and track your applications all in one place.
@@ -48,7 +48,7 @@ const HeroSection = () => {
 };
 const MarqueeSection = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-brand-dark text-white">
+    <section className="flex w-full flex-col items-center justify-center bg-primary-dark text-white">
       <div className="w-full">
         <h2 className="p-4 text-center font-bold md:text-3xl">500+ community verified salaries from top companies</h2>
       </div>
@@ -171,7 +171,7 @@ const TestimonialSection = () => {
     <section className="mx-auto flex w-full flex-col items-center justify-center gap-5">
       <h2 className="p-4 text-center text-lg font-bold md:text-2xl lg:text-5xl">What others are saying</h2>
       <div
-        className="flex w-full flex-col items-center justify-center border-y-2 border-brand bg-gradient-to-tr py-4 md:py-10"
+        className="flex w-full flex-col items-center justify-center border-y-2 border-primary bg-gradient-to-tr py-4 md:py-10"
         style={{
           backgroundImage: `url("${svgToDataUri(
             `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="green"><path d="M0 .5H31.5V32"/></svg>`
@@ -194,7 +194,7 @@ const TestimonialSection = () => {
                   className={cn(
                     "h-65 relative transform border-2 border-black transition duration-300 ease-in-out sm:min-w-60",
                     current === index + 1
-                      ? "-translate-y-4 scale-110 bg-brand text-white"
+                      ? "-translate-y-4 scale-110 bg-primary text-white"
                       : "bg-white text-black dark:bg-gray-800 dark:text-white"
                   )}
                   style={{
@@ -235,16 +235,6 @@ const TestimonialSection = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="flex justify-center gap-10 text-lg">
-            <CarouselPrevious
-              className="rounded-none hover:bg-brand bg-brand/80 border-brand text-white"
-              onClick={() => autoPlay.current.reset()}
-            />
-            <CarouselNext
-              className="rounded-none hover:bg-brand bg-brand/80 border-brand text-white"
-              onClick={() => autoPlay.current.reset()}
-            />
-          </div>
         </Carousel>
       </div>
     </section>
@@ -253,7 +243,7 @@ const TestimonialSection = () => {
 const SubscribeSection = () => {
   return (
     <TransitionView className="mx-auto flex w-full flex-col items-center justify-center gap-5 p-6 py-20 md:px-0">
-      <div className="group relative rounded-full bg-brand">
+      <div className="group relative rounded-full bg-primary">
         <CTABadge intro="Join us!" main="Subscribe to our newsletter 📬" link="https://compclarity.substack.com/" />
       </div>
       <h1 className="max-w-4xl animate-fade-in text-wrap p-2 text-center text-3xl font-bold tracking-tight transition lg:text-6xl">

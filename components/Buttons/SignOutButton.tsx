@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { toast } from "../hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 
 interface SignOutButtonProps {}
 

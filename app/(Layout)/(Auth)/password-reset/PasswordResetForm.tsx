@@ -4,7 +4,7 @@ import { ResetPasswordSchema } from "@/lib/validation/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "@/components/hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 import { Eye } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { resetPasswordSchema } from "@/lib/validation/schema";
@@ -44,7 +44,7 @@ export const PasswordResetForm = () => {
         toast({
           title: "Success",
           description: "Password reset successfully!",
-          variant: "constructive",
+          variant: "default",
         });
         router.replace("/account");
       } else {

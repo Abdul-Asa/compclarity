@@ -23,12 +23,6 @@ const config = {
   			]
   		},
   		colors: {
-  			brand: {
-  				light: 'hsl(var(--brand-light))',
-  				DEFAULT: 'hsl(var(--brand))',
-  				dark: 'hsl(var(--brand-dark))',
-  				grey: 'hsl(var(--brand-grey))'
-  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			border: {

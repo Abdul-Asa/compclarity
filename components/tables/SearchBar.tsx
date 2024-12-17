@@ -48,7 +48,7 @@ export default function SearchBar({ isCompanyPage, isForJob }: SearchBarProps) {
       <input
         type="text"
         id="table-search"
-        className="block p-2 ps-10 text-sm text-gray-900 dark:text-white border border-border rounded-md w-64 sm:w-75 bg-white dark:bg-black focus:ring-brand focus:border-brand"
+        className="block p-2 ps-10 text-sm text-gray-900 dark:text-white border border-border rounded-md w-64 sm:w-75 bg-white dark:bg-black focus:ring-primary focus:border-primary"
         placeholder={
           isForJob
             ? isCompanyPage

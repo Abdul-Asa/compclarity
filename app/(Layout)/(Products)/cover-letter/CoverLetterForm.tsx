@@ -14,7 +14,7 @@ import { ErrorMessage } from "@/components/ui/error-message";
 import { Copy, Wand2 } from "lucide-react";
 import { generateCoverLetter } from "./action";
 import { User } from "@supabase/supabase-js";
-import { toast } from "@/components/hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 import { createClient } from "@/lib/supabase/client";
 
 export function CoverLetterForm({ user }: { user: User | null }) {
