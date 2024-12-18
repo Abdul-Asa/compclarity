@@ -6,6 +6,7 @@ import { PasswordResetForm } from "@/app/(Layout)/(Auth)/password-reset/Password
 import AccountForm from "./AccountForm";
 import { SignOutButton } from "@/components/Buttons/SignOutButton";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "CompClarity - Account",
@@ -15,6 +16,10 @@ export const metadata: Metadata = {
 
 export default async function page() {
   const supabase = await createClient();
+
+  if (cookies().get("signin_flow")) {
+    redirect("/auth/onboarding");
+  }
 
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {

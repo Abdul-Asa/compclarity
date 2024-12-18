@@ -35,12 +35,13 @@ export const verifyOTP = actionClient
     }
 
     const user = await getUser();
-    console.log("user");
-    if (!user || user.signup_flow) {
+
+    if (!user || !user.signup_flow) {
+      cookies().set("signin_flow", "true");
+    } else {
       redirect("/account");
     }
 
-    cookies().set("signin_flow", "true");
-    redirect(`/auth/sign-in`);
+    redirect(`/auth/onboarding`);
   
   });

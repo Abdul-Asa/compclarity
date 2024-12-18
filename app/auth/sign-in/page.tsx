@@ -10,7 +10,6 @@ import { AppleSignIn } from "@/components/auth/apple-signin";
 import { LinkedInSignIn } from "@/components/auth/linkedin-signin";
 import { getUser } from "@/lib/supabase/queries";
 import { InfoIcon } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "CompClarity - Login",
@@ -40,12 +39,6 @@ const signInOptions = {
 
 export default async function Page() {
   const user = await getUser();
-  // const supabase = await createClient();
-  // const {
-  //   data: { user: directUser },
-  // } = await supabase.auth.getUser();
-  // console.log(user);
-  // console.log(directUser);
   if (user) {
     return redirect("/account");
   }
