@@ -149,3 +149,9 @@ export const otpSignInSchema = z.object({
 export const emailSignInSchema = z.object({
   email: z.string().email(),
 });
+
+export const introFormSchema = z.object({
+  firstName: z.string().min(1, { message: "First name cannot be empty" }),
+  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
+  cv: z.array(z.instanceof(File)).optional(),
+});

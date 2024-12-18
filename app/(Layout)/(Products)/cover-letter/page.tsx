@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { CoverLetterForm } from "./CoverLetterForm";
 
 export default async function CoverLetter() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

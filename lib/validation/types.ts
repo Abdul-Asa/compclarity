@@ -12,6 +12,7 @@ import {
   signUpFormSchema,
   updateApplicationSchema,
   updateUserSchema,
+  introFormSchema,
 } from "@/lib/validation/schema";
 import countryToCurrency from "country-to-currency";
 import { Database } from "../supabase/types";
@@ -111,3 +112,4 @@ export type CoverLetterSchema = z.infer<typeof coverLetterSchema>;
 export type User = Database["public"]["Tables"]["users"]["Row"];
 export type OTPSignInSchema = z.infer<typeof otpSignInSchema>;
 export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
+export type IntroFormSchema = z.infer<typeof introFormSchema>;

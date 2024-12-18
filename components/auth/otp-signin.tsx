@@ -39,10 +39,10 @@ export function OTPSignIn({ className }: OTPSignInProps) {
 
     setEmail(email);
 
-    // await supabase.auth.signInWithOtp({
-    //   email,
-    //   options: { emailRedirectTo: `${window.location.origin}/api/auth/confirm` },
-    // });
+    await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/api/auth/confirm` },
+    });
 
     setSent(true);
     setLoading(false);

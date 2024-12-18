@@ -2,11 +2,12 @@ import { DeleteAlert } from "./DeleteAlert";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PasswordResetForm } from "@/app/(Layout)/(Auth)/password-reset/PasswordResetForm";
+import { PasswordResetForm } from "@/app/(Layout)/_old/password-reset/PasswordResetForm";
 import AccountForm from "./AccountForm";
 import { SignOutButton } from "@/components/Buttons/SignOutButton";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { getUser } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
   title: "CompClarity - Account",
@@ -15,21 +16,19 @@ export const metadata: Metadata = {
 };
 
 export default async function page() {
-  const supabase = await createClient();
-
-  if (cookies().get("signin_flow")) {
-    redirect("/auth/onboarding");
-  }
-
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
+  const user = await getUser();
+  if (!user) {
     redirect("/auth/sign-in");
   }
 
-  const user = {
-    email: data.user.email || "",
-    first_name: data.user.user_metadata?.first_name,
-    last_name: data.user.user_metadata?.last_name,
+  if (!user.signup_flow) {
+    redirect("/auth/onboarding");
+  }
+
+  const userInfo = {
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
   };
 
   return (
@@ -41,25 +40,30 @@ export default async function page() {
             <CardDescription>Update your profile details.</CardDescription>
           </CardHeader>
           <CardContent>
-            <AccountForm userData={user} />
+            <AccountForm userData={userInfo} />
           </CardContent>
         </Card>
 
         <Card className="col-span-2 md:col-span-1">
-          <PasswordResetForm />
+          <CardHeader>
+            <CardTitle>Sign Out</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SignOutButton />
+          </CardContent>
         </Card>
       </div>
-      <div className="pb-40 sm:pb-0">
+      {/* <div className="pb-40 sm:pb-0">
         <Card>
           <CardHeader>
             <CardTitle>Sign Out</CardTitle>
           </CardHeader>
           <CardContent>
             <SignOutButton />
-            {/* <DeleteAlert userId={data.user.id} /> */}
+        <DeleteAlert userId={data.user.id} /> 
           </CardContent>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 }

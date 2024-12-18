@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { addYears } from "date-fns";
 import { actionClient } from "./safe-action";
-import { otpSignInSchema } from "../validation/schema";
+// import { otpSignInSchema } from "../validation/schema";
 import { redirect } from "next/navigation";
 import { getUser } from "../supabase/queries";
 import { z } from "zod";
@@ -37,11 +37,10 @@ export const verifyOTP = actionClient
     const user = await getUser();
 
     if (!user || !user.signup_flow) {
-      cookies().set("signin_flow", "true");
+      redirect(`/auth/onboarding`);
     } else {
       redirect("/account");
     }
 
-    redirect(`/auth/onboarding`);
   
   });

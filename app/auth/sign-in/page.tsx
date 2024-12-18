@@ -97,8 +97,8 @@ export default async function Page() {
   }
 
   return (
-    <div className="relative z-20 mx-auto flex w-full max-w-lg h-full flex-col py-12 px-8">
-      <div className="flex w-full flex-col relative">
+    <div className=" mx-auto flex w-full max-w-lg  flex-col py-12 px-8 items-center justify-center">
+      <div className="flex w-full flex-col ">
         <h1 className="font-medium pb-4 text-xl md:text-3xl">
           Ready to find your <span className="inline-block text-primary transition hover:-translate-y-3">dream</span>{" "}
           job?

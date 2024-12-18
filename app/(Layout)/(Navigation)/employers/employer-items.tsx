@@ -6,8 +6,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { useMediaQuery } from "@/components/hooks/useMediaQuery";
 import { TransitionView } from "@/components/ui/transition";
+import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 
 export const Heading = () => {
   return (
