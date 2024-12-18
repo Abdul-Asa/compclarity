@@ -41,7 +41,7 @@ export function MobileMenu() {
         <NavigationItems mobile />
         <div className="flex w-full justify-center border-t">
           <Link
-            href="/login"
+            href="/auth/sign-in"
             className="text-lg font-medium py-5 w-full text-center hover:bg-accent"
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           >

@@ -1,0 +1,17 @@
+import Logo from "@/components/layout/Logo";
+import { ModeToggle } from "@/components/providers";
+import Link from "next/link";
+
+export default function layout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <main className="flex min-h-screen w-full items-center justify-between font-space bg-neutral">
+      <div className="flex items-center w-full justify-between px-2 py-4 md:px-8 absolute top-0">
+        <Link href="/">
+          <Logo />
+        </Link>
+        <ModeToggle />
+      </div>
+      {children}
+    </main>
+  );
+}

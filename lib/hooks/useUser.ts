@@ -28,6 +28,7 @@ export const useUser = () => {
         staleTime: 5 * 60 * 1000, // 5 minutes
     });
 
+
     return {
         isSignedIn: data?.isSignedIn ?? false,
         user: data?.user ?? null,

@@ -82,17 +82,17 @@ export const AuthForm = ({ type }: AuthFormProps) => {
       toast({
         title: "Success",
         description: response.message || "Success",
-        variant: "constructive",
+        variant: "default",
       });
       reset();
 
       // redirect
       if (type === "register") {
-        router.push("/login");
+        router.push("/auth/sign-in");
       } else if (type === "login") {
         router.push("/tracker");
       } else if (type === "forgot-password") {
-        router.push("/login");
+        router.push("/auth/sign-in");
       }
     }
   };

@@ -39,6 +39,6 @@ export async function deleteUser(userId: string) {
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
-  redirect("/login");
+  redirect("/auth/sign-in");
   //Currently, Supabase does not have a delete user method without logging in as admin
 }

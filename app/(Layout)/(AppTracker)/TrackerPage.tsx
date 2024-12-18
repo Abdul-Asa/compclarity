@@ -20,7 +20,7 @@ const HeroSection = () => {
           like a <span className="inline-block text-primary transition hover:-translate-y-1">pro</span>.
         </h1>
         <Button size={"lg"} className="my-10" asChild>
-          <Link href="/login">Get Started</Link>
+          <Link href="/auth/sign-in">Get Started</Link>
         </Button>
       </div>
     </section>

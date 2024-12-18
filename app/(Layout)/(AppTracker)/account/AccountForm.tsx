@@ -10,7 +10,7 @@ import { updateUser } from "./actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
-import { toast } from "@/components/hooks/useToast";
+import { toast } from "@/lib/hooks/useToast";
 
 interface AccountFormProps {
   userData: {
@@ -55,7 +55,7 @@ export default function AccountForm({ userData }: AccountFormProps) {
       toast({
         title: "Success",
         description: response.message,
-        variant: "constructive",
+        variant: "default",
       });
     }
     router.refresh();

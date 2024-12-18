@@ -64,6 +64,7 @@
     "lucide-react": "^0.372.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "^14.2.13",
+    "next-safe-action": "^7.10.2",
     "next-themes": "^0.3.0",
     "posthog-js": "^1.200.1",
     "react": "^18.3.1",

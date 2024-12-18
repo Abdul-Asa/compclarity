@@ -140,3 +140,12 @@ export const coverLetterSchema = z.object({
     .max(300, { message: "Maximum 300 words allowed" })
     .transform((val) => val.toString()),
 });
+
+export const otpSignInSchema = z.object({
+  email: z.string().email(),
+  token: z.string().min(1, { message: "Token cannot be empty" }),
+});
+
+export const emailSignInSchema = z.object({
+  email: z.string().email(),
+});
