@@ -14,7 +14,7 @@ export function Announcement() {
     if (!hasDisplayed) {
       // Set a timeout to display the toast
       const timeoutId = setTimeout(() => {
-        toast("📢 2024 Salary Report", {
+        toast("📢 2024 Tech Salary Report 💰", {
           closeButton: true,
           classNames: {
             closeButton: "bg-white",
@@ -22,15 +22,20 @@ export function Announcement() {
           id: "welcome-toast",
           duration: 10000,
           description: (
-            <a
-              href="https://www.linkedin.com/posts/compclarity_2024-tech-salaries-activity-7275474808769822721-oJrJ"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#007bff", textDecoration: "underline" }}
-            >
-              Check it out here
-            </a>
-          ),          onAutoClose: () => {
+            <span>
+              {" "}
+              <a
+                href="https://www.linkedin.com/posts/compclarity_2024-tech-salaries-activity-7275474808769822721-oJrJ"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#007bff", textDecoration: "underline" }}
+              >
+                Check it out here
+              </a>
+              ! Leave a like if you found it useful 🚀
+            </span>
+          ),          
+          onAutoClose: () => {
             sessionStorage.setItem("announcementDisplayed", "true");
           },
           onDismiss: () => {
