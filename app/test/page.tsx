@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
 import { Plus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/lib/hooks/useToast";
 
 const ColorBlock = ({ className, colorName }: { className: string; colorName: string }) => (
   <TooltipProvider>
@@ -18,6 +19,11 @@ const ColorBlock = ({ className, colorName }: { className: string; colorName: st
     </Tooltip>
   </TooltipProvider>
 );
+
+const ToastButton = ({ children, toastProps }: { children: React.ReactNode; toastProps: any }) => {
+  const toast = useToast();
+  return <Button onClick={() => toast.toast(toastProps)}>{children}</Button>;
+};
 
 // Define all component examples in a single object
 const components = {
@@ -116,6 +122,16 @@ const components = {
             <ModeToggle />
           </div>
         ),
+      },
+    ],
+  },
+  toast: {
+    title: "Toast",
+    description: "Toast component",
+    variants: [
+      {
+        title: "Default Toast",
+        component: <ToastButton toastProps={{ title: "Hello", description: "World" }}>Toast</ToastButton>,
       },
     ],
   },
