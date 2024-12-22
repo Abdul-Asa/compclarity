@@ -1,5 +1,5 @@
 import Logo from "@/components/layout/Logo";
-import { ModeToggle } from "@/components/providers";
+import { ModeToggle } from "@/components/providers/ThemeProvider";
 import Link from "next/link";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { ModeToggle } from "@/components/providers";
+import { ModeToggle } from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";

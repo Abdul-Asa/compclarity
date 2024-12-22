@@ -1,11 +1,11 @@
 "use client";
 
-import { ModeToggle } from "@/components/providers";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
 import { Plus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/lib/hooks/useToast";
+import { ModeToggle } from "@/components/providers/ThemeProvider";
 
 const ColorBlock = ({ className, colorName }: { className: string; colorName: string }) => (
   <TooltipProvider>

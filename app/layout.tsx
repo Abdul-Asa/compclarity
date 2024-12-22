@@ -3,7 +3,7 @@ import { Open_Sans, Space_Grotesk, Courier_Prime } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { rootStructuredData } from "@/lib/config/structuredData";
 import { metadata as metadataConfig } from "@/lib/config/metadata";
-import { CSPostHogProvider, PostHogPageView, ThemeProvider, QueryProvider } from "@/components/providers";
+import Providers from "@/components/providers";
 import { Toaster as SonnerToaster } from "sonner";
 import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
@@ -22,19 +22,9 @@ export const metadata = metadataConfig;
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <CSPostHogProvider>
-        <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
-          <ThemeProvider attribute="class" enableSystem>
-            <QueryProvider>
-              <PostHogPageView />
-              {children}
-              <Announcement />
-              <SonnerToaster />
-              <Toaster />
-            </QueryProvider>
-          </ThemeProvider>
-        </body>
-      </CSPostHogProvider>
+      <body className={`${sg.variable} ${os.variable} ${cp.variable}`}>
+        <Providers>{children}</Providers>
+      </body>
 
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       <Script

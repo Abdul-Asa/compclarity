@@ -2,7 +2,7 @@ import Link from "next/link";
 import Logo from "../Logo";
 import { Button } from "../../ui/button";
 import { MobileMenu } from "./MobileMenu";
-import { ModeToggle } from "@/components/providers";
+import { ModeToggle } from "@/components/providers/ThemeProvider";
 import NavigationItems from "./NavLinks";
 import { getUser } from "@/lib/supabase/queries";
 import { AccountMenu } from "./account-menu";

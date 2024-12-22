@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider, usePostHog } from "posthog-js/react";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, Suspense } from "react";
 import { EventName, EventProperties } from "./events";
 
 export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
@@ -16,7 +16,12 @@ export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
       capture_pageleave: true,
     });
   }, []);
-  return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
+  return (
+    <PostHogProvider client={posthog}>
+      <SuspendedPostHogPageView />
+      {children}
+    </PostHogProvider>
+  );
 }
 
 export function PostHogPageView() {
@@ -57,8 +62,13 @@ export function PostHogPageView() {
   return null;
 }
 
-// ... existing code ...
-
+export function SuspendedPostHogPageView() {
+  return (
+    <Suspense fallback={null}>
+      <PostHogPageView />
+    </Suspense>
+  );
+}
 export const useTrackEvent = () => {
   const posthog = usePostHog();
 
