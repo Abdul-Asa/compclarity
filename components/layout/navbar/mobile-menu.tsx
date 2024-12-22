@@ -4,7 +4,7 @@ import { ModeToggle } from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
-import NavigationItems from "./NavLinks";
+import NavigationItems from "./nav-links";
 
 export function MobileMenu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

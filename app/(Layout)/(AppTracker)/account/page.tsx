@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PasswordResetForm } from "@/app/(Layout)/_old/password-reset/PasswordResetForm";
 import AccountForm from "./AccountForm";
-import { SignOutButton } from "@/components/Buttons/SignOutButton";
+import { SignOutButton } from "@/components/layout/navbar/sign-out";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { getUser } from "@/lib/supabase/queries";
@@ -43,27 +43,7 @@ export default async function page() {
             <AccountForm userData={userInfo} />
           </CardContent>
         </Card>
-
-        <Card className="col-span-2 md:col-span-1">
-          <CardHeader>
-            <CardTitle>Sign Out</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <SignOutButton />
-          </CardContent>
-        </Card>
       </div>
-      {/* <div className="pb-40 sm:pb-0">
-        <Card>
-          <CardHeader>
-            <CardTitle>Sign Out</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <SignOutButton />
-        <DeleteAlert userId={data.user.id} /> 
-          </CardContent>
-        </Card>
-      </div> */}
     </div>
   );
 }

@@ -129,3 +129,9 @@ export function fromUrlFriendly(str: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter
     .join(" "); // Join back with spaces
 }
+
+export const capitalize = (...strings: string[]): string => {
+  return strings
+    .map((str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase())
+    .join(" ");
+};

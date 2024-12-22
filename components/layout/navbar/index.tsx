@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Logo from "../Logo";
 import { Button } from "../../ui/button";
-import { MobileMenu } from "./MobileMenu";
+import { MobileMenu } from "./mobile-menu";
 import { ModeToggle } from "@/components/providers/ThemeProvider";
-import NavigationItems from "./NavLinks";
+import NavigationItems from "./nav-links";
 import { getUser } from "@/lib/supabase/queries";
 import { AccountMenu } from "./account-menu";
 
@@ -20,7 +20,7 @@ export async function Navbar() {
         <div className="hidden justify-end gap-2 lg:flex">
           <ModeToggle />
           <Button asChild size="lg" variant="outline">
-            {user ? <Link href="/account">Account</Link> : <Link href="/auth/sign-in">Login</Link>}
+            {user ? <AccountMenu user={user} /> : <Link href="/auth/sign-in">Login</Link>}
           </Button>
         </div>
 

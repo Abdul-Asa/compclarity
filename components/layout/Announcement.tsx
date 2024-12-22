@@ -15,21 +15,24 @@ export function Announcement() {
     if (!hasDisplayed) {
       const timeoutId = setTimeout(() => {
         toast({
-          title: (<p className="text-lg font-semibold mb-2">📢 Share your salary!</p>) as React.ReactNode,
+          title: (<p className="font-semibold">📢 Share your salary!</p>) as React.ReactNode,
           description: (
-            <div className="text-sm flex flex-col gap-2">
-              <p>Received an offer this year? Share your salary to help improve transparency for all!</p>
-              <Button
-                variant="outline"
-                className="w-fit"
-                onClick={() => {
-                  sessionStorage.setItem("announcementDisplayed", "true");
-                  dismiss();
-                }}
-              >
-                <Link href="/add">Share your salary</Link>
-              </Button>
-            </div>
+            <p className="text-xs">
+              Received an offer this year? Share your salary to help improve transparency for all!
+            </p>
+          ),
+          action: (
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-fit"
+              onClick={() => {
+                sessionStorage.setItem("announcementDisplayed", "true");
+                dismiss();
+              }}
+            >
+              <Link href="/add">Share offer</Link>
+            </Button>
           ),
           onOpenChange: (open) => {
             if (!open) {
@@ -39,9 +42,13 @@ export function Announcement() {
         });
       }, 100);
 
+      const autoDismiss = setTimeout(() => {
+        sessionStorage.setItem("announcementDisplayed", "true");
+      }, 10000);
+
       return () => {
         clearTimeout(timeoutId);
-        sessionStorage.setItem("announcementDisplayed", "true");
+        clearTimeout(autoDismiss);
       };
     }
   }, []);

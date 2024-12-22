@@ -3,19 +3,17 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { addYears } from "date-fns";
 import { actionClient } from "./safe-action";
-// import { otpSignInSchema } from "../validation/schema";
 import { redirect } from "next/navigation";
 import { getUser } from "../supabase/queries";
 import { z } from "zod";
 
-
-const schema = z.object({
+export const otpSignInSchema = z.object({
   email: z.string().email(),
   token: z.string().min(1, { message: "Token cannot be empty" }),
 });
 
 export const verifyOTP = actionClient
-  .schema(schema)
+  .schema(otpSignInSchema)
   .action(async ({ parsedInput: { email, token } }) => {
     console.log("verifyOTP");
     console.log(email, token);
