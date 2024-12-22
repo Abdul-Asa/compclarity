@@ -6,13 +6,14 @@ import * as React from "react";
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
 
 const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_REMOVE_DELAY = 10000;
 
-type ToasterToast = ToastProps & {
+type ToasterToast = Omit<ToastProps, "id" | "title" | "description" | "action"> & {
   id: string;
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: ToastActionElement;
+  closeButton?: boolean;
 };
 
 const actionTypes = {

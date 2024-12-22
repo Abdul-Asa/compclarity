@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/lib/hooks/useToast";
 import { ModeToggle } from "@/components/providers/ThemeProvider";
+import { ToastAction } from "@/components/ui/toast";
 
 const ColorBlock = ({ className, colorName }: { className: string; colorName: string }) => (
   <TooltipProvider>
@@ -130,8 +131,29 @@ const components = {
     description: "Toast component",
     variants: [
       {
-        title: "Default Toast",
-        component: <ToastButton toastProps={{ title: "Hello", description: "World" }}>Toast</ToastButton>,
+        title: "Variants",
+        component: (
+          <div className="flex gap-4 items-center flex-wrap">
+            <ToastButton toastProps={{ title: "Hello", description: "World" }}>Default</ToastButton>
+            <ToastButton
+              toastProps={{
+                title: "Hello",
+                description: "World",
+                closeButton: false,
+                action: (
+                  <ToastAction altText="Dismiss" onClick={() => {}}>
+                    Dismiss
+                  </ToastAction>
+                ),
+              }}
+            >
+              Action
+            </ToastButton>
+            <ToastButton toastProps={{ title: "Hello", description: "World", variant: "destructive" }}>
+              Destructive
+            </ToastButton>
+          </div>
+        ),
       },
     ],
   },

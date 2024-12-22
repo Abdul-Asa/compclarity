@@ -7,16 +7,16 @@ import { Toaster } from "@/components/ui/toaster";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <CSPostHogProvider>
-      <ThemeProvider attribute="class" enableSystem>
-        <QueryProvider>
+    <QueryProvider>
+      <CSPostHogProvider>
+        <ThemeProvider attribute="class" enableSystem>
           {children}
           <Announcement />
           <SonnerToaster />
           <Toaster />
-        </QueryProvider>
-      </ThemeProvider>
-    </CSPostHogProvider>
+        </ThemeProvider>
+      </CSPostHogProvider>{" "}
+    </QueryProvider>
   );
 };
 

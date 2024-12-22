@@ -1,38 +1,48 @@
 "use client";
 
+import { useToast } from "@/lib/hooks/useToast";
 import { useEffect } from "react";
-import { toast } from "sonner";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export function Announcement() {
-  useEffect(() => {
-    // Don't display on mobile
-    if (window.innerWidth < 768) return;
+  const { toast, dismiss } = useToast();
 
-    // Check if the announcement has already been displayed
+  useEffect(() => {
+    if (window.innerWidth < 768) return;
     const hasDisplayed = sessionStorage.getItem("announcementDisplayed");
 
     if (!hasDisplayed) {
-      // Set a timeout to display the toast
       const timeoutId = setTimeout(() => {
-        toast("📢 Share your salary!", {
-          closeButton: true,
-          classNames: {
-            closeButton: "bg-white",
-          },
-          id: "welcome-toast",
-          duration: 5000,
-          description: "Received an offer this year? Share your salary to help improve transparency for all!",
-          onAutoClose: () => {
-            sessionStorage.setItem("announcementDisplayed", "true");
-          },
-          onDismiss: () => {
-            sessionStorage.setItem("announcementDisplayed", "true");
+        toast({
+          title: (<p className="text-lg font-semibold mb-2">📢 Share your salary!</p>) as React.ReactNode,
+          description: (
+            <div className="text-sm flex flex-col gap-2">
+              <p>Received an offer this year? Share your salary to help improve transparency for all!</p>
+              <Button
+                variant="outline"
+                className="w-fit"
+                onClick={() => {
+                  sessionStorage.setItem("announcementDisplayed", "true");
+                  dismiss();
+                }}
+              >
+                <Link href="/add">Share your salary</Link>
+              </Button>
+            </div>
+          ),
+          onOpenChange: (open) => {
+            if (!open) {
+              sessionStorage.setItem("announcementDisplayed", "true");
+            }
           },
         });
       }, 100);
 
-      // Cleanup timeout on unmount
-      return () => clearTimeout(timeoutId);
+      return () => {
+        clearTimeout(timeoutId);
+        sessionStorage.setItem("announcementDisplayed", "true");
+      };
     }
   }, []);
 
