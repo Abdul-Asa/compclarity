@@ -16,8 +16,6 @@ export const metadata: Metadata = {
   description: "Sign in or register for an account to apply for jobs and track your progress",
 };
 
-export const revalidate = 30;
-
 const signInOptions = {
   google: {
     name: "Google",

@@ -6,7 +6,6 @@ import { UpdateUserSchema } from "@/lib/validation/types";
 import { updateUserSchema } from "@/lib/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { updateUser } from "./actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
@@ -35,34 +34,34 @@ export default function AccountForm({ userData }: AccountFormProps) {
     },
   });
 
-  const onSubmit = async (data: UpdateUserSchema) => {
-    const response = await updateUser(data);
+  // const onSubmit = async (data: UpdateUserSchema) => {
+  //   // const response = await updateUser(data);
 
-    if (response.error) {
-      console.error(response.message);
-      toast({
-        title: "Error",
-        description: response.message,
-        variant: "destructive",
-      });
-    } else {
-      setCurrentUserData((prev) => ({
-        ...prev,
-        first_name: data.firstName,
-        last_name: data.lastName,
-      }));
-      console.log(response.message);
-      toast({
-        title: "Success",
-        description: response.message,
-        variant: "default",
-      });
-    }
-    router.refresh();
-  };
+  //   if (response.error) {
+  //     console.error(response.message);
+  //     toast({
+  //       title: "Error",
+  //       description: response.message,
+  //       variant: "destructive",
+  //     });
+  //   } else {
+  //     setCurrentUserData((prev) => ({
+  //       ...prev,
+  //       first_name: data.firstName,
+  //       last_name: data.lastName,
+  //     }));
+  //     console.log(response.message);
+  //     toast({
+  //       title: "Success",
+  //       description: response.message,
+  //       variant: "default",
+  //     });
+  //   }
+  //   router.refresh();
+  // };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+    <form className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>

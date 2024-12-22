@@ -1,4 +1,3 @@
-import { DeleteAlert } from "./DeleteAlert";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
