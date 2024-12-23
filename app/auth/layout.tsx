@@ -9,7 +9,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         <Link href="/">
           <Logo />
         </Link>
-        <ModeToggle />
+        <ModeToggle className="bg-background" />
       </div>
 
       <div className="flex-1 w-full flex items-center justify-center">{children}</div>

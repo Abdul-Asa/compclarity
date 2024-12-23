@@ -12,7 +12,7 @@ import { getUser } from "@/lib/supabase/queries";
 import { InfoIcon } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "CompClarity - Login",
+  title: "Login",
   description: "Sign in or register for an account to apply for jobs and track your progress",
 };
 

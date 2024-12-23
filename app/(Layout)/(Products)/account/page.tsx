@@ -1,20 +1,15 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PasswordResetForm } from "@/app/(Layout)/_old/password-reset/PasswordResetForm";
-import AccountForm from "./AccountForm";
-import { SignOutButton } from "@/components/layout/navbar/sign-out";
+import AccountForm from "../../../../components/forms/AccountForm";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { getUser } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
-  title: "CompClarity - Account",
-  description:
-    "CompClarity's mission is dedicated to demystifying compensation packages across Europe, by ensuring that you have all the information required to understand your worth and make informed decisions.",
+  title: "Account",
+  description: "Manage your account settings",
 };
 
-export default async function page() {
+export default async function Account() {
   const user = await getUser();
   if (!user) {
     redirect("/auth/sign-in");

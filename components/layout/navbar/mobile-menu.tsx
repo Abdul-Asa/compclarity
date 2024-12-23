@@ -10,7 +10,11 @@ export function MobileMenu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="group flex items-center gap-2 lg:hidden select-none" aria-label="Menu">
+    <div
+      className="group flex items-center gap-2 lg:hidden select-none"
+      aria-label="Menu"
+      aria-hidden={isMobileMenuOpen}
+    >
       <ModeToggle />
       <button
         className="flex relative aspect-square h-11 list-none"
