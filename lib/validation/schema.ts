@@ -67,10 +67,7 @@ export const resetPasswordSchema = z.object({
   confirmPassword: z.string().min(6, { message: "Password must have a length of at least 6." }),
 });
 
-export const updateUserSchema = z.object({
-  firstName: z.string().min(1, { message: "First name cannot be empty" }),
-  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
-});
+
 
 export const createApplicationSchema = z.object({
   companyName: z.string().min(1, { message: "Company name cannot be empty" }),
@@ -145,6 +142,11 @@ export const coverLetterSchema = z.object({
 
 export const emailSignInSchema = z.object({
   email: z.string().email(),
+});
+
+export const updateUserSchema = z.object({
+  firstName: z.string().min(1, { message: "First name cannot be empty" }),
+  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
 });
 
 export const introFormSchema = z.object({

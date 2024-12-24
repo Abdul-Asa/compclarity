@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { TransitionView } from "@/components/ui/transition";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 

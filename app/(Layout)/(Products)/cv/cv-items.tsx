@@ -1,6 +1,6 @@
 "use client";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Marquee from "@/components/ui/marquee";

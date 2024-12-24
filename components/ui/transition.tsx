@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 
 type FadeDirection = "in" | "up" | "left" | "right" | "down";
 
@@ -32,7 +32,13 @@ export const TransitionView: React.FC<TransitionViewProps> = ({ className, fade 
   const { initial, animate } = getInitialAndAnimate(fade);
 
   return (
-    <motion.div ref={ref} initial={initial} animate={inView ? animate : initial} transition={{ duration: 0.5 }} className={className}>
+    <motion.div
+      ref={ref}
+      initial={initial}
+      animate={inView ? animate : initial}
+      transition={{ duration: 0.5 }}
+      className={className}
+    >
       {children}
     </motion.div>
   );

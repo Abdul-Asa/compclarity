@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         ]}
       />
 
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 py-4">{children}</main>
     </div>
   );
 }

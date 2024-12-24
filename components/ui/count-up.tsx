@@ -2,15 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import {
-  LazyMotion,
-  domAnimation,
-  m,
-  useAnimate,
-  useInView,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { LazyMotion, domAnimation, m, useAnimate, useInView, useMotionValue, useTransform } from "motion/react";
 
 interface CountUpProps {
   className?: string;
@@ -39,8 +31,7 @@ export default function CountUp({
 
   const currentValue = useTransform(
     startingValue,
-    (value) =>
-      (prefix || "") + Math.round(value).toLocaleString() + (suffix || "")
+    (value) => (prefix || "") + Math.round(value).toLocaleString() + (suffix || "")
   );
 
   useEffect(() => {
