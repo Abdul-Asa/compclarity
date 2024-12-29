@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 import { MAIN_URL } from "@/lib/config/env";
-import { getUser } from "@/lib/supabase/queries";
+import { getUser } from "@/lib/actions/profile";
 
 export async function GET(request: NextRequest) {
   let APP_URL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : MAIN_URL;
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   const user = await getUser();
   let redirect;
   
-  if (type === "signup" || !user || !user.signup_flow) {
+  if (type === "signup" || !user || !user.onboarding_completed) {
     redirect = APP_URL + "/auth/onboarding";
   } else {
     redirect = APP_URL + "/account";

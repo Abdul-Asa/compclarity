@@ -1,60 +1,191 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UpdateUserSchema } from "@/lib/validation/types";
-import { updateUserSchema } from "@/lib/validation/schema";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { Loader2, Pencil } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
-import { toast } from "@/lib/hooks/useToast";
+import { Form, FormField, FormItem, FormControl, FormMessage, FormLabel } from "../ui/form";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { ProfileFormSchema, User } from "@/lib/validation/types";
+import { profileFormSchema } from "@/lib/validation/schema";
+import { fetchUserProfile } from "@/lib/actions/tanstack-queries";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
-interface AccountFormProps {
-  userData: {
-    email: string;
-    first_name: string;
-    last_name: string;
-  };
+interface ProfileFormProps {
+  initialData: User;
+  onSubmit: (data: ProfileFormSchema) => Promise<void>;
 }
-export default function AccountForm({ userData }: AccountFormProps) {
-  const router = useRouter();
-  const [currentUserData, setCurrentUserData] = useState(userData);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<UpdateUserSchema>({
-    resolver: zodResolver(updateUserSchema),
-    defaultValues: {
-      firstName: currentUserData.first_name,
-      lastName: currentUserData.last_name,
-    },
+
+export default function ProfileForm({ initialData, onSubmit }: ProfileFormProps) {
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUserProfile,
+    initialData,
   });
 
   return (
-    <form className="space-y-4">
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input id="firstName" {...register("firstName")} autoComplete="on" />
-          <p className="text-red-500 text-xs min-h-1 my-1">{errors.firstName?.message}</p>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-2xl font-bold">Profile</CardTitle>
+        <EditProfileDialog initialData={userData} onSubmit={onSubmit} />
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">First Name</p>
+            <p className="text-sm font-medium">{userData?.first_name || "-"}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">Last Name</p>
+            <p className="text-sm font-medium">{userData?.last_name || "-"}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">Phone Number</p>
+            <p className="text-sm font-medium">{userData?.phonenumber || "-"}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">Birth Date</p>
+            <p className="text-sm font-medium">
+              {userData?.birthdate ? new Date(userData.birthdate).toLocaleDateString() : "-"}
+            </p>
+          </div>
+          <div className="space-y-1 md:col-span-2">
+            <p className="text-sm font-medium text-muted-foreground">Location</p>
+            <p className="text-sm font-medium">{userData?.location || "-"}</p>
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input id="lastName" {...register("lastName")} autoComplete="on" />
-          <p className="text-red-500 text-xs min-h-1 my-1">{errors.lastName?.message}</p>
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="on" disabled defaultValue={userData.email} />
-      </div>
-      <div className="flex flex-row-reverse justify-between pt-10">
-        <SpinnerButton state={isSubmitting} type="submit" name="Save Changes" />
-      </div>
-    </form>
+      </CardContent>
+    </Card>
   );
 }
+
+interface EditProfileDialogProps {
+  initialData: User;
+  onSubmit: (data: ProfileFormSchema) => Promise<void>;
+}
+
+const EditProfileDialog = ({ initialData, onSubmit }: EditProfileDialogProps) => {
+  const [isPending, setIsPending] = useState(false);
+  const form = useForm<ProfileFormSchema>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      first_name: initialData?.first_name || "",
+      last_name: initialData?.last_name || "",
+      phonenumber: initialData?.phonenumber || "",
+      birthdate: initialData?.birthdate || "",
+      location: initialData?.location || "",
+    },
+  });
+
+  const handleSubmit = async (data: ProfileFormSchema) => {
+    try {
+      setIsPending(true);
+      await onSubmit(data);
+    } finally {
+      setIsPending(false);
+    }
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Pencil className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="first_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phonenumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="birthdate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Birth Date</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="date" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem className="md:col-span-2">
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <DialogFooter className="mt-4">
+              <Button type="submit" disabled={isPending}>
+                {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save changes"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+};

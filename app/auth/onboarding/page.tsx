@@ -1,5 +1,5 @@
 import { OnboardingForm } from "@/components/forms/OnboardingForm";
-import { getUser } from "@/lib/supabase/queries";
+import { getUser } from "@/lib/actions/profile";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ export default async function Onboarding() {
   }
 
   //if user has completed signup, redirect to account
-  if (user.signup_flow) {
+  if (user.onboarding_completed) {
     redirect("/account");
   }
 

@@ -58,7 +58,7 @@ export function IntroForm() {
         .update({
           first_name: values.firstName,
           last_name: values.lastName,
-          signup_flow: true,
+          onboarding_completed: true,
         })
         .eq("id", data.user?.id)
         .select();

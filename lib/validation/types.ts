@@ -4,14 +4,10 @@ import {
   createApplicationSchema,
   cvServiceSchema,
   emailSignInSchema,
-  forgotPasswordSchema,
-  loginFormSchema,
-  resetPasswordSchema,
   salaryFormSchema,
-  signUpFormSchema,
   updateApplicationSchema,
-  updateUserSchema,
   introFormSchema,
+  profileFormSchema,
 } from "@/lib/validation/schema";
 import countryToCurrency from "country-to-currency";
 import { Database } from "../supabase/types";
@@ -93,15 +89,6 @@ export type { Company, Job, JobsApiResponse, Offer, OfferApiResponse };
 export type Func<T = any> = (...args: T[]) => any;
 
 export type SalaryFormSchema = z.infer<typeof salaryFormSchema>;
-export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
-export type LoginFormSchema = z.infer<typeof loginFormSchema>;
-export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
-export type AuthFormSchema =
-  | SignUpFormSchema
-  | LoginFormSchema
-  | ForgotPasswordSchema;
-export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
-export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 export type CreateApplicationSchema = z.infer<typeof createApplicationSchema>;
 export type UpdateApplicationSchema = z.infer<typeof updateApplicationSchema>;
 export type ApplicationObject = Database["public"]["Tables"]["todos"]["Row"];
@@ -111,3 +98,4 @@ export type CoverLetterSchema = z.infer<typeof coverLetterSchema>;
 export type User = Database["public"]["Tables"]["users"]["Row"];
 export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
 export type IntroFormSchema = z.infer<typeof introFormSchema>;
+export type ProfileFormSchema = z.infer<typeof profileFormSchema>;

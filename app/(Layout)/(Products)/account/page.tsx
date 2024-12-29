@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import AccountForm from "../../../../components/forms/profile-form";
 import type { Metadata } from "next";
-import { getUser } from "@/lib/supabase/queries";
+import { ProfileProgress } from "@/components/layout/account/profile-progress";
+import { getUser } from "@/lib/actions/profile";
+import { redirect } from "next/navigation";
+import ProfileForm from "@/components/forms/profile-form";
 
 export const metadata: Metadata = {
   title: "Account",
@@ -12,57 +12,14 @@ export const metadata: Metadata = {
 export default async function Account() {
   const user = await getUser();
   if (!user) {
-    redirect("/auth/sign-in");
+    redirect("/auth/signin");
   }
-
-  if (!user.signup_flow) {
-    redirect("/auth/onboarding");
-  }
-
-  const userInfo = {
-    email: user.email,
-    first_name: user.first_name,
-    last_name: user.last_name,
-  };
-
   return (
-    <div className="grid grid-cols-3 gap-8">
-      {/* <Card className="col-span-1">
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your profile details.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AccountForm userData={userInfo} />
-        </CardContent>
-      </Card>
-      <Card className="col-span-2">
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your profile details.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AccountForm userData={userInfo} />
-        </CardContent>
-      </Card>
-      <Card className="col-span-3 md:col-span-1">
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your profile details.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AccountForm userData={userInfo} />
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 md:col-span-1">
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your profile details.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AccountForm userData={userInfo} />
-        </CardContent>
-      </Card> */}
+    <div className="grid grid-cols-3 gap-4">
+      <ProfileProgress initialData={user} />
+      <div className="col-span-2 rounded-sm ">
+        <ProfileForm {...user} />
+      </div>
     </div>
   );
 }

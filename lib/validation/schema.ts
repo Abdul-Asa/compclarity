@@ -46,29 +46,6 @@ export const salaryFormSchema = z.object({
   other: z.string(),
 });
 
-export const signUpFormSchema = z.object({
-  firstName: z.string().min(1, { message: "First name cannot be empty" }),
-  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
-  email: z.string().email(),
-  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
-});
-
-export const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
-});
-
-export const forgotPasswordSchema = z.object({
-  email: z.string().email(),
-});
-
-export const resetPasswordSchema = z.object({
-  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
-  confirmPassword: z.string().min(6, { message: "Password must have a length of at least 6." }),
-});
-
-
-
 export const createApplicationSchema = z.object({
   companyName: z.string().min(1, { message: "Company name cannot be empty" }),
   title: z.string().min(1, { message: "Title cannot be empty" }),
@@ -140,17 +117,21 @@ export const coverLetterSchema = z.object({
     .transform((val) => val.toString()),
 });
 
+// New schemas
 export const emailSignInSchema = z.object({
   email: z.string().email(),
-});
-
-export const updateUserSchema = z.object({
-  firstName: z.string().min(1, { message: "First name cannot be empty" }),
-  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
 });
 
 export const introFormSchema = z.object({
   firstName: z.string().min(1, { message: "First name cannot be empty" }),
   lastName: z.string().min(1, { message: "Last name cannot be empty" }),
   cv: z.array(z.instanceof(File)).optional(),
+});
+
+export const profileFormSchema = z.object({
+  first_name: z.string().min(1, { message: "First name cannot be empty" }),
+  last_name: z.string().min(1, { message: "Last name cannot be empty" }),
+  phonenumber: z.string().min(1, { message: "Phone number cannot be empty" }),
+  birthdate: z.string().min(1, { message: "Birthdate cannot be empty" }),
+  location: z.string().min(1, { message: "Location cannot be empty" }),
 });

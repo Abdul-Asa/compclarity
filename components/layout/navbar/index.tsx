@@ -4,7 +4,7 @@ import { Button } from "../../ui/button";
 import { MobileMenu } from "./mobile-menu";
 import { ModeToggle } from "@/components/providers/ThemeProvider";
 import NavigationItems from "./nav-links";
-import { getUser } from "@/lib/supabase/queries";
+import { getUser } from "@/lib/actions/profile";
 import { AccountMenu } from "./account-menu";
 
 export async function Navbar() {

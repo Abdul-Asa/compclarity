@@ -113,34 +113,46 @@ export type Database = {
       }
       users: {
         Row: {
+          birthdate: string | null
           created_at: string | null
           email: string
           first_name: string
           id: string
           last_name: string
+          links: Json
+          location: string | null
+          onboarding_completed: boolean
           phonenumber: string | null
-          signup_flow: boolean
           tokens: number
+          username_completed: boolean
         }
         Insert: {
+          birthdate?: string | null
           created_at?: string | null
           email: string
           first_name: string
           id: string
           last_name: string
+          links?: Json
+          location?: string | null
+          onboarding_completed?: boolean
           phonenumber?: string | null
-          signup_flow?: boolean
           tokens?: number
+          username_completed?: boolean
         }
         Update: {
+          birthdate?: string | null
           created_at?: string | null
           email?: string
           first_name?: string
           id?: string
           last_name?: string
+          links?: Json
+          location?: string | null
+          onboarding_completed?: boolean
           phonenumber?: string | null
-          signup_flow?: boolean
           tokens?: number
+          username_completed?: boolean
         }
         Relationships: []
       }
