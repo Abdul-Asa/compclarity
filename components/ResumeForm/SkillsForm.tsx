@@ -41,7 +41,7 @@ export const SkillsForm = () => {
             <BulletListIconButton showBulletPoints={showBulletPoints} onClick={handleShowBulletPoints} />
           </div>
         </div>
-        <div className="col-span-full mb-4 mt-6 border-t-2 border-dotted border-gray-200" />
+        {/* <div className="col-span-full mb-4 mt-6 border-t-2 border-dotted border-gray-200" />
         <InputGroupWrapper label="Featured Skills (Optional)" className="col-span-full">
           <p className="mt-2 text-sm font-normal text-gray-600">
             Featured skills is optional to highlight top skills, with more circles mean higher proficiency.
@@ -60,7 +60,7 @@ export const SkillsForm = () => {
             placeholder={`Featured Skill ${idx + 1}`}
             circleColor={themeColor}
           />
-        ))}
+        ))} */}
       </div>
     </Form>
   );

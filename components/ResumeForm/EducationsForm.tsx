@@ -42,7 +42,7 @@ export const EducationsForm = () => {
               label="School"
               labelClassName="col-span-4"
               name="school"
-              placeholder="Cornell University"
+              placeholder="Oxford University"
               value={school}
               onChange={handleEducationChange}
             />
@@ -50,7 +50,7 @@ export const EducationsForm = () => {
               label="Date"
               labelClassName="col-span-2"
               name="date"
-              placeholder="May 2018"
+              placeholder="May 2024"
               value={date}
               onChange={handleEducationChange}
             />
@@ -58,7 +58,7 @@ export const EducationsForm = () => {
               label="Degree & Major"
               labelClassName="col-span-4"
               name="degree"
-              placeholder="Bachelor of Science in Computer Engineering"
+              placeholder="Bachelor of Science in Computer Science"
               value={degree}
               onChange={handleEducationChange}
             />
@@ -80,7 +80,7 @@ export const EducationsForm = () => {
                 onChange={handleEducationChange}
                 showBulletPoints={showBulletPoints}
               />
-              <div className="absolute left-[15.6rem] top-[0.07rem]">
+              <div className="absolute left-[16.6rem] top-[0.0rem]">
                 <BulletListIconButton showBulletPoints={showBulletPoints} onClick={handleShowBulletPoints} />
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { IconButton } from "@/components/Buttons/OR-button";
+import { Button } from "@/components/ui/button";
 import {
   EyeIcon,
   EyeSlashIcon,
@@ -7,19 +7,17 @@ import {
   TrashIcon,
   ListBulletIcon,
 } from "@heroicons/react/24/outline";
+import { cn } from "@/lib/utils";
 
 export const ShowIconButton = ({ show, setShow }: { show: boolean; setShow: (show: boolean) => void }) => {
   const tooltipText = show ? "Hide section" : "Show section";
-  const onClick = () => {
-    setShow(!show);
-  };
   const Icon = show ? EyeIcon : EyeSlashIcon;
 
   return (
-    <IconButton onClick={onClick} tooltipText={tooltipText}>
-      <Icon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+    <Button variant="ghost" size="icon" onClick={() => setShow(!show)} title={tooltipText}>
+      <Icon className="h-6 w-6" aria-hidden="true" />
       <span className="sr-only">{tooltipText}</span>
-    </IconButton>
+    </Button>
   );
 };
 
@@ -34,23 +32,28 @@ export const MoveIconButton = ({
   onClick: (type: MoveIconButtonType) => void;
 }) => {
   const tooltipText = type === "up" ? "Move up" : "Move down";
-  const sizeClassName = size === "medium" ? "h-6 w-6" : "h-4 w-4";
   const Icon = type === "up" ? ArrowSmallUpIcon : ArrowSmallDownIcon;
 
   return (
-    <IconButton onClick={() => onClick(type)} tooltipText={tooltipText} size={size}>
-      <Icon className={`${sizeClassName} text-gray-400`} aria-hidden="true" />
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => onClick(type)}
+      title={tooltipText}
+      className={cn(size === "small" && "h-8 w-8 [&_svg]:size-4")}
+    >
+      <Icon aria-hidden="true" />
       <span className="sr-only">{tooltipText}</span>
-    </IconButton>
+    </Button>
   );
 };
 
 export const DeleteIconButton = ({ onClick, tooltipText }: { onClick: () => void; tooltipText: string }) => {
   return (
-    <IconButton onClick={onClick} tooltipText={tooltipText} size="small">
-      <TrashIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+    <Button variant="ghost" size="icon" onClick={onClick} title={tooltipText} className="h-8 w-8 [&_svg]:size-4">
+      <TrashIcon aria-hidden="true" />
       <span className="sr-only">{tooltipText}</span>
-    </IconButton>
+    </Button>
   );
 };
 
@@ -64,17 +67,15 @@ export const BulletListIconButton = ({
   const tooltipText = showBulletPoints ? "Hide bullet points" : "Show bullet points";
 
   return (
-    <IconButton
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={() => onClick(!showBulletPoints)}
-      tooltipText={tooltipText}
-      size="small"
-      className={showBulletPoints ? "!bg-sky-100" : ""}
+      title={tooltipText}
+      className={cn("size-6 [&_svg]:size-4", showBulletPoints && "bg-primary hover:bg-primary/90")}
     >
-      <ListBulletIcon
-        className={`h-4 w-4 ${showBulletPoints ? "text-gray-700" : "text-gray-400"}`}
-        aria-hidden="true"
-      />
+      <ListBulletIcon className={cn(showBulletPoints ? "text-gray-700" : "text-gray-400")} aria-hidden="true" />
       <span className="sr-only">{tooltipText}</span>
-    </IconButton>
+    </Button>
   );
 };
