@@ -23,14 +23,14 @@ export async function GET(request: NextRequest) {
   });
 
 
-  const user = await getUser();
-  let redirect;
+  // const user = await getUser();
+  let redirect = APP_URL
   
-  if (type === "signup" || !user || !user.onboarding_completed) {
-    redirect = APP_URL + "/auth/onboarding";
-  } else {
-    redirect = APP_URL + "/account";
-  }
+  // if (type === "signup" || !user || !user.onboarding_completed) {
+  //   redirect = APP_URL + "/auth/onboarding";
+  // } else {
+  //   redirect = APP_URL + "/account";
+  // }
 
   return error
     ? NextResponse.redirect(APP_URL + `/auth/error?message=${error.message || "Invalid OTP"}`)

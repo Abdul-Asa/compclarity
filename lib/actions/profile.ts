@@ -50,11 +50,11 @@ export const verifyOTP = actionClient.schema(otpSignInSchema).action(async ({ pa
     redirect(`/auth/error?message=${error.message}`);
   }
 
-  const user = await getUser();
-
-  if (!user || !user.onboarding_completed) {
-    redirect(`/auth/onboarding`);
-  } else {
-    redirect("/account");
-  }
+  // const user = await getUser();
+  // if (!user || !user.onboarding_completed) {
+  //   redirect(`/auth/onboarding`);
+  // } else {
+  //   redirect("/account");
+  // }
+  redirect("/");
 });

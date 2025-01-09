@@ -38,7 +38,7 @@ export function AccountMenu({ user }: { user: User }) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           <Link prefetch href="/account">
             <DropdownMenuItem>
               <User2 className="w-4 h-4" /> Profile
@@ -54,9 +54,9 @@ export function AccountMenu({ user }: { user: User }) {
               <Settings className="w-4 h-4" /> Settings
             </DropdownMenuItem>
           </Link>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
 
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
 
         <SignOutButton />
       </DropdownMenuContent>
