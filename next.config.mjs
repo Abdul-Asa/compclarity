@@ -29,6 +29,7 @@ const nextConfig = {
   //   experimental: {
   //     instrumentationHook: true,
   // }
+  transpilePackages: ["@react-pdf/renderer"],
 };
 
 export default nextConfig;

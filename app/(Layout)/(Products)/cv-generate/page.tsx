@@ -1,15 +1,22 @@
 "use client";
+import { Provider } from "react-redux";
+import { store } from "@/lib/store/redux";
+import { ResumeForm } from "@/components/ResumeForm";
+import { Resume } from "@/components/Resume";
 
-export default function CVGeneratePage() {
+export default function Create() {
   return (
-    <div className="flex min-h-screen justify-center items-center w-full gap-4 p-4">
-      <h1 className="text-2xl font-bold font-primary"> Coming Soon </h1>
-      {/* <div className="w-full md:w-1/2">
-        <CVForm />
-      </div>
-      <div className="w-full md:w-1/2">
-        <PDFPreview />
-      </div> */}
-    </div>
+    <Provider store={store}>
+      <main className="relative h-full w-full overflow-hidden bg-gray-50">
+        <div className="grid grid-cols-3 md:grid-cols-6">
+          <div className="col-span-3">
+            <ResumeForm />
+          </div>
+          <div className="col-span-3">
+            <Resume />
+          </div>
+        </div>
+      </main>
+    </Provider>
   );
 }
