@@ -34,12 +34,12 @@ const HeroSection = () => {
       <div className="my-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
         <Button asChild>
           <Link href="/tech">
-            View <b>Tech</b> Salaries
+            View&nbsp;<b>Tech</b>&nbsp;Salaries
           </Link>
         </Button>
         <Button asChild>
           <Link href="/finance">
-            View <b>Finance</b> Salaries
+            View&nbsp;<b>Finance</b>&nbsp;Salaries
           </Link>
         </Button>
       </div>

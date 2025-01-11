@@ -7,6 +7,13 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/lib/hooks/useToast";
 import { ModeToggle } from "@/components/providers/ThemeProvider";
 import { ToastAction } from "@/components/ui/toast";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 
 const ColorBlock = ({ className, colorName }: { className: string; colorName: string }) => (
   <TooltipProvider>
@@ -24,6 +31,47 @@ const ColorBlock = ({ className, colorName }: { className: string; colorName: st
 const ToastButton = ({ children, toastProps }: { children: React.ReactNode; toastProps: any }) => {
   const toast = useToast();
   return <Button onClick={() => toast.toast(toastProps)}>{children}</Button>;
+};
+
+const testFormSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+});
+
+const TestForm = () => {
+  const form = useForm<z.infer<typeof testFormSchema>>({
+    resolver: zodResolver(testFormSchema),
+    defaultValues: {
+      username: "",
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof testFormSchema>) => {
+    console.log(values);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="CompClarity" {...field} />
+              </FormControl>
+              <FormDescription>This is your public display name.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
 };
 
 // Define all component examples in a single object
@@ -124,6 +172,81 @@ const components = {
           </div>
         ),
       },
+      {
+        title: "Props",
+        component: (
+          <div className="flex gap-4 items-center">
+            <Button loading>Loading</Button>
+            <Button tooltip="Tooltip">Tooltip</Button>
+          </div>
+        ),
+      },
+    ],
+  },
+  cards: {
+    title: "Cards",
+    description: "Card component",
+    variants: [
+      {
+        title: "Default Card",
+        component: (
+          <Card>
+            <CardHeader>
+              <CardTitle>Card Title</CardTitle>
+              <CardDescription>Card Description</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Card Content</p>
+            </CardContent>
+            <CardFooter>
+              <p>Card Footer</p>
+            </CardFooter>
+          </Card>
+        ),
+      },
+      {
+        title: "Variants",
+        component: () => {
+          return (
+            <div className="flex gap-4 items-center">
+              <Card className="flex-1 max-w-xl">
+                <CardHeader>
+                  <CardTitle>Profile Form</CardTitle>
+                  <CardDescription>Enter your profile information</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <TestForm />
+                </CardContent>
+              </Card>
+              <Card className="flex-1" collapsible>
+                <CardHeader>
+                  <CardTitle>Personal</CardTitle>
+                  <CardDescription>Personal description</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <TestForm />
+                </CardContent>
+              </Card>
+            </div>
+          );
+        },
+      },
+    ],
+  },
+  modals: {
+    title: "Modals",
+    description: "Modal component",
+    variants: [
+      {
+        title: "Default Modal",
+        component: () => {
+          return (
+            <Modal trigger={<Button>Open Modal</Button>}>
+              <TestForm />
+            </Modal>
+          );
+        },
+      },
     ],
   },
   toast: {
@@ -191,7 +314,7 @@ export default function Test() {
               {component.variants.map((variant, index) => (
                 <div key={index} className="space-y-4">
                   <h3 className="text-sm font-medium">{variant.title}</h3>
-                  {variant.component}
+                  {typeof variant.component === "function" ? variant.component() : variant.component}
                 </div>
               ))}
             </div>

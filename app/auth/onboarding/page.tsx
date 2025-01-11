@@ -1,5 +1,5 @@
 import { OnboardingForm } from "@/components/forms/OnboardingForm";
-import { getUser } from "@/lib/actions/profile";
+import { getUser } from "@/lib/actions/server-actions";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

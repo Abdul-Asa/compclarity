@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ProfileProgress } from "@/components/layout/account/profile-progress";
-import { getUser } from "@/lib/actions/profile";
+import { getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
 import ProfileForm from "@/components/forms/profile-form";
 

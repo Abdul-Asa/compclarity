@@ -37,7 +37,7 @@ export const SkillsForm = () => {
             onChange={handleSkillsChange}
             showBulletPoints={showBulletPoints}
           />
-          <div className="absolute left-[4.5rem] top-[0.07rem]">
+          <div className="absolute left-[5.5rem] top-[0.07rem]">
             <BulletListIconButton showBulletPoints={showBulletPoints} onClick={handleShowBulletPoints} />
           </div>
         </div>

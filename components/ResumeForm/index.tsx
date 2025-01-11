@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import { useAppSelector, useSaveStateToLocalStorageOnChange, useSetInitialStore } from "@/lib/store/hooks";
 import { ShowForm, selectFormsOrder } from "@/lib/store/settings";
 import { ProfileForm } from "@/components/ResumeForm/ProfileForm";

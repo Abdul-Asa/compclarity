@@ -1,22 +1,12 @@
 "use client";
-import { Provider } from "react-redux";
-import { store } from "@/lib/store/redux";
-import { ResumeForm } from "@/components/ResumeForm";
-import { Resume } from "@/components/Resume";
 
-export default function Create() {
+import { CVForm } from "@/components/cv-builder/cv-form";
+
+export default function CVBuilder() {
   return (
-    <Provider store={store}>
-      <main className="flex min-h-screen w-full flex-col scroll-smooth container p-8">
-        <div className="grid grid-cols-3 md:grid-cols-6">
-          <div className="col-span-3">
-            <ResumeForm />
-          </div>
-          <div className="col-span-3">
-            <Resume />
-          </div>
-        </div>
-      </main>
-    </Provider>
+    <div className="flex flex-col lg:flex-row min-h-screen gap-8 p-4 md:p-8 w-full">
+      <CVForm />
+      <div className="w-full bg-gray-700 rounded-sm animate-pulse" />
+    </div>
   );
 }

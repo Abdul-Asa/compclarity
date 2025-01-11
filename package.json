@@ -62,7 +62,7 @@
     "embla-carousel-autoplay": "^8.0.0-rc22",
     "embla-carousel-react": "^8.5.1",
     "input-otp": "^1.4.1",
-    "jotai": "^2.10.4",
+    "jotai": "^2.11.0",
     "libphonenumber-js": "^1.11.9",
     "lucide-react": "^0.372.0",
     "mini-svg-data-uri": "^1.4.4",

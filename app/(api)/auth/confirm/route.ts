@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 import { MAIN_URL } from "@/lib/config/env";
-import { getUser } from "@/lib/actions/profile";
+import { getUser } from "@/lib/actions/server-actions";
 
 export async function GET(request: NextRequest) {
   let APP_URL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : MAIN_URL;

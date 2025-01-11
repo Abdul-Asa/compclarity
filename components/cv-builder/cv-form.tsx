@@ -6,12 +6,14 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useAtom } from "jotai";
-import { cvSectionsAtom } from "@/lib/store/jotai";
-import { PersonalSection } from "./personal";
+import { CVSection, cvSectionsAtom } from "./config";
 import { SortableSection } from "./sortabble";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ExperienceSection } from "./experience";
-import { EducationSection } from "./education";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from "../ui/form";
+import { Textarea } from "../ui/textarea";
+import { useForm } from "react-hook-form";
+import { Input } from "../ui/input";
+import { PersonalSection } from "./sections/personal";
 
 export function CVForm() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
@@ -36,23 +38,96 @@ export function CVForm() {
     }
   };
 
-  const renderSection = (section: (typeof sections)[0]) => {
+  const form = useForm();
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
+  const renderSection = (section: CVSection) => {
     switch (section.type) {
-      case "personal":
+      case "profile":
         return <PersonalSection />;
-      case "experience":
-        return <ExperienceSection />;
-      case "education":
-        return <EducationSection />;
-      // Add other section components here
       default:
         return (
           <Card>
             <CardHeader>
               <CardTitle>{section.title}</CardTitle>
+              <CardDescription>{section.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">This section is under development</p>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name={section.type}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{section.title}</FormLabel>
+                        <FormControl>
+                          <Input placeholder="John Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="john@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+1 234 567 890" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Location</FormLabel>
+                        <FormControl>
+                          <Input placeholder="City, Country" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="summary"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Professional Summary</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Brief overview of your professional background and key strengths"
+                            className="min-h-[100px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </form>
+              </Form>
             </CardContent>
           </Card>
         );
@@ -60,7 +135,7 @@ export function CVForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl p-4">
+    <div className="w-full p-4">
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={sections} strategy={verticalListSortingStrategy}>
           {sections.map((section) => (

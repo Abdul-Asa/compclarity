@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserProfile } from "@/lib/actions/tanstack-queries";
+import { fetchUserProfile } from "@/lib/actions/tanstack-actions";
 import { User } from "@/lib/validation/types";
 
 interface Section {

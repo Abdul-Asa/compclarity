@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { EmailSignInSchema } from "@/lib/validation/types";
 import { emailSignInSchema } from "@/lib/validation/schema";
 import { useAction } from "next-safe-action/hooks";
-import { verifyOTP } from "@/lib/actions/profile";
+import { verifyOTP } from "@/lib/actions/server-actions";
 
 interface OTPSignInProps {
   className?: string;

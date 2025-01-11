@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { GoogleSignIn } from "@/components/auth/google-signin";
 import { AppleSignIn } from "@/components/auth/apple-signin";
 import { LinkedInSignIn } from "@/components/auth/linkedin-signin";
-import { getUser } from "@/lib/actions/profile";
+import { getUser } from "@/lib/actions/server-actions";
 import { InfoIcon } from "lucide-react";
 
 export const metadata: Metadata = {

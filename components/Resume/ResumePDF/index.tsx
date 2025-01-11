@@ -11,6 +11,8 @@ import type { Settings, ShowForm } from "@/lib/store/settings";
 import type { Resume } from "@/lib/store/configs";
 import { SuppressResumePDFErrorMessage } from "@/components/Resume/ResumePDF/common/SuppressResumePDFErrorMessage";
 
+import type { JSX } from "react";
+
 /**
  * Note: ResumePDF is supposed to be rendered inside PDFViewer. However,
  * PDFViewer is rendered too slow and has noticeable delay as you enter

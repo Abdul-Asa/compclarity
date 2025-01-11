@@ -11,7 +11,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ProfileFormSchema, User } from "@/lib/validation/types";
 import { profileFormSchema } from "@/lib/validation/schema";
-import { fetchUserProfile } from "@/lib/actions/tanstack-queries";
+import { fetchUserProfile } from "@/lib/actions/tanstack-actions";
 import {
   Dialog,
   DialogContent,
