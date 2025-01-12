@@ -1,46 +1,16 @@
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import { useAtom } from "jotai";
-import { CVSection, cvSectionsAtom } from "./config";
-import { SortableSection } from "./sortabble";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from "../ui/form";
-import { Textarea } from "../ui/textarea";
-import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
+import { CVSection, cvSectionsAtom } from "./store";
 import { PersonalSection } from "./sections/personal";
+import { Sortable, SortableDragHandle, SortableItem } from "../ui/sortable";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { GripVertical } from "lucide-react";
+import { G } from "@react-pdf/renderer";
 
 export function CVForm() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
-
-    if (active.id !== over.id) {
-      setSections((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  };
-
-  const form = useForm();
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const handleSortChange = (newSections: CVSection[]) => {
+    setSections(newSections);
   };
 
   const renderSection = (section: CVSection) => {
@@ -48,103 +18,26 @@ export function CVForm() {
       case "profile":
         return <PersonalSection />;
       default:
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle>{section.title}</CardTitle>
-              <CardDescription>{section.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name={section.type}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{section.title}</FormLabel>
-                        <FormControl>
-                          <Input placeholder="John Doe" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="john@example.com" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone</FormLabel>
-                        <FormControl>
-                          <Input placeholder="+1 234 567 890" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Location</FormLabel>
-                        <FormControl>
-                          <Input placeholder="City, Country" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="summary"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Professional Summary</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Brief overview of your professional background and key strengths"
-                            className="min-h-[100px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        );
+        return null;
     }
   };
 
   return (
-    <div className="w-full p-4">
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={sections} strategy={verticalListSortingStrategy}>
-          {sections.map((section) => (
-            <SortableSection key={section.id} section={section}>
-              {renderSection(section)}
-            </SortableSection>
-          ))}
-        </SortableContext>
-      </DndContext>
+    <div className="w-full p-4 space-y-4">
+      <Sortable value={sections}>
+        {sections.map((section) => (
+          <SortableItem key={section.id} value={section.id}>
+            <div className="relative mb-4">
+              <div className="absolute left-0 top-4 cursor-grab p-2">
+                <SortableDragHandle variant="ghost" size="icon" className="size-8 shrink-0">
+                  <GripVertical className="size-4" aria-hidden="true" />
+                </SortableDragHandle>
+              </div>
+              <div className="pl-10">{renderSection(section)}</div>
+            </div>
+          </SortableItem>
+        ))}
+      </Sortable>
     </div>
   );
 }
