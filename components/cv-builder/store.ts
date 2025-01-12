@@ -20,8 +20,10 @@ export const profileSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   location: z.string().optional(),
-  website: z.string().url("Invalid URL").optional(),
-  summary: z.string().min(10, "Summary must be at least 10 characters"),
+  links: z.array(z.object({
+    name: z.string(),
+    url: z.string()
+  })),
 });
 
 export const educationSchema = z.object({
@@ -70,8 +72,7 @@ const initialCVData: CVData = {
     email: "",
     phone: "",
     location: "",
-    website: "",
-    summary: "",
+    links: [{ name: "GitHub", url: "" }, { name: "LinkedIn", url: "" }, { name: "Portfolio", url: "" }],
   },
   educations: [],
   workExperiences: [],

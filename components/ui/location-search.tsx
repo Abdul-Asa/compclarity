@@ -1,62 +1,48 @@
+"use client";
+
 import { useCallback, useState } from "react";
-import { AutoComplete, type Option } from "./autocomplete";
+import { AutoComplete } from "./autocomplete";
 import { autocomplete } from "@/lib/actions/google";
 import { useDebouncedCallback } from "use-debounce";
-import type { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 
 type LocationSearchProps = {
-  onLocationSelect?: (location: PlaceAutocompleteResult) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
   placeholder?: string;
-  className?: string;
-  value?: Option;
 };
 
-export const LocationSearch = ({
-  onLocationSelect,
-  placeholder = "Search for a city...",
-  className,
-  value,
-}: LocationSearchProps) => {
-  const [options, setOptions] = useState<Option[]>([]);
+export function LocationSearch({ value, onValueChange, placeholder = "Search location..." }: LocationSearchProps) {
+  const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Store the original predictions to map back when selecting
-  const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
-
-  const handleSearch = useDebouncedCallback(async (value: string) => {
-    if (!value) {
+  const handleSearch = useDebouncedCallback(async (search: string) => {
+    if (!search) {
       setOptions([]);
-      setPredictions([]);
       return;
     }
 
     setIsLoading(true);
     try {
-      const results = await autocomplete(value);
-      setPredictions(results);
-
-      // Transform predictions into options format
-      const newOptions = results.map((prediction) => ({
-        value: prediction.place_id,
-        label: prediction.description,
-      }));
-
-      setOptions(newOptions);
+      const predictions = await autocomplete(search);
+      setOptions(
+        predictions.map((prediction) => ({
+          value: prediction.place_id,
+          label: prediction.description,
+        }))
+      );
     } catch (error) {
-      console.error("Failed to fetch locations:", error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   }, 300);
 
   const handleValueChange = useCallback(
-    (option: Option) => {
-      const selectedPrediction = predictions.find((prediction) => prediction.place_id === option.value);
-      if (selectedPrediction && onLocationSelect) {
-        onLocationSelect(selectedPrediction);
-      }
+    (newValue: string) => {
+      onValueChange?.(newValue);
+      handleSearch(newValue);
     },
-    [predictions, onLocationSelect]
+    [handleSearch, onValueChange]
   );
 
   return (
@@ -66,8 +52,8 @@ export const LocationSearch = ({
       onValueChange={handleValueChange}
       isLoading={isLoading}
       placeholder={placeholder}
-      emptyMessage="No locations found."
-      className={className}
+      emptyMessage="No locations found"
+      showEmptyMessage={false}
     />
   );
-};
+}

@@ -2,9 +2,8 @@ import { useAtom } from "jotai";
 import { CVSection, cvSectionsAtom } from "./store";
 import { PersonalSection } from "./sections/personal";
 import { Sortable, SortableDragHandle, SortableItem } from "../ui/sortable";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GripVertical } from "lucide-react";
-import { G } from "@react-pdf/renderer";
 
 export function CVForm() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
@@ -33,7 +32,15 @@ export function CVForm() {
                   <GripVertical className="size-4" aria-hidden="true" />
                 </SortableDragHandle>
               </div>
-              <div className="pl-10">{renderSection(section)}</div>
+              <div className="pl-10">
+                <Card collapsible>
+                  <CardHeader>
+                    <CardTitle>{section.title}</CardTitle>
+                    <CardDescription>{section.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-6">{renderSection(section)}</CardContent>
+                </Card>
+              </div>
             </div>
           </SortableItem>
         ))}
