@@ -10,7 +10,7 @@ import { useAtom } from "jotai";
 import { profileAtom } from "../store";
 import { useEffect } from "react";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { CommandDemo } from "@/components/ui/autocomplete";
+import { AutoComplete } from "@/components/ui/autocomplete";
 
 export function PersonalSection() {
   const [profile, setProfile] = useAtom(profileAtom);
@@ -103,7 +103,19 @@ export function PersonalSection() {
                   <FormItem className="relative">
                     <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <CommandDemo />
+                      <AutoComplete
+                        placeholder="Search location..."
+                        options={[
+                          { label: "London", value: "London" },
+                          { label: "Paris", value: "Paris" },
+                          { label: "New York", value: "New York" },
+                          { label: "Tokyo", value: "Tokyo" },
+                          { label: "Sydney", value: "Sydney" },
+                          { label: "Berlin", value: "Berlin" },
+                          { label: "Madrid", value: "Madrid" },
+                        ]}
+                        emptyMessage={"No results"}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

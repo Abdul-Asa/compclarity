@@ -95,7 +95,18 @@ CardDescription.displayName = "CardDescription";
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const { collapsible, isExpanded } = useCardContext();
-    const contentRef = React.useRef<HTMLDivElement>(null);
+    const [isTransitioning, setIsTransitioning] = React.useState(false);
+
+    React.useEffect(() => {
+      if (collapsible) {
+        setIsTransitioning(true);
+        // 200ms matches the duration-200 transition
+        const timer = setTimeout(() => {
+          setIsTransitioning(false);
+        }, 200);
+        return () => clearTimeout(timer);
+      }
+    }, [isExpanded, collapsible]);
 
     return (
       <div
@@ -108,8 +119,8 @@ const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
           className
         )}
       >
-        <div className={cn("overflow-hidden")}>
-          <div className={cn("p-6 pt-0")} {...props} />
+        <div className={cn((!isExpanded || isTransitioning) && "overflow-hidden")}>
+          <div className={cn("p-6 pt-0 relative")} {...props} />
         </div>
       </div>
     );
