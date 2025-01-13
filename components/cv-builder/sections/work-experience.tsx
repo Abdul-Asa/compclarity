@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CVSection, WorkExperienceData, workExperienceSchema, workExperiencesAtom } from "../store";
-import { useAtom } from "jotai";
+import { CVSection, WorkExperienceData, workExperienceSchema, workExperiencesAtom, customsAtom } from "../store";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +18,8 @@ import { z } from "zod";
 
 export function WorkExperienceSection({ ...section }: CVSection) {
   const [experiences, setExperiences] = useAtom(workExperiencesAtom);
-  const { isVisible } = section;
+  const setCustomExperiences = useSetAtom(customsAtom);
+  const { isVisible, type, id } = section;
 
   const form = useForm<{ data: WorkExperienceData }>({
     resolver: zodResolver(z.object({ data: workExperienceSchema })),
@@ -36,13 +37,15 @@ export function WorkExperienceSection({ ...section }: CVSection) {
   useEffect(() => {
     if (isVisible) {
       const { unsubscribe } = form.watch((value) => {
-        if (value.data) {
+        if (type === "workExperiences") {
           setExperiences(value.data as WorkExperienceData);
+        } else {
+          setCustomExperiences({ id, data: value.data as WorkExperienceData });
         }
       });
       return () => unsubscribe();
     }
-  }, [form.watch, isVisible, setExperiences]);
+  }, [form.watch, isVisible]);
 
   const handleLocationChange = (index: number, value: string) => {
     if (isVisible) {

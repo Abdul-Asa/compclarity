@@ -1,9 +1,9 @@
 import { useAtom } from "jotai";
-import { CVSection, cvSectionsAtom, SectionType, sectionTypes } from "./store";
+import { CVSection, cvSectionsAtom } from "./store";
 import { PersonalSection } from "./sections/personal";
 import { Sortable, SortableDragHandle, SortableItem } from "../ui/sortable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GripVertical } from "lucide-react";
+import { CheckIcon, GripVertical, XIcon } from "lucide-react";
 import { SummarySection } from "./sections/summary";
 import { EducationSection } from "./sections/education";
 import { WorkExperienceSection } from "./sections/work-experience";
@@ -13,9 +13,14 @@ import { nanoid } from "nanoid";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { CustomSection } from "./sections/custom";
+import { useState } from "react";
+import { PencilIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 export function CVForm() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
+  const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
 
   const handleAddCustomSection = () => {
     const newSection: CVSection = {
@@ -28,6 +33,7 @@ export function CVForm() {
       isExpanded: true,
       isDraggable: true,
       isAlwaysVisible: false,
+      isEditable: true,
     };
     setSections([...sections, newSection]);
   };
@@ -63,6 +69,12 @@ export function CVForm() {
     setSections(sections.map((section) => (section.id === sectionId ? { ...section, isVisible } : section)));
   };
 
+  const handleTitleEdit = (sectionId: string, newTitle: string) => {
+    if (!newTitle.trim()) return;
+    setSections(sections.map((section) => (section.id === sectionId ? { ...section, title: newTitle } : section)));
+    setEditingTitleId(null);
+  };
+
   return (
     <div className="w-full p-4 space-y-4">
       <Sortable
@@ -71,7 +83,6 @@ export function CVForm() {
           if (newSections[0].id !== "profile") {
             return;
           }
-
           setSections(newSections);
         }}
       >
@@ -98,7 +109,63 @@ export function CVForm() {
                   onVisibilityChange={(isVisible) => handleSectionVisibility(section.id, isVisible)}
                 >
                   <CardHeader>
-                    <CardTitle>{section.title}</CardTitle>
+                    <div className="flex items-center gap-2">
+                      {editingTitleId === section.id ? (
+                        <div className="flex items-center gap-2 w-full">
+                          <Input
+                            defaultValue={section.title}
+                            className="h-7 py-1 text-lg font-semibold w-[400px]"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                                handleTitleEdit(section.id, e.currentTarget.value);
+                              }
+                            }}
+                            autoFocus
+                          />
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-6"
+                              onClick={() => setEditingTitleId(null)}
+                            >
+                              <XIcon className="size-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={!section.title.trim()}
+                              className="size-6"
+                              onClick={(e) => {
+                                const input = e.currentTarget.parentElement?.previousElementSibling as HTMLInputElement;
+                                if (input?.value.trim()) {
+                                  handleTitleEdit(section.id, input.value);
+                                }
+                              }}
+                            >
+                              <CheckIcon className="size-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <CardTitle
+                          className={cn("flex items-center gap-2", section.isEditable && "hover:cursor-pointer")}
+                        >
+                          {section.title}
+                          {section.isEditable && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-6 p-0"
+                              onClick={() => setEditingTitleId(section.id)}
+                            >
+                              <PencilIcon className="size-4" />
+                              <span className="sr-only">Edit section title</span>
+                            </Button>
+                          )}
+                        </CardTitle>
+                      )}
+                    </div>
                     <CardDescription>{section.description}</CardDescription>
                   </CardHeader>
                   <CardContent className="grid gap-6">{renderSection(section)}</CardContent>

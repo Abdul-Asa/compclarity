@@ -11,27 +11,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: [
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-foreground",
-          "disabled:bg-primary/50 disabled:text-primary-foreground/70",
-        ],
-        destructive: [
-          "bg-destructive/50 text-foreground border border-destructive-secondary/50 hover:bg-destructive hover:border-destructive-secondary",
-          "disabled:bg-destructive/30 disabled:border-destructive-secondary/30 disabled:text-foreground/50",
-        ],
-        outline: [
-          "border border-muted-foreground bg-transparent hover:border-primary-dark hover:bg-primary-light/25 dark:hover:border-primary dark:hover:bg-primary-dark/25",
-          "disabled:border-muted-foreground/40 disabled:text-muted-foreground/40",
-        ],
-        secondary: [
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-          "disabled:bg-secondary/40 disabled:text-secondary-foreground/50",
-        ],
-        ghost: [
-          "hover:bg-accent hover:text-accent-foreground",
-          "disabled:text-muted-foreground/50 disabled:hover:bg-transparent",
-        ],
-        link: ["text-primary underline-offset-4 hover:underline", "disabled:text-primary/40 disabled:no-underline"],
+        default:
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-foreground disabled:bg-primary/50 disabled:text-primary-foreground/70",
+        destructive:
+          "bg-destructive/50 text-foreground border border-destructive-secondary/50 hover:bg-destructive hover:border-destructive-secondary disabled:bg-destructive/30 disabled:border-destructive-secondary/30 disabled:text-foreground/50",
+        outline:
+          "border border-muted-foreground bg-transparent hover:border-primary-dark hover:bg-primary-light/25 dark:hover:border-primary dark:hover:bg-primary-dark/25 disabled:border-muted-foreground/40 disabled:text-muted-foreground/40",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 disabled:bg-secondary/40 disabled:text-secondary-foreground/50",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground disabled:text-muted-foreground/50 disabled:hover:bg-transparent",
+        link: "text-primary underline-offset-4 hover:underline disabled:text-primary/40 disabled:no-underline",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -67,7 +57,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, loading = false, children, disabled, variant, size, asChild = false, tooltip, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const ButtonComponent = (
-      <Comp ref={ref} disabled={loading} className={cn(buttonVariants({ variant, size, className }))} {...props}>
+      <Comp
+        ref={ref}
+        disabled={loading || disabled}
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...props}
+      >
         {loading && <Loader2 className="h-5 w-5 mr-2 animate-spin text-muted" />}
         <Slottable>{children}</Slottable>
       </Comp>

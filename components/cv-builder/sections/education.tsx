@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CVSection, EducationData, educationSchema, educationsAtom } from "../store";
-import { useAtom } from "jotai";
+import { CVSection, EducationData, educationSchema, educationsAtom, customsAtom } from "../store";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,7 +17,8 @@ import Editor from "@/components/editor/cv-editor";
 
 export function EducationSection({ ...section }: CVSection) {
   const [educations, setEducations] = useAtom(educationsAtom);
-  const { isVisible } = section;
+  const setCustomEducations = useSetAtom(customsAtom);
+  const { isVisible, type, id } = section;
 
   const form = useForm<{ data: EducationData }>({
     resolver: zodResolver(z.object({ data: educationSchema })),
@@ -35,13 +36,15 @@ export function EducationSection({ ...section }: CVSection) {
   useEffect(() => {
     if (isVisible) {
       const { unsubscribe } = form.watch((value) => {
-        if (value.data) {
+        if (type === "educations") {
           setEducations(value.data as EducationData);
+        } else {
+          setCustomEducations({ id, data: value.data as EducationData });
         }
       });
       return () => unsubscribe();
     }
-  }, [form.watch, isVisible, setEducations]);
+  }, [form.watch, isVisible]);
 
   const handleLocationChange = (index: number, value: string) => {
     if (isVisible) {

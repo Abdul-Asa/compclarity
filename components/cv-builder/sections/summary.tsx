@@ -4,15 +4,16 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SummaryData, summarySchema, summaryAtom } from "../store";
-import { useAtom } from "jotai";
+import { SummaryData, summarySchema, summaryAtom, customsAtom } from "../store";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { CVSection } from "../store";
 import Editor from "@/components/editor/cv-editor";
 
 export const SummarySection = ({ ...section }: CVSection) => {
   const [summary, setSummary] = useAtom(summaryAtom);
-  const { isVisible } = section;
+  const setCustomSummary = useSetAtom(customsAtom);
+  const { isVisible, type, id } = section;
   const form = useForm<SummaryData>({
     resolver: zodResolver(summarySchema),
     defaultValues: summary,
@@ -22,7 +23,12 @@ export const SummarySection = ({ ...section }: CVSection) => {
   useEffect(() => {
     if (isVisible) {
       const { unsubscribe } = form.watch((value) => {
-        setSummary(value as SummaryData);
+        if (type === "summary") {
+          setSummary(value as SummaryData);
+        } else {
+          setCustomSummary({ id, data: value as SummaryData });
+        }
+        console.log("section", section);
       });
       return () => unsubscribe();
     }

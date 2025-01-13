@@ -16,12 +16,12 @@ import { cn } from "@/lib/utils";
 
 export function SkillsSection({ ...section }: CVSection) {
   const [skills, setSkills] = useAtom(skillsAtom);
-  const { isVisible } = section;
+  const { isVisible, type, id } = section;
 
   const form = useForm<{ data: SkillsData }>({
     resolver: zodResolver(skillsSchema),
     disabled: !isVisible,
-    values: skills,
+    defaultValues: skills,
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -38,7 +38,7 @@ export function SkillsSection({ ...section }: CVSection) {
       });
       return () => unsubscribe();
     }
-  }, [form.watch, isVisible, setSkills]);
+  }, [form.watch, isVisible]);
 
   const handleAppend = () => {
     append({

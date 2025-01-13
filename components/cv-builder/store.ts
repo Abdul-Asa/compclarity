@@ -5,7 +5,6 @@ import * as z from "zod"
 export type SectionType = "profile" | "summary" | "workExperiences" | "educations" | "projects" | "skills" | "custom";
 export type SectionSchema = Omit<SectionType, "custom">;
 
-export const sectionTypes = ["profile", "summary", "workExperiences", "educations", "projects", "skills"] as const;
 export interface CVSection {
   id: string;
   type: SectionType;
@@ -16,15 +15,16 @@ export interface CVSection {
   isExpanded?: boolean;
   isDraggable?: boolean;
   isAlwaysVisible?: boolean;
+  isEditable?: boolean;
 }
 
 const initialSections: CVSection[] = [
-  { id: "profile", type: "profile", schema: "profile", title: "Profile", description: "Profile description", isVisible: true, isExpanded: true, isDraggable: false, isAlwaysVisible: true },
-  { id: "summary", type: "summary", schema: "summary", title: "Professional Summary", description: "A brief overview of your professional background", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false },
-  { id: "education", type: "educations", schema: "educations", title: "Education", description: "Your academic background and qualifications", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: true },
-  { id: "workExperience", type: "workExperiences", schema: "workExperiences", title: "Work Experience", description: "Your professional work history", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: true },
-  { id: "projects", type: "projects", schema: "projects", title: "Projects", description: "Highlight your key projects and achievements", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false },
-  { id: "skills", type: "skills", schema: "skills", title: "Skills", description: "List your technical and professional skills", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false },
+  { id: "profile", type: "profile", schema: "profile", title: "Profile", description: "Profile description", isVisible: true, isExpanded: true, isDraggable: false, isAlwaysVisible: true, isEditable: false },
+  { id: "summary", type: "summary", schema: "summary", title: "Professional Summary", description: "A brief overview of your professional background", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false, isEditable: true },
+  { id: "education", type: "educations", schema: "educations", title: "Education", description: "Your academic background and qualifications", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: true, isEditable: true },
+  { id: "workExperience", type: "workExperiences", schema: "workExperiences", title: "Work Experience", description: "Your professional work history", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: true, isEditable: true },
+  { id: "projects", type: "projects", schema: "projects", title: "Projects", description: "Highlight your key projects and achievements", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false, isEditable: true },
+  { id: "skills", type: "skills", schema: "skills", title: "Skills", description: "List your technical and professional skills", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false, isEditable: true },
 ];
    
 
@@ -87,9 +87,10 @@ export const projectSchema = z.array(z.object({
   technologies: z.array(z.string()).default([]),
 }));
 
-export const customSchema = z.object({
+export const customSchema = z.array(z.object({
+  id: z.string(),
   data: z.union([summarySchema, educationSchema, workExperienceSchema, skillsSchema, projectSchema])
-});
+}));
 
 // Define the complete CV data structure
 export const cvDataSchema = z.object({
@@ -99,7 +100,7 @@ export const cvDataSchema = z.object({
   workExperiences: z.object({ data: workExperienceSchema }),
   skills: z.object({ data: skillsSchema }),
   projects: z.object({ data: projectSchema }),
-  customs: customSchema,
+  customs: z.object({ data: customSchema }),
 });
 
 // Create types from schemas
@@ -203,8 +204,22 @@ export const projectsAtom = atom(
 
 export const customsAtom = atom(
   (get) => get(cvDataAtom).customs,
-  (get, set, update: CustomData) => {
-    set(cvDataAtom, { ...get(cvDataAtom), customs: update });
+  (get, set, update: { id: string, data: any }) => {
+    const currentCustoms = get(cvDataAtom).customs.data;
+    const existingIndex = currentCustoms.findIndex(custom => custom.id === update.id);
+    
+    const newCustoms = existingIndex >= 0
+      ? currentCustoms.map((custom, index) => 
+          index === existingIndex ? { ...custom, data: update.data } : custom
+        )
+      : [...currentCustoms, { id: update.id, data: update.data }];
+
+    set(cvDataAtom, { 
+      ...get(cvDataAtom), 
+      customs: { data: newCustoms }
+    });
   }
 );
+
+
 
