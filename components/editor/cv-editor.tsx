@@ -72,7 +72,7 @@ const Editor = ({ content, onChange, disabled, placeholder, className }: EditorP
     extensions: extensions as Extension[],
     content: content,
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
+      const html = editor.getText();
       onChange?.(html);
     },
     immediatelyRender: false,

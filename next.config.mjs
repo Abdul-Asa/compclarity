@@ -24,12 +24,16 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
+  },
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
   //   experimental: {
   //     instrumentationHook: true,
   // }
-  transpilePackages: ["@react-pdf/renderer"],
+  // transpilePackages: ["@react-pdf/renderer"],
 };
 
 export default nextConfig;

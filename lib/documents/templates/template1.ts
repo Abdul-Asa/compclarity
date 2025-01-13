@@ -1,6 +1,6 @@
 import { stripIndent, source } from 'common-tags'
 import { WHITESPACE } from './constants'
-import { FormValues, Generator } from '../../types'
+import { FormValues, Generator } from '../types'
 
 const generator: Generator = {
   profileSection(basics) {
@@ -192,8 +192,8 @@ const generator: Generator = {
           line1 += `{\\textbf{${name}}}`
         }
 
-        if (keywords) {
-          line1 += ` {\\sl ${keywords.join(', ')}} `
+        if (keywords && keywords.length > 0 && keywords.some(k => k.trim())) {
+          line1 += ` {\\sl ${keywords.filter(k => k.trim()).join(', ')}} `
         }
 
         if (url) {
@@ -213,7 +213,7 @@ const generator: Generator = {
           ${line2}
           \\vspace*{2mm}
         `
-      })}
+      }).filter(Boolean).join('\n')}
     `
   },
 

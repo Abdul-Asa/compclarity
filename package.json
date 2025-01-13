@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:types": "source .env.local && supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts"
+    "db:types": "source .env.local && supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts",
+    "postinstall": "cp node_modules/swiftlatex/dist/swift*.js node_modules/swiftlatex/dist/*.wasm public"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -63,6 +64,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "common-tags": "^1.8.2",
     "country-to-currency": "^1.1.5",
     "date-fns": "^3.6.0",
     "embla-carousel": "^8.0.0-rc22",
@@ -88,6 +90,7 @@
     "react-hook-form": "^7.54.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1",
+    "react-pdf": "^9.2.1",
     "react-phone-number-input": "^3.4.8",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^2.1.7",
@@ -108,6 +111,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.62.10",
     "@types/canvas-confetti": "^1.6.4",
+    "@types/common-tags": "^1.8.4",
     "@types/node": "^20.12.12",
     "@types/react": "^18.3.2",
     "@types/react-copy-to-clipboard": "^5.0.7",

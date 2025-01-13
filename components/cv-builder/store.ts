@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { CVData, CVSection, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
+import { CVData, CVRender, CVSection, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
 
 //Initial Data
 const initialSections: CVSection[] = [
@@ -12,43 +12,94 @@ const initialSections: CVSection[] = [
 ];
 const initialCVData: CVData = {
   profile: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    location: "",
-    links: [{ name: "GitHub", url: "" }, { name: "LinkedIn", url: "" }, { name: "Portfolio", url: "" }],
+    firstName: "John",
+    lastName: "Smith",
+    email: "john.smith@email.com",
+    phone: "+44 7123 456789",
+    location: "San Francisco, CA",
+    links: [
+      { name: "GitHub", url: "https://github.com/johnsmith" },
+      { name: "LinkedIn", url: "https://linkedin.com/in/johnsmith" },
+      { name: "Portfolio", url: "https://johnsmith.dev" }
+    ],
   },
   summary: {
-    content: "",
+    content: "Senior Software Engineer with 8+ years of experience in full-stack development, specializing in React and Node.js. Proven track record of delivering scalable web applications and leading development teams in fast-paced environments.",
   },
   educations: {
     data: [
       {
-        school: "",
-        degree: "",
-        fieldOfStudy: "",
-        location: "",
-        startDate: "",
-        endDate: "",
-        description: "<ul class=\"list-disc\"><li><p></p></li></ul>",
+        school: "University of California, Berkeley",
+        degree: "Bachelor of Science",
+        fieldOfStudy: "Computer Science",
+        location: "Berkeley, CA",
+        startDate: "2012",
+        endDate: "2016",
+        description: "• Graduated with Honors (3.8 GPA)\n• Teaching Assistant for Data Structures course\n• President of Computer Science Club",
       }
     ],
   },
-  workExperiences: { data: [{ company: "", position: "", startDate: "", endDate: "", current: false, description: "<ul class=\"list-disc\"><li><p></p></li></ul>" }] },
-  skills: { data: [{ category: "", skills: [] }] },
+  workExperiences: {
+    data: [
+      {
+        company: "Tech Solutions Inc.",
+        position: "Senior Software Engineer",
+        startDate: "2020",
+        endDate: "",
+        current: true,
+        description: "• Led development of microservices architecture serving 1M+ users\n• Mentored junior developers and conducted code reviews\n• Reduced application load time by 40% through optimization"
+      },
+      {
+        company: "Innovation Labs",
+        position: "Software Engineer",
+        startDate: "2016",
+        endDate: "2020",
+        current: false,
+        description: "• Developed and maintained React-based dashboard\n• Implemented CI/CD pipeline reducing deployment time by 60%\n• Collaborated with UX team to improve user experience"
+      }
+    ]
+  },
+  skills: {
+    data: [
+      {
+        category: "Programming Languages",
+        skills: ["JavaScript", "TypeScript", "Python", "Java"]
+      },
+      {
+        category: "Frontend",
+        skills: ["React", "Next.js", "Vue.js", "HTML5", "CSS3", "TailwindCSS"]
+      },
+      {
+        category: "Backend",
+        skills: ["Node.js", "Express", "PostgreSQL", "MongoDB", "REST APIs"]
+      }
+    ]
+  },
   projects: {
-    data: [{
-      name: "",
-      role: "",
-      organization: "",
-      url: "",
-      startDate: "",
-      endDate: "",
-      current: false,
-      description: "<ul class=\"list-disc\"><li><p></p></li></ul>",
-      technologies: [],
-    }]
+    data: [
+      {
+        name: "E-commerce Platform",
+        role: "Lead Developer",
+        organization: "Tech Solutions Inc.",
+        url: "https://project-demo.com",
+        startDate: "2021",
+        endDate: "2022",
+        current: false,
+        description: "• Built scalable e-commerce platform handling 100K+ daily transactions\n• Implemented secure payment processing system\n• Integrated inventory management system",
+        technologies: ["React", "Node.js", "PostgreSQL", "Redis", "AWS"]
+      },
+      {
+        name: "Analytics Dashboard",
+        role: "Frontend Developer",
+        organization: "Innovation Labs",
+        url: "https://analytics-demo.com",
+        startDate: "2019",
+        endDate: "2020",
+        current: false,
+        description: "• Developed real-time analytics dashboard\n• Integrated multiple data sources and APIs\n• Implemented responsive design for mobile users",
+        technologies: ["React", "D3.js", "GraphQL", "Material-UI"]
+      }
+    ]
   },
   customs: { data: [] }
 };
@@ -125,5 +176,10 @@ export const customsAtom = atom(
   }
 );
 
+export const cvRenderAtom = atom<CVRender>({
+  url: "",
+  isLoading: false,
+  isError: false,
+});
 
 

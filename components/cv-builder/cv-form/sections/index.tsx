@@ -1,5 +1,6 @@
+"use client";
 import { useAtom } from "jotai";
-import { cvSectionsAtom } from "@/components/cv-builder/store";
+import { cvDataAtom, cvRenderAtom, cvSectionsAtom } from "@/components/cv-builder/store";
 import { PersonalSection } from "./personal";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,15 +14,129 @@ import { nanoid } from "nanoid";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { CustomSection } from "./custom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PencilIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { CVSection } from "@/components/cv-builder/types";
+import { CVData, CVSection } from "@/components/cv-builder/types";
+import { Basics, Education, FormValues, Project, Skill, Work } from "@/lib/documents/types";
+import getTemplateData from "@/lib/documents/templates";
+import latex from "@/lib/documents/latex";
+
+async function generateResume(formData: FormValues): Promise<string> {
+  const { texDoc, opts } = getTemplateData(formData);
+  return latex(texDoc, opts);
+}
+
+// const formData = {
+//   selectedTemplate: 1,
+//   headings: { work: "", education: "rhrhr", skills: "", projects: "projects", awards: "fff" },
+//   basics: { name: "ffff", phone: "07479083186", website: "ffffffff", location: { address: "ffff" }, email: "proe" },
+//   education: [
+//     {
+//       institution: "rhrhr",
+//       location: "rbrbr",
+//       area: "rhrhrj",
+//       studyType: "rhrh",
+//       startDate: "rhrh",
+//       endDate: "rhrh",
+//       gpa: "rhrh",
+//     },
+//     {},
+//   ],
+//   work: [{ company: "", location: "", position: "", website: "", startDate: "", endDate: "", highlights: [""] }],
+//   skills: [{ name: "", level: "", keywords: [""] }],
+//   projects: [{ name: "pipw", description: "hhhhn", url: "llink", keywords: ["h", "g"] }, { keywords: [""] }],
+//   awards: [{ title: "ffff", date: "ffff", awarder: "fff", summary: "fffff" }],
+//   sections: ["templates", "profile", "education", "work", "skills", "projects", "awards"],
+// };
+const formatCVDataToFormValues = (cvData: CVData, sections: CVSection[]): FormValues => {
+  // Format basics/profile data
+  const basics: Basics = {
+    name: `${cvData.profile.firstName} ${cvData.profile.lastName}`,
+    email: cvData.profile.email,
+    phone: cvData.profile.phone,
+    location: cvData.profile.location
+      ? {
+          city: cvData.profile.location,
+        }
+      : undefined,
+    profiles: cvData.profile.links.map((link) => ({
+      url: link.url,
+    })),
+  };
+
+  // Format work experience
+  const work: Work[] = cvData.workExperiences.data.map((exp) => ({
+    company: exp.company,
+    position: exp.position,
+    startDate: exp.startDate,
+    endDate: exp.endDate || "Present",
+    location: exp.location,
+    highlights: exp.description ? exp.description.split("\n").filter(Boolean) : [],
+  }));
+
+  // Format education
+  const education: Education[] = cvData.educations.data.map((edu) => ({
+    institution: edu.school,
+    area: edu.fieldOfStudy,
+    studyType: edu.degree,
+    startDate: edu.startDate,
+    endDate: edu.endDate,
+    location: edu.location,
+  }));
+
+  // Format skills
+  const skills: Skill[] = cvData.skills.data.map((skillGroup) => ({
+    name: skillGroup.category,
+    keywords: skillGroup.skills,
+  }));
+
+  // Format projects
+  const projects: Project[] = cvData.projects.data.map((proj) => ({
+    name: proj.name,
+    description: proj.description,
+    startDate: proj.startDate,
+    endDate: proj.endDate,
+    url: proj.url,
+    keywords: proj.technologies,
+    highlights: proj.description ? proj.description.split("\n").filter(Boolean) : [],
+  }));
+
+  return {
+    basics,
+    work,
+    education,
+    skills,
+    projects,
+    sections: sections
+      .map((section) => {
+        // Map your section types to FormValues section types
+        const sectionTypeMap: Record<string, string> = {
+          profile: "profile",
+          educations: "education",
+          workExperiences: "work",
+          skills: "skills",
+          projects: "projects",
+        };
+        return sectionTypeMap[section.type] as any;
+      })
+      .filter(Boolean),
+    selectedTemplate: 1,
+    headings: {
+      education: "Education",
+      work: "Work Experience",
+      skills: "Skills",
+      projects: "Projects",
+    },
+  };
+};
 
 export default function Sections() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
+  const [cvData] = useAtom(cvDataAtom);
+  const [cvRender, setCvRender] = useAtom(cvRenderAtom);
 
   const handleAddCustomSection = () => {
     const newSection: CVSection = {
@@ -76,8 +191,23 @@ export default function Sections() {
     setEditingTitleId(null);
   };
 
+  const handleGenerateRender = async () => {
+    const formData = formatCVDataToFormValues(cvData, sections);
+    setCvRender({ ...cvRender, isLoading: true });
+    try {
+      const newResumeUrl = await generateResume(formData);
+      setCvRender({ ...cvRender, url: newResumeUrl, isLoading: false });
+    } catch (error) {
+      console.error(error);
+      setCvRender({ ...cvRender, isError: true, isLoading: false });
+    }
+  };
+
   return (
     <div className="w-full p-4 space-y-4">
+      <Button type="button" variant="outline" className="w-full" onClick={handleGenerateRender}>
+        Generate
+      </Button>
       <Sortable
         value={sections}
         onValueChange={(newSections) => {

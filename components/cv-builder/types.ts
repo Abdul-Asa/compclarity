@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 // Add new type for section types
+export type CVRender = {
+  url: string;
+  isLoading: boolean;
+  isError: boolean;
+};
 export type SectionType = "profile" | "summary" | "workExperiences" | "educations" | "projects" | "skills" | "custom";
 export type SectionSchema = Omit<SectionType, "custom">;
 export interface CVSection {
