@@ -92,7 +92,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
         <Link href="/tracker" className={navigationMenuTriggerStyle()} onClick={() => trackNav("app_tracker")}>
           Tracker
         </Link>
-        <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
+        {/* <Popover open={isPopoverOpen2} onOpenChange={setIsPopoverOpen2}>
           <PopoverTrigger className={navigationMenuTriggerStyle()}>
             Services{" "}
             <ChevronDown
@@ -130,7 +130,7 @@ const Navbar = ({ user }: { user?: User | null }) => {
               </p>
             </Link>
           </PopoverContent>
-        </Popover>
+        </Popover> */}
       </ul>
 
       <div className="hidden w-[15%] justify-end gap-2 lg:flex">
