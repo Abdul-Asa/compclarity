@@ -4,9 +4,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { CVSection, cvSectionsAtom, ProfileData, profileSchema } from "../store";
+import { cvSectionsAtom, profileAtom } from "../store";
 import { useAtom } from "jotai";
-import { profileAtom } from "../store";
 import { useEffect } from "react";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { LocationSearch } from "@/components/ui/location-search";
@@ -15,6 +14,7 @@ import { Tooltip } from "react-tooltip";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Button } from "@/components/ui/button";
 import { GripVerticalIcon, TrashIcon } from "lucide-react";
+import { CVSection, ProfileData, profileSchema } from "../types";
 
 export function PersonalSection({ ...section }: CVSection) {
   const [profile, setProfile] = useAtom(profileAtom);

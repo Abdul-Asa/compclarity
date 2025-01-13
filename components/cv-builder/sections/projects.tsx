@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CVSection, ProjectData, projectSchema, projectsAtom, skillsAtom } from "../store";
+import { projectsAtom, skillsAtom } from "../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -15,10 +15,11 @@ import { Switch } from "@/components/ui/switch";
 import Editor from "@/components/editor/cv-editor";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { CVSection, ProjectData, projectSchema } from "../types";
 
 export function ProjectsSection({ ...section }: CVSection) {
   const [projects, setProjects] = useAtom(projectsAtom);
-  const [skills, setSkills] = useAtom(skillsAtom);
+  // const [skills, setSkills] = useAtom(skillsAtom);
   const { isVisible } = section;
 
   const form = useForm<{ data: ProjectData }>({

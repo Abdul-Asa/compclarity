@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CVSection, EducationData, educationSchema, educationsAtom, customsAtom } from "../store";
+import { educationsAtom, customsAtom } from "../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -14,6 +14,7 @@ import { GripVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { LocationSearch } from "@/components/ui/location-search";
 import { z } from "zod";
 import Editor from "@/components/editor/cv-editor";
+import { CVSection, educationSchema, EducationData } from "../types";
 
 export function EducationSection({ ...section }: CVSection) {
   const [educations, setEducations] = useAtom(educationsAtom);

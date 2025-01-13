@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { CVSection, cvSectionsAtom } from "./store";
+import { cvSectionsAtom } from "./store";
 import { PersonalSection } from "./sections/personal";
 import { Sortable, SortableDragHandle, SortableItem } from "../ui/sortable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +17,7 @@ import { useState } from "react";
 import { PencilIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { CVSection } from "./types";
 
 export function CVForm() {
   const [sections, setSections] = useAtom(cvSectionsAtom);

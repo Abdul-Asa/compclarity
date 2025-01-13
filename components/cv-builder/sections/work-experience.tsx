@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { CVSection, WorkExperienceData, workExperienceSchema, workExperiencesAtom, customsAtom } from "../store";
+import { workExperiencesAtom, customsAtom } from "../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -15,6 +15,7 @@ import { LocationSearch } from "@/components/ui/location-search";
 import { Switch } from "@/components/ui/switch";
 import Editor from "@/components/editor/cv-editor";
 import { z } from "zod";
+import { CVSection, WorkExperienceData, workExperienceSchema } from "../types";
 
 export function WorkExperienceSection({ ...section }: CVSection) {
   const [experiences, setExperiences] = useAtom(workExperiencesAtom);

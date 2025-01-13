@@ -98,6 +98,7 @@
     "sharp": "^0.33.3",
     "sonner": "^1.7.1",
     "stripe": "^16.12.0",
+    "swiftlatex": "https://github.com/ducaale/SwiftLaTeX/releases/download/v1.0.0-experimental-9902734/swiftlatex-1.0.0-experimental-9902734.tgz",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.0",
