@@ -10,7 +10,7 @@ const initialSections: CVSection[] = [
   { id: "projects", type: "projects", schema: "projects", title: "Projects", description: "Highlight your key projects and achievements", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false, isEditable: true },
   { id: "skills", type: "skills", schema: "skills", title: "Skills", description: "List your technical and professional skills", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: false, isEditable: true },
 ];
-const initialCVData: CVData = {
+export const seededCVData: CVData = {
   profile: {
     firstName: "John",
     lastName: "Smith",
@@ -33,9 +33,9 @@ const initialCVData: CVData = {
         degree: "Bachelor of Science",
         fieldOfStudy: "Computer Science",
         location: "Berkeley, CA",
-        startDate: "2012",
-        endDate: "2016",
-        description: "• Graduated with Honors (3.8 GPA)\n• Teaching Assistant for Data Structures course\n• President of Computer Science Club",
+        startDate: "2012-09",
+        endDate: "2016-05",
+        description: "Graduated with Honors (3.8 GPA)\nTeaching Assistant for Data Structures course\nPresident of Computer Science Club",
       }
     ],
   },
@@ -44,18 +44,18 @@ const initialCVData: CVData = {
       {
         company: "Tech Solutions Inc.",
         position: "Senior Software Engineer",
-        startDate: "2020",
+        startDate: "2020-03",
         endDate: "",
         current: true,
-        description: "• Led development of microservices architecture serving 1M+ users\n• Mentored junior developers and conducted code reviews\n• Reduced application load time by 40% through optimization"
+        description: "Led development of microservices architecture serving 1M+ users\nMentored junior developers and conducted code reviews\nReduced application load time by 40% through optimization"
       },
       {
         company: "Innovation Labs",
         position: "Software Engineer",
-        startDate: "2016",
-        endDate: "2020",
+        startDate: "2016-06",
+        endDate: "2020-02",
         current: false,
-        description: "• Developed and maintained React-based dashboard\n• Implemented CI/CD pipeline reducing deployment time by 60%\n• Collaborated with UX team to improve user experience"
+        description: "Developed and maintained React-based dashboard\nImplemented CI/CD pipeline reducing deployment time by 60%\nCollaborated with UX team to improve user experience"
       }
     ]
   },
@@ -82,10 +82,10 @@ const initialCVData: CVData = {
         role: "Lead Developer",
         organization: "Tech Solutions Inc.",
         url: "https://project-demo.com",
-        startDate: "2021",
-        endDate: "2022",
+        startDate: "2021-04",
+        endDate: "2022-11",
         current: false,
-        description: "• Built scalable e-commerce platform handling 100K+ daily transactions\n• Implemented secure payment processing system\n• Integrated inventory management system",
+        description: "Built scalable e-commerce platform handling 100K+ daily transactions\nImplemented secure payment processing system\nIntegrated inventory management system",
         technologies: ["React", "Node.js", "PostgreSQL", "Redis", "AWS"]
       },
       {
@@ -93,15 +93,43 @@ const initialCVData: CVData = {
         role: "Frontend Developer",
         organization: "Innovation Labs",
         url: "https://analytics-demo.com",
-        startDate: "2019",
-        endDate: "2020",
+        startDate: "2019-07",
+        endDate: "2020-02",
         current: false,
-        description: "• Developed real-time analytics dashboard\n• Integrated multiple data sources and APIs\n• Implemented responsive design for mobile users",
+        description: "Developed real-time analytics dashboard\nIntegrated multiple data sources and APIs\nImplemented responsive design for mobile users",
         technologies: ["React", "D3.js", "GraphQL", "Material-UI"]
       }
     ]
   },
   customs: { data: [] }
+};
+export const initialCVData: CVData = {
+  profile: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    location: "",
+    links: [],
+  },
+  summary: {
+    content: ""
+  },
+  educations: {
+    data: []
+  },
+  workExperiences: {
+    data: []
+  },
+  skills: {
+    data: []
+  },
+  projects: {
+    data: []
+  },
+  customs: {
+    data: []
+  }
 };
 // const initialSettings: SettingsData = {
 //   theme: "light",

@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { cvSectionsAtom, profileAtom } from "../../store";
+import { cvDataAtom, cvSectionsAtom, profileAtom } from "../../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -27,9 +27,13 @@ export function PersonalSection({ ...section }: CVSection) {
   });
 
   useEffect(() => {
+    form.reset(profile);
+  }, [profile, form]);
+
+  useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        setProfile(value as ProfileData);
+      const { unsubscribe } = form.watch((value, { type }) => {
+        if (type==="change") setProfile(value as ProfileData);
       });
       return () => unsubscribe();
     }

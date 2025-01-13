@@ -35,14 +35,20 @@ export function ProjectsSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (value.data) {
-          setProjects(value.data as ProjectData);
+      const { unsubscribe } = form.watch((value, { type: eventType }) => {
+        if (eventType === "change") {
+          if (value.data) {
+            setProjects(value.data as ProjectData);
+          }
         }
       });
       return () => unsubscribe();
     }
-  }, [form.watch, isVisible, setProjects]);
+  }, [form.watch, isVisible]);
+
+  useEffect(() => {
+    form.reset(projects);
+  }, [projects, form]);
 
   const handleAppend = () => {
     append({

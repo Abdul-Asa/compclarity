@@ -36,16 +36,22 @@ export function EducationSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (type === "educations") {
-          setEducations(value.data as EducationData);
-        } else {
-          setCustomEducations({ id, data: value.data as EducationData });
+      const { unsubscribe } = form.watch((value, { type: eventType }) => {
+        if (eventType === "change") {
+          if (type === "educations") {
+            setEducations(value.data as EducationData);
+          } else {
+            setCustomEducations({ id, data: value.data as EducationData });
+          }
         }
       });
       return () => unsubscribe();
     }
   }, [form.watch, isVisible]);
+
+  useEffect(() => {
+    form.reset(educations);
+  }, [educations, form]);
 
   const handleLocationChange = (index: number, value: string) => {
     if (isVisible) {

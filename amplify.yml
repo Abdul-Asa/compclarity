@@ -24,7 +24,6 @@ frontend:
         - echo "GOOGLE_API_KEY=$GOOGLE_API_KEY" >> .env
         - node -v
         - npm -v
-        - npm run postinstall
         - npm run build
   artifacts:
     baseDirectory: .next

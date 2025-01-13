@@ -30,6 +30,10 @@ export function WorkExperienceSection({ ...section }: CVSection) {
     },
   });
 
+  useEffect(() => {
+    form.reset({ data: experiences.data });
+  }, [experiences, form]);
+
   const { fields, append, remove, move } = useFieldArray({
     control: form.control,
     name: "data",

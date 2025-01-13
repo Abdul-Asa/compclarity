@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { skillsAtom } from "../../store";
-import { useAtom } from "jotai";
+import { skillsAtom, customsAtom } from "../../store";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +17,7 @@ import { CVSection, SkillsData, skillsSchema } from "../../types";
 
 export function SkillsSection({ ...section }: CVSection) {
   const [skills, setSkills] = useAtom(skillsAtom);
+  const setCustomSkills = useSetAtom(customsAtom);
   const { isVisible, type, id } = section;
 
   const form = useForm<{ data: SkillsData }>({
@@ -32,14 +33,22 @@ export function SkillsSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (value.data) {
-          setSkills(value.data as SkillsData);
+      const { unsubscribe } = form.watch((value, { type: eventType }) => {
+        if (eventType === "change") {
+          if (type === "skills") {
+            setSkills(value.data as SkillsData);
+          } else {
+            setCustomSkills({ id, data: value.data as SkillsData });
+          }
         }
       });
       return () => unsubscribe();
     }
   }, [form.watch, isVisible]);
+
+  useEffect(() => {
+    form.reset(skills);
+  }, [skills, form]);
 
   const handleAppend = () => {
     append({
