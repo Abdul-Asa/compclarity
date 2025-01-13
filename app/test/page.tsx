@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
-import { Plus } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/lib/hooks/useToast";
 import { ModeToggle } from "@/components/providers/ThemeProvider";
@@ -14,6 +14,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { AutoComplete } from "@/components/ui/autocomplete";
+import { FileUploader } from "@/components/ui/file-upload";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
+import { DateTimeInput } from "@/components/ui/datetime-input";
+import { SimpleTimePicker } from "@/components/ui/datetime-simple";
 
 const ColorBlock = ({ className, colorName }: { className: string; colorName: string }) => (
   <TooltipProvider>
@@ -246,6 +252,62 @@ const components = {
             </Modal>
           );
         },
+      },
+    ],
+  },
+  inputs: {
+    title: "Input",
+    description: "Input component",
+    variants: [
+      {
+        title: "Different Inputs",
+        component: (
+          <div className="grid grid-cols-3 gap-4">
+            <Input placeholder="Default" />
+            <Input placeholder="With Icon" icon={<User />} />
+            <Input placeholder="Disabled" disabled />
+            <Input type="password" placeholder="Password" toggleAllowed />
+            <Input type="email" placeholder="Email" />
+            <PhoneInput placeholder="Number" />
+            <AutoComplete
+              placeholder="autocomplete"
+              options={[
+                { label: "London", value: "london" },
+                { label: "Paris", value: "paris" },
+                { label: "New York", value: "new-york" },
+              ]}
+            />
+            <AutoComplete
+              placeholder="autocomplete loading"
+              options={[
+                { label: "London", value: "london" },
+                { label: "Paris", value: "paris" },
+                { label: "New York", value: "new-york" },
+              ]}
+              isLoading
+            />
+            <Input type="date" placeholder="Date" />
+            <Input type="time" placeholder="Time" />
+            <Input type="month" placeholder="Month" />
+            <Input type="color" placeholder="Color" />
+            <Input type="file" placeholder="File" />
+            <Input type="range" placeholder="Range" />
+          </div>
+        ),
+      },
+      {
+        title: "File Uploader",
+        component: <FileUploader />,
+      },
+      {
+        title: "Date Pickers",
+        component: (
+          <div className="grid grid-cols-3 gap-4">
+            <DateTimePicker value={new Date(2025, 1, 1, 12, 0, 0)} onChange={() => {}} />
+            <DateTimeInput value={new Date(2025, 1, 1, 12, 0, 0)} onChange={() => {}} />
+            <SimpleTimePicker value={new Date(2025, 1, 1, 12, 0, 0)} onChange={() => {}} />
+          </div>
+        ),
       },
     ],
   },

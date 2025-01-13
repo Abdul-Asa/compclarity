@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { ProfileData, profileSchema } from "../store";
+import { CVSection, cvSectionsAtom, ProfileData, profileSchema } from "../store";
 import { useAtom } from "jotai";
 import { profileAtom } from "../store";
 import { useEffect } from "react";
@@ -16,23 +16,30 @@ import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sort
 import { Button } from "@/components/ui/button";
 import { GripVerticalIcon, TrashIcon } from "lucide-react";
 
-export function PersonalSection() {
+export function PersonalSection({ ...section }: CVSection) {
   const [profile, setProfile] = useAtom(profileAtom);
+  const { isVisible } = section;
+
   const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
     defaultValues: profile,
+    disabled: !isVisible,
   });
 
   useEffect(() => {
-    const { unsubscribe } = form.watch((value) => {
-      setProfile(value as ProfileData);
-    });
-    return () => unsubscribe();
-  }, [form.watch]);
+    if (isVisible) {
+      const { unsubscribe } = form.watch((value) => {
+        setProfile(value as ProfileData);
+      });
+      return () => unsubscribe();
+    }
+  }, [form.watch, isVisible]);
 
   const handleLocationChange = (value: string) => {
-    setProfile({ ...profile, location: value });
-    form.setValue("location", value);
+    if (isVisible) {
+      setProfile({ ...profile, location: value });
+      form.setValue("location", value);
+    }
   };
 
   const { fields, append, move, remove } = useFieldArray({
@@ -134,7 +141,12 @@ export function PersonalSection() {
                   <Tooltip id="location" />
                 </FormLabel>
                 <FormControl>
-                  <LocationSearch {...field} onValueChange={handleLocationChange} placeholder="Search location..." />
+                  <LocationSearch
+                    {...field}
+                    onValueChange={handleLocationChange}
+                    disabled={!isVisible}
+                    placeholder="Search location..."
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

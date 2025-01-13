@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, type KeyboardEvent } from "react";
 
 import { Skeleton } from "./skeleton";
 
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type Option = Record<"value" | "label", string> & Record<string, string>;
@@ -107,14 +107,15 @@ export const AutoComplete = ({
               "rounded-lg",
               // Only add ring when there are filtered items to show or when empty message should be displayed
               (options.some((option) => option.label.toLowerCase().includes(inputValue.toLowerCase())) ||
-                showEmptyMessage) &&
+                showEmptyMessage ||
+                isLoading) &&
                 "ring-1 ring-border"
             )}
           >
             {isLoading ? (
               <CommandPrimitive.Loading>
-                <div className="p-1">
-                  <Skeleton className="h-8 w-full animate-pulse" />
+                <div className="p-1 flex h-8 justify-center items-center">
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 </div>
               </CommandPrimitive.Loading>
             ) : null}

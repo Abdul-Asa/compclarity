@@ -9,9 +9,15 @@ type LocationSearchProps = {
   value?: string;
   onValueChange?: (value: string) => void;
   placeholder?: string;
+  disabled?: boolean;
 };
 
-export function LocationSearch({ value, onValueChange, placeholder = "Search location..." }: LocationSearchProps) {
+export function LocationSearch({
+  value,
+  onValueChange,
+  placeholder = "Search location...",
+  disabled,
+}: LocationSearchProps) {
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +41,7 @@ export function LocationSearch({ value, onValueChange, placeholder = "Search loc
     } finally {
       setIsLoading(false);
     }
-  }, 300);
+  }, 800);
 
   const handleValueChange = useCallback(
     (newValue: string) => {
@@ -47,6 +53,7 @@ export function LocationSearch({ value, onValueChange, placeholder = "Search loc
 
   return (
     <AutoComplete
+      disabled={disabled}
       options={options}
       value={value}
       onValueChange={handleValueChange}

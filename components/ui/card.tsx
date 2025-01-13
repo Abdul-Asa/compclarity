@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { Eye, EyeOff, ChevronDown } from "lucide-react";
 import { Button } from "./button";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -9,12 +9,18 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultExpanded?: boolean;
   onExpand?: (isExpanded: boolean) => void;
   isExpanded?: boolean;
+  isVisible?: boolean;
+  onVisibilityChange?: (isVisible: boolean) => void;
+  isAlwaysVisible?: boolean;
 }
 
 const CardContext = React.createContext<{
   collapsible: boolean;
   isExpanded: boolean;
+  isVisible: boolean;
+  isAlwaysVisible: boolean;
   onExpand: () => void;
+  onVisibilityChange: () => void;
 }>({} as any);
 
 const useCardContext = () => {
@@ -26,27 +32,64 @@ const useCardContext = () => {
 };
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, collapsible = false, defaultExpanded = true, ...props }, ref) => {
+  (
+    {
+      className,
+      collapsible = false,
+      defaultExpanded = true,
+      isVisible = true,
+      isExpanded,
+      onExpand,
+      onVisibilityChange,
+      isAlwaysVisible = false,
+      ...props
+    },
+    ref
+  ) => {
     const [localExpanded, setLocalExpanded] = React.useState(defaultExpanded);
+    const [localVisible, setLocalVisible] = React.useState(isVisible);
 
-    // Determine if we're in controlled or uncontrolled mode
-    const isControlled = props.isExpanded !== undefined;
-    const isExpanded = isControlled && props.isExpanded ? props.isExpanded : localExpanded;
+    const isControlled = isExpanded !== undefined;
+    const currentExpanded = isControlled ? isExpanded : localExpanded;
+    const currentVisibility = isVisible !== undefined ? isVisible : localVisible;
 
     const handleExpand = () => {
       if (isControlled) {
-        // In controlled mode, call the parent's onExpand
-        props.onExpand?.(!isExpanded);
+        onExpand?.(!currentExpanded);
       } else {
-        // In uncontrolled mode, manage internal state
-        setLocalExpanded(!isExpanded);
-        props.onExpand?.(!isExpanded);
+        setLocalExpanded(!currentExpanded);
+        onExpand?.(!currentExpanded);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (onVisibilityChange) {
+        onVisibilityChange(!currentVisibility);
+      } else {
+        setLocalVisible(!currentVisibility);
       }
     };
 
     return (
-      <CardContext.Provider value={{ collapsible, isExpanded, onExpand: handleExpand }}>
-        <div ref={ref} className={cn("rounded-sm border bg-card text-card-foreground", className)} {...props} />
+      <CardContext.Provider
+        value={{
+          collapsible,
+          isExpanded: currentExpanded,
+          isVisible: currentVisibility,
+          isAlwaysVisible,
+          onExpand: handleExpand,
+          onVisibilityChange: handleVisibilityChange,
+        }}
+      >
+        <div
+          ref={ref}
+          className={cn(
+            "rounded-sm border bg-card text-card-foreground transition-opacity duration-200",
+            !currentVisibility && "opacity-50",
+            className
+          )}
+          {...props}
+        />
       </CardContext.Provider>
     );
   }
@@ -58,18 +101,37 @@ interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(({ className, ...props }, ref) => {
-  const { collapsible, isExpanded, onExpand } = useCardContext();
+  const { collapsible, isExpanded, isVisible, onExpand, onVisibilityChange, isAlwaysVisible } = useCardContext();
 
   return (
     <div className={cn("flex justify-between items-center w-full p-6")}>
-      <div ref={ref} className={cn("flex flex-col w-full space-y-1.5 ", className)} {...props}>
+      <div ref={ref} className={cn("flex flex-col w-full space-y-1.5", className)} {...props}>
         {props.children}
       </div>
       {collapsible && (
-        <div className="flex items-center gap-1 justify-end">
+        <div className="flex items-center gap-2">
           {props.sideComponent}
-          <Button variant="ghost" size="icon" onClick={collapsible ? onExpand : undefined} className="size-6">
-            <ChevronDown className={cn(" transition-transform duration-200", isExpanded && "rotate-180")} />
+          {!isAlwaysVisible && (
+            <Button
+              tooltip={isVisible ? "Hide section" : "Show section"}
+              variant="ghost"
+              size="icon"
+              onClick={() => onVisibilityChange()}
+              className="size-6"
+              aria-label={isVisible ? "Hide section" : "Show section"}
+            >
+              {isVisible ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+            </Button>
+          )}
+          <Button
+            tooltip={isExpanded ? "Collapse section" : "Expand section"}
+            variant="ghost"
+            size="icon"
+            onClick={onExpand}
+            className="size-6"
+            aria-label={isExpanded ? "Collapse section" : "Expand section"}
+          >
+            <ChevronDown className={cn("transition-transform duration-200", isExpanded && "rotate-180")} />
           </Button>
         </div>
       )}
@@ -94,19 +156,7 @@ CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
-    const { collapsible, isExpanded } = useCardContext();
-    const [isTransitioning, setIsTransitioning] = React.useState(false);
-
-    React.useEffect(() => {
-      if (collapsible) {
-        setIsTransitioning(true);
-        // 200ms matches the duration-200 transition
-        const timer = setTimeout(() => {
-          setIsTransitioning(false);
-        }, 200);
-        return () => clearTimeout(timer);
-      }
-    }, [isExpanded, collapsible]);
+    const { collapsible, isExpanded, isVisible } = useCardContext();
 
     return (
       <div
@@ -116,10 +166,11 @@ const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
           collapsible && "grid",
           collapsible && !isExpanded && "grid-rows-[0fr]",
           collapsible && isExpanded && "grid-rows-[1fr]",
+          !isVisible && "[&_input]:disabled [&_textarea]:disabled [&_button]:disabled",
           className
         )}
       >
-        <div className={cn((!isExpanded || isTransitioning) && "overflow-hidden")}>
+        <div className={cn("overflow-hidden")}>
           <div className={cn("p-6 pt-0 relative")} {...props} />
         </div>
       </div>

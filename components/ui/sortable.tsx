@@ -193,6 +193,7 @@ interface SortableItemContextProps {
   attributes: React.HTMLAttributes<HTMLElement>;
   listeners: DraggableSyntheticListeners | undefined;
   isDragging?: boolean;
+  disabled?: boolean;
 }
 
 const SortableItemContext = React.createContext<SortableItemContextProps>({
@@ -232,23 +233,34 @@ interface SortableItemProps extends SlotProps {
    * @type boolean | undefined
    */
   asChild?: boolean;
+
+  /**
+   * Specifies whether the item should be disabled.
+   * @default false
+   * @type boolean | undefined
+   */
+  disabled?: boolean;
 }
 
 const SortableItem = React.forwardRef<HTMLDivElement, SortableItemProps>(
-  ({ value, asTrigger, asChild, className, ...props }, ref) => {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: value });
+  ({ value, asTrigger, asChild, className, disabled, ...props }, ref) => {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+      id: value,
+      disabled,
+    });
 
     const context = React.useMemo<SortableItemContextProps>(
       () => ({
         attributes,
         listeners,
         isDragging,
+        disabled,
       }),
-      [attributes, listeners, isDragging]
+      [attributes, listeners, isDragging, disabled]
     );
     const style: React.CSSProperties = {
       opacity: isDragging ? 0.5 : 1,
-      transform: CSS.Translate.toString(transform),
+      transform: disabled ? undefined : CSS.Translate.toString(transform),
       transition,
     };
 
@@ -281,13 +293,16 @@ interface SortableDragHandleProps extends ButtonProps {
 
 const SortableDragHandle = React.forwardRef<HTMLButtonElement, SortableDragHandleProps>(
   ({ className, ...props }, ref) => {
-    const { attributes, listeners, isDragging } = useSortableItem();
+    const { attributes, listeners, isDragging, disabled } = useSortableItem();
 
     return (
       <Button
         ref={composeRefs(ref)}
         data-state={isDragging ? "dragging" : undefined}
-        className={cn("cursor-grab data-[state=dragging]:cursor-grabbing", className)}
+        className={cn(
+          disabled ? "cursor-not-allowed opacity-50" : "cursor-grab data-[state=dragging]:cursor-grabbing",
+          className
+        )}
         {...attributes}
         {...listeners}
         {...props}
