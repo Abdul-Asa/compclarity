@@ -7,18 +7,31 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-foreground",
-        destructive:
+        default: [
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-foreground",
+          "disabled:bg-primary/50 disabled:text-primary-foreground/70",
+        ],
+        destructive: [
           "bg-destructive/50 text-foreground border border-destructive-secondary/50 hover:bg-destructive hover:border-destructive-secondary",
-        outline:
+          "disabled:bg-destructive/30 disabled:border-destructive-secondary/30 disabled:text-foreground/50",
+        ],
+        outline: [
           "border border-muted-foreground bg-transparent hover:border-primary-dark hover:bg-primary-light/25 dark:hover:border-primary dark:hover:bg-primary-dark/25",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "disabled:border-muted-foreground/40 disabled:text-muted-foreground/40",
+        ],
+        secondary: [
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+          "disabled:bg-secondary/40 disabled:text-secondary-foreground/50",
+        ],
+        ghost: [
+          "hover:bg-accent hover:text-accent-foreground",
+          "disabled:text-muted-foreground/50 disabled:hover:bg-transparent",
+        ],
+        link: ["text-primary underline-offset-4 hover:underline", "disabled:text-primary/40 disabled:no-underline"],
       },
       size: {
         default: "h-10 px-4 py-2",

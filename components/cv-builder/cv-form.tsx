@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { CVSection, cvSectionsAtom } from "./store";
+import { CVSection, cvSectionsAtom, SectionType, sectionTypes } from "./store";
 import { PersonalSection } from "./sections/personal";
 import { Sortable, SortableDragHandle, SortableItem } from "../ui/sortable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,12 +7,35 @@ import { GripVertical } from "lucide-react";
 import { SummarySection } from "./sections/summary";
 import { EducationSection } from "./sections/education";
 import { WorkExperienceSection } from "./sections/work-experience";
+import { ProjectsSection } from "./sections/projects";
+import { SkillsSection } from "./sections/skills";
+import { nanoid } from "nanoid";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { CustomSection } from "./sections/custom";
 
 export function CVForm() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
 
+  const handleAddCustomSection = () => {
+    const newSection: CVSection = {
+      id: nanoid(),
+      type: "custom",
+      title: "Custom Section",
+      schema: "summary",
+      description: "This is a custom section",
+      isVisible: true,
+      isExpanded: true,
+      isDraggable: true,
+      isAlwaysVisible: false,
+    };
+    setSections([...sections, newSection]);
+  };
+
   const renderSection = (section: CVSection) => {
-    switch (section.type) {
+    const type = section.type;
+
+    switch (type) {
       case "profile":
         return <PersonalSection {...section} />;
       case "summary":
@@ -21,6 +44,12 @@ export function CVForm() {
         return <EducationSection {...section} />;
       case "workExperiences":
         return <WorkExperienceSection {...section} />;
+      case "projects":
+        return <ProjectsSection {...section} />;
+      case "skills":
+        return <SkillsSection {...section} />;
+      case "custom":
+        return <CustomSection {...section} />;
       default:
         return null;
     }
@@ -79,6 +108,11 @@ export function CVForm() {
           </SortableItem>
         ))}
       </Sortable>
+
+      <Button type="button" variant="outline" className="w-full" onClick={handleAddCustomSection}>
+        <PlusIcon className="mr-2 size-4" />
+        Add Custom Section
+      </Button>
     </div>
   );
 }

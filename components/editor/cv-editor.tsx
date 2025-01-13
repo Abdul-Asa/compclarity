@@ -14,8 +14,8 @@ import { RedoToolbar } from "./components/redo";
 import { StrikeThroughToolbar } from "./components/strikethrough";
 import { Separator } from "../ui/separator";
 import { UndoToolbar } from "./components/undo";
-import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "../ui/skeleton";
 
 const extensions = [
   StarterKit.configure({
@@ -79,7 +79,7 @@ const Editor = ({ content, onChange, disabled, placeholder, className }: EditorP
   });
 
   if (!editor) {
-    return <Textarea placeholder={placeholder} value={content} onChange={(e) => onChange?.(e.target.value)} />;
+    return <Skeleton className="h-20 bg-muted animate-pulse  rounded-md" />;
   }
 
   return (
