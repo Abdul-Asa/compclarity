@@ -110,7 +110,19 @@ export const initialCVData: CVData = {
     email: "",
     phone: "",
     location: "",
-    links: [],
+    links: [{
+      name: "GitHub",
+      url: ""
+    },
+    {
+      name: "LinkedIn",
+      url: ""
+    },
+    {
+      name: "Portfolio",
+      url: ""
+    }
+  ],
   },
   summary: {
     content: ""
@@ -141,7 +153,7 @@ export const initialCVData: CVData = {
 //Atoms
 export const cvSectionsAtom = atom<CVSection[]>(initialSections);
 
-export const cvDataAtom = atom<CVData>(initialCVData);
+export const cvDataAtom = atom<CVData>(seededCVData);
 
 export const profileAtom = atom(
   (get) => get(cvDataAtom).profile,

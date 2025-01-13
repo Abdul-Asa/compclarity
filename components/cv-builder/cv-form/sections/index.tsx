@@ -211,13 +211,6 @@ export default function Sections() {
     setCvData(initialCVData);
   };
 
-  const handleSeedData = () => {
-    setCvRender({ url: "", isLoading: false, isError: false });
-    setSections(sections.map((section) => ({ ...section, isExpanded: true })));
-    setEditingTitleId(null);
-    setCvData(seededCVData);
-  };
-
   return (
     <div className="w-full p-4 space-y-4">
       <div className="flex gap-2">
@@ -226,9 +219,6 @@ export default function Sections() {
         </Button>
         <Button type="button" variant="outline" className="flex-1" onClick={handleResetData}>
           Reset Form
-        </Button>
-        <Button type="button" variant="outline" className="flex-1" onClick={handleSeedData}>
-          Load Sample
         </Button>
         <Modal trigger={<Button>Show JSON</Button>}>
           <div className="w-full h-[425px] bg-gray-50 dark:bg-gray-800 rounded-lg p-4 overflow-scroll">

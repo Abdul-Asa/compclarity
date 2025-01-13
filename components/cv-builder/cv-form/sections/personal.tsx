@@ -27,13 +27,9 @@ export function PersonalSection({ ...section }: CVSection) {
   });
 
   useEffect(() => {
-    form.reset(profile);
-  }, [profile, form]);
-
-  useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value, { type }) => {
-        if (type==="change") setProfile(value as ProfileData);
+      const { unsubscribe } = form.watch((value) => {
+        setProfile(value as ProfileData);
       });
       return () => unsubscribe();
     }

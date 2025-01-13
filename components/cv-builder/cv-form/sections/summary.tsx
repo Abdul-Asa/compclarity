@@ -21,22 +21,16 @@ export const SummarySection = ({ ...section }: CVSection) => {
 
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value, { type: eventType }) => {
-        if (eventType === "change") {
-          if (type === "summary") {
-            setSummary(value as SummaryData);
-          } else {
-            setCustomSummary({ id, data: value as SummaryData });
-          }
+      const { unsubscribe } = form.watch((value) => {
+        if (type === "summary") {
+          setSummary(value as SummaryData);
+        } else {
+          setCustomSummary({ id, data: value as SummaryData });
         }
       });
       return () => unsubscribe();
     }
   }, [form.watch, isVisible]);
-
-  useEffect(() => {
-    form.reset(summary);
-  }, [summary]);
 
   return (
     <Form {...form}>

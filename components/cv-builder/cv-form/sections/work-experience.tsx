@@ -25,14 +25,8 @@ export function WorkExperienceSection({ ...section }: CVSection) {
   const form = useForm<{ data: WorkExperienceData }>({
     resolver: zodResolver(z.object({ data: workExperienceSchema })),
     disabled: !isVisible,
-    defaultValues: {
-      data: experiences.data,
-    },
+    defaultValues: experiences,
   });
-
-  useEffect(() => {
-    form.reset({ data: experiences.data });
-  }, [experiences, form]);
 
   const { fields, append, remove, move } = useFieldArray({
     control: form.control,

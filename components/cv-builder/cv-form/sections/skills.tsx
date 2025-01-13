@@ -33,22 +33,16 @@ export function SkillsSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value, { type: eventType }) => {
-        if (eventType === "change") {
-          if (type === "skills") {
-            setSkills(value.data as SkillsData);
-          } else {
-            setCustomSkills({ id, data: value.data as SkillsData });
-          }
+      const { unsubscribe } = form.watch((value) => {
+        if (type === "skills") {
+          setSkills(value.data as SkillsData);
+        } else {
+          setCustomSkills({ id, data: value.data as SkillsData });
         }
       });
       return () => unsubscribe();
     }
   }, [form.watch, isVisible]);
-
-  useEffect(() => {
-    form.reset(skills);
-  }, [skills, form]);
 
   const handleAppend = () => {
     append({
