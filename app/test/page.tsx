@@ -20,6 +20,7 @@ import { FileUploader } from "@/components/ui/file-upload";
 import { DateTimePicker } from "@/components/ui/datetime-picker";
 import { DateTimeInput } from "@/components/ui/datetime-input";
 import { SimpleTimePicker } from "@/components/ui/datetime-simple";
+import DatePicker from "@/components/ui/date-picker";
 
 const ColorBlock = ({ className, colorName }: { className: string; colorName: string }) => (
   <TooltipProvider>
@@ -306,6 +307,7 @@ const components = {
             <DateTimePicker value={new Date(2025, 1, 1, 12, 0, 0)} onChange={() => {}} />
             <DateTimeInput value={new Date(2025, 1, 1, 12, 0, 0)} onChange={() => {}} />
             <SimpleTimePicker value={new Date(2025, 1, 1, 12, 0, 0)} onChange={() => {}} />
+            <DatePicker mode="monthYear" />
           </div>
         ),
       },

@@ -3,11 +3,11 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { summaryAtom, customsAtom } from "../store";
+import { summaryAtom, customsAtom } from "../../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import Editor from "@/components/editor/cv-editor";
-import { CVSection, SummaryData, summarySchema } from "../types";
+import { CVSection, SummaryData, summarySchema } from "../../types";
 
 export const SummarySection = ({ ...section }: CVSection) => {
   const [summary, setSummary] = useAtom(summaryAtom);

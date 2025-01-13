@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { skillsAtom } from "../store";
+import { skillsAtom } from "../../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -13,7 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { GripVerticalIcon, PlusIcon, TrashIcon, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { CVSection, SkillsData, skillsSchema } from "../types";
+import { CVSection, SkillsData, skillsSchema } from "../../types";
 
 export function SkillsSection({ ...section }: CVSection) {
   const [skills, setSkills] = useAtom(skillsAtom);

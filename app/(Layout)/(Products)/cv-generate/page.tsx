@@ -1,9 +1,8 @@
 "use client";
 
-import { CVForm } from "@/components/cv-builder/cv-form";
 import { useAtomValue } from "jotai";
 import { cvDataAtom, cvSectionsAtom } from "@/components/cv-builder/store";
-
+import { CVForm } from "@/components/cv-builder/cv-form";
 export default function CVBuilder() {
   const cvData = useAtomValue(cvDataAtom);
   const sections = useAtomValue(cvSectionsAtom);

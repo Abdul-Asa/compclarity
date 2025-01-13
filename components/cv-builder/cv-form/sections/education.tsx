@@ -5,28 +5,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { workExperiencesAtom, customsAtom } from "../store";
+import { educationsAtom, customsAtom } from "../../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
 import { GripVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { LocationSearch } from "@/components/ui/location-search";
-import { Switch } from "@/components/ui/switch";
-import Editor from "@/components/editor/cv-editor";
 import { z } from "zod";
-import { CVSection, WorkExperienceData, workExperienceSchema } from "../types";
+import Editor from "@/components/editor/cv-editor";
+import { CVSection, educationSchema, EducationData } from "../../types";
 
-export function WorkExperienceSection({ ...section }: CVSection) {
-  const [experiences, setExperiences] = useAtom(workExperiencesAtom);
-  const setCustomExperiences = useSetAtom(customsAtom);
+export function EducationSection({ ...section }: CVSection) {
+  const [educations, setEducations] = useAtom(educationsAtom);
+  const setCustomEducations = useSetAtom(customsAtom);
   const { isVisible, type, id } = section;
 
-  const form = useForm<{ data: WorkExperienceData }>({
-    resolver: zodResolver(z.object({ data: workExperienceSchema })),
+  const form = useForm<{ data: EducationData }>({
+    resolver: zodResolver(z.object({ data: educationSchema })),
     disabled: !isVisible,
     defaultValues: {
-      data: experiences.data,
+      data: educations.data,
     },
   });
 
@@ -38,10 +37,10 @@ export function WorkExperienceSection({ ...section }: CVSection) {
   useEffect(() => {
     if (isVisible) {
       const { unsubscribe } = form.watch((value) => {
-        if (type === "workExperiences") {
-          setExperiences(value.data as WorkExperienceData);
+        if (type === "educations") {
+          setEducations(value.data as EducationData);
         } else {
-          setCustomExperiences({ id, data: value.data as WorkExperienceData });
+          setCustomEducations({ id, data: value.data as EducationData });
         }
       });
       return () => unsubscribe();
@@ -56,12 +55,12 @@ export function WorkExperienceSection({ ...section }: CVSection) {
 
   const handleAppend = () => {
     append({
-      company: "",
-      position: "",
+      school: "",
+      degree: "",
+      fieldOfStudy: "",
       location: "",
       startDate: "",
       endDate: "",
-      current: false,
       description: "",
     });
   };
@@ -79,29 +78,31 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                       <SortableDragHandle variant="outline" size="icon" className="size-8 shrink-0">
                         <GripVerticalIcon className="size-4" />
                       </SortableDragHandle>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="size-8"
-                        disabled={fields.length <= 1}
-                        onClick={() => fields.length > 1 && remove(index)}
-                      >
-                        <TrashIcon className="size-4" />
-                        <span className="sr-only">Remove experience</span>
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="size-8"
+                          disabled={fields.length <= 1}
+                          onClick={() => fields.length > 1 && remove(index)}
+                        >
+                          <TrashIcon className="size-4" />
+                          <span className="sr-only">Remove education</span>
+                        </Button>
+                      </div>
                     </div>
 
                     <div className="grid gap-4">
                       <div className="grid gap-4 sm:grid-cols-2">
                         <FormField
                           control={form.control}
-                          name={`data.${index}.company`}
+                          name={`data.${index}.school`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Company</FormLabel>
+                              <FormLabel>School/University</FormLabel>
                               <FormControl>
-                                <Input placeholder="Company name" {...field} />
+                                <Input placeholder="University name" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -109,19 +110,31 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                         />
                         <FormField
                           control={form.control}
-                          name={`data.${index}.position`}
+                          name={`data.${index}.degree`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Position</FormLabel>
+                              <FormLabel>Degree</FormLabel>
                               <FormControl>
-                                <Input placeholder="Job title" {...field} />
+                                <Input placeholder="Bachelor's, Master's, etc." {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                       </div>
-
+                      <FormField
+                        control={form.control}
+                        name={`data.${index}.fieldOfStudy`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Field of Study</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Computer Science, Business, etc." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       <FormField
                         control={form.control}
                         name={`data.${index}.location`}
@@ -140,7 +153,6 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                           </FormItem>
                         )}
                       />
-
                       <div className="grid gap-4 sm:grid-cols-2">
                         <FormField
                           control={form.control}
@@ -160,29 +172,15 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                           name={`data.${index}.endDate`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>End Date</FormLabel>
+                              <FormLabel>Graduation Date</FormLabel>
                               <FormControl>
-                                <Input type="month" {...field} disabled={form.watch(`data.${index}.current`)} />
+                                <Input type="month" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                       </div>
-
-                      <FormField
-                        control={form.control}
-                        name={`data.${index}.current`}
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center justify-start space-x-3 space-y-0">
-                            <FormControl>
-                              <Switch checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                            <FormLabel>Current Position</FormLabel>
-                          </FormItem>
-                        )}
-                      />
-
                       <FormField
                         control={form.control}
                         name={`data.${index}.description`}
@@ -194,7 +192,7 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                                 content={field.value}
                                 onChange={field.onChange}
                                 disabled={!isVisible}
-                                placeholder="Describe your responsibilities and achievements..."
+                                placeholder="Relevant coursework, achievements, activities..."
                               />
                             </FormControl>
                             <FormMessage />
@@ -211,7 +209,7 @@ export function WorkExperienceSection({ ...section }: CVSection) {
 
         <Button type="button" variant="outline" className="w-full" onClick={handleAppend}>
           <PlusIcon className="mr-2 size-4" />
-          Add Work Experience
+          Add Education
         </Button>
       </div>
     </Form>

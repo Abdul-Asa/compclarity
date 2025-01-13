@@ -1,25 +1,25 @@
 import { useAtom } from "jotai";
-import { cvSectionsAtom } from "./store";
-import { PersonalSection } from "./sections/personal";
-import { Sortable, SortableDragHandle, SortableItem } from "../ui/sortable";
+import { cvSectionsAtom } from "@/components/cv-builder/store";
+import { PersonalSection } from "./personal";
+import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckIcon, GripVertical, XIcon } from "lucide-react";
-import { SummarySection } from "./sections/summary";
-import { EducationSection } from "./sections/education";
-import { WorkExperienceSection } from "./sections/work-experience";
-import { ProjectsSection } from "./sections/projects";
-import { SkillsSection } from "./sections/skills";
+import { SummarySection } from "./summary";
+import { EducationSection } from "./education";
+import { WorkExperienceSection } from "./work-experience";
+import { ProjectsSection } from "./projects";
+import { SkillsSection } from "./skills";
 import { nanoid } from "nanoid";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { CustomSection } from "./sections/custom";
+import { CustomSection } from "./custom";
 import { useState } from "react";
 import { PencilIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { CVSection } from "./types";
+import { CVSection } from "@/components/cv-builder/types";
 
-export function CVForm() {
+export default function Sections() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
 

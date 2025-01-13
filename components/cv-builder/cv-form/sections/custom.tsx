@@ -3,15 +3,15 @@
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAtom } from "jotai";
-import { cvSectionsAtom } from "../store";
+import { cvSectionsAtom } from "../../store";
 import { SummarySection } from "./summary";
 import { EducationSection } from "./education";
 import { WorkExperienceSection } from "./work-experience";
 import { SkillsSection } from "./skills";
 import { InfoIcon } from "lucide-react";
 import { Tooltip } from "react-tooltip";
-import { SectionSchema } from "../types";
-import { CVSection } from "../types";
+import { SectionSchema } from "../../types";
+import { CVSection } from "../../types";
 
 export const sectionTypes = [
   { label: "Text", value: "summary" },
