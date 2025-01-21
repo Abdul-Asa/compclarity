@@ -24,17 +24,16 @@ export const HeroSection = () => {
         <div className="p-2 max-w-4xl text-left space-y-5 ">
           <h1 className="animate-fade-in text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
             <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
-              Craft
+              Increase
             </span>{" "}
-            the perfect{" "}
+            your{" "}
             <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
-              CV
+              odds
             </span>{" "}
-            in one go.
+            in getting hired.
           </h1>
           <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-            Tired of not even passing the CV screening stage? We can help. Our team of experts will work with you to
-            create a standout CV that showcases your experience and strengths that will get you noticed by employers.
+            Tired of not even passing the CV screening stage? We can help. Our AI Suite creates standout CV and cover letters that showcases your experience and strengths that will get you noticed by employers.
           </h2>
           <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
             <Link href="#pricing">Get Started</Link>
@@ -86,7 +85,7 @@ export const MarqueeSection = () => {
   return (
     <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
       <div className="w-full">
-        <h2 className="p-4 text-center font-bold md:text-3xl">Our members work at</h2>
+        <h2 className="p-4 text-center font-bold md:text-3xl">Our members received offers from</h2>
       </div>
 
       <Marquee className="w-full p-4">
@@ -161,24 +160,24 @@ export const HowItWorks = () => {
   const howItWorksSteps = [
     {
       icon: Send,
-      title: "1. Send us your details",
-      description: "Submit your existing CV. Let us know your work experience, education, and skills.",
+      title: "1. Share your details",
+      description: "Submit your existing CV or fill in your experience in the CV builder. Let us know your work experience, education, and skills.",
     },
     {
       icon: FileText,
-      title: "2. CV Writing",
-      description: "Our team of experts will work with you to create your perfect CV.",
+      title: "2. Generate your CV and cover letter",
+      description: "Create custom CVs and cover letters for different job applications, let our AI Suite do the heavy lifting for you.",
     },
     {
       icon: Pen,
       title: "3. Download & Apply",
-      description: "Review, edit if needed, and download your polished CV. You're ready to apply for jobs!",
+      description: "Review, edit, and download your polished CV and cover letter. You just increased your chances of getting hired!",
     },
   ];
   return (
     <section id="how-it-works" className="container space-y-4 mx-auto px-4 py-16">
       <div className="container px-4 md:px-6">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">How It Works</h2>
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">How the AI Suite works</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {howItWorksSteps.map((step, index) => (
             <Card key={index}>
@@ -198,21 +197,16 @@ export const HowItWorks = () => {
 export const FAQ = () => {
   const faqItems = [
     {
-      question: "Do I need an existing CV to begin?",
-      answer: "Yes, we will need it to transform your existing CV to a masterpiece.",
-    },
-    {
-      question: "Do you offer any revisions after the CV is delivered?",
+      question: "How does the AI Suite work?",
       answer:
-        "Yes, we offer up to two rounds of revisions to ensure you're completely satisfied with the final product.",
+        "You'll be able to access your AI-powered CV and cover letter builder. Simply input your details and the builder will generate a professional CV and cover letter for you based on the role that you're applying to.",
     },
     {
-      question: "Will you format my CV according to the latest industry standards?",
-      answer:
-        "Yes, we stay up to date with the latest CV formats and industry expectations to ensure your CV looks professional and modern.",
+      question: "Why should I care about job notifications?",
+      answer: "The early bird catches the worm. Most employers recruit on a rolling basis, meaning they review candidates in the order they applied and close applications once headcount is reached.",
     },
     {
-      question: "What differentiates you from other resume review/career coaching services?",
+      question: "What differentiates you from other career coaching services?",
       answer: "Cuz we love you and care about your success 😘",
     },
   ];

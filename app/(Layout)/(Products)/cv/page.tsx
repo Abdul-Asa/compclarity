@@ -4,9 +4,9 @@ import { Separator } from "@/components/ui/separator";
 
 // Edit the metadata for the page
 export const metadata: Metadata = {
-  title: "CompClarity - CV Writing Service",
+  title: "CompClarity - Premium",
   description:
-    "Our CV writing service is designed to help you stand out in the job market. Our team of experts will work with you to create a CV that highlights your skills and experience, and makes you stand out from the competition",
+    "Discover your personal AI career companion. Get access to the best tools and resources to help you land your dream job.",
 };
 
 export default function CVPage() {
