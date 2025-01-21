@@ -206,6 +206,10 @@ export const FAQ = () => {
       answer: "The early bird catches the worm. Most employers recruit on a rolling basis, meaning they review candidates in the order they applied and close applications once headcount is reached.",
     },
     {
+      question: "Can I cancel my subscription?",
+      answer: "Yes, you can cancel your subscription at any time. Your subscription will remain active until the end of the billing cycle.",
+    },
+    {
       question: "What differentiates you from other career coaching services?",
       answer: "Cuz we love you and care about your success 😘",
     },
