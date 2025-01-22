@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { workExperiencesAtom, customsAtom } from "../../store";
+import { workExperiencesAtom, customsAtom, resetTriggerAtom } from "../../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -19,6 +19,7 @@ import { CVSection, WorkExperienceData, workExperienceSchema } from "../../types
 
 export function WorkExperienceSection({ ...section }: CVSection) {
   const [experiences, setExperiences] = useAtom(workExperiencesAtom);
+  const [resetTrigger] = useAtom(resetTriggerAtom);
   const setCustomExperiences = useSetAtom(customsAtom);
   const { isVisible, type, id } = section;
 
@@ -32,6 +33,12 @@ export function WorkExperienceSection({ ...section }: CVSection) {
     control: form.control,
     name: "data",
   });
+
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      form.reset(experiences);
+    }
+  }, [resetTrigger]);
 
   useEffect(() => {
     if (isVisible) {

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { projectsAtom, skillsAtom } from "../../store";
+import { projectsAtom, resetTriggerAtom } from "../../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -19,7 +19,7 @@ import { CVSection, ProjectData, projectSchema } from "../../types";
 
 export function ProjectsSection({ ...section }: CVSection) {
   const [projects, setProjects] = useAtom(projectsAtom);
-  // const [skills, setSkills] = useAtom(skillsAtom);
+  const [resetTrigger] = useAtom(resetTriggerAtom);
   const { isVisible } = section;
 
   const form = useForm<{ data: ProjectData }>({
@@ -32,6 +32,12 @@ export function ProjectsSection({ ...section }: CVSection) {
     control: form.control,
     name: "data",
   });
+
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      form.reset(projects);
+    }
+  }, [resetTrigger]);
 
   useEffect(() => {
     if (isVisible) {
@@ -74,31 +80,6 @@ export function ProjectsSection({ ...section }: CVSection) {
       tech.filter((_, i) => i !== techIndex)
     );
   };
-
-  //   const handleAddToSkills = (technologies: string[]) => {
-  // if (!technologies.length) return;
-  // const createSkills = () => {
-  //   // Find or create Technologies category
-  //   let techCategory = skills.find((category) => category.category.toLowerCase() === "technologies");
-  //   if (!techCategory) {
-  //     // If no Technologies category exists, create one
-  //     techCategory = { category: "Technologies", skills: [] };
-  //     return [...skills, techCategory].map((category) =>
-  //       category === techCategory
-  //         ? { ...category, skills: [...new Set([...category.skills, ...technologies])] }
-  //         : category
-  //     );
-  //   }
-  //   // Update existing Technologies category
-  //   return skills.map((category) =>
-  //     category.category.toLowerCase() === "technologies"
-  //       ? { ...category, skills: [...new Set([...category.skills, ...technologies])] }
-  //       : category
-  //   );
-  // };
-  // const newSkills = createSkills();
-  // setSkills(newSkills);
-  //};
 
   return (
     <Form {...form}>

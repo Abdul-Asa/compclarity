@@ -1,7 +1,7 @@
 "use client";
 
 import { EditorContent, type Extension, useEditor } from "@tiptap/react";
-import Placeholder from "@tiptap/extension-placeholder";
+// import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { ToolbarProvider } from "./components/provider";
 import { BoldToolbar } from "./components/bold";
@@ -16,6 +16,7 @@ import { Separator } from "../ui/separator";
 import { UndoToolbar } from "./components/undo";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
+import { useEffect } from "react";
 
 const extensions = [
   StarterKit.configure({
@@ -77,6 +78,13 @@ const Editor = ({ content, onChange, disabled, placeholder, className }: EditorP
     },
     immediatelyRender: false,
   });
+
+  // Add effect to update editor content when prop changes
+  useEffect(() => {
+    if (editor && content !== editor.getText()) {
+      editor.commands.setContent(content || "");
+    }
+  }, [content, editor]);
 
   if (!editor) {
     return <Skeleton className="h-20 bg-muted animate-pulse  rounded-md" />;

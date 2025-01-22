@@ -1,6 +1,13 @@
 "use client";
 import { useAtom } from "jotai";
-import { cvDataAtom, cvRenderAtom, cvSectionsAtom, seededCVData, initialCVData } from "@/components/cv-builder/store";
+import {
+  cvDataAtom,
+  cvRenderAtom,
+  cvSectionsAtom,
+  seededCVData,
+  initialCVData,
+  resetTriggerAtom,
+} from "@/components/cv-builder/store";
 import { PersonalSection } from "./personal";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,28 +36,6 @@ async function generateResume(formData: FormValues): Promise<string> {
   return latex(texDoc, opts);
 }
 
-// const formData = {
-//   selectedTemplate: 1,
-//   headings: { work: "", education: "rhrhr", skills: "", projects: "projects", awards: "fff" },
-//   basics: { name: "ffff", phone: "07479083186", website: "ffffffff", location: { address: "ffff" }, email: "proe" },
-//   education: [
-//     {
-//       institution: "rhrhr",
-//       location: "rbrbr",
-//       area: "rhrhrj",
-//       studyType: "rhrh",
-//       startDate: "rhrh",
-//       endDate: "rhrh",
-//       gpa: "rhrh",
-//     },
-//     {},
-//   ],
-//   work: [{ company: "", location: "", position: "", website: "", startDate: "", endDate: "", highlights: [""] }],
-//   skills: [{ name: "", level: "", keywords: [""] }],
-//   projects: [{ name: "pipw", description: "hhhhn", url: "llink", keywords: ["h", "g"] }, { keywords: [""] }],
-//   awards: [{ title: "ffff", date: "ffff", awarder: "fff", summary: "fffff" }],
-//   sections: ["templates", "profile", "education", "work", "skills", "projects", "awards"],
-// };
 const formatCVDataToFormValues = (cvData: CVData, sections: CVSection[]): FormValues => {
   // Format basics/profile data
   const basics: Basics = {
@@ -135,6 +120,7 @@ const formatCVDataToFormValues = (cvData: CVData, sections: CVSection[]): FormVa
 
 export default function Sections() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
+  const [resetTrigger, setResetTrigger] = useAtom(resetTriggerAtom);
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
   const [cvData, setCvData] = useAtom(cvDataAtom);
   const [cvRender, setCvRender] = useAtom(cvRenderAtom);
@@ -206,16 +192,27 @@ export default function Sections() {
 
   const handleResetData = () => {
     setCvRender({ url: "", isLoading: false, isError: false });
-    setSections(sections.map((section) => ({ ...section, isExpanded: false })));
+    setSections(sections.map((section) => ({ ...section, isExpanded: true })));
     setEditingTitleId(null);
     setCvData(initialCVData);
+    setResetTrigger(resetTrigger + 1);
+  };
+
+  const handleSeedData = () => {
+    setCvData(seededCVData);
+    setSections(sections.map((section) => ({ ...section, isExpanded: true })));
+    setEditingTitleId(null);
+    setResetTrigger(resetTrigger + 1);
   };
 
   return (
     <div className="w-full p-4 space-y-4">
-      {/* <div className="flex gap-2">
+      <div className="flex gap-2">
         <Button type="button" variant="outline" className="flex-1" onClick={handleGenerateRender}>
           Generate
+        </Button>
+        <Button type="button" variant="outline" className="flex-1" onClick={handleSeedData}>
+          Seed Form
         </Button>
         <Button type="button" variant="outline" className="flex-1" onClick={handleResetData}>
           Reset Form
@@ -225,7 +222,7 @@ export default function Sections() {
             <pre className="text-sm">{JSON.stringify(cvData, null, 2)}</pre>
           </div>
         </Modal>
-      </div> */}
+      </div>
       <Sortable
         value={sections}
         onValueChange={(newSections) => {
@@ -297,9 +294,7 @@ export default function Sections() {
                           </div>
                         </div>
                       ) : (
-                        <CardTitle
-                          className={cn("flex items-center gap-2", section.isEditable && "hover:cursor-pointer")}
-                        >
+                        <CardTitle className={cn("flex items-center gap-2")}>
                           {section.title}
                           {section.isEditable && (
                             <Button
@@ -307,6 +302,7 @@ export default function Sections() {
                               size="icon"
                               className="size-6 p-0"
                               onClick={() => setEditingTitleId(section.id)}
+                              disabled={!section.isVisible}
                             >
                               <PencilIcon className="size-4" />
                               <span className="sr-only">Edit section title</span>

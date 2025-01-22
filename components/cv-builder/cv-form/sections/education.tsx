@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { educationsAtom, customsAtom } from "../../store";
+import { educationsAtom, customsAtom, resetTriggerAtom } from "../../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -18,6 +18,7 @@ import { CVSection, educationSchema, EducationData } from "../../types";
 
 export function EducationSection({ ...section }: CVSection) {
   const [educations, setEducations] = useAtom(educationsAtom);
+  const [resetTrigger] = useAtom(resetTriggerAtom);
   const setCustomEducations = useSetAtom(customsAtom);
   const { isVisible, type, id } = section;
 
@@ -31,6 +32,12 @@ export function EducationSection({ ...section }: CVSection) {
     control: form.control,
     name: "data",
   });
+
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      form.reset(type === "educations" ? educations : {});
+    }
+  }, [resetTrigger]);
 
   useEffect(() => {
     if (isVisible) {

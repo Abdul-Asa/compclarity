@@ -3,7 +3,7 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { summaryAtom, customsAtom } from "../../store";
+import { summaryAtom, customsAtom, resetTriggerAtom } from "../../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import Editor from "@/components/editor/cv-editor";
@@ -11,6 +11,7 @@ import { CVSection, SummaryData, summarySchema } from "../../types";
 
 export const SummarySection = ({ ...section }: CVSection) => {
   const [summary, setSummary] = useAtom(summaryAtom);
+  const [resetTrigger] = useAtom(resetTriggerAtom);
   const setCustomSummary = useSetAtom(customsAtom);
   const { isVisible, type, id } = section;
   const form = useForm<SummaryData>({
@@ -31,6 +32,12 @@ export const SummarySection = ({ ...section }: CVSection) => {
       return () => unsubscribe();
     }
   }, [form.watch, isVisible]);
+
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      form.reset(summary);
+    }
+  }, [resetTrigger]);
 
   return (
     <Form {...form}>

@@ -10,7 +10,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     <QueryProvider>
       <JotaiProvider>
         <CSPostHogProvider>
-          <ThemeProvider attribute="class" enableSystem>
+          <ThemeProvider attribute="class" enableSystem={false}>
             {children}
             <Announcement />
             <SonnerToaster />

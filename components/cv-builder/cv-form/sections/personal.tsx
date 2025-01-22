@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { cvDataAtom, cvSectionsAtom, profileAtom } from "../../store";
+import { cvDataAtom, cvSectionsAtom, profileAtom, resetTriggerAtom } from "../../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -17,8 +17,9 @@ import { GripVerticalIcon, TrashIcon } from "lucide-react";
 import { CVSection, ProfileData, profileSchema } from "../../types";
 
 export function PersonalSection({ ...section }: CVSection) {
-  const [profile, setProfile] = useAtom(profileAtom);
   const { isVisible } = section;
+  const [profile, setProfile] = useAtom(profileAtom);
+  const [resetTrigger] = useAtom(resetTriggerAtom);
 
   const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
@@ -34,6 +35,12 @@ export function PersonalSection({ ...section }: CVSection) {
       return () => unsubscribe();
     }
   }, [form.watch, isVisible]);
+
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      form.reset(profile);
+    }
+  }, [resetTrigger]);
 
   const handleLocationChange = (value: string) => {
     if (isVisible) {

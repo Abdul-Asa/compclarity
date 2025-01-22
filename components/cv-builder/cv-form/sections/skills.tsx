@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { skillsAtom, customsAtom } from "../../store";
+import { skillsAtom, customsAtom, resetTriggerAtom } from "../../store";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -17,6 +17,7 @@ import { CVSection, SkillsData, skillsSchema } from "../../types";
 
 export function SkillsSection({ ...section }: CVSection) {
   const [skills, setSkills] = useAtom(skillsAtom);
+  const [resetTrigger] = useAtom(resetTriggerAtom);
   const setCustomSkills = useSetAtom(customsAtom);
   const { isVisible, type, id } = section;
 
@@ -30,6 +31,12 @@ export function SkillsSection({ ...section }: CVSection) {
     control: form.control,
     name: "data",
   });
+
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      form.reset(skills);
+    }
+  }, [resetTrigger]);
 
   useEffect(() => {
     if (isVisible) {
