@@ -15,7 +15,7 @@ export const SummarySection = ({ ...section }: CVSection) => {
   const { isVisible, type, id } = section;
   const form = useForm<SummaryData>({
     resolver: zodResolver(summarySchema),
-    defaultValues: summary,
+    defaultValues: type === "summary" ? summary : {},
     disabled: !isVisible,
   });
 

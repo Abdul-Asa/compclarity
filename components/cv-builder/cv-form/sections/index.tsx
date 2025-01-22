@@ -213,7 +213,7 @@ export default function Sections() {
 
   return (
     <div className="w-full p-4 space-y-4">
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <Button type="button" variant="outline" className="flex-1" onClick={handleGenerateRender}>
           Generate
         </Button>
@@ -225,7 +225,7 @@ export default function Sections() {
             <pre className="text-sm">{JSON.stringify(cvData, null, 2)}</pre>
           </div>
         </Modal>
-      </div>
+      </div> */}
       <Sortable
         value={sections}
         onValueChange={(newSections) => {

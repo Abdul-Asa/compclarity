@@ -15,7 +15,7 @@ export const seededCVData: CVData = {
     firstName: "John",
     lastName: "Smith",
     email: "john.smith@email.com",
-    phone: "+44 7123 456789",
+    phone: "+447123456789",
     location: "San Francisco, CA",
     links: [
       { name: "GitHub", url: "https://github.com/johnsmith" },

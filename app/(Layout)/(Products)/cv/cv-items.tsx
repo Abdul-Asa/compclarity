@@ -33,7 +33,8 @@ export const HeroSection = () => {
             in getting hired.
           </h1>
           <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-            Tired of not even passing the CV screening stage? We can help. Our AI Suite creates standout CV and cover letters that showcases your experience and strengths that will get you noticed by employers.
+            Tired of not even passing the CV screening stage? We can help. Our AI Suite creates standout CV and cover
+            letters that showcases your experience and strengths that will get you noticed by employers.
           </h2>
           <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
             <Link href="#pricing">Get Started</Link>
@@ -109,7 +110,7 @@ export const Pricing = () => {
       <p className=" text-center text-gray-600 dark:text-gray-200">
         Get the perfect CV with just a small fraction of your potential salary.
       </p>
-      <div className="grid pt-10  md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid pt-10  grid-cols-2 gap-8">
         {pricingTiers.map((tier) => (
           <Card key={tier.id} className="flex flex-col">
             <CardHeader>
@@ -161,23 +162,28 @@ export const HowItWorks = () => {
     {
       icon: Send,
       title: "1. Share your details",
-      description: "Submit your existing CV or fill in your experience in the CV builder. Let us know your work experience, education, and skills.",
+      description:
+        "Submit your existing CV or fill in your experience in the CV builder. Let us know your work experience, education, and skills.",
     },
     {
       icon: FileText,
       title: "2. Generate your CV and cover letter",
-      description: "Create custom CVs and cover letters for different job applications, let our AI Suite do the heavy lifting for you.",
+      description:
+        "Create custom CVs and cover letters for different job applications, let our AI Suite do the heavy lifting for you.",
     },
     {
       icon: Pen,
       title: "3. Download & Apply",
-      description: "Review, edit, and download your polished CV and cover letter. You just increased your chances of getting hired!",
+      description:
+        "Review, edit, and download your polished CV and cover letter. You just increased your chances of getting hired!",
     },
   ];
   return (
     <section id="how-it-works" className="container space-y-4 mx-auto px-4 py-16">
       <div className="container px-4 md:px-6">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">How the AI Suite works</h2>
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
+          How the AI Suite works
+        </h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {howItWorksSteps.map((step, index) => (
             <Card key={index}>
@@ -203,11 +209,13 @@ export const FAQ = () => {
     },
     {
       question: "Why should I care about job notifications?",
-      answer: "The early bird catches the worm. Most employers recruit on a rolling basis, meaning they review candidates in the order they applied and close applications once headcount is reached.",
+      answer:
+        "The early bird catches the worm. Most employers recruit on a rolling basis, meaning they review candidates in the order they applied and close applications once headcount is reached.",
     },
     {
       question: "Can I cancel my subscription?",
-      answer: "Yes, you can cancel your subscription at any time. Your subscription will remain active until the end of the billing cycle.",
+      answer:
+        "Yes, you can cancel your subscription at any time. Your subscription will remain active until the end of the billing cycle.",
     },
     {
       question: "What differentiates you from other career coaching services?",

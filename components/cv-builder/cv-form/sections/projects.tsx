@@ -42,7 +42,7 @@ export function ProjectsSection({ ...section }: CVSection) {
       });
       return () => unsubscribe();
     }
-  }, [form.watch, isVisible, setProjects]);
+  }, [form.watch, isVisible]);
 
   const handleAppend = () => {
     append({

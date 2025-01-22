@@ -24,9 +24,7 @@ export function EducationSection({ ...section }: CVSection) {
   const form = useForm<{ data: EducationData }>({
     resolver: zodResolver(z.object({ data: educationSchema })),
     disabled: !isVisible,
-    defaultValues: {
-      data: educations.data,
-    },
+    defaultValues: type === "educations" ? educations : {},
   });
 
   const { fields, append, remove, move } = useFieldArray({

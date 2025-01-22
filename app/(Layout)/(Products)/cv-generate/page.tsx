@@ -7,7 +7,9 @@ export default function CVBuilder() {
       <div className="w-full lg:h-[calc(100vh-4rem)] overflow-auto">
         <CVForm />
       </div>
-      <CVPreview />
+      <div className="w-full lg:h-[calc(100vh-4rem)] overflow-auto">
+        <CVPreview />
+      </div>
     </div>
   );
 }
