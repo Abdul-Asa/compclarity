@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { cvDataAtom, cvSectionsAtom, profileAtom, resetTriggerAtom } from "../../store";
+import { profileAtom, resetTriggerAtom } from "../../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { PhoneInput } from "@/components/ui/phone-input";

@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { atomWithStorage } from 'jotai/utils';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { CVData, CVRender, CVSection, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
 
 //Initial Data
@@ -176,15 +176,30 @@ export const initialCVData: CVData = {
 //   fontFamily: "sans-serif",
 // };
 
+const getStorage = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage;
+  }
+  return {
+    getItem: (_key: string) => null,
+    setItem: (_key: string, _value: string) => {},
+    removeItem: (_key: string) => {},
+  };
+};
+
 //Atoms
 export const cvSectionsAtom = atomWithStorage<CVSection[]>(
   'cv-sections',
-  initialSections, 
+  initialSections,
+  createJSONStorage(() => getStorage()),
+  { getOnInit: true }
 );
 
 export const cvDataAtom = atomWithStorage<CVData>(
   'cv-data',
-  initialCVData
+  initialCVData,
+  createJSONStorage(() => getStorage()),
+  { getOnInit: true }
 );
 
 export const profileAtom = atom(
