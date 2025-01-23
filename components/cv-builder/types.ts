@@ -20,6 +20,21 @@ export interface CVSection {
   isAlwaysVisible?: boolean;
   isEditable?: boolean;
 }
+export interface CVSettings {
+  template: 'classic' | 'modern' | 'minimal'; 
+  margins: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
+  font: {
+    family: string;
+    size: number;
+  };
+  dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
+  displayFullLinks: boolean;
+}
 
 //Schemas
 export const profileSchema = z.object({
@@ -102,3 +117,4 @@ export type CVData = z.infer<typeof cvDataSchema>;
 export type SummaryData = z.infer<typeof summarySchema>;
 export type ProjectData = z.infer<typeof projectSchema>;
 export type CustomData = z.infer<typeof customSchema>;
+

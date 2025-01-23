@@ -2,8 +2,7 @@ import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SimpleLoader from "@/components/layout/SimpleLoader";
 const Sections = dynamic(() => import("./sections"), { loading: () => <SimpleLoader />, ssr: false });
-import Settings from "./settings";
-
+const Settings = dynamic(() => import("./settings"), { loading: () => <SimpleLoader />, ssr: false });
 export function CVForm() {
   return (
     <Tabs defaultValue="sections">

@@ -2,11 +2,11 @@
 import { useAtom } from "jotai";
 import {
   cvDataAtom,
-  cvRenderAtom,
   cvSectionsAtom,
   seededCVData,
   initialCVData,
   resetTriggerAtom,
+  cvSettingsAtom,
 } from "@/components/cv-builder/store";
 import { PersonalSection } from "./personal";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -25,110 +25,15 @@ import { useState } from "react";
 import { PencilIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { CVData, CVSection } from "@/components/cv-builder/types";
-import { Basics, Education, FormValues, Project, Skill, Work } from "@/lib/documents/types";
+import { CVSection } from "@/components/cv-builder/types";
 import { Modal } from "@/components/ui/modal";
-import getTemplateData from "@/lib/documents/templates";
-import latex from "@/lib/documents/latex";
-
-async function generateResume(formData: FormValues): Promise<string> {
-  const { texDoc, opts } = getTemplateData(formData);
-  return latex(texDoc, opts);
-}
-
-const formatCVDataToFormValues = (cvData: CVData, sections: CVSection[]): FormValues => {
-  // Format basics/profile data
-  const basics: Basics = {
-    name: `${cvData.profile.firstName} ${cvData.profile.lastName}`,
-    email: cvData.profile.email,
-    phone: cvData.profile.phone,
-    location: cvData.profile.location
-      ? {
-          city: cvData.profile.location,
-        }
-      : undefined,
-    profiles: cvData.profile.links.map((link) => ({
-      url: link.url,
-    })),
-  };
-
-  // Format work experience
-  const work: Work[] = cvData.workExperiences.data.map((exp) => ({
-    company: exp.company,
-    position: exp.position,
-    startDate: exp.startDate,
-    endDate: exp.endDate || "Present",
-    location: exp.location,
-    highlights: exp.description ? exp.description.split("\n").filter(Boolean) : [],
-  }));
-
-  // Format education
-  const education: Education[] = cvData.educations.data.map((edu) => ({
-    institution: edu.school,
-    area: edu.fieldOfStudy,
-    studyType: edu.degree,
-    startDate: edu.startDate,
-    endDate: edu.endDate,
-    location: edu.location,
-  }));
-
-  // Format skills
-  const skills: Skill[] = cvData.skills.data.map((skillGroup) => ({
-    name: skillGroup.category,
-    keywords: skillGroup.skills,
-  }));
-
-  // Format projects
-  const projects: Project[] = cvData.projects.data.map((proj) => ({
-    name: proj.name,
-    description: proj.description,
-    startDate: proj.startDate,
-    endDate: proj.endDate,
-    url: proj.url,
-    keywords: proj.technologies,
-    highlights: proj.description ? proj.description.split("\n").filter(Boolean) : [],
-  }));
-
-  return {
-    basics,
-    work,
-    education,
-    skills,
-    projects,
-    sections: sections
-      .map((section) => {
-        // Map your section types to FormValues section types
-        const sectionTypeMap: Record<string, string> = {
-          profile: "profile",
-          educations: "education",
-          workExperiences: "work",
-          skills: "skills",
-          projects: "projects",
-        };
-        return sectionTypeMap[section.type] as any;
-      })
-      .filter(Boolean),
-    selectedTemplate: 1,
-    headings: {
-      education: "Education",
-      work: "Work Experience",
-      skills: "Skills",
-      projects: "Projects",
-    },
-  };
-};
 
 export default function Sections() {
   const [sections, setSections] = useAtom(cvSectionsAtom);
   const [resetTrigger, setResetTrigger] = useAtom(resetTriggerAtom);
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
   const [cvData, setCvData] = useAtom(cvDataAtom);
-  const [cvRender, setCvRender] = useAtom(cvRenderAtom);
-  // const [isClient, setIsClient] = useState(false);
-
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
+  const [settings] = useAtom(cvSettingsAtom);
 
   const handleAddCustomSection = () => {
     const newSection: CVSection = {
@@ -183,20 +88,7 @@ export default function Sections() {
     setEditingTitleId(null);
   };
 
-  const handleGenerateRender = async () => {
-    const formData = formatCVDataToFormValues(cvData, sections);
-    setCvRender({ ...cvRender, isLoading: true });
-    try {
-      const newResumeUrl = await generateResume(formData);
-      setCvRender({ ...cvRender, url: newResumeUrl, isLoading: false });
-    } catch (error) {
-      console.error(error);
-      setCvRender({ ...cvRender, isError: true, isLoading: false });
-    }
-  };
-
   const handleResetData = () => {
-    setCvRender({ url: "", isLoading: false, isError: false });
     setSections(sections.map((section) => ({ ...section, isExpanded: true })));
     setEditingTitleId(null);
     setCvData(initialCVData);
@@ -213,9 +105,6 @@ export default function Sections() {
   return (
     <div className="w-full p-4 space-y-4">
       <div className="flex gap-2">
-        <Button type="button" variant="outline" className="flex-1" onClick={handleGenerateRender}>
-          Generate
-        </Button>
         <Button type="button" variant="outline" className="flex-1" onClick={handleSeedData}>
           Seed Form
         </Button>
@@ -225,6 +114,8 @@ export default function Sections() {
         <Modal trigger={<Button>Show JSON</Button>}>
           <div className="w-full h-[425px] bg-gray-50 dark:bg-gray-800 rounded-lg p-4 overflow-scroll">
             <pre className="text-sm">{JSON.stringify(cvData, null, 2)}</pre>
+            <pre className="text-sm">{JSON.stringify(sections, null, 2)}</pre>
+            <pre className="text-sm">{JSON.stringify(settings, null, 2)}</pre>
           </div>
         </Modal>
       </div>

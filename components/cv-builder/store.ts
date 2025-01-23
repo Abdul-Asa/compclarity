@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import { CVData, CVRender, CVSection, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
+import { CVData, CVSection, CVSettings, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
 
 //Initial Data
 const initialSections: CVSection[] = [
@@ -169,12 +169,13 @@ export const initialCVData: CVData = {
     data: []
   }
 };
-// const initialSettings: SettingsData = {
-//   theme: "light",
-//   language: "en",
-//   fontSize: "medium",
-//   fontFamily: "sans-serif",
-// };
+export const initialSettings: CVSettings = {
+  template: 'classic',
+  margins: { top: 10, bottom: 10, left: 10, right: 10 },
+  font: { family: 'Arial', size: 12 },
+  dateFormat: 'numbers-slash',
+  displayFullLinks: true
+};
 
 const getStorage = () => {
   if (typeof window !== 'undefined') {
@@ -198,6 +199,13 @@ export const cvSectionsAtom = atomWithStorage<CVSection[]>(
 export const cvDataAtom = atomWithStorage<CVData>(
   'cv-data',
   initialCVData,
+  createJSONStorage(() => getStorage()),
+  { getOnInit: true }
+);
+
+export const cvSettingsAtom = atomWithStorage<CVSettings>(
+  'cv-settings',
+  initialSettings,
   createJSONStorage(() => getStorage()),
   { getOnInit: true }
 );
@@ -262,12 +270,6 @@ export const customsAtom = atom(
     });
   }
 );
-
-export const cvRenderAtom = atom<CVRender>({
-  url: "",
-  isLoading: false,
-  isError: false,
-});
 
 // Add a new atom for reset trigger
 export const resetTriggerAtom = atom<number>(0);
