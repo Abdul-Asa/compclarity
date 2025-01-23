@@ -41,189 +41,261 @@ export function HTMLPreview({ data, settings }: HTMLPreviewProps) {
   // Section render methods
   const sectionRenderers: Record<SectionType, (section: CVSection) => JSX.Element> = {
     educations: (section) => (
-      <section id="education" aria-label="Education">
-        <h2 className="text-2xl font-semibold -mb-1">{section.title}</h2>
-        <hr className="border-black border-t-[3px]" />
-        {data.educations.data.map((edu, index) => (
-          <div key={index} id={`edu-${index}`}>
-            <div className="flex flex-row justify-between items-end">
-              <div>
-                <h3>
-                  <strong>{edu.school},</strong> {edu.fieldOfStudy}
-                </h3>
-                <p className="italic">{edu.degree}</p>
-              </div>
-              <div className="text-right">
-                <div>{edu.location}</div>
-                <div className="italic">
-                  {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
-                </div>
-              </div>
-            </div>
-            {edu.description && <p className="mt-2 whitespace-pre-line">{edu.description}</p>}
+      <div className="group/section">
+        <div className="flex justify-between items-end border-b border-black/70 mb-1">
+          <div className="flex gap-1.5 items-center">
+            <span className="font-bold text-sm uppercase">{section.title}</span>
           </div>
-        ))}
-      </section>
+        </div>
+        <div className="ml-[calc(-2rem-0.125rem)] -mr-9">
+          <ul className="flex flex-col p-0 gap-2 list-none">
+            {data.educations.data.map((edu, index) => (
+              <li key={index} className="flex gap-2 group/entity">
+                <div className="flex w-full justify-between">
+                  <div className="flex flex-col w-full">
+                    <span className="text-sm font-semibold">{edu.school}</span>
+                    <span className="text-sm italic">{edu.degree}</span>
+                  </div>
+                  <div className="flex flex-col w-full text-right">
+                    <div className="text-sm font-bold">
+                      {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
+                    </div>
+                    {edu.location && <div className="text-sm italic">{edu.location}</div>}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     ),
 
     workExperiences: (section) => (
-      <section id="experience" aria-label="Work Experience">
-        <h2 className="text-2xl font-semibold -mb-1">{section.title}</h2>
-        <hr className="border-black border-t-[3px]" />
-        {data.workExperiences.data.map((exp, index) => (
-          <div key={index} id={`exp-${index}`}>
-            <div className="flex flex-row justify-between items-end">
-              <div>
-                <h3>
-                  <strong>{exp.company}</strong> {exp.location && `- ${exp.location}`}
-                </h3>
-                <p className="italic">{exp.position}</p>
-              </div>
-              <div>
-                <p className="italic">
-                  {formatDate(exp.startDate)} - {exp.current ? "Present" : formatDate(exp.endDate)}
-                </p>
-              </div>
-            </div>
-            {exp.description && <p className="mt-2 whitespace-pre-line">{exp.description}</p>}
+      <div className="group/section">
+        <div className="flex justify-between items-end border-b border-black/70 mb-1">
+          <div className="flex gap-1.5 items-center">
+            <span className="font-bold text-sm uppercase">{section.title}</span>
           </div>
-        ))}
-      </section>
+        </div>
+        <div className="ml-[calc(-2rem-0.125rem)] -mr-9">
+          <ul className="flex flex-col p-0 gap-2 list-none">
+            {data.workExperiences.data.map((exp, index) => (
+              <li key={index} className="flex gap-2 group/entity">
+                <div className="flex flex-col w-full group/parent">
+                  <div className="flex justify-between">
+                    <div className="flex w-full items-center gap-4">
+                      <div className="flex flex-col w-max group">
+                        <span className="text-[0.86rem]/[1.15rem] font-semibold">{exp.position}</span>
+                        <span className="text-sm italic">{exp.company}</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full text-right">
+                      <div className="text-sm font-bold">
+                        {formatDate(exp.startDate)} - {exp.current ? "Present" : formatDate(exp.endDate)}
+                      </div>
+                      {exp.location && <div className="text-sm italic">{exp.location}</div>}
+                    </div>
+                  </div>
+                  {exp.description && (
+                    <div className="space-y-0.5 p-1 -m-1">
+                      <ul className="space-y-0">
+                        {exp.description.split("\n").map((bullet, i) => (
+                          <li key={i} className="flex items-start justify-center gap-2 leading-none">
+                            <div className="flex items-center justify-center gap-3">
+                              <span className="flex items-center justify-center h-[1.15rem] w-3 scale-110">•</span>
+                            </div>
+                            <div className="inline-flex items-end w-full gap-2">
+                              <span className="text-[0.86rem]/[1.15rem]">{bullet}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     ),
 
     projects: (section) => (
-      <section id="projects" aria-label="Projects">
-        <h2 className="text-2xl font-semibold -mb-1">{section.title}</h2>
-        <hr className="border-black border-t-[3px]" />
-        {data.projects.data.map((project, index) => (
-          <div key={index} id={`project-${index}`}>
-            <div className="flex flex-row justify-between items-end">
-              <div>
-                <h3>
-                  <strong>{project.name}</strong>
-                  {project.organization && ` - ${project.organization}`}
-                </h3>
-                <p className="italic">{project.role}</p>
-              </div>
-              <div>
-                <p className="italic">
-                  {formatDate(project.startDate)} - {project.current ? "Present" : formatDate(project.endDate)}
-                </p>
-              </div>
-            </div>
-            {project.description && <p className="mt-2 whitespace-pre-line">{project.description}</p>}
-            {project.technologies.length > 0 && (
-              <p className="mt-1">
-                <strong>Technologies:</strong> {project.technologies.join(", ")}
-              </p>
-            )}
-            {project.url && (
-              <p className="mt-1">
-                <strong>URL:</strong>{" "}
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  {getLink(project.url)}
-                </a>
-              </p>
-            )}
+      <div className="group/section">
+        <div className="flex justify-between items-end border-b border-black/70 mb-1">
+          <div className="flex gap-1.5 items-center">
+            <span className="font-bold text-sm uppercase">{section.title}</span>
           </div>
-        ))}
-      </section>
+        </div>
+        <div className="ml-[calc(-2rem-0.125rem)] -mr-9">
+          <ul className="flex flex-col p-0 gap-2 list-none">
+            {data.projects.data.map((project, index) => (
+              <li key={index} className="flex gap-2 group/entity">
+                <div className="flex flex-col w-full group/parent">
+                  <div className="flex justify-between">
+                    <div className="flex w-full items-center gap-2">
+                      <div className="flex items-center">
+                        <span className="text-[0.86rem]/[1.15rem] font-semibold pr-[6px]">{project.name}</span>
+                        <div className="shrink-0 w-[1px] h-4 bg-black"></div>
+                        <span className="text-sm italic pl-[6px]">{project.technologies.join(", ")}</span>
+                      </div>
+                    </div>
+                    <div className="text-sm font-bold">
+                      {formatDate(project.startDate)} - {project.current ? "Present" : formatDate(project.endDate)}
+                    </div>
+                  </div>
+                  {project.description && (
+                    <div className="space-y-0.5 p-1 -m-1">
+                      <ul className="space-y-0">
+                        {project.description.split("\n").map((bullet, i) => (
+                          <li key={i} className="flex items-start justify-center gap-2 leading-none">
+                            <div className="flex items-center justify-center gap-3">
+                              <span className="flex items-center justify-center h-[1.15rem] w-3 scale-110">•</span>
+                            </div>
+                            <div className="inline-flex items-end w-full gap-2">
+                              <span className="text-[0.86rem]/[1.15rem]">{bullet}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     ),
 
     skills: (section) => (
-      <section id="skills" aria-label="Skills">
-        <h2 className="text-2xl font-semibold -mb-1">{section.title}</h2>
-        <hr className="border-black border-t-[3px]" />
-        <ul className="px-4 pt-2">
-          {data.skills.data.map((category, index) => (
-            <li key={index}>
-              <strong>{category.category}:</strong> {category.skills.join(", ")}
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="group/section">
+        <div className="flex justify-between items-end border-b border-black/70 mb-1">
+          <div className="flex gap-1.5 items-center">
+            <span className="font-bold text-sm uppercase">{section.title}</span>
+          </div>
+        </div>
+        <div className="ml-[calc(-2rem-0.125rem)] -mr-9">
+          <ul className="flex flex-col p-0 list-none gap-0">
+            {data.skills.data.map((category, index) => (
+              <li key={index} className="flex gap-2 group/entity">
+                <div className="flex flex-col w-full">
+                  <div className="flex flex-row items-center justify-between w-full">
+                    <div>
+                      <span className="text-[0.86rem]/[1.15rem] font-semibold">{category.category}</span>
+                      <span className="mr-1 text-[0.86rem]/[1.15rem]">: </span>
+                      <span className="text-[0.86rem]/[1.15rem]">{category.skills.join(", ")}</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     ),
 
     profile: (section) => (
-      <header className="grid grid-cols-3">
-        <div className="col-span-1 col-start-2 flex flex-col text-center">
-          <h1 className="text-xl font-bold">
-            {data.profile.firstName} {data.profile.lastName}
-          </h1>
-          <a href={`mailto:${data.profile.email}`} className="font-bold">
-            {data.profile.email}
-          </a>
-          {data.profile.phone && <a href={`tel:${data.profile.phone}`}>{data.profile.phone}</a>}
-          {data.profile.location && <p>{data.profile.location}</p>}
-        </div>
-        <div className="my-auto text-right flex flex-col">
-          {data.profile.links.map((link, index) => (
-            <a key={index} href={link.url} target="_blank" rel="noopener noreferrer">
-              {getLink(link.url)}
+      <div className="flex flex-col space-y-1 mb-2">
+        <h1 className="w-fit text-3xl font-bold capitalize tracking-tight">
+          {data.profile.firstName} {data.profile.lastName}
+        </h1>
+        <ul className="flex">
+          <li>
+            <a href={`mailto:${data.profile.email}`} className="text-sm">
+              {data.profile.email}
             </a>
+            <span className="text-xs px-0.5">❖</span>
+          </li>
+          {data.profile.phone && (
+            <li>
+              <a href={`tel:${data.profile.phone}`} className="text-sm">
+                {data.profile.phone}
+              </a>
+              <span className="text-xs px-0.5">❖</span>
+            </li>
+          )}
+          {data.profile.links.map((link, index) => (
+            <li key={index}>
+              <span className="text-sm">{link.name.toLowerCase()}.com/</span>
+              <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm">
+                {getLink(link.url)}
+              </a>
+              {index < data.profile.links.length - 1 && <span className="text-xs px-0.5">❖</span>}
+            </li>
           ))}
-        </div>
-      </header>
+        </ul>
+      </div>
     ),
 
     summary: (section) => (
-      <section id="summary" aria-label="Professional Summary">
-        <h2 className="text-2xl font-semibold -mb-1">{section.title}</h2>
-        <hr className="border-black border-t-[3px]" />
-        <p className="mt-2 whitespace-pre-line">{data.summary.content}</p>
-      </section>
+      <div className="group/section">
+        <div className="flex justify-between items-end border-b border-black/70 mb-1">
+          <div className="flex gap-1.5 items-center">
+            <span className="font-bold text-sm uppercase">{section.title}</span>
+          </div>
+        </div>
+        <p className="text-[0.86rem]/[1.15rem] whitespace-pre-line">{data.summary.content}</p>
+      </div>
     ),
 
-    custom: (section) => <></>, // Placeholder for custom sections
+    custom: () => <></>,
   };
 
   return (
-    <div
-      className="w-full h-full overflow-auto bg-[#f0f0f0] p-8"
-      style={{
-        WebkitPrintColorAdjust: "exact",
-        printColorAdjust: "exact",
-      }}
-    >
-      <div className="print-mimic leading-snug font-serif">
-        <main>{settings.sections.map((section) => sectionRenderers[section.type](section))}</main>
+    <div className="w-full h-full overflow-auto bg-gray-100">
+      <div
+        id="paper"
+        className="relative bg-white border p-2 border-gray-200 shadow-2xl shadow-slate-700/10 ring-1 ring-gray-900/5 mx-auto my-8"
+      >
+        <div className="paper-container font-minimal flex flex-col gap-2 leading-none max-w-[700px] mx-auto">
+          {settings.sections.map((section) => (
+            <div key={section.id}>{sectionRenderers[section.type](section)}</div>
+          ))}
+        </div>
       </div>
 
       <style jsx global>{`
         @media screen {
-          .print-mimic {
+          #paper {
             width: 210mm;
-            margin: 20mm auto;
+            min-height: 297mm;
             padding: ${settings.margins.top}mm ${settings.margins.right}mm ${settings.margins.bottom}mm
               ${settings.margins.left}mm;
-            border: 1px solid #000;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            font-family: ${settings.font.family};
-            font-size: ${settings.font.size}px;
           }
         }
 
         @media print {
-          .print-mimic {
-            width: auto;
+          @page {
+            size: A4;
             margin: 0;
+          }
+
+          body {
+            margin: 0;
+          }
+
+          #paper {
+            width: 210mm;
+            min-height: 297mm;
             padding: ${settings.margins.top}mm ${settings.margins.right}mm ${settings.margins.bottom}mm
               ${settings.margins.left}mm;
-            border: none;
+            margin: 0;
             box-shadow: none;
-            font-family: ${settings.font.family};
-            font-size: ${settings.font.size}px;
+            border: none;
+            background: white;
           }
 
           .print-hide {
             display: none;
           }
+        }
+
+        .paper-container {
+          font-family: ${settings.font.family}, system-ui, sans-serif;
+          font-size: ${settings.font.size}px;
+          line-height: 1.5;
+          color: #111827;
         }
       `}</style>
     </div>

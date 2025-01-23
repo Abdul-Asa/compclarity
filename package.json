@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:types": "source .env.local && supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts",
-    "postinstall": "cp node_modules/swiftlatex/dist/swift*.js node_modules/swiftlatex/dist/*.wasm public"
+    "db:types": "source .env.local && supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

@@ -3,7 +3,7 @@ import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { CVData, CVSection, CVSettings, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
 
 //Initial Data
-const initialSections: CVSection[] = [
+export const initialSections: CVSection[] = [
   { id: "profile", type: "profile", schema: "profile", title: "Profile", description: "Profile description", isVisible: true, isExpanded: true, isDraggable: false, isAlwaysVisible: true, isEditable: false },
   { id: "summary", type: "summary", schema: "summary", title: "Professional Summary", description: "A brief overview of your professional background", isVisible: false, isExpanded: false, isDraggable: true, isAlwaysVisible: false, isEditable: true },
   { id: "education", type: "educations", schema: "educations", title: "Education", description: "Your academic background and qualifications", isVisible: true, isExpanded: true, isDraggable: true, isAlwaysVisible: true, isEditable: true },

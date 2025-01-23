@@ -5,6 +5,7 @@ import {
   cvSectionsAtom,
   seededCVData,
   initialCVData,
+  initialSections,
   resetTriggerAtom,
   cvSettingsAtom,
 } from "@/components/cv-builder/store";
@@ -89,7 +90,7 @@ export default function Sections() {
   };
 
   const handleResetData = () => {
-    setSections(sections.map((section) => ({ ...section, isExpanded: true })));
+    setSections(initialSections);
     setEditingTitleId(null);
     setCvData(initialCVData);
     setResetTrigger(resetTrigger + 1);
@@ -97,14 +98,14 @@ export default function Sections() {
 
   const handleSeedData = () => {
     setCvData(seededCVData);
-    setSections(sections.map((section) => ({ ...section, isExpanded: true })));
+    setSections(initialSections);
     setEditingTitleId(null);
     setResetTrigger(resetTrigger + 1);
   };
 
   return (
     <div className="w-full p-4 space-y-4">
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <Button type="button" variant="outline" className="flex-1" onClick={handleSeedData}>
           Seed Form
         </Button>
@@ -118,7 +119,7 @@ export default function Sections() {
             <pre className="text-sm">{JSON.stringify(settings, null, 2)}</pre>
           </div>
         </Modal>
-      </div>
+      </div> */}
       <Sortable
         value={sections}
         onValueChange={(newSections) => {
