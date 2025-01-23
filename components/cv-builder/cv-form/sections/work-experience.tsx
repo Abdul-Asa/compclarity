@@ -18,15 +18,16 @@ import { z } from "zod";
 import { CVSection, WorkExperienceData, workExperienceSchema } from "../../types";
 
 export function WorkExperienceSection({ ...section }: CVSection) {
+  const { isVisible, type, id } = section;
   const [experiences, setExperiences] = useAtom(workExperiencesAtom);
   const [resetTrigger] = useAtom(resetTriggerAtom);
-  const setCustomExperiences = useSetAtom(customsAtom);
-  const { isVisible, type, id } = section;
+  const [customs, setCustomExperiences] = useAtom(customsAtom);
+  const customExperiences = customs.data.find((custom) => custom.id === id)?.data as WorkExperienceData;
 
   const form = useForm<{ data: WorkExperienceData }>({
     resolver: zodResolver(z.object({ data: workExperienceSchema })),
     disabled: !isVisible,
-    defaultValues: type === "workExperiences" ? experiences : {},
+    defaultValues: type === "workExperiences" ? experiences : { data: customExperiences },
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -36,7 +37,7 @@ export function WorkExperienceSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (resetTrigger > 0) {
-      form.reset(experiences);
+      form.reset(type === "workExperiences" ? experiences : { data: customExperiences });
     }
   }, [resetTrigger]);
 

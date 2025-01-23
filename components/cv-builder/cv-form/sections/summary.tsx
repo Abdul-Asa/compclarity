@@ -10,13 +10,14 @@ import Editor from "@/components/editor/cv-editor";
 import { CVSection, SummaryData, summarySchema } from "../../types";
 
 export const SummarySection = ({ ...section }: CVSection) => {
+  const { isVisible, type, id } = section;
   const [summary, setSummary] = useAtom(summaryAtom);
   const [resetTrigger] = useAtom(resetTriggerAtom);
-  const setCustomSummary = useSetAtom(customsAtom);
-  const { isVisible, type, id } = section;
+  const [customs, setCustomSummary] = useAtom(customsAtom);
+  const customSummary = customs.data.find((custom) => custom.id === id)?.data as SummaryData;
   const form = useForm<SummaryData>({
     resolver: zodResolver(summarySchema),
-    defaultValues: type === "summary" ? summary : {},
+    defaultValues: type === "summary" ? summary : customSummary,
     disabled: !isVisible,
   });
 
@@ -35,7 +36,7 @@ export const SummarySection = ({ ...section }: CVSection) => {
 
   useEffect(() => {
     if (resetTrigger > 0) {
-      form.reset(summary);
+      form.reset(type === "summary" ? summary : customSummary);
     }
   }, [resetTrigger]);
 

@@ -19,6 +19,7 @@ export function CVPreview() {
 
   const handleDownload = () => {
     // Trigger print dialog which can save as PDF
+    // implement better version later
     window.print();
   };
 
@@ -32,13 +33,7 @@ export function CVPreview() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <HTMLPreview
-          data={data}
-          settings={{
-            ...settings,
-            sections,
-          }}
-        />
+        <HTMLPreview {...{ data, settings, sections }} />
       </div>
     </div>
   );

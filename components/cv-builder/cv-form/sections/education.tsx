@@ -17,15 +17,16 @@ import Editor from "@/components/editor/cv-editor";
 import { CVSection, educationSchema, EducationData } from "../../types";
 
 export function EducationSection({ ...section }: CVSection) {
+  const { isVisible, type, id } = section;
   const [educations, setEducations] = useAtom(educationsAtom);
   const [resetTrigger] = useAtom(resetTriggerAtom);
-  const setCustomEducations = useSetAtom(customsAtom);
-  const { isVisible, type, id } = section;
+  const [customs, setCustomEducations] = useAtom(customsAtom);
+  const customEducations = customs.data.find((custom) => custom.id === id)?.data as EducationData;
 
   const form = useForm<{ data: EducationData }>({
     resolver: zodResolver(z.object({ data: educationSchema })),
     disabled: !isVisible,
-    defaultValues: type === "educations" ? educations : {},
+    defaultValues: type === "educations" ? educations : { data: customEducations },
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -35,7 +36,7 @@ export function EducationSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (resetTrigger > 0) {
-      form.reset(type === "educations" ? educations : {});
+      form.reset(type === "educations" ? educations : { data: customEducations });
     }
   }, [resetTrigger]);
 

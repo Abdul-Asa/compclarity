@@ -16,15 +16,16 @@ import { cn } from "@/lib/utils";
 import { CVSection, SkillsData, skillsSchema } from "../../types";
 
 export function SkillsSection({ ...section }: CVSection) {
+  const { isVisible, type, id } = section;
   const [skills, setSkills] = useAtom(skillsAtom);
   const [resetTrigger] = useAtom(resetTriggerAtom);
-  const setCustomSkills = useSetAtom(customsAtom);
-  const { isVisible, type, id } = section;
+  const [customs, setCustomSkills] = useAtom(customsAtom);
+  const customSkills = customs.data.find((custom) => custom.id === id)?.data as SkillsData;
 
   const form = useForm<{ data: SkillsData }>({
     resolver: zodResolver(skillsSchema),
     disabled: !isVisible,
-    defaultValues: skills,
+    defaultValues: type === "skills" ? skills : { data: customSkills },
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -34,7 +35,7 @@ export function SkillsSection({ ...section }: CVSection) {
 
   useEffect(() => {
     if (resetTrigger > 0) {
-      form.reset(skills);
+      form.reset(type === "skills" ? skills : { data: customSkills });
     }
   }, [resetTrigger]);
 

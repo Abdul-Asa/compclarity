@@ -73,7 +73,7 @@ const Editor = ({ content, onChange, disabled, placeholder, className }: EditorP
     extensions: extensions as Extension[],
     content: content,
     onUpdate: ({ editor }) => {
-      const html = editor.getText();
+      const html = editor.getHTML();
       onChange?.(html);
     },
     immediatelyRender: false,
@@ -81,7 +81,7 @@ const Editor = ({ content, onChange, disabled, placeholder, className }: EditorP
 
   // Add effect to update editor content when prop changes
   useEffect(() => {
-    if (editor && content !== editor.getText()) {
+    if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content || "");
     }
   }, [content, editor]);
@@ -114,7 +114,7 @@ const Editor = ({ content, onChange, disabled, placeholder, className }: EditorP
         }}
         className={cn("cursor-text min-h-[10rem] bg-background font-open", className)}
       >
-        <EditorContent className="outline-none" editor={editor} />
+        <EditorContent className="outline-none text-sm" editor={editor} />
       </div>
     </div>
   );

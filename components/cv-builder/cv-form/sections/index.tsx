@@ -105,7 +105,7 @@ export default function Sections() {
 
   return (
     <div className="w-full p-4 space-y-4 max-w-screen-md mx-auto">
-      {/* <div className="flex gap-2">
+      <div className="flex gap-2">
         <Button type="button" variant="outline" className="flex-1" onClick={handleSeedData}>
           Seed Form
         </Button>
@@ -119,7 +119,7 @@ export default function Sections() {
             <pre className="text-sm">{JSON.stringify(settings, null, 2)}</pre>
           </div>
         </Modal>
-      </div> */}
+      </div>
       <Sortable
         value={sections}
         onValueChange={(newSections) => {
