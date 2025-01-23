@@ -99,7 +99,7 @@ export function EducationSection({ ...section }: CVSection) {
                     </div>
 
                     <div className="grid gap-4">
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
                         <FormField
                           control={form.control}
                           name={`data.${index}.school`}
@@ -158,7 +158,7 @@ export function EducationSection({ ...section }: CVSection) {
                           </FormItem>
                         )}
                       />
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
                         <FormField
                           control={form.control}
                           name={`data.${index}.startDate`}

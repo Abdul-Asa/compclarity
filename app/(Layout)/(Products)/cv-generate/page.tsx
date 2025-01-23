@@ -3,9 +3,11 @@ import { CVForm } from "@/components/cv-builder/cv-form";
 export default function CVBuilder() {
   return (
     <div className="h-[calc(100vh-4rem)] p-4 w-full max-w-screen-2xl mx-auto">
-      <ResizablePanelGroup direction="horizontal" className="rounded-lg border">
+      <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={45} minSize={30} collapsible collapsedSize={0}>
-          <CVForm />
+          <div className="h-full overflow-y-auto container-type-width">
+            <CVForm />
+          </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={55} minSize={50} collapsible collapsedSize={0}>

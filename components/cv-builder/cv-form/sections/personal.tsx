@@ -72,7 +72,7 @@ export function PersonalSection({ ...section }: CVSection) {
   return (
     <Form {...form}>
       <div className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
           <FormField
             control={form.control}
             name="firstName"
@@ -102,7 +102,7 @@ export function PersonalSection({ ...section }: CVSection) {
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
           <FormField
             control={form.control}
             name="email"
