@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 const Sections = dynamic(() => import("./sections"), {
   loading: () => (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex-grow p-4 overflow-auto">
         <Skeleton className="w-full h-8 mb-4" />
         <Skeleton className="w-full h-8 mb-4" />
@@ -20,7 +20,7 @@ const Sections = dynamic(() => import("./sections"), {
 });
 const Settings = dynamic(() => import("./settings"), {
   loading: () => (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex-grow p-4 overflow-auto">
         <Skeleton className="w-full h-64" />
       </div>
@@ -28,7 +28,7 @@ const Settings = dynamic(() => import("./settings"), {
   ),
   ssr: false,
 });
-export function CVForm() {
+export default function CVForm() {
   return (
     <Tabs defaultValue="sections">
       <TabsList>

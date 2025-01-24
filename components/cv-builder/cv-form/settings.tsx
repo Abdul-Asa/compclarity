@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { CVSettings } from "../types";
+import { fonts } from "../cv-preview/fonts";
 
 const Settings = () => {
   const [settings, setSettings] = useAtom(cvSettingsAtom);
@@ -92,9 +93,11 @@ const Settings = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Arial">Arial</SelectItem>
-                    <SelectItem value="Times New Roman">Times New Roman</SelectItem>
-                    <SelectItem value="Helvetica">Helvetica</SelectItem>
+                    {Object.entries(fonts).map(([key, value]) => (
+                      <SelectItem key={key} value={key}>
+                        {value.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

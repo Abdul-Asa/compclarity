@@ -1,6 +1,7 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { CVForm } from "@/components/cv-builder/cv-form";
-import { CVPreview } from "@/components/cv-builder/cv-preview";
+import CVForm from "@/components/cv-builder/cv-form";
+import CVPreview from "@/components/cv-builder/cv-preview";
+
 export default function CVBuilder() {
   return (
     <div className="h-[calc(100vh-4rem)] p-4 w-full max-w-screen-2xl mx-auto">

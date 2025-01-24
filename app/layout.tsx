@@ -4,10 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { rootStructuredData } from "@/lib/config/structuredData";
 import { metadata as metadataConfig } from "@/lib/config/metadata";
 import Providers from "@/components/providers";
-import { Toaster as SonnerToaster } from "sonner";
-import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
-import { Announcement } from "@/components/layout/Announcement";
 
 const sg = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 const os = Open_Sans({ subsets: ["latin"], variable: "--font-open" });

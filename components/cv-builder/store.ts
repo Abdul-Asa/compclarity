@@ -274,4 +274,63 @@ export const customsAtom = atom(
 // Add a new atom for reset trigger
 export const resetTriggerAtom = atom<number>(0);
 
+// Add this new function to combine all CV data
+export const getCombinedCVData = (
+  cvData: CVData,
+  sections: CVSection[],
+  settings: CVSettings
+) => {
+  const combinedData = {
+    sections: sections.map(section => {
+      const sectionData = {
+        ...section,
+        data: null as any
+      };
+
+      // Map the section data based on type
+      switch (section.type) {
+        case 'profile':
+          sectionData.data = cvData.profile;
+          break;
+        case 'summary':
+          sectionData.data = cvData.summary;
+          break;
+        case 'educations':
+          sectionData.data = cvData.educations.data;
+          break;
+        case 'workExperiences':
+          sectionData.data = cvData.workExperiences.data;
+          break;
+        case 'skills':
+          sectionData.data = cvData.skills.data;
+          break;
+        case 'projects':
+          sectionData.data = cvData.projects.data;
+          break;
+        case 'custom':
+          // Find matching custom section data
+          const customData = cvData.customs.data.find(
+            custom => custom.id === section.id
+          );
+          sectionData.data = customData?.data || [];
+          break;
+      }
+
+      return sectionData;
+    }),
+    settings,
+  };
+
+  return combinedData;
+};
+
+// Add a convenience atom to get the combined data
+export const combinedCVDataAtom = atom((get) => {
+  const cvData = get(cvDataAtom);
+  const sections = get(cvSectionsAtom);
+  const settings = get(cvSettingsAtom);
+  
+  return getCombinedCVData(cvData, sections, settings);
+});
+
 

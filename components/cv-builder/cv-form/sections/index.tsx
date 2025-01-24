@@ -8,6 +8,7 @@ import {
   initialSections,
   resetTriggerAtom,
   cvSettingsAtom,
+  combinedCVDataAtom,
 } from "@/components/cv-builder/store";
 import { PersonalSection } from "./personal";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
@@ -34,6 +35,7 @@ export default function Sections() {
   const [resetTrigger, setResetTrigger] = useAtom(resetTriggerAtom);
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
   const [cvData, setCvData] = useAtom(cvDataAtom);
+  const [combinedCVData] = useAtom(combinedCVDataAtom);
   const [settings] = useAtom(cvSettingsAtom);
 
   const handleAddCustomSection = () => {
@@ -114,9 +116,7 @@ export default function Sections() {
         </Button>
         <Modal trigger={<Button>Show JSON</Button>}>
           <div className="w-full h-[425px] bg-gray-50 dark:bg-gray-800 rounded-lg p-4 overflow-scroll">
-            <pre className="text-sm">{JSON.stringify(cvData, null, 2)}</pre>
-            <pre className="text-sm">{JSON.stringify(sections, null, 2)}</pre>
-            <pre className="text-sm">{JSON.stringify(settings, null, 2)}</pre>
+            <pre className="text-sm">{JSON.stringify(combinedCVData, null, 2)}</pre>
           </div>
         </Modal>
       </div>
