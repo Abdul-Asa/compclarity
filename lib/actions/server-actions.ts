@@ -28,9 +28,14 @@ export const getUser = cache(async () => {
   return data;
 });
 
-export const getCVData = cache(async (userId: string) => {
+export const getCVs = cache(async () => {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("cvs").select("*").eq("user_id", userId)
+  const user = await getUser();
+  if (!user) {
+    console.log("User not authenticated");
+    return null;
+  }
+  const { data, error } = await supabase.from("cvs").select("*").eq("user_id", user.id);
 
   if (error || !data){
     return null
@@ -90,6 +95,44 @@ export const verifyOTP = actionClient.schema(otpSignInSchema).action(async ({ pa
   //   redirect("/account");
   // }
   redirect("/");
+});
+
+const signUpSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  firstName: z.string().min(1, { message: "First name cannot be empty" }),
+  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
+});
+
+export const signUp = actionClient.schema(signUpSchema).action(async ({ parsedInput: { email, password, firstName, lastName } }) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { first_name: firstName, last_name: lastName },
+    },
+  });
+
+  if (error || !data) {
+    console.error(error);
+    throw new Error("Failed to sign up");
+  }
+
+  return data;
+});
+
+const passwordSignInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const passwordSignIn = actionClient.schema(passwordSignInSchema).action(async ({ parsedInput: { email, password } }) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 });
 
 const createCVSchema = z.object({

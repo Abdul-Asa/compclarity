@@ -3,7 +3,7 @@ import { cookies, headers } from "next/headers";
 import Link from "next/link";
 import { userAgent } from "next/server";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { OTPSignIn } from "@/components/auth/otp-signin";
+import { PasswordSignIn } from "@/components/auth/password-sign-in";
 import { redirect } from "next/navigation";
 import { GoogleSignIn } from "@/components/auth/google-signin";
 import { AppleSignIn } from "@/components/auth/apple-signin";
@@ -13,7 +13,7 @@ import { InfoIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Sign in or register for an account to apply for jobs and track your progress",
+  description: "Sign in to apply for jobs and track your progress",
 };
 
 const signInOptions = {
@@ -31,7 +31,7 @@ const signInOptions = {
   },
   otp: {
     name: "Email",
-    component: <OTPSignIn />,
+    component: <PasswordSignIn />,
   },
 };
 
@@ -95,23 +95,23 @@ export default async function Page() {
   }
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-lg flex-col px-8 items-center justify-center">
-      <div className="flex w-full flex-col ">
-        <h1 className="font-medium pb-4 text-xl md:text-3xl">
-          Ready to find your <span className="inline-block text-primary transition hover:-translate-y-3">dream</span>{" "}
+    <div className="flex flex-col items-center justify-center w-full h-[calc(100vh-4rem)] max-w-lg px-8 mx-auto">
+      <div className="flex flex-col w-full ">
+        <h1 className="pb-4 text-xl font-medium md:text-3xl">
+          Ready to find your <span className="inline-block transition text-primary hover:-translate-y-3">dream</span>{" "}
           job?
         </h1>
 
-        <p className="font-medium pb-1 text-sm md:text-lg text-muted-foreground">
+        <p className="pb-1 text-sm font-medium md:text-lg text-muted-foreground">
           Apply effortlessly and track your progress
         </p>
 
-        <div className="pointer-events-auto mt-6 flex flex-col mb-6">
+        <div className="flex flex-col mt-6 mb-6 pointer-events-auto">
           {preferredSignInOption}
 
-          <Accordion type="single" collapsible className="border-t-[1px] pt-2 mt-6 border-border">
+          {/* <Accordion type="single" collapsible className="border-t-[1px] pt-2 mt-6 border-border">
             <AccordionItem value="item-1" className="border-0">
-              <AccordionTrigger className="justify-center space-x-2 flex text-sm">
+              <AccordionTrigger className="flex justify-center space-x-2 text-sm">
                 <span>More options</span>
               </AccordionTrigger>
               <AccordionContent className="mt-4">
@@ -123,11 +123,21 @@ export default async function Page() {
                 </div>
               </AccordionContent>
             </AccordionItem>
-          </Accordion>
+          </Accordion> */}
+          <p className="mt-4 text-center ">
+            Don't have an account?{" "}
+            <Link href="/auth/sign-up" className="underline text-primary">
+              Sign up
+            </Link>
+          </p>
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          By clicking continue, you acknowledge that you have read and agree to CompClarity's{" "}
+        <p className="text-xs text-center text-muted-foreground">
+          Forgot your password?{" "}
+          <Link href="/auth/reset-password" className="underline">
+            Reset password
+          </Link>
+          {/* By clicking continue, you acknowledge that you have read and agree to CompClarity's{" "}
           <Link href="/privacy" className="underline">
             Terms of Service
           </Link>{" "}
@@ -135,7 +145,7 @@ export default async function Page() {
           <Link href="/privacy" className="underline">
             Privacy Policy
           </Link>
-          .
+          . */}
         </p>
       </div>
     </div>

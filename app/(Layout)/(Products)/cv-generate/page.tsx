@@ -1,4 +1,4 @@
-import { getCVData, getUser } from "@/lib/actions/server-actions";
+import { getCVs, getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
@@ -13,7 +13,7 @@ export default async function CVBuilder() {
     redirect("/auth/sign-in");
   }
 
-  const cvs = await getCVData(user.id);
+  const cvs = await getCVs(user.id);
 
   return (
     <div className="h-[calc(100vh-4rem)] p-2 sm:p-4 w-full container">

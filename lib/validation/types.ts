@@ -8,6 +8,8 @@ import {
   updateApplicationSchema,
   introFormSchema,
   profileFormSchema,
+  passwordSignUpSchema,
+  passwordSignInSchema,
 } from "@/lib/validation/schema";
 import countryToCurrency from "country-to-currency";
 import { Database } from "../supabase/types";
@@ -100,3 +102,5 @@ export type CVDbType = Database["public"]["Tables"]["cvs"]["Row"];
 export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
 export type IntroFormSchema = z.infer<typeof introFormSchema>;
 export type ProfileFormSchema = z.infer<typeof profileFormSchema>;
+export type PasswordSignUpSchema = z.infer<typeof passwordSignUpSchema>;
+export type PasswordSignInSchema = z.infer<typeof passwordSignInSchema>;
