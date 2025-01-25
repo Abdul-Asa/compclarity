@@ -1,17 +1,12 @@
 "use client";
-
-import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CVDbType } from "@/lib/validation/types";
-import { useLoadFromDb } from "../store";
-import { useDebounce } from "@/lib/hooks/useDebounce";
-import { useAtomValue } from "jotai";
-import { combinedCVDataAtom } from "../store";
-import { updateCV } from "@/lib/actions/server-actions";
-import { useAction } from "next-safe-action/hooks";
-import { useToast } from "@/lib/hooks/useToast";
+import { cvDataAtom, cvSectionsAtom, cvSettingsAtom, deconstructCombinedCVData, resetTriggerAtom } from "../store";
+import { CombinedCVData } from "../types";
+import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
 
 const Sections = dynamic(() => import("./sections"), {
   loading: () => (
@@ -42,39 +37,26 @@ const Settings = dynamic(() => import("./settings"), {
 });
 
 export default function CVForm({ cv }: { cv: CVDbType }) {
-  const loadFromDb = useLoadFromDb(cv.id);
-  const combinedData = useAtomValue(combinedCVDataAtom);
-  const debouncedData = useDebounce(combinedData, 5000);
-  const { execute, hasErrored } = useAction(updateCV);
-  const { toast } = useToast();
+  const { cvData, sections, settings } = deconstructCombinedCVData(cv.cv_data as unknown as CombinedCVData);
+  const newSettings = {
+    ...settings,
+    id: cv.id,
+    userId: cv.user_id,
+    createdAt: cv.created_at,
+    updatedAt: cv.updated_at,
+    lastModified: new Date().toISOString(),
+  };
+  const [, setCvDataState] = useAtom(cvDataAtom);
+  const [, setSectionsState] = useAtom(cvSectionsAtom);
+  const [, setSettingsState] = useAtom(cvSettingsAtom);
+  const [, setResetTrigger] = useAtom(resetTriggerAtom);
 
-  // Load initial data
   useEffect(() => {
-    loadFromDb();
-  }, [cv.id]);
-
-  // // Auto-save effect
-  // useEffect(() => {
-  //   if (!cv.id) return;
-
-  //   execute({
-  //     cvId: cv.id,
-  //     combinedCVData: debouncedData,
-  //   });
-
-  //   if (!hasErrored) {
-  //     toast({
-  //       title: "Changes saved",
-  //       description: "Your changes have been saved.",
-  //     });
-  //   } else {
-  //     toast({
-  //       title: "Failed to save changes",
-  //       description: "Your changes could not be saved. Please try again.",
-  //       variant: "destructive",
-  //     });
-  //   }
-  // }, [debouncedData, cv.id]);
+    setCvDataState(cvData);
+    setSectionsState(sections);
+    setSettingsState(newSettings);
+    setResetTrigger((prev) => prev + 1);
+  }, [cv]);
 
   return (
     <Tabs defaultValue="sections">

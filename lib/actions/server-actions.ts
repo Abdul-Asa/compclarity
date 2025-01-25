@@ -188,7 +188,7 @@ export const updateCV = actionClient.schema(updateCVSchema).action(
     if (!user) {
       throw new Error("User not authenticated");
     }
-
+    console.log(cvId);
     const { data, error } = await supabase
       .from("cvs")
       .update({
@@ -196,9 +196,7 @@ export const updateCV = actionClient.schema(updateCVSchema).action(
         updated_at: new Date().toISOString(),
       })
       .eq("id", cvId)
-      .eq("user_id", user.id)
       .select()
-      .single();
 
     if (error) {
       console.error(error);
@@ -206,6 +204,7 @@ export const updateCV = actionClient.schema(updateCVSchema).action(
     }
 
     revalidatePath("/");
+    console.log(data);
     return data;
   }
 );

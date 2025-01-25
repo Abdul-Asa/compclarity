@@ -54,7 +54,7 @@ export default function Settings() {
     <div className="p-4 space-y-6">
       {/* Document Info */}
       <Card>
-        <CardHeader className="pb-2">
+        <CardHeader className="p-6">
           <CardTitle>Document Information</CardTitle>
           <CardDescription>Basic information about your CV</CardDescription>
         </CardHeader>
@@ -78,7 +78,7 @@ export default function Settings() {
 
       {/* Layout Settings */}
       <Card>
-        <CardHeader className="pb-2">
+        <CardHeader className="p-6">
           <CardTitle>Layout</CardTitle>
           <CardDescription>Customize the layout of your CV</CardDescription>
         </CardHeader>
@@ -147,7 +147,7 @@ export default function Settings() {
 
       {/* Typography Settings */}
       <Card>
-        <CardHeader className="pb-2">
+        <CardHeader className="p-6">
           <CardTitle>Typography</CardTitle>
           <CardDescription>Customize the fonts and text styles</CardDescription>
         </CardHeader>
@@ -342,7 +342,7 @@ export default function Settings() {
 
       {/* Format Settings */}
       <Card>
-        <CardHeader className="pb-2">
+        <CardHeader className="p-6">
           <CardTitle>Format</CardTitle>
           <CardDescription>Customize the formatting of your CV</CardDescription>
         </CardHeader>

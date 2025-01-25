@@ -13,7 +13,7 @@ export default async function CVBuilder() {
     redirect("/auth/sign-in");
   }
 
-  const cvs = await getCVs(user.id);
+  const cvs = await getCVs();
 
   return (
     <div className="h-[calc(100vh-4rem)] p-2 sm:p-4 w-full container">

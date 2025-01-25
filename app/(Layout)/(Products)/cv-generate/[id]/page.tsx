@@ -1,12 +1,15 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CVPreview from "@/components/cv-builder/cv-preview";
 import { getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
 import { getCV } from "@/lib/actions/server-actions";
 import dynamic from "next/dynamic";
 
 const CVForm = dynamic(() => import("@/components/cv-builder/cv-form"), {
+  ssr: false,
+});
+
+const CVPreview = dynamic(() => import("@/components/cv-builder/cv-preview"), {
   ssr: false,
 });
 
@@ -22,7 +25,7 @@ export default async function CVBuilder({ params }: { params: { id: number } }) 
   }
 
   return (
-    <div className="h-[calc(100vh-4rem)] p-2 sm:p-4 w-full max-w-screen-2xl mx-auto">
+    <div className="w-full h-screen p-2 mx-auto  sm:p-4 max-w-screen-2xl">
       {/* Mobile View: Tabs */}
       <div className="block h-full lg:hidden">
         <Tabs defaultValue="form" className="h-full">

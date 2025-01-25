@@ -23,7 +23,7 @@ interface ToolbarProps {
 export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
   const [settings, setSettings] = useAtom(cvSettingsAtom);
   const combinedData = useAtomValue(combinedCVDataAtom);
-  const { execute, hasErrored } = useAction(updateCV);
+  const { executeAsync } = useAction(updateCV);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -63,12 +63,12 @@ export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
   };
 
   const handleManualSave = async () => {
-    execute({
+    const result = await executeAsync({
       cvId: settings.id,
       combinedCVData: combinedData,
     });
 
-    if (!hasErrored) {
+    if (result?.data) {
       toast({
         title: "Changes saved",
         description: "Your changes have been saved successfully.",
@@ -76,7 +76,7 @@ export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
     } else {
       toast({
         title: "Failed to save changes",
-        description: "Your changes could not be saved. Please try again.",
+        description: result?.serverError || "Your changes could not be saved. Please try again.",
         variant: "destructive",
       });
     }
