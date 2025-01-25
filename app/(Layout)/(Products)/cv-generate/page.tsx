@@ -33,12 +33,7 @@ export default async function CVBuilder() {
                 <div className="overflow-hidden border rounded-lg bg-card">
                   {/* Placeholder Image */}
                   <div className="relative aspect-[3/4] bg-muted">
-                    <Image
-                      src="/cv-placeholder.png"
-                      alt={`CV - ${cvData.settings.name}`}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src="/create.png" alt={`CV - ${cvData.settings.name}`} fill className="object-cover" />
                   </div>
 
                   {/* Card Content */}
