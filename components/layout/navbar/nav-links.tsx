@@ -37,7 +37,7 @@ export const navLinks: NavLink[] = [
     title: "Services",
     children: [
       { title: "CV Crafting", href: "/cv", description: "Craft the perfect CV", icon: FileText },
-      { title: "CV Generation", href: "/cv-generate", description: "Generate a CV", icon: FileText },
+      // { title: "CV Generation", href: "/cv-generate", description: "Generate a CV", icon: FileText },
       {
         title: "Cover Letter",
         href: "/cover-letter",
@@ -55,10 +55,10 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
       <Link
         key={link.title}
         href={link.href || "#"}
-        className="text-lg font-medium  pl-10 md:pl-0 py-5 border-b w-full"
+        className="w-full py-5 pl-10 text-lg font-medium border-b md:pl-0"
         onClick={onLinkClick}
       >
-        {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+        {link.icon && <link.icon className="w-4 h-4 mr-2" />}
         {link.title}
       </Link>
     );
@@ -67,7 +67,7 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
   if (!link.children) {
     return (
       <Link key={link.title} href={link.href || "#"} className={navigationMenuTriggerStyle()} onClick={onLinkClick}>
-        {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+        {link.icon && <link.icon className="w-4 h-4 mr-2" />}
         {link.title}
       </Link>
     );
@@ -77,7 +77,7 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
     return (
       <Accordion type="multiple" className="w-full">
         <AccordionItem value={`item-${link.title}`}>
-          <AccordionTrigger className="text-lg font-medium py-5 md:justify-center w-full text-center">
+          <AccordionTrigger className="w-full py-5 text-lg font-medium text-center md:justify-center">
             {link.title}
           </AccordionTrigger>
           <AccordionContent className="flex flex-col pb-0">
@@ -108,13 +108,13 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
           <Link
             key={child.href}
             href={child.href || "#"}
-            className="transition-all duration-200 flex items-center w-full gap-3 rounded-sm border border-border p-3 hover:border-primary hover:bg-primary-light/30"
+            className="flex items-center w-full gap-3 p-3 transition-all duration-200 border rounded-sm border-border hover:border-primary hover:bg-primary-light/30"
             onClick={onLinkClick}
           >
-            {child.icon && <child.icon className="size-8 mr-1" />}
+            {child.icon && <child.icon className="mr-1 size-8" />}
             <div className="flex flex-col">
               <div className="font-medium">{child.title}</div>
-              <p className="font-open text-sm leading-tight text-muted-foreground">{child.description}</p>
+              <p className="text-sm leading-tight font-open text-muted-foreground">{child.description}</p>
             </div>
           </Link>
         ))}

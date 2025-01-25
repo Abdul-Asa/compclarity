@@ -1,23 +1,47 @@
-import type { Metadata } from "next";
-import { ProfileProgress } from "@/components/layout/account/profile-progress";
-import { getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
-import ProfileForm from "@/components/forms/profile-form";
+import { createClient } from "@/lib/supabase/server";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Metadata } from "next";
+import AccountForm from "./AccountForm";
+import { PasswordResetForm } from "@/app/(Layout)/(Auth)/password-reset/PasswordReset";
 
 export const metadata: Metadata = {
-  title: "Account",
-  description: "Manage your account settings",
+  title: "CompClarity - Account",
+  description:
+    "CompClarity's mission is dedicated to demystifying compensation packages across Europe, by ensuring that you have all the information required to understand your worth and make informed decisions.",
 };
 
-export default async function Account() {
-  const user = await getUser();
-  if (!user) {
-    redirect("/auth/sign-in");
+export default async function page() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    redirect("/login");
   }
+
+  const user = {
+    email: data.user.email || "",
+    first_name: data.user.user_metadata?.first_name,
+    last_name: data.user.user_metadata?.last_name,
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {/* <ProfileProgress initialData={user} /> */}
-      <div className="col-span-2 rounded-sm ">{/* <ProfileForm {...user} /> */}</div>
+    <div className="flex flex-col max-w-5xl gap-10">
+      <div className="grid grid-cols-2 gap-10">
+        <Card className="col-span-2 md:col-span-1">
+          <CardHeader className="p-6">
+            <CardTitle>Profile</CardTitle>
+            <CardDescription>Update your profile details.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AccountForm userData={user} />
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-2 md:col-span-1">
+          <PasswordResetForm />
+        </Card>
+      </div>
     </div>
   );
 }

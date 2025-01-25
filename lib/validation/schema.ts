@@ -45,6 +45,31 @@ export const salaryFormSchema = z.object({
   ethnicity: z.string(),
   other: z.string(),
 });
+export const signUpFormSchema = z.object({
+  firstName: z.string().min(1, { message: "First name cannot be empty" }),
+  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
+  email: z.string().email(),
+  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
+});
+
+export const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export const resetPasswordSchema = z.object({
+  password: z.string().min(6, { message: "Password must have a length of at least 6." }),
+  confirmPassword: z.string().min(6, { message: "Password must have a length of at least 6." }),
+});
+
+export const updateUserSchema = z.object({
+  firstName: z.string().min(1, { message: "First name cannot be empty" }),
+  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
+});
 
 export const createApplicationSchema = z.object({
   companyName: z.string().min(1, { message: "Company name cannot be empty" }),
@@ -136,15 +161,15 @@ export const profileFormSchema = z.object({
   location: z.string().min(1, { message: "Location cannot be empty" }),
 });
 
-export const passwordSignUpSchema = z.object({
-  firstName: z.string().min(1, { message: "First name cannot be empty" }),
-  lastName: z.string().min(1, { message: "Last name cannot be empty" }),
-  email: z.string().email(),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string(),
-});
+// export const passwordSignUpSchema = z.object({
+//   firstName: z.string().min(1, { message: "First name cannot be empty" }),
+//   lastName: z.string().min(1, { message: "Last name cannot be empty" }),
+//   email: z.string().email(),
+//   password: z.string().min(8, "Password must be at least 8 characters"),
+//   confirmPassword: z.string(),
+// });
 
-export const passwordSignInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
+// export const passwordSignInSchema = z.object({
+//   email: z.string().email(),
+//   password: z.string().min(8, "Password must be at least 8 characters"),
+// });
