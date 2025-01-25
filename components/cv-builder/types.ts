@@ -1,11 +1,6 @@
 import { z } from "zod";
+import { getCombinedCVData } from "./store";
 
-// Add new type for section types
-export type CVRender = {
-  url: string;
-  isLoading: boolean;
-  isError: boolean;
-};
 export type SectionType = "profile" | "summary" | "workExperiences" | "educations" | "projects" | "skills" | "custom";
 export type SectionSchema = Omit<SectionType, "custom">;
 export interface CVSection {
@@ -21,20 +16,67 @@ export interface CVSection {
   isEditable?: boolean;
 }
 export interface CVSettings {
-  template: 'classic' | 'modern' | 'minimal'; 
+  // Document Settings
+  name: string;
+  createdAt: string;
+  lastModified: string;
+  documentSize: "A4" | "LETTER";
+  scale: number;
+  autoScale: boolean;
+
+  // Layout Settings
+  template: 'classic' | 'modern' | 'minimal';
   margins: {
     top: number;
     bottom: number;
     left: number;
     right: number;
   };
-  font: {
-    family: string;
-    size: number;
+  spacing: {
+    sectionGap: number;
+    itemGap: number;
+    lineHeight: number;
   };
+
+  // Typography Settings
+  title: {
+    font: {
+      family: string;
+      size: number;
+      weight: "normal" | "medium" | "semibold" | "bold";
+    };
+    color: string;
+    align: "left" | "center" | "right";
+  };
+  heading: {
+    font: {
+      family: string;
+      size: number;
+      weight: "normal" | "medium" | "semibold" | "bold";
+    };
+    color: string;
+    align: "left" | "center" | "right";
+  };
+  body: {
+    font: {
+      family: string;
+      size: number;
+      weight: "normal" | "medium" | "semibold" | "bold";
+    };
+    color: string;
+  };
+  accent: {
+    primary: string;
+    secondary: string;
+  };
+
+  // Format Settings
   dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
   displayFullLinks: boolean;
+  bulletPoints: "•" | "◦" | "▪" | "▫" | "‣" | "-";
 }
+
+export type CombinedCVData = ReturnType<typeof getCombinedCVData>;
 
 //Schemas
 export const profileSchema = z.object({

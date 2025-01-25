@@ -5,19 +5,21 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 import NavigationItems from "./nav-links";
+import { AccountMenu } from "./account-menu";
+import { User } from "@/lib/validation/types";
 
-export function MobileMenu() {
+export function MobileMenu({ user }: { user: User | null }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div
-      className="group flex items-center gap-2 lg:hidden select-none"
+      className="flex items-center gap-2 select-none group lg:hidden"
       aria-label="Menu"
       aria-hidden={isMobileMenuOpen}
     >
       <ModeToggle />
       <button
-        className="flex relative aspect-square h-11 list-none"
+        className="relative flex list-none aspect-square h-11"
         onClick={() => setIsMobileMenuOpen((prev) => !prev)}
         aria-expanded={isMobileMenuOpen}
         aria-label="Toggle menu"
@@ -43,14 +45,18 @@ export function MobileMenu() {
         )}
       >
         <NavigationItems mobile />
-        <div className="flex w-full justify-center border-t">
-          <Link
-            href="/auth/sign-in"
-            className="text-lg font-medium py-5 w-full text-center hover:bg-accent"
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          >
-            Login
-          </Link>
+        <div className="flex justify-center w-full border-t">
+          {user ? (
+            <AccountMenu user={user} />
+          ) : (
+            <Link
+              href="/auth/sign-in"
+              className="w-full py-5 text-lg font-medium text-center hover:bg-accent"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>

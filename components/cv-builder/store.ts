@@ -1,5 +1,4 @@
 import { atom } from "jotai";
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { CVData, CVSection, CVSettings, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
 
 //Initial Data
@@ -170,45 +169,77 @@ export const initialCVData: CVData = {
   }
 };
 export const initialSettings: CVSettings = {
-  template: 'classic',
-  margins: { top: 10, bottom: 10, left: 10, right: 10 },
-  font: { family: 'Arial', size: 12 },
-  dateFormat: 'numbers-slash',
-  displayFullLinks: true
-};
+  // Document Settings
+  name: "Untitled CV",
+  createdAt: new Date().toISOString(),
+  lastModified: new Date().toISOString(),
+  documentSize: "A4",
+  scale: 1,
+  autoScale: true,
 
-const getStorage = () => {
-  if (typeof window !== 'undefined') {
-    return localStorage;
-  }
-  return {
-    getItem: (_key: string) => null,
-    setItem: (_key: string, _value: string) => {},
-    removeItem: (_key: string) => {},
-  };
+  // Layout Settings
+  template: 'classic',
+  margins: { 
+    top: 20, 
+    bottom: 20, 
+    left: 20, 
+    right: 20 
+  },
+  spacing: {
+    sectionGap: 24,
+    itemGap: 16,
+    lineHeight: 1.5
+  },
+
+  // Typography Settings
+  title: {
+    font: { 
+      family: 'Inter', 
+      size: 28,
+      weight: "bold"
+    },
+    color: "#111827",
+    align: "left"
+  },
+  heading: {
+    font: { 
+      family: 'Inter', 
+      size: 18,
+      weight: "semibold"
+    },
+    color: "#111827",
+    align: "left"
+  },
+  body: {
+    font: { 
+      family: 'Inter', 
+      size: 12,
+      weight: "normal"
+    },
+    color: "#374151"
+  },
+  accent: {
+    primary: "#2563eb",
+    secondary: "#6b7280"
+  },
+
+  // Format Settings
+  dateFormat: 'words-short',
+  displayFullLinks: false,
+  bulletPoints: "•"
 };
 
 //Atoms
-export const cvSectionsAtom = atomWithStorage<CVSection[]>(
-  'cv-sections',
+export const cvSectionsAtom = atom<CVSection[]>(
   initialSections,
-  createJSONStorage(() => getStorage()),
-  { getOnInit: true }
+ 
 );
 
-export const cvDataAtom = atomWithStorage<CVData>(
-  'cv-data',
+export const cvDataAtom = atom<CVData>(
   initialCVData,
-  createJSONStorage(() => getStorage()),
-  { getOnInit: true }
 );
 
-export const cvSettingsAtom = atomWithStorage<CVSettings>(
-  'cv-settings',
-  initialSettings,
-  createJSONStorage(() => getStorage()),
-  { getOnInit: true }
-);
+export const cvSettingsAtom = atom<CVSettings>(initialSettings);
 
 export const profileAtom = atom(
   (get) => get(cvDataAtom).profile,
@@ -274,11 +305,10 @@ export const customsAtom = atom(
 // Add a new atom for reset trigger
 export const resetTriggerAtom = atom<number>(0);
 
-// Add this new function to combine all CV data
 export const getCombinedCVData = (
   cvData: CVData,
   sections: CVSection[],
-  settings: CVSettings
+  settings: CVSettings,
 ) => {
   const combinedData = {
     sections: sections.map(section => {
@@ -323,7 +353,6 @@ export const getCombinedCVData = (
 
   return combinedData;
 };
-
 // Add a convenience atom to get the combined data
 export const combinedCVDataAtom = atom((get) => {
   const cvData = get(cvDataAtom);
@@ -332,5 +361,3 @@ export const combinedCVDataAtom = atom((get) => {
   
   return getCombinedCVData(cvData, sections, settings);
 });
-
-

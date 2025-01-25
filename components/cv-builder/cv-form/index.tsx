@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
+
 const Sections = dynamic(() => import("./sections"), {
   loading: () => (
     <div className="flex flex-col h-full">
@@ -28,6 +29,7 @@ const Settings = dynamic(() => import("./settings"), {
   ),
   ssr: false,
 });
+
 export default function CVForm() {
   return (
     <Tabs defaultValue="sections">

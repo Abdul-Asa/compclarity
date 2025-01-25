@@ -17,14 +17,14 @@ export async function Navbar() {
           <Logo />
         </Link>
         <NavigationItems />
-        <div className="hidden justify-end gap-2 lg:flex">
+        <div className="justify-end hidden gap-2 lg:flex">
           <ModeToggle />
           <Button asChild size="lg" variant="outline">
             {user ? <AccountMenu user={user} /> : <Link href="/auth/sign-in">Login</Link>}
           </Button>
         </div>
 
-        <MobileMenu />
+        <MobileMenu user={user} />
       </div>
     </nav>
   );

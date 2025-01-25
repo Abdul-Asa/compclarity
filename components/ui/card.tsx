@@ -167,12 +167,11 @@ const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
           collapsible && "grid",
           collapsible && !isExpanded && "grid-rows-[0fr]",
           collapsible && isExpanded && "grid-rows-[1fr]",
-          !isVisible && "[&_input]:disabled [&_textarea]:disabled [&_button]:disabled",
-          className
+          !isVisible && "[&_input]:disabled [&_textarea]:disabled [&_button]:disabled"
         )}
       >
         <div className={cn("overflow-hidden")}>
-          <div className={cn("p-6 pt-0 relative")} {...props} />
+          <div className={cn("p-6 pt-0 relative", className)} {...props} />
         </div>
       </div>
     );
