@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function Account() {
   const user = await getUser();
   if (!user) {
-    redirect("/auth/signin");
+    redirect("/auth/sign-in");
   }
   return (
     <div className="grid grid-cols-3 gap-4">

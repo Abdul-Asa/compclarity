@@ -13,7 +13,7 @@ const CVForm = dynamic(() => import("@/components/cv-builder/cv-form"), {
 export default async function CVBuilder({ params }: { params: { id: number } }) {
   const user = await getUser();
   if (!user) {
-    redirect("/auth/signin");
+    redirect("/auth/sign-in");
   }
 
   const cv = await getCV(params.id);

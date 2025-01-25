@@ -10,7 +10,7 @@ import { CreateCVButton } from "./create-cv";
 export default async function CVBuilder() {
   const user = await getUser();
   if (!user) {
-    redirect("/auth/signin");
+    redirect("/auth/sign-in");
   }
 
   const cvs = await getCVData(user.id);
