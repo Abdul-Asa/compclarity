@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cvs: {
+        Row: {
+          created_at: string
+          cv_data: Json
+          id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cv_data: Json
+          id?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cv_data?: Json
+          id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           additional_info: string | null

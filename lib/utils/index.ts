@@ -204,4 +204,13 @@ function useComposedRefs<T>(...refs: PossibleRef<T>[]) {
   return React.useCallback(composeRefs(...refs), refs)
 }
 
+export function formatDate(dateString?: string) {
+  if (!dateString) return "N/A";
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export { composeRefs, useComposedRefs }

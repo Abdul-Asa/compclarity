@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { actionClient } from "./safe-action";
+import { CombinedCVData } from "@/components/cv-builder/types";
 
 export const getUser = cache(async () => {
   const supabase = await createClient();
@@ -24,6 +25,16 @@ export const getUser = cache(async () => {
     return null;
   }
 
+  return data;
+});
+
+export const getCVData = cache(async (userId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("cvs").select("*").eq("user_id", userId);
+
+  if (error || !data){
+    return null
+  }
   return data;
 });
 
@@ -58,4 +69,39 @@ export const verifyOTP = actionClient.schema(otpSignInSchema).action(async ({ pa
   // }
   redirect("/");
 });
+
+const createCVSchema = z.object({
+  combinedCVData: z.object({
+    sections: z.any(),
+    settings: z.any(),
+  }),
+});
+
+export const createCV = actionClient.schema(createCVSchema).action(
+  async ({ parsedInput: { combinedCVData } }) => {
+    const supabase = await createClient();
+    
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { data, error } = await supabase
+      .from("cvs")
+      .insert({
+        user_id: user.id,
+        cv_data: combinedCVData,
+        last_updated: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error("Failed to create CV");
+    }
+
+    return data;
+  }
+);
 

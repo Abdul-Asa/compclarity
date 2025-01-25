@@ -105,7 +105,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(({ classNam
   const { collapsible, isExpanded, isVisible, onExpand, onVisibilityChange, isAlwaysVisible } = useCardContext();
 
   return (
-    <div className={cn("flex justify-between items-center w-full p-6")}>
+    <div className={cn("flex justify-between items-center w-full", collapsible ? "p-6" : "")}>
       <div ref={ref} className={cn("flex flex-col w-full space-y-1.5", className)} {...props}>
         {props.children}
       </div>

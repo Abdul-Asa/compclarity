@@ -1,5 +1,6 @@
 import { atom } from "jotai";
-import { CVData, CVSection, CVSettings, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
+import { CombinedCVData, CVData, CVSection, CVSettings, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
+import { useSetAtom, useAtomValue } from 'jotai';
 
 //Initial Data
 export const initialSections: CVSection[] = [
@@ -361,3 +362,119 @@ export const combinedCVDataAtom = atom((get) => {
   
   return getCombinedCVData(cvData, sections, settings);
 });
+
+interface SavedCV {
+  combinedCVData: CombinedCVData;
+  id: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const useLoadFromDb = () => {
+  const setCvData = useSetAtom(cvDataAtom);
+  const setSections = useSetAtom(cvSectionsAtom);
+  const setSettings = useSetAtom(cvSettingsAtom);
+
+  return async (cvId: string) => {
+    try {
+      const response = await fetch(`/api/cv/${cvId}`);
+      if (!response.ok) {
+        throw new Error('Failed to load CV data');
+      }
+
+      const savedData: SavedCV = await response.json();
+      const { combinedCVData } = savedData;
+
+      // Extract and update individual stores from combinedCVData
+      const cvData: CVData = combinedCVData.sections.reduce((acc, section) => {
+        switch (section.type) {
+          case 'profile':
+            acc.profile = section.data;
+            break;
+          case 'summary':
+            acc.summary = section.data;
+            break;
+          case 'educations':
+            acc.educations = { data: section.data };
+            break;
+          case 'workExperiences':
+            acc.workExperiences = { data: section.data };
+            break;
+          case 'skills':
+            acc.skills = { data: section.data };
+            break;
+          case 'projects':
+            acc.projects = { data: section.data };
+            break;
+          case 'custom':
+            if (section.data) {
+              acc.customs.data.push({ id: section.id, data: section.data });
+            }
+            break;
+        }
+        return acc;
+      }, {
+        profile: {} as ProfileData,
+        summary: {} as SummaryData,
+        educations: { data: [] },
+        workExperiences: { data: [] },
+        skills: { data: [] },
+        projects: { data: [] },
+        customs: { data: [] }
+      } as CVData);
+
+      setCvData(cvData);
+      setSections(combinedCVData.sections);
+      setSettings({
+        ...combinedCVData.settings,
+        lastModified: new Date().toISOString(),
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error loading CV data:', error);
+      return false;
+    }
+  };
+};
+
+export const useSaveToDb = () => {
+  const combinedData = useAtomValue(combinedCVDataAtom);
+
+  return async (cvId?: string) => {
+    try {
+      const savedData: SavedCV = {
+        combinedCVData: {
+          ...combinedData,
+          settings: {
+            ...combinedData.settings,
+            lastModified: new Date().toISOString(),
+          }
+        },
+        id: "",
+        userId: "",
+        createdAt: "",
+        updatedAt: ""
+      };
+
+      const response = await fetch(`/api/cv${cvId ? `/${cvId}` : ''}`, {
+        method: cvId ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(savedData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save CV data');
+      }
+
+      const result = await response.json();
+      return result.id;
+    } catch (error) {
+      console.error('Error saving CV data:', error);
+      return false;
+    }
+  };
+};

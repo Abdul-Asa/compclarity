@@ -53,7 +53,7 @@ export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
       )}
       ref={setNodeRef}
     >
-      <CardHeader className="relative flex flex-row items-center justify-between border-b-2 border-secondary px-4 py-0">
+      <CardHeader className="relative flex flex-row items-center justify-between px-4 py-0 border-b-2 border-secondary">
         <Button
           variant={"ghost"}
           {...attributes}
@@ -69,14 +69,14 @@ export const ApplicationCard = ({ application, isOverlay }: AppItemProps) => {
         <EditApplication application={application} />
       </CardHeader>
       <CardContent className="flex flex-col pb-0">
-        <CardTitle className="truncate py-1 text-lg font-semibold">{application.title}</CardTitle>
+        <CardTitle className="py-1 text-lg font-semibold truncate">{application.title}</CardTitle>
         <Separator />
         <div className="flex flex-col justify-center py-1">
-          <span className="line-clamp-3 text-gray-900 dark:text-gray-200 md:line-clamp-1">{application.company}</span>
+          <span className="text-gray-900 line-clamp-3 dark:text-gray-200 md:line-clamp-1">{application.company}</span>
           <span className="text-xs">{application.location}</span>
         </div>
 
-        <Badge className="my-4 flex gap-4 bg-muted" variant="outline">
+        <Badge className="flex gap-4 my-4 bg-muted" variant="outline">
           <Clock className="text-emerald-500" />
           <p>{shownDate}</p>
         </Badge>
