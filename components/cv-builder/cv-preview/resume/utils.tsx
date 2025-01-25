@@ -1,7 +1,11 @@
+"use client";
+
 import { Text, View } from "@react-pdf/renderer";
 import { parse } from "node-html-parser";
+import { CVSettings } from "../../types";
+import { styles } from "./styles";
 
-export const parseAndRenderHTML = (html: string, fontSize: number) => {
+export const parseAndRenderHTML = (html: string, fontSize: number, settings: CVSettings) => {
   if (!html) return null;
 
   const root = parse(html);
@@ -11,7 +15,16 @@ export const parseAndRenderHTML = (html: string, fontSize: number) => {
     if (node.nodeType === 3) {
       // Text node
       elements.push(
-        <Text key={index} style={{ fontSize }}>
+        <Text
+          key={index}
+          style={{
+            ...styles.text,
+            fontSize,
+            fontFamily: settings.body.font.family,
+            fontWeight: settings.body.font.weight,
+            color: settings.body.color,
+          }}
+        >
           {node.text.trim()}
         </Text>
       );
@@ -23,16 +36,46 @@ export const parseAndRenderHTML = (html: string, fontSize: number) => {
         element.childNodes.forEach((li: any, liIndex: number) => {
           if (li.tagName === "LI") {
             elements.push(
-              <View key={`li-${index}-${liIndex}`} style={{ flexDirection: "row", marginLeft: 10 }}>
-                <Text style={{ fontSize, marginRight: 5 }}>•</Text>
-                <Text style={{ fontSize, flex: 1 }}>{li.text.trim()}</Text>
+              <View key={`li-${index}-${liIndex}`} style={{ ...styles.row, ...styles.gap2 }}>
+                <Text
+                  style={{
+                    ...styles.text,
+                    fontSize,
+                    fontFamily: settings.body.font.family,
+                    fontWeight: settings.body.font.weight,
+                    color: settings.body.color,
+                  }}
+                >
+                  {settings.bulletPoints}
+                </Text>
+                <Text
+                  style={{
+                    ...styles.text,
+                    flex: 1,
+                    fontSize,
+                    fontFamily: settings.body.font.family,
+                    fontWeight: settings.body.font.weight,
+                    color: settings.body.color,
+                  }}
+                >
+                  {li.text.trim()}
+                </Text>
               </View>
             );
           }
         });
       } else if (element.tagName === "P") {
         elements.push(
-          <Text key={`p-${index}`} style={{ fontSize }}>
+          <Text
+            key={`p-${index}`}
+            style={{
+              ...styles.text,
+              fontSize,
+              fontFamily: settings.body.font.family,
+              fontWeight: settings.body.font.weight,
+              color: settings.body.color,
+            }}
+          >
             {element.text.trim()}
           </Text>
         );

@@ -3,6 +3,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { SummaryData, CVSettings, CombinedCVData } from "../../../types";
 import { parseAndRenderHTML } from "../utils";
+import { styles } from "../styles";
 
 interface SummaryProps {
   section: CombinedCVData["sections"][number];
@@ -13,19 +14,20 @@ export const Summary = ({ section, settings }: SummaryProps) => {
   const { content } = section.data as SummaryData;
 
   return (
-    <View style={{ gap: "0.5rem" }}>
+    <View style={styles.col}>
       <Text
         style={{
+          ...styles.heading,
           fontSize: settings.heading.font.size,
           fontFamily: settings.heading.font.family,
-          fontWeight: "bold",
-          color: "#1a1a1a",
-          marginBottom: "0.25rem",
+          fontWeight: settings.heading.font.weight,
+          color: settings.heading.color,
+          textAlign: settings.heading.align,
         }}
       >
         {section.title}
       </Text>
-      <View style={{ gap: "0.25rem" }}>{parseAndRenderHTML(content, settings.body.font.size)}</View>
+      <View style={styles.gap2}>{parseAndRenderHTML(content, settings.body.font.size, settings)}</View>
     </View>
   );
 };

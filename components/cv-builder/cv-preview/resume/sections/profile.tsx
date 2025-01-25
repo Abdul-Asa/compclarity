@@ -1,7 +1,9 @@
 "use client";
 
-import { Text, View, Link } from "@react-pdf/renderer";
-import { CombinedCVData, CVSection, CVSettings, ProfileData } from "../../../types";
+import { View } from "@react-pdf/renderer";
+import { CombinedCVData, CVSettings, ProfileData } from "../../../types";
+import { styles, spacing } from "../styles";
+import { CVSection, CVText, CVRow, CVLink } from "../common";
 
 interface ProfileProps {
   section: CombinedCVData["sections"][number];
@@ -12,63 +14,50 @@ export const Profile = ({ section, settings }: ProfileProps) => {
   const { firstName, lastName, email, phone, location, links } = section.data as ProfileData;
 
   return (
-    <View style={{ gap: "0.5rem" }}>
+    <CVSection>
       {/* Name */}
-      <Text
-        style={{
-          fontSize: settings.title.font.size,
-          fontFamily: settings.title.font.family,
-          fontWeight: "bold",
-          color: "#1a1a1a",
-        }}
-      >
+      <CVText settings={settings} variant="title">
         {firstName} {lastName}
-      </Text>
+      </CVText>
 
       {/* Contact Info */}
-      <View
-        style={{
-          flexDirection: "row",
-          gap: "1rem",
-          flexWrap: "wrap",
-          color: "#4a5568",
-          fontSize: settings.body.font.size - 1,
-        }}
-      >
+      <CVRow style={{ ...styles.wrap, ...styles.gap3, marginBottom: spacing[4] }}>
         {email && (
-          <Link src={`mailto:${email}`}>
-            <Text>{email}</Text>
-          </Link>
+          <CVLink src={`mailto:${email}`}>
+            <CVText settings={settings} variant="small" style={styles.muted}>
+              {email}
+            </CVText>
+          </CVLink>
         )}
         {phone && (
-          <Link src={`tel:${phone}`}>
-            <Text>{phone}</Text>
-          </Link>
+          <CVLink src={`tel:${phone}`}>
+            <CVText settings={settings} variant="small" style={styles.muted}>
+              {phone}
+            </CVText>
+          </CVLink>
         )}
-        {location && <Text>{location}</Text>}
-      </View>
+        {location && (
+          <CVText settings={settings} variant="small" style={styles.muted}>
+            {location}
+          </CVText>
+        )}
+      </CVRow>
 
       {/* Links */}
       {links && links.length > 0 && (
-        <View
-          style={{
-            flexDirection: "row",
-            gap: "1rem",
-            flexWrap: "wrap",
-            color: "#4a5568",
-            fontSize: settings.body.font.size - 1,
-          }}
-        >
+        <CVRow style={{ ...styles.wrap, ...styles.gap3 }}>
           {links.map(
             (link, index) =>
               link.url && (
-                <Link key={index} src={link.url}>
-                  <Text>{settings.displayFullLinks ? link.url : link.name}</Text>
-                </Link>
+                <CVLink key={index} src={link.url}>
+                  <CVText settings={settings} variant="small" style={styles.link}>
+                    {settings.displayFullLinks ? link.url : link.name}
+                  </CVText>
+                </CVLink>
               )
           )}
-        </View>
+        </CVRow>
       )}
-    </View>
+    </CVSection>
   );
 };
