@@ -1,17 +1,21 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CVForm from "@/components/cv-builder/cv-form";
 import CVPreview from "@/components/cv-builder/cv-preview";
 import { getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
 import { getCV } from "@/lib/actions/server-actions";
+import dynamic from "next/dynamic";
+
+const CVForm = dynamic(() => import("@/components/cv-builder/cv-form"), {
+  ssr: false,
+});
+
 export default async function CVBuilder({ params }: { params: { id: number } }) {
   const user = await getUser();
   if (!user) {
     redirect("/auth/signin");
   }
 
-  console.log(params.id);
   const cv = await getCV(params.id);
   if (!cv) {
     redirect("/cv-generate");

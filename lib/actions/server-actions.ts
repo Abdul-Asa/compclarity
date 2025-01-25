@@ -40,10 +40,16 @@ export const getCVData = cache(async (userId: string) => {
 
 export const getCV = cache(async (cvId: number) => {
   const supabase = await createClient();
+  const user = await getUser();
+  if (!user) {
+    console.log("User not authenticated");
+    return null;
+  }
   const { data, error } = await supabase
     .from("cvs")
     .select("*")
     .eq("id", cvId)
+    .eq("user_id", user.id)
     .single();
 
   if (error || !data) {

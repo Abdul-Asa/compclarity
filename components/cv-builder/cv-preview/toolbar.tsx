@@ -23,7 +23,7 @@ interface ToolbarProps {
 export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
   const [settings, setSettings] = useAtom(cvSettingsAtom);
   const combinedData = useAtomValue(combinedCVDataAtom);
-  const { execute, result } = useAction(updateCV);
+  const { execute, hasErrored } = useAction(updateCV);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
       combinedCVData: combinedData,
     });
 
-    if (result.data) {
+    if (!hasErrored) {
       toast({
         title: "Changes saved",
         description: "Your changes have been saved successfully.",
