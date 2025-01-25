@@ -17,6 +17,7 @@ export interface CVSection {
 }
 export interface CVSettings {
   // Document Settings
+  id: number;
   name: string;
   createdAt: string;
   lastModified: string;

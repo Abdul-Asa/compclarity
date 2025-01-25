@@ -1,15 +1,19 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { Search, Download } from "lucide-react";
+import { Search, Download, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { cvSettingsAtom } from "../store";
+import { combinedCVDataAtom, cvSettingsAtom } from "../store";
 import { MAX_SCALE, MIN_SCALE, STEP } from "./constants";
 import { useEffect } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { updateCV } from "@/lib/actions/server-actions";
+import { useToast } from "@/lib/hooks/useToast";
+import { useAtomValue } from "jotai";
 
 interface ToolbarProps {
   onDownload?: () => void;
@@ -18,6 +22,9 @@ interface ToolbarProps {
 
 export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
   const [settings, setSettings] = useAtom(cvSettingsAtom);
+  const combinedData = useAtomValue(combinedCVDataAtom);
+  const { execute, result } = useAction(updateCV);
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleResize = () => {
@@ -55,6 +62,26 @@ export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
     setSettings((prev) => ({ ...prev, autoScale: checked }));
   };
 
+  const handleManualSave = async () => {
+    execute({
+      cvId: settings.id,
+      combinedCVData: combinedData,
+    });
+
+    if (result.data) {
+      toast({
+        title: "Changes saved",
+        description: "Your changes have been saved successfully.",
+      });
+    } else {
+      toast({
+        title: "Failed to save changes",
+        description: "Your changes could not be saved. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -82,10 +109,23 @@ export const Toolbar = ({ onDownload, className }: ToolbarProps) => {
         </div>
       </div>
 
-      <Button variant="outline" size="sm" onClick={onDownload} className="flex items-center gap-2">
-        <Download className="w-4 h-4" />
-        <span>Download CV</span>
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleManualSave}
+          disabled={status === "executing"}
+          className="flex items-center gap-2"
+        >
+          {status === "executing" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          <span>Save</span>
+        </Button>
+
+        <Button variant="outline" size="sm" onClick={onDownload} className="flex items-center gap-2">
+          <Download className="w-4 h-4" />
+          <span>Download CV</span>
+        </Button>
+      </div>
     </div>
   );
 };

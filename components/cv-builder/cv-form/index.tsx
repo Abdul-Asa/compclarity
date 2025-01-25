@@ -1,6 +1,17 @@
+"use client";
+
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CVDbType } from "@/lib/validation/types";
+import { useLoadFromDb } from "../store";
+import { useDebounce } from "@/lib/hooks/useDebounce";
+import { useAtomValue } from "jotai";
+import { combinedCVDataAtom } from "../store";
+import { updateCV } from "@/lib/actions/server-actions";
+import { useAction } from "next-safe-action/hooks";
+import { useToast } from "@/lib/hooks/useToast";
 
 const Sections = dynamic(() => import("./sections"), {
   loading: () => (
@@ -30,7 +41,41 @@ const Settings = dynamic(() => import("./settings"), {
   ssr: false,
 });
 
-export default function CVForm() {
+export default function CVForm({ cv }: { cv: CVDbType }) {
+  const loadFromDb = useLoadFromDb(cv.id);
+  const combinedData = useAtomValue(combinedCVDataAtom);
+  const debouncedData = useDebounce(combinedData, 5000);
+  const { execute, result } = useAction(updateCV);
+  const { toast } = useToast();
+
+  // Load initial data
+  useEffect(() => {
+    loadFromDb();
+  }, [cv.id]);
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!cv.id) return;
+
+    execute({
+      cvId: cv.id,
+      combinedCVData: debouncedData,
+    });
+
+    if (result.data) {
+      toast({
+        title: "Changes saved",
+        description: "Your changes have been saved.",
+      });
+    } else {
+      toast({
+        title: "Failed to save changes",
+        description: "Your changes could not be saved. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [debouncedData, cv.id]);
+
   return (
     <Tabs defaultValue="sections">
       <TabsList>

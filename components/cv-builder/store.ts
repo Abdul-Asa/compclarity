@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 import { CombinedCVData, CVData, CVSection, CVSettings, EducationData, ProfileData, ProjectData, SkillsData, SummaryData, WorkExperienceData } from "./types";
 import { useSetAtom, useAtomValue } from 'jotai';
+import { getCV } from "@/lib/actions/server-actions";
 
 //Initial Data
 export const initialSections: CVSection[] = [
@@ -171,6 +172,7 @@ export const initialCVData: CVData = {
 };
 export const initialSettings: CVSettings = {
   // Document Settings
+  id:0,
   name: "Untitled CV",
   createdAt: new Date().toISOString(),
   lastModified: new Date().toISOString(),
@@ -371,21 +373,20 @@ interface SavedCV {
   updatedAt: string;
 }
 
-export const useLoadFromDb = () => {
+export const useLoadFromDb = (cvId: number) => {
   const setCvData = useSetAtom(cvDataAtom);
   const setSections = useSetAtom(cvSectionsAtom);
   const setSettings = useSetAtom(cvSettingsAtom);
 
-  return async (cvId: string) => {
+  return async () => {
     try {
-      const response = await fetch(`/api/cv/${cvId}`);
-      if (!response.ok) {
-        throw new Error('Failed to load CV data');
+      const cv = await getCV(cvId);
+      if (!cv || !cv.cv_data) {
+        throw new Error('CV not found');
       }
 
-      const savedData: SavedCV = await response.json();
-      const { combinedCVData } = savedData;
-
+      const { cv_data } = cv 
+  const combinedCVData = cv_data as unknown as CombinedCVData;
       // Extract and update individual stores from combinedCVData
       const cvData: CVData = combinedCVData.sections.reduce((acc, section) => {
         switch (section.type) {
@@ -434,46 +435,6 @@ export const useLoadFromDb = () => {
       return true;
     } catch (error) {
       console.error('Error loading CV data:', error);
-      return false;
-    }
-  };
-};
-
-export const useSaveToDb = () => {
-  const combinedData = useAtomValue(combinedCVDataAtom);
-
-  return async (cvId?: string) => {
-    try {
-      const savedData: SavedCV = {
-        combinedCVData: {
-          ...combinedData,
-          settings: {
-            ...combinedData.settings,
-            lastModified: new Date().toISOString(),
-          }
-        },
-        id: "",
-        userId: "",
-        createdAt: "",
-        updatedAt: ""
-      };
-
-      const response = await fetch(`/api/cv${cvId ? `/${cvId}` : ''}`, {
-        method: cvId ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(savedData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save CV data');
-      }
-
-      const result = await response.json();
-      return result.id;
-    } catch (error) {
-      console.error('Error saving CV data:', error);
       return false;
     }
   };

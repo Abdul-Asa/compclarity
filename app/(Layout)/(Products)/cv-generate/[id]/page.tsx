@@ -4,11 +4,17 @@ import CVForm from "@/components/cv-builder/cv-form";
 import CVPreview from "@/components/cv-builder/cv-preview";
 import { getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
-
-export default async function CVBuilder() {
+import { getCV } from "@/lib/actions/server-actions";
+export default async function CVBuilder({ params }: { params: { id: number } }) {
   const user = await getUser();
   if (!user) {
     redirect("/auth/signin");
+  }
+
+  console.log(params.id);
+  const cv = await getCV(params.id);
+  if (!cv) {
+    redirect("/cv-generate");
   }
 
   return (
@@ -21,7 +27,7 @@ export default async function CVBuilder() {
             <TabsTrigger value="preview">Preview</TabsTrigger>
           </TabsList>
           <TabsContent value="form" className="h-[calc(100%-2.5rem)] overflow-y-auto">
-            <CVForm />
+            <CVForm cv={cv} />
           </TabsContent>
           <TabsContent value="preview" className="h-[calc(100%-2.5rem)] overflow-y-auto">
             <CVPreview />
@@ -34,7 +40,7 @@ export default async function CVBuilder() {
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={45} minSize={30} collapsible collapsedSize={0}>
             <div className="h-full overflow-y-auto">
-              <CVForm />
+              <CVForm cv={cv} />
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />

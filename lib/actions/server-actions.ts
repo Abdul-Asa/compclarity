@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { actionClient } from "./safe-action";
-import { CombinedCVData } from "@/components/cv-builder/types";
+import { revalidatePath } from "next/cache";
 
 export const getUser = cache(async () => {
   const supabase = await createClient();
@@ -30,11 +30,27 @@ export const getUser = cache(async () => {
 
 export const getCVData = cache(async (userId: string) => {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("cvs").select("*").eq("user_id", userId);
+  const { data, error } = await supabase.from("cvs").select("*").eq("user_id", userId)
 
   if (error || !data){
     return null
   }
+  return data;
+});
+
+export const getCV = cache(async (cvId: number) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("cvs")
+    .select("*")
+    .eq("id", cvId)
+    .single();
+
+  if (error || !data) {
+    console.log(cvId, error);
+    return null;
+  }
+
   return data;
 });
 
@@ -91,16 +107,56 @@ export const createCV = actionClient.schema(createCVSchema).action(
       .insert({
         user_id: user.id,
         cv_data: combinedCVData,
-        last_updated: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         created_at: new Date().toISOString(),
       })
       .select()
       .single();
 
     if (error) {
+      console.error(error);
       throw new Error("Failed to create CV");
     }
 
+    revalidatePath("/");
+    redirect(`/cv-generate/${data.id}`)
+  }
+);
+
+const updateCVSchema = z.object({
+  cvId: z.number(),
+  combinedCVData: z.object({
+    sections: z.any(),
+    settings: z.any(),
+  }),
+});
+
+export const updateCV = actionClient.schema(updateCVSchema).action(
+  async ({ parsedInput: { cvId, combinedCVData } }) => {
+    const supabase = await createClient();
+    
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { data, error } = await supabase
+      .from("cvs")
+      .update({
+        cv_data: combinedCVData,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", cvId)
+      .eq("user_id", user.id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error(error);
+      throw new Error("Failed to update CV");
+    }
+
+    revalidatePath("/");
     return data;
   }
 );

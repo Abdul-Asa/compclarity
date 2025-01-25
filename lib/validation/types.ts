@@ -96,6 +96,7 @@ export type ApplicationSorted = Record<string, ApplicationObject[]>;
 export type CVServiceSchema = z.infer<typeof cvServiceSchema>;
 export type CoverLetterSchema = z.infer<typeof coverLetterSchema>;
 export type User = Database["public"]["Tables"]["users"]["Row"];
+export type CVDbType = Database["public"]["Tables"]["cvs"]["Row"];
 export type EmailSignInSchema = z.infer<typeof emailSignInSchema>;
 export type IntroFormSchema = z.infer<typeof introFormSchema>;
 export type ProfileFormSchema = z.infer<typeof profileFormSchema>;
