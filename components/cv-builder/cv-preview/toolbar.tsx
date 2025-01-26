@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { combinedCVDataAtom, cvSettingsAtom } from "../store";
-import { MAX_SCALE, MIN_SCALE, STEP } from "./constants";
+import { MAX_SCALE, MIN_SCALE, STEP } from "../constants";
 import { useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { updateCV } from "@/lib/actions/server-actions";

@@ -3,18 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Loader2, PlusCircle } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { createCV } from "@/lib/actions/server-actions";
-import { getCombinedCVData, initialSections, initialSettings, initialCVData } from "@/components/cv-builder/store";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/lib/hooks/useToast";
+import { INITIAL_CV_DATA } from "@/components/cv-builder/constants";
 
 export const CreateCVButton = () => {
   const { toast } = useToast();
   const { execute, hasErrored, isPending } = useAction(createCV);
 
   const handleCreateCV = async () => {
-    const initialData = getCombinedCVData(initialCVData, initialSections, initialSettings);
-
-    execute({ combinedCVData: initialData });
+    execute({ combinedCVData: INITIAL_CV_DATA });
 
     if (hasErrored) {
       toast({

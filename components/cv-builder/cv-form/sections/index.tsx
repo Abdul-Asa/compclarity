@@ -1,46 +1,108 @@
 "use client";
-import { useAtom } from "jotai";
-import {
-  cvDataAtom,
-  cvSectionsAtom,
-  seededCVData,
-  initialCVData,
-  initialSections,
-  resetTriggerAtom,
-  cvSettingsAtom,
-  combinedCVDataAtom,
-} from "@/components/cv-builder/store";
+import { getCV, updateCV } from "@/lib/actions/server-actions";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { CVData, CVSection } from "../../types";
 import { PersonalSection } from "./personal";
-import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckIcon, GripVertical, XIcon } from "lucide-react";
-import { SummarySection } from "./summary";
+import { CustomSection } from "./custom";
 import { EducationSection } from "./education";
-import { WorkExperienceSection } from "./work-experience";
 import { ProjectsSection } from "./projects";
 import { SkillsSection } from "./skills";
-import { nanoid } from "nanoid";
+import { SummarySection } from "./summary";
+import { WorkExperienceSection } from "./work-experience";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { CustomSection } from "./custom";
-import { useState } from "react";
-import { PencilIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Sortable, SortableItem, SortableDragHandle } from "@/components/ui/sortable";
 import { cn } from "@/lib/utils";
-import { CVSection } from "@/components/cv-builder/types";
-import { Modal } from "@/components/ui/modal";
+import { GripVertical, XIcon, CheckIcon, PencilIcon, PlusIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function Sections() {
-  const [sections, setSections] = useAtom(cvSectionsAtom);
-  const [resetTrigger, setResetTrigger] = useAtom(resetTriggerAtom);
+  const params = useParams();
+  const queryClient = useQueryClient();
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
-  const [cvData, setCvData] = useAtom(cvDataAtom);
-  const [combinedCVData] = useAtom(combinedCVDataAtom);
-  const [settings] = useAtom(cvSettingsAtom);
+
+  // Query for fetching CV data
+  const { data: cv } = useQuery({
+    queryKey: ["cv", params.id],
+    queryFn: () => getCV(params.id as string),
+  });
+
+  // Mutation for updating CV
+  const { mutate: updateCVMutation } = useMutation({
+    mutationFn: (newData: CVData) => updateCV({ cvId: params.id as string, combinedCVData: newData }),
+    onMutate: async (newData) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["cv", params.id] });
+
+      // Snapshot the previous value
+      const previousCV = queryClient.getQueryData(["cv", params.id]);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(["cv", params.id], (old: any) => ({
+        ...old,
+        cv_data: newData,
+      }));
+
+      return { previousCV };
+    },
+    onError: (err, newData, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      queryClient.setQueryData(["cv", params.id], context?.previousCV);
+    },
+    onSettled: () => {
+      // Always refetch after error or success to ensure we have the latest data
+      queryClient.invalidateQueries({ queryKey: ["cv", params.id] });
+    },
+  });
+
+  const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
+  const setSections = (newSections: CVSection[]) => {
+    if (!cv) return;
+    const newData = {
+      ...cv.cv_data,
+      sections: newSections,
+    };
+    debouncedUpdateCVMutation(newData);
+  };
+
+  const handleSectionExpand = (sectionId: string, isExpanded: boolean) => {
+    if (!cv) return;
+
+    const newSections = cv.cv_data.sections.map((section) =>
+      section.id === sectionId ? { ...section, isExpanded } : section
+    );
+
+    setSections(newSections);
+  };
+
+  const handleSectionVisibility = (sectionId: string, isVisible: boolean) => {
+    if (!cv) return;
+
+    const newSections = cv.cv_data.sections.map((section) =>
+      section.id === sectionId ? { ...section, isVisible } : section
+    );
+
+    setSections(newSections);
+  };
+
+  const handleTitleEdit = (sectionId: string, newTitle: string) => {
+    if (!cv || !newTitle.trim()) return;
+
+    const newSections = cv.cv_data.sections.map((section) =>
+      section.id === sectionId ? { ...section, title: newTitle } : section
+    );
+
+    setEditingTitleId(null);
+    setSections(newSections);
+  };
 
   const handleAddCustomSection = () => {
+    if (!cv) return;
     const newSection: CVSection = {
-      id: nanoid(),
+      id: crypto.randomUUID(),
       type: "custom",
       title: "Custom Section",
       schema: "summary",
@@ -50,8 +112,21 @@ export default function Sections() {
       isDraggable: true,
       isAlwaysVisible: false,
       isEditable: true,
+      data: {
+        content: "test",
+      },
     };
-    setSections([...sections, newSection]);
+
+    const newSections = [...cv.cv_data.sections, newSection];
+    setSections(newSections);
+  };
+
+  const handleChange = (data: CVSection) => {
+    if (!cv) return;
+    const newSections = cv.cv_data.sections.map((section) =>
+      section.id === data.id ? { ...section, data: data.data } : section
+    );
+    setSections(newSections);
   };
 
   const renderSection = (section: CVSection) => {
@@ -59,67 +134,35 @@ export default function Sections() {
 
     switch (type) {
       case "profile":
-        return <PersonalSection {...section} />;
-      case "summary":
-        return <SummarySection {...section} />;
-      case "educations":
-        return <EducationSection {...section} />;
-      case "workExperiences":
-        return <WorkExperienceSection {...section} />;
-      case "projects":
-        return <ProjectsSection {...section} />;
-      case "skills":
-        return <SkillsSection {...section} />;
-      case "custom":
-        return <CustomSection {...section} />;
+        return <PersonalSection handleChange={handleChange} {...section} />;
+      // case "summary":
+      //   return <SummarySection {...section} />;
+      // case "educations":
+      //   return <EducationSection {...section} />;
+      // case "workExperiences":
+      //   return <WorkExperienceSection {...section} />;
+      // case "projects":
+      //   return <ProjectsSection {...section} />;
+      // case "skills":
+      //   return <SkillsSection {...section} />;
+      // case "custom":
+      //   return <CustomSection {...section} />;
       default:
         return null;
     }
   };
 
-  const handleSectionExpand = (sectionId: string, isExpanded: boolean) => {
-    setSections(sections.map((section) => (section.id === sectionId ? { ...section, isExpanded } : section)));
-  };
+  const sections = cv?.cv_data.sections || [];
 
-  const handleSectionVisibility = (sectionId: string, isVisible: boolean) => {
-    setSections(sections.map((section) => (section.id === sectionId ? { ...section, isVisible } : section)));
-  };
-
-  const handleTitleEdit = (sectionId: string, newTitle: string) => {
-    if (!newTitle.trim()) return;
-    setSections(sections.map((section) => (section.id === sectionId ? { ...section, title: newTitle } : section)));
-    setEditingTitleId(null);
-  };
-
-  const handleResetData = () => {
-    setSections(initialSections);
-    setEditingTitleId(null);
-    setCvData(initialCVData);
-    setResetTrigger(resetTrigger + 1);
-  };
-
-  const handleSeedData = () => {
-    setCvData(seededCVData);
-    setSections(initialSections);
-    setEditingTitleId(null);
-    setResetTrigger(resetTrigger + 1);
-  };
+  // return (
+  //   <div>
+  //     {isPending && <p>Updating CV...</p>}
+  //     <pre>{JSON.stringify(cv, null, 2)}</pre>
+  //   </div>
+  // );
 
   return (
-    <div className="w-full p-4 space-y-4 max-w-screen-md mx-auto">
-      <div className="flex gap-2">
-        <Button type="button" variant="outline" className="flex-1" onClick={handleSeedData}>
-          Seed Form
-        </Button>
-        <Button type="button" variant="outline" className="flex-1" onClick={handleResetData}>
-          Reset Form
-        </Button>
-        <Modal trigger={<Button>Show JSON</Button>}>
-          <div className="w-full h-[425px] bg-gray-50 dark:bg-gray-800 rounded-lg p-4 overflow-scroll">
-            <pre className="text-sm">{JSON.stringify(combinedCVData, null, 2)}</pre>
-          </div>
-        </Modal>
-      </div>
+    <div className="w-full max-w-screen-md p-4 mx-auto space-y-4">
       <Sortable
         value={sections}
         onValueChange={(newSections) => {
@@ -132,7 +175,7 @@ export default function Sections() {
         {sections.map((section) => (
           <SortableItem key={section.id} value={section.id} disabled={!section.isDraggable}>
             <div className="relative mb-4">
-              <div className="absolute left-0 top-4 p-2">
+              <div className="absolute left-0 p-2 top-4">
                 <SortableDragHandle
                   variant="ghost"
                   size="icon"
@@ -154,7 +197,7 @@ export default function Sections() {
                   <CardHeader>
                     <div className="flex items-center gap-2">
                       {editingTitleId === section.id ? (
-                        <div className="flex items-center gap-2 w-full">
+                        <div className="flex items-center w-full gap-2">
                           <Input
                             defaultValue={section.title}
                             className="h-7 py-1 text-lg font-semibold w-[400px]"
@@ -197,7 +240,7 @@ export default function Sections() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="size-6 p-0"
+                              className="p-0 size-6"
                               onClick={() => setEditingTitleId(section.id)}
                               disabled={!section.isVisible}
                             >

@@ -1,84 +1,8 @@
 import { z } from "zod";
-import { getCombinedCVData } from "./store";
+import { CVDbType } from "@/lib/validation/types";
 
 export type SectionType = "profile" | "summary" | "workExperiences" | "educations" | "projects" | "skills" | "custom";
 export type SectionSchema = Omit<SectionType, "custom">;
-export interface CVSection {
-  id: string;
-  type: SectionType;
-  schema: SectionSchema;
-  title: string;
-  description: string;
-  isVisible?: boolean;
-  isExpanded?: boolean;
-  isDraggable?: boolean;
-  isAlwaysVisible?: boolean;
-  isEditable?: boolean;
-}
-export interface CVSettings {
-  // Document Settings
-  id: number;
-  name: string;
-  createdAt: string;
-  lastModified: string;
-  documentSize: "A4" | "LETTER";
-  scale: number;
-  autoScale: boolean;
-
-  // Layout Settings
-  template: 'classic' | 'modern' | 'minimal';
-  margins: {
-    top: number;
-    bottom: number;
-    left: number;
-    right: number;
-  };
-  spacing: {
-    sectionGap: number;
-    itemGap: number;
-    lineHeight: number;
-  };
-
-  // Typography Settings
-  title: {
-    font: {
-      family: string;
-      size: number;
-      weight: "normal" | "medium" | "semibold" | "bold";
-    };
-    color: string;
-    align: "left" | "center" | "right";
-  };
-  heading: {
-    font: {
-      family: string;
-      size: number;
-      weight: "normal" | "medium" | "semibold" | "bold";
-    };
-    color: string;
-    align: "left" | "center" | "right";
-  };
-  body: {
-    font: {
-      family: string;
-      size: number;
-      weight: "normal" | "medium" | "semibold" | "bold";
-    };
-    color: string;
-  };
-  accent: {
-    primary: string;
-    secondary: string;
-  };
-
-  // Format Settings
-  dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
-  displayFullLinks: boolean;
-  bulletPoints: "•" | "◦" | "▪" | "▫" | "‣" | "-";
-}
-
-export type CombinedCVData = ReturnType<typeof getCombinedCVData>;
-
 //Schemas
 export const profileSchema = z.object({
   firstName: z.string().min(2, "Name must be at least 2 characters"),
@@ -140,24 +64,92 @@ export const customSchema = z.array(z.object({
   data: z.union([summarySchema, educationSchema, workExperienceSchema, skillsSchema, projectSchema])
 }));
 
-// Define the complete CV data structure
-export const cvDataSchema = z.object({
-  profile: profileSchema,
-  summary: summarySchema,
-  educations: z.object({ data: educationSchema }),
-  workExperiences: z.object({ data: workExperienceSchema }),
-  skills: z.object({ data: skillsSchema }),
-  projects: z.object({ data: projectSchema }),
-  customs: z.object({ data: customSchema }),
-});
-
 // Create types from schemas
 export type ProfileData = z.infer<typeof profileSchema>;
 export type EducationData = z.infer<typeof educationSchema>;
 export type WorkExperienceData = z.infer<typeof workExperienceSchema>;
 export type SkillsData = z.infer<typeof skillsSchema>;
-export type CVData = z.infer<typeof cvDataSchema>;
 export type SummaryData = z.infer<typeof summarySchema>;
 export type ProjectData = z.infer<typeof projectSchema>;
 export type CustomData = z.infer<typeof customSchema>;
 
+export type CVSection = {
+  id: string;
+  data: ProfileData | SummaryData | EducationData | WorkExperienceData | SkillsData | ProjectData;
+  title: string;
+  type: SectionType;
+  schema: SectionSchema;
+  isVisible: boolean;
+  isEditable: boolean;
+  isExpanded: boolean;
+  description: string;
+  isDraggable: boolean;
+  isAlwaysVisible: boolean;
+};
+
+export type CVSettings = {
+  // Document Settings
+  id: number;
+  name: string;
+  createdAt: string;
+  lastModified: string;
+  documentSize: "A4" | "LETTER";
+  scale: number;
+  autoScale: boolean;
+
+  // Layout Settings
+  template: 'classic' | 'modern' | 'minimal';
+  margins: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
+  spacing: {
+    sectionGap: number;
+    itemGap: number;
+    lineHeight: number;
+  };
+
+  // Typography Settings
+  title: {
+    font: {
+      family: string;
+      size: number;
+      weight: "normal" | "medium" | "semibold" | "bold";
+    };
+    color: string;
+    align: "left" | "center" | "right";
+  };
+  heading: {
+    font: {
+      family: string;
+      size: number;
+      weight: "normal" | "medium" | "semibold" | "bold";
+    };
+    color: string;
+    align: "left" | "center" | "right";
+  };
+  body: {
+    font: {
+      family: string;
+      size: number;
+      weight: "normal" | "medium" | "semibold" | "bold";
+    };
+    color: string;
+  };
+  accent: {
+    primary: string;
+    secondary: string;
+  };
+
+  // Format Settings
+  dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
+  displayFullLinks: boolean;
+  bulletPoints: "•" | "◦" | "▪" | "▫" | "‣" | "-";
+}
+
+export type CVData = {
+  settings: CVSettings;
+  sections: CVSection[];
+}

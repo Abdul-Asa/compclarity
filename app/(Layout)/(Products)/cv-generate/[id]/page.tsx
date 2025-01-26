@@ -1,63 +1,30 @@
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
 import { getCV } from "@/lib/actions/server-actions";
 import dynamic from "next/dynamic";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-const CVForm = dynamic(() => import("@/components/cv-builder/cv-form"), {
+const CVBuilder = dynamic(() => import("@/components/cv-builder"), {
   ssr: false,
 });
 
-const CVPreview = dynamic(() => import("@/components/cv-builder/cv-preview"), {
-  ssr: false,
-});
-
-export default async function CVBuilder({ params }: { params: { id: number } }) {
+export default async function CVBuilderPage({ params }: { params: { id: string } }) {
   const user = await getUser();
   if (!user) {
     redirect("/auth/sign-in");
   }
+  const queryClient = new QueryClient();
 
-  const cv = await getCV(params.id);
-  if (!cv) {
-    redirect("/cv-generate");
-  }
+  await queryClient.prefetchQuery({
+    queryKey: ["cv", params.id],
+    queryFn: () => getCV(params.id),
+  });
 
   return (
-    <div className="w-full h-screen p-2 mx-auto  sm:p-4 max-w-screen-2xl">
-      {/* Mobile View: Tabs */}
-      <div className="block h-full lg:hidden">
-        <Tabs defaultValue="form" className="h-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="form">Editor</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-          </TabsList>
-          <TabsContent value="form" className="h-[calc(100%-2.5rem)] overflow-y-auto">
-            <CVForm cv={cv} />
-          </TabsContent>
-          <TabsContent value="preview" className="h-[calc(100%-2.5rem)] overflow-y-auto">
-            <CVPreview />
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      {/* Desktop View: Resizable panels */}
-      <div className="hidden h-full lg:block">
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={45} minSize={30} collapsible collapsedSize={0}>
-            <div className="h-full overflow-y-auto">
-              <CVForm cv={cv} />
-            </div>
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={55} minSize={40} collapsible collapsedSize={0}>
-            <div className="h-full overflow-y-auto">
-              <CVPreview />
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
+    <div className="w-full h-screen p-2 mx-auto sm:p-4 max-w-screen-2xl">
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <CVBuilder />
+      </HydrationBoundary>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { profileAtom, resetTriggerAtom } from "../../store";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -16,43 +15,32 @@ import { Button } from "@/components/ui/button";
 import { GripVerticalIcon, TrashIcon } from "lucide-react";
 import { CVSection, ProfileData, profileSchema } from "../../types";
 
-export function PersonalSection({ ...section }: CVSection) {
-  const { isVisible } = section;
-  const [profile, setProfile] = useAtom(profileAtom);
-  const [resetTrigger] = useAtom(resetTriggerAtom);
+export function PersonalSection({ handleChange, ...section }: CVSection & { handleChange: (data: CVSection) => void }) {
+  const { isVisible, data } = section;
 
   const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: profile,
+    values: data as ProfileData,
     disabled: !isVisible,
   });
-
-  useEffect(() => {
-    if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        setProfile(value as ProfileData);
-      });
-      return () => unsubscribe();
-    }
-  }, [form.watch, isVisible]);
-
-  useEffect(() => {
-    if (resetTrigger > 0) {
-      form.reset(profile);
-    }
-  }, [resetTrigger]);
-
-  const handleLocationChange = (value: string) => {
-    if (isVisible) {
-      setProfile({ ...profile, location: value });
-      form.setValue("location", value);
-    }
-  };
 
   const { fields, append, move, remove } = useFieldArray({
     control: form.control,
     name: "links",
   });
+
+  // Watch form changes and trigger debounced update
+  useEffect(() => {
+    if (isVisible) {
+      const subscription = form.watch((formData) => {
+        handleChange({
+          ...section,
+          data: formData as ProfileData,
+        });
+      });
+      return () => subscription.unsubscribe();
+    }
+  }, [form.watch, isVisible]);
 
   const determinePlaceholder = (index: number) => {
     const platformName = form.watch(`links.${index}.name`);
@@ -78,7 +66,7 @@ export function PersonalSection({ ...section }: CVSection) {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>First Name</FormLabel>
                 <FormControl>
                   <Input placeholder="John Doe" {...field} />
                 </FormControl>
@@ -150,9 +138,11 @@ export function PersonalSection({ ...section }: CVSection) {
                 <FormControl>
                   <LocationSearch
                     {...field}
-                    onValueChange={handleLocationChange}
                     disabled={!isVisible}
                     placeholder="Search location..."
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -174,14 +164,14 @@ export function PersonalSection({ ...section }: CVSection) {
             onMove={({ activeIndex, overIndex }) => move(activeIndex, overIndex)}
             overlay={
               <div className="grid grid-cols-[1fr,1fr,auto,auto] items-center gap-2">
-                <div className="h-8 w-full rounded-sm bg-muted/10" />
-                <div className="h-8 w-full rounded-sm bg-muted/10" />
-                <div className="size-8 shrink-0 rounded-sm bg-muted/10" />
-                <div className="size-8 shrink-0 rounded-sm bg-muted/10" />
+                <div className="w-full h-8 rounded-sm bg-muted/10" />
+                <div className="w-full h-8 rounded-sm bg-muted/10" />
+                <div className="rounded-sm size-8 shrink-0 bg-muted/10" />
+                <div className="rounded-sm size-8 shrink-0 bg-muted/10" />
               </div>
             }
           >
-            <div className="flex w-full flex-col gap-2">
+            <div className="flex flex-col w-full gap-2">
               {fields.map((field, index) => (
                 <SortableItem key={field.id} value={field.id} asChild>
                   <div className="grid grid-cols-[1fr,1fr,auto,auto] items-center gap-2">

@@ -11,7 +11,7 @@ import {
   LETTER_HEIGHT_PX,
   LETTER_WIDTH_PX,
   LETTER_WIDTH_PT,
-} from "./constants";
+} from "../constants";
 
 const getIframeInitialContent = (isA4: boolean) => {
   const width = isA4 ? A4_WIDTH_PT : LETTER_WIDTH_PT;
@@ -74,4 +74,3 @@ export const CVIFrame = ({ documentSize, scale, children, enablePDFViewer = fals
     </div>
   );
 };
-
