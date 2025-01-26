@@ -103,7 +103,7 @@ export const createCV = actionClient.schema(createCVSchema).action(
     }
 
     revalidatePath("/");
-    redirect(`/cv-generate/${data.id}`)
+    redirect(`/cv-generate/${data.id}i`)
   }
 );
 
