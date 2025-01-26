@@ -29,7 +29,7 @@ export default async function CVBuilder() {
           {cvs.map((cv) => {
             const cvData = cv.cv_data as unknown as CVData;
             return (
-              <Link href={`/cv-generate/${cv.id}`} key={cv.id} className="transition-opacity group hover:opacity-90">
+              <Link href={`/cv-generate/${cv.id}i`} key={cv.id} className="transition-opacity group hover:opacity-90">
                 <div className="overflow-hidden border rounded-lg bg-card">
                   {/* Placeholder Image */}
                   <div className="relative aspect-[3/4] bg-muted">
