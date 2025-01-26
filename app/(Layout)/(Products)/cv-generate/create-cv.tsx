@@ -12,7 +12,15 @@ export const CreateCVButton = () => {
   const { execute, hasErrored, isPending } = useAction(createCV);
 
   const handleCreateCV = async () => {
-    execute({ combinedCVData: INITIAL_CV_DATA });
+    execute({
+      combinedCVData: {
+        ...INITIAL_CV_DATA,
+        settings: {
+          ...INITIAL_CV_DATA.settings,
+          name: "CV-New-" + new Date().toISOString(),
+        },
+      },
+    });
 
     if (hasErrored) {
       toast({

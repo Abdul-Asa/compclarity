@@ -89,10 +89,7 @@ export type CVSection = {
 
 export type CVSettings = {
   // Document Settings
-  id: number;
   name: string;
-  createdAt: string;
-  lastModified: string;
   documentSize: "A4" | "LETTER";
   scale: number;
   autoScale: boolean;

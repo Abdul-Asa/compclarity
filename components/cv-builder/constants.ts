@@ -194,10 +194,6 @@ export const INITIAL_CV_DATA = {
       }
     ],
     "settings": {
-      "id": 0,
-      "name": "CV-2025-01-25T19:34:59.721Z",
-      "createdAt": "2025-01-25T19:34:59.722Z",
-      "lastModified": "2025-01-25T19:34:59.722Z",
       "documentSize": "A4",
       "scale": 0.6,
       "autoScale": true,

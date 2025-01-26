@@ -18,10 +18,11 @@ import { cn } from "@/lib/utils";
 import { GripVertical, XIcon, CheckIcon, PencilIcon, PlusIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
-
+import { useToast } from "@/lib/hooks/useToast";
 export default function Sections() {
   const params = useParams();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
 
   // Query for fetching CV data
@@ -41,16 +42,15 @@ export default function Sections() {
       // Snapshot the previous value
       const previousCV = queryClient.getQueryData(["cv", params.id]);
 
-      // Optimistically update to the new value
-      queryClient.setQueryData(["cv", params.id], (old: any) => ({
-        ...old,
-        cv_data: newData,
-      }));
-
       return { previousCV };
     },
     onError: (err, newData, context) => {
       // If the mutation fails, use the context returned from onMutate to roll back
+      toast({
+        title: "Failed to update CV",
+        description: "Please try again later",
+        variant: "destructive",
+      });
       queryClient.setQueryData(["cv", params.id], context?.previousCV);
     },
     onSettled: () => {
