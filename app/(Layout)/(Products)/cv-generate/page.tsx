@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
-import { CombinedCVData } from "@/components/cv-builder/types";
+import { CVData } from "@/components/cv-builder/types";
 import { CreateCVButton } from "./create-cv";
 
 export default async function CVBuilder() {
@@ -27,7 +27,7 @@ export default async function CVBuilder() {
       {cvs && cvs.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {cvs.map((cv) => {
-            const cvData = cv.cv_data as unknown as CombinedCVData;
+            const cvData = cv.cv_data as unknown as CVData;
             return (
               <Link href={`/cv-generate/${cv.id}`} key={cv.id} className="transition-opacity group hover:opacity-90">
                 <div className="overflow-hidden border rounded-lg bg-card">

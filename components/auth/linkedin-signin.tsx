@@ -17,10 +17,10 @@ export function LinkedInSignIn() {
   return (
     <Button onClick={handleSignIn} variant="outline" disabled>
       {isLoading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
         <>
-          <FaLinkedin className="h-5 w-5 mr-2" />
+          <FaLinkedin className="w-5 h-5 mr-2" />
           Continue with LinkedIn
         </>
       )}

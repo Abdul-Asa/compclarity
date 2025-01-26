@@ -36,14 +36,17 @@ export function WorkExperienceSection({
   useEffect(() => {
     if (isVisible) {
       const subscription = form.watch((formData) => {
-        handleChange({
-          ...section,
-          data: formData.data as WorkExperienceData,
-        });
+        // Only update if there are actual changes to avoid unnecessary re-renders
+        if (JSON.stringify(formData.data) !== JSON.stringify(data)) {
+          handleChange({
+            ...section,
+            data: formData.data as WorkExperienceData,
+          });
+        }
       });
       return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible, handleChange, section]);
+  }, [form.watch, isVisible]);
 
   const handleLocationChange = (index: number, value: string) => {
     if (isVisible) {
