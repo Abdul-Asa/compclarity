@@ -5,9 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { educationsAtom, customsAtom, resetTriggerAtom } from "../../store";
-import { useAtom, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
 import { GripVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
@@ -16,17 +14,15 @@ import { z } from "zod";
 import Editor from "@/components/editor/cv-editor";
 import { CVSection, educationSchema, EducationData } from "../../types";
 
-export function EducationSection({ ...section }: CVSection) {
-  const { isVisible, type, id } = section;
-  const [educations, setEducations] = useAtom(educationsAtom);
-  const [resetTrigger] = useAtom(resetTriggerAtom);
-  const [customs, setCustomEducations] = useAtom(customsAtom);
-  const customEducations = customs.data.find((custom) => custom.id === id)?.data as EducationData;
-
+export function EducationSection({
+  handleChange,
+  ...section
+}: CVSection & { handleChange: (data: CVSection) => void }) {
+  const { isVisible, data } = section;
   const form = useForm<{ data: EducationData }>({
     resolver: zodResolver(z.object({ data: educationSchema })),
+    values: { data: data as EducationData },
     disabled: !isVisible,
-    defaultValues: type === "educations" ? educations : { data: customEducations },
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -34,30 +30,28 @@ export function EducationSection({ ...section }: CVSection) {
     name: "data",
   });
 
-  useEffect(() => {
-    if (resetTrigger > 0) {
-      form.reset(type === "educations" ? educations : { data: customEducations });
-    }
-  }, [resetTrigger]);
+  // Memoize the form change handler
+  const handleFormChange = useCallback(
+    (formData: { data: EducationData }) => {
+      handleChange({
+        ...section,
+        data: formData.data,
+      });
+    },
+    [handleChange, section]
+  );
 
+  // Watch form changes and trigger update
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (type === "educations") {
-          setEducations(value.data as EducationData);
-        } else {
-          setCustomEducations({ id, data: value.data as EducationData });
+      const subscription = form.watch((formData) => {
+        if (formData.data) {
+          handleFormChange(formData as { data: EducationData });
         }
       });
-      return () => unsubscribe();
+      return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible]);
-
-  const handleLocationChange = (index: number, value: string) => {
-    if (isVisible) {
-      form.setValue(`data.${index}.location`, value);
-    }
-  };
+  }, [form.watch, isVisible, handleFormChange]);
 
   const handleAppend = () => {
     append({
@@ -84,36 +78,35 @@ export function EducationSection({ ...section }: CVSection) {
                       <SortableDragHandle variant="outline" size="icon" className="size-8 shrink-0">
                         <GripVerticalIcon className="size-4" />
                       </SortableDragHandle>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="icon"
-                          className="size-8"
-                          disabled={fields.length <= 1}
-                          onClick={() => fields.length > 1 && remove(index)}
-                        >
-                          <TrashIcon className="size-4" />
-                          <span className="sr-only">Remove education</span>
-                        </Button>
-                      </div>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="size-8"
+                        disabled={fields.length <= 1}
+                        onClick={() => fields.length > 1 && remove(index)}
+                      >
+                        <TrashIcon className="size-4" />
+                        <span className="sr-only">Remove education</span>
+                      </Button>
                     </div>
 
                     <div className="grid gap-4">
-                      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
-                        <FormField
-                          control={form.control}
-                          name={`data.${index}.school`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>School/University</FormLabel>
-                              <FormControl>
-                                <Input placeholder="University name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                      <FormField
+                        control={form.control}
+                        name={`data.${index}.school`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>School</FormLabel>
+                            <FormControl>
+                              <Input placeholder="School or university name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-2 gap-4">
                         <FormField
                           control={form.control}
                           name={`data.${index}.degree`}
@@ -121,26 +114,28 @@ export function EducationSection({ ...section }: CVSection) {
                             <FormItem>
                               <FormLabel>Degree</FormLabel>
                               <FormControl>
-                                <Input placeholder="Bachelor's, Master's, etc." {...field} />
+                                <Input placeholder="e.g., Bachelor's" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name={`data.${index}.fieldOfStudy`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Field of Study</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g., Computer Science" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                       </div>
-                      <FormField
-                        control={form.control}
-                        name={`data.${index}.fieldOfStudy`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Field of Study</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Computer Science, Business, etc." {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+
                       <FormField
                         control={form.control}
                         name={`data.${index}.location`}
@@ -150,16 +145,19 @@ export function EducationSection({ ...section }: CVSection) {
                             <FormControl>
                               <LocationSearch
                                 {...field}
-                                onValueChange={(value) => handleLocationChange(index, value)}
                                 disabled={!isVisible}
                                 placeholder="Search location..."
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                }}
                               />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+
+                      <div className="grid grid-cols-2 gap-4">
                         <FormField
                           control={form.control}
                           name={`data.${index}.startDate`}
@@ -173,12 +171,13 @@ export function EducationSection({ ...section }: CVSection) {
                             </FormItem>
                           )}
                         />
+
                         <FormField
                           control={form.control}
                           name={`data.${index}.endDate`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Graduation Date</FormLabel>
+                              <FormLabel>End Date</FormLabel>
                               <FormControl>
                                 <Input type="month" {...field} />
                               </FormControl>
@@ -187,6 +186,7 @@ export function EducationSection({ ...section }: CVSection) {
                           )}
                         />
                       </div>
+
                       <FormField
                         control={form.control}
                         name={`data.${index}.description`}
@@ -198,7 +198,7 @@ export function EducationSection({ ...section }: CVSection) {
                                 content={field.value}
                                 onChange={field.onChange}
                                 disabled={!isVisible}
-                                placeholder="Relevant coursework, achievements, activities..."
+                                placeholder="Describe your academic achievements, relevant coursework, etc..."
                               />
                             </FormControl>
                             <FormMessage />
@@ -213,7 +213,7 @@ export function EducationSection({ ...section }: CVSection) {
           </div>
         </Sortable>
 
-        <Button type="button" variant="outline" className="w-full" onClick={handleAppend}>
+        <Button type="button" variant="outline" className="w-full" onClick={handleAppend} disabled={!isVisible}>
           <PlusIcon className="mr-2 size-4" />
           Add Education
         </Button>

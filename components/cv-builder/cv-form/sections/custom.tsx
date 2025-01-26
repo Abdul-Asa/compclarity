@@ -2,16 +2,14 @@
 
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useAtom } from "jotai";
-import { cvSectionsAtom } from "../../store";
-import { SummarySection } from "./summary";
-import { EducationSection } from "./education";
-import { WorkExperienceSection } from "./work-experience";
-import { SkillsSection } from "./skills";
 import { InfoIcon } from "lucide-react";
 import { Tooltip } from "react-tooltip";
 import { SectionSchema } from "../../types";
 import { CVSection } from "../../types";
+import { SummarySection } from "./summary";
+import { EducationSection } from "./education";
+import { WorkExperienceSection } from "./work-experience";
+import { SkillsSection } from "./skills";
 
 export const sectionTypes = [
   { label: "Text", value: "summary" },
@@ -20,18 +18,17 @@ export const sectionTypes = [
   { label: "Skills", value: "skills" },
 ] as const;
 
-export function CustomSection({ ...section }: CVSection) {
-  const [cvSections, setCvSections] = useAtom(cvSectionsAtom);
+export function CustomSection({ handleChange, ...section }: CVSection & { handleChange: (data: CVSection) => void }) {
   const renderSectionContent = (schema: SectionSchema) => {
     switch (schema) {
       case "educations":
-        return <EducationSection {...section} />;
+        return <EducationSection handleChange={handleChange} {...section} />;
       case "workExperiences":
-        return <WorkExperienceSection {...section} />;
+        return <WorkExperienceSection handleChange={handleChange} {...section} />;
       case "skills":
-        return <SkillsSection {...section} />;
+        return <SkillsSection handleChange={handleChange} {...section} />;
       default:
-        return <SummarySection {...section} />;
+        return <SummarySection handleChange={handleChange} {...section} />;
     }
   };
 
@@ -49,11 +46,11 @@ export function CustomSection({ ...section }: CVSection) {
       <Select
         value={section.schema as string}
         onValueChange={(value) => {
-          setCvSections(
-            cvSections.map((section) =>
-              section.id === section.id ? { ...section, schema: value as SectionSchema } : section
-            )
-          );
+          handleChange({
+            ...section,
+            schema: value as SectionSchema,
+            data: value === "summary" ? { content: "" } : [],
+          });
         }}
       >
         <SelectTrigger>

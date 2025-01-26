@@ -5,8 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { projectsAtom, resetTriggerAtom } from "../../store";
-import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,16 +14,15 @@ import Editor from "@/components/editor/cv-editor";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CVSection, ProjectData, projectSchema } from "../../types";
+import { z } from "zod";
 
-export function ProjectsSection({ ...section }: CVSection) {
-  const [projects, setProjects] = useAtom(projectsAtom);
-  const [resetTrigger] = useAtom(resetTriggerAtom);
-  const { isVisible } = section;
+export function ProjectsSection({ handleChange, ...section }: CVSection & { handleChange: (data: CVSection) => void }) {
+  const { isVisible, data } = section;
 
   const form = useForm<{ data: ProjectData }>({
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(z.object({ data: projectSchema })),
+    values: { data: data as ProjectData },
     disabled: !isVisible,
-    defaultValues: projects,
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -33,22 +30,18 @@ export function ProjectsSection({ ...section }: CVSection) {
     name: "data",
   });
 
-  useEffect(() => {
-    if (resetTrigger > 0) {
-      form.reset(projects);
-    }
-  }, [resetTrigger]);
-
+  // Watch form changes and trigger update
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (value.data) {
-          setProjects(value.data as ProjectData);
-        }
+      const subscription = form.watch((formData) => {
+        handleChange({
+          ...section,
+          data: formData.data as ProjectData,
+        });
       });
-      return () => unsubscribe();
+      return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible]);
+  }, [form.watch, isVisible, handleChange, section]);
 
   const handleAppend = () => {
     append({
@@ -65,19 +58,19 @@ export function ProjectsSection({ ...section }: CVSection) {
   };
 
   const handleAddTechnology = (index: number) => {
-    const tech = form.watch(`data.${index}.technologies`);
     const techInput = document.getElementById(`tech-input-${index}`) as HTMLInputElement;
-    if (techInput && techInput.value) {
-      form.setValue(`data.${index}.technologies`, [...tech, techInput.value]);
+    if (techInput && techInput.value.trim()) {
+      const currentTech = form.getValues(`data.${index}.technologies`);
+      form.setValue(`data.${index}.technologies`, [...currentTech, techInput.value.trim()]);
       techInput.value = "";
     }
   };
 
   const handleRemoveTechnology = (index: number, techIndex: number) => {
-    const tech = form.watch(`data.${index}.technologies`);
+    const currentTech = form.getValues(`data.${index}.technologies`);
     form.setValue(
       `data.${index}.technologies`,
-      tech.filter((_, i) => i !== techIndex)
+      currentTech.filter((_, i) => i !== techIndex)
     );
   };
 
@@ -201,19 +194,7 @@ export function ProjectsSection({ ...section }: CVSection) {
                         name={`data.${index}.technologies`}
                         render={({ field }) => (
                           <FormItem>
-                            <div className="flex items-center justify-between">
-                              <FormLabel>Technologies Used</FormLabel>
-                              {/* <Button
-                                type="button"
-                                variant="outline"
-                                disabled={!field.value.length}
-                                size="sm"
-                                onClick={() => handleAddToSkills(field.value)}
-                                className="h-8"
-                              >
-                                Add to Skills
-                              </Button> */}
-                            </div>
+                            <FormLabel>Technologies Used</FormLabel>
                             <div className="flex flex-wrap gap-2 mb-2">
                               {field.value.map((tech, techIndex) => (
                                 <Badge
@@ -280,7 +261,7 @@ export function ProjectsSection({ ...section }: CVSection) {
           </div>
         </Sortable>
 
-        <Button type="button" variant="outline" className="w-full" onClick={handleAppend}>
+        <Button type="button" variant="outline" className="w-full" onClick={handleAppend} disabled={!isVisible}>
           <PlusIcon className="mr-2 size-4" />
           Add Project
         </Button>

@@ -5,8 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { workExperiencesAtom, customsAtom, resetTriggerAtom } from "../../store";
-import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,17 +15,16 @@ import Editor from "@/components/editor/cv-editor";
 import { z } from "zod";
 import { CVSection, WorkExperienceData, workExperienceSchema } from "../../types";
 
-export function WorkExperienceSection({ ...section }: CVSection) {
-  const { isVisible, type, id } = section;
-  const [experiences, setExperiences] = useAtom(workExperiencesAtom);
-  const [resetTrigger] = useAtom(resetTriggerAtom);
-  const [customs, setCustomExperiences] = useAtom(customsAtom);
-  const customExperiences = customs.data.find((custom) => custom.id === id)?.data as WorkExperienceData;
+export function WorkExperienceSection({
+  handleChange,
+  ...section
+}: CVSection & { handleChange: (data: CVSection) => void }) {
+  const { isVisible, data } = section;
 
   const form = useForm<{ data: WorkExperienceData }>({
     resolver: zodResolver(z.object({ data: workExperienceSchema })),
+    values: { data: data as WorkExperienceData },
     disabled: !isVisible,
-    defaultValues: type === "workExperiences" ? experiences : { data: customExperiences },
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -35,24 +32,18 @@ export function WorkExperienceSection({ ...section }: CVSection) {
     name: "data",
   });
 
-  useEffect(() => {
-    if (resetTrigger > 0) {
-      form.reset(type === "workExperiences" ? experiences : { data: customExperiences });
-    }
-  }, [resetTrigger]);
-
+  // Watch form changes and trigger update
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (type === "workExperiences") {
-          setExperiences(value.data as WorkExperienceData);
-        } else {
-          setCustomExperiences({ id, data: value.data as WorkExperienceData });
-        }
+      const subscription = form.watch((formData) => {
+        handleChange({
+          ...section,
+          data: formData.data as WorkExperienceData,
+        });
       });
-      return () => unsubscribe();
+      return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible]);
+  }, [form.watch, isVisible, handleChange, section]);
 
   const handleLocationChange = (index: number, value: string) => {
     if (isVisible) {
@@ -99,34 +90,33 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                     </div>
 
                     <div className="grid gap-4">
-                      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
-                        <FormField
-                          control={form.control}
-                          name={`data.${index}.company`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Company</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Company name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`data.${index}.position`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Position</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Job title" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`data.${index}.company`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Company</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Company name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`data.${index}.position`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Position</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Job title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
                       <FormField
                         control={form.control}
@@ -137,9 +127,9 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                             <FormControl>
                               <LocationSearch
                                 {...field}
-                                onValueChange={(value) => handleLocationChange(index, value)}
                                 disabled={!isVisible}
                                 placeholder="Search location..."
+                                onValueChange={(value) => handleLocationChange(index, value)}
                               />
                             </FormControl>
                             <FormMessage />
@@ -147,7 +137,7 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                         )}
                       />
 
-                      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <FormField
                           control={form.control}
                           name={`data.${index}.startDate`}
@@ -161,6 +151,7 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                             </FormItem>
                           )}
                         />
+
                         <FormField
                           control={form.control}
                           name={`data.${index}.endDate`}
@@ -168,7 +159,11 @@ export function WorkExperienceSection({ ...section }: CVSection) {
                             <FormItem>
                               <FormLabel>End Date</FormLabel>
                               <FormControl>
-                                <Input type="month" {...field} disabled={form.watch(`data.${index}.current`)} />
+                                <Input
+                                  type="month"
+                                  {...field}
+                                  disabled={form.watch(`data.${index}.current`) || !isVisible}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -215,9 +210,9 @@ export function WorkExperienceSection({ ...section }: CVSection) {
           </div>
         </Sortable>
 
-        <Button type="button" variant="outline" className="w-full" onClick={handleAppend}>
+        <Button type="button" variant="outline" className="w-full" onClick={handleAppend} disabled={!isVisible}>
           <PlusIcon className="mr-2 size-4" />
-          Add Work Experience
+          Add Experience
         </Button>
       </div>
     </Form>

@@ -29,7 +29,6 @@ export function PersonalSection({ handleChange, ...section }: CVSection & { hand
     name: "links",
   });
 
-  // Watch form changes and trigger debounced update
   useEffect(() => {
     if (isVisible) {
       const subscription = form.watch((formData) => {

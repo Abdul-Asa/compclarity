@@ -5,8 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { skillsAtom, customsAtom, resetTriggerAtom } from "../../store";
-import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,18 +12,15 @@ import { GripVerticalIcon, PlusIcon, TrashIcon, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CVSection, SkillsData, skillsSchema } from "../../types";
+import { z } from "zod";
 
-export function SkillsSection({ ...section }: CVSection) {
-  const { isVisible, type, id } = section;
-  const [skills, setSkills] = useAtom(skillsAtom);
-  const [resetTrigger] = useAtom(resetTriggerAtom);
-  const [customs, setCustomSkills] = useAtom(customsAtom);
-  const customSkills = customs.data.find((custom) => custom.id === id)?.data as SkillsData;
+export function SkillsSection({ handleChange, ...section }: CVSection & { handleChange: (data: CVSection) => void }) {
+  const { isVisible, data } = section;
 
   const form = useForm<{ data: SkillsData }>({
-    resolver: zodResolver(skillsSchema),
+    resolver: zodResolver(z.object({ data: skillsSchema })),
+    values: { data: data as SkillsData },
     disabled: !isVisible,
-    defaultValues: type === "skills" ? skills : { data: customSkills },
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -33,24 +28,18 @@ export function SkillsSection({ ...section }: CVSection) {
     name: "data",
   });
 
-  useEffect(() => {
-    if (resetTrigger > 0) {
-      form.reset(type === "skills" ? skills : { data: customSkills });
-    }
-  }, [resetTrigger]);
-
+  // Watch form changes and trigger update
   useEffect(() => {
     if (isVisible) {
-      const { unsubscribe } = form.watch((value) => {
-        if (type === "skills") {
-          setSkills(value.data as SkillsData);
-        } else {
-          setCustomSkills({ id, data: value.data as SkillsData });
-        }
+      const subscription = form.watch((formData) => {
+        handleChange({
+          ...section,
+          data: formData.data as SkillsData,
+        });
       });
-      return () => unsubscribe();
+      return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible]);
+  }, [form.watch, isVisible, handleChange, section]);
 
   const handleAppend = () => {
     append({
@@ -62,19 +51,17 @@ export function SkillsSection({ ...section }: CVSection) {
   const handleAddSkill = (index: number) => {
     const skillInput = document.getElementById(`skill-input-${index}`) as HTMLInputElement;
     if (skillInput && skillInput.value.trim()) {
-      const currentSkills = form.watch(`data.${index}.skills`);
-      if (!currentSkills.includes(skillInput.value.trim())) {
-        form.setValue(`data.${index}.skills`, [...currentSkills, skillInput.value.trim()]);
-      }
+      const currentSkills = form.getValues(`data.${index}.skills`);
+      form.setValue(`data.${index}.skills`, [...currentSkills, skillInput.value.trim()]);
       skillInput.value = "";
     }
   };
 
   const handleRemoveSkill = (categoryIndex: number, skillIndex: number) => {
-    const currentSkills = form.watch(`data.${categoryIndex}.skills`);
+    const currentSkills = form.getValues(`data.${categoryIndex}.skills`);
     form.setValue(
       `data.${categoryIndex}.skills`,
-      currentSkills.filter((_, i) => i !== skillIndex)
+      currentSkills.filter((_, index) => index !== skillIndex)
     );
   };
 
@@ -100,11 +87,11 @@ export function SkillsSection({ ...section }: CVSection) {
                         onClick={() => fields.length > 1 && remove(index)}
                       >
                         <TrashIcon className="size-4" />
-                        <span className="sr-only">Remove skill category</span>
+                        <span className="sr-only">Remove category</span>
                       </Button>
                     </div>
 
-                    <div className="grid gap-4">
+                    <div className="space-y-4">
                       <FormField
                         control={form.control}
                         name={`data.${index}.category`}
@@ -112,59 +99,62 @@ export function SkillsSection({ ...section }: CVSection) {
                           <FormItem>
                             <FormLabel>Category</FormLabel>
                             <FormControl>
-                              <Input placeholder="e.g., Programming Languages, Frameworks, Tools" {...field} />
+                              <Input placeholder="e.g., Programming Languages" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      <FormField
-                        control={form.control}
-                        name={`data.${index}.skills`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Skills</FormLabel>
-                            <div className="flex flex-wrap gap-2 mb-2">
-                              {field.value.map((skill, skillIndex) => (
-                                <Badge
-                                  key={skillIndex}
-                                  variant="secondary"
-                                  className={cn("px-2 py-1 text-sm font-normal", "flex items-center gap-1")}
-                                >
-                                  {skill}
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className="size-4 p-0 ml-1 hover:bg-transparent"
-                                    onClick={() => handleRemoveSkill(index, skillIndex)}
-                                  >
-                                    <XIcon className="size-3" />
-                                    <span className="sr-only">Remove {skill}</span>
-                                  </Button>
-                                </Badge>
-                              ))}
-                            </div>
-                            <div className="flex gap-2">
-                              <Input
-                                id={`skill-input-${index}`}
-                                placeholder="Add a skill..."
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    e.preventDefault();
-                                    handleAddSkill(index);
-                                  }
-                                }}
-                              />
-                              <Button type="button" variant="outline" onClick={() => handleAddSkill(index)}>
-                                Add
+                      <div className="space-y-2">
+                        <FormLabel>Skills</FormLabel>
+                        <div className="flex flex-wrap gap-2">
+                          {form.watch(`data.${index}.skills`).map((skill, skillIndex) => (
+                            <Badge
+                              key={skillIndex}
+                              variant="secondary"
+                              className={cn("pr-1.5 text-sm font-normal", !isVisible && "opacity-50")}
+                            >
+                              {skill}
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="size-4 ml-1 p-0.5 hover:bg-transparent"
+                                onClick={() => handleRemoveSkill(index, skillIndex)}
+                                disabled={!isVisible}
+                              >
+                                <XIcon className="size-3" />
+                                <span className="sr-only">Remove skill</span>
                               </Button>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <Input
+                            id={`skill-input-${index}`}
+                            placeholder="Add a skill"
+                            className="flex-1"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleAddSkill(index);
+                              }
+                            }}
+                            disabled={!isVisible}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleAddSkill(index)}
+                            disabled={!isVisible}
+                          >
+                            <PlusIcon className="size-4" />
+                            <span className="sr-only">Add skill</span>
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -173,9 +163,9 @@ export function SkillsSection({ ...section }: CVSection) {
           </div>
         </Sortable>
 
-        <Button type="button" variant="outline" className="w-full" onClick={handleAppend}>
+        <Button type="button" variant="outline" className="w-full" onClick={handleAppend} disabled={!isVisible}>
           <PlusIcon className="mr-2 size-4" />
-          Add Skill Category
+          Add Category
         </Button>
       </div>
     </Form>

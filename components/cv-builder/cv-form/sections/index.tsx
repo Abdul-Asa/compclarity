@@ -32,6 +32,7 @@ export default function Sections() {
 
   // Mutation for updating CV
   const { mutate: updateCVMutation } = useMutation({
+    mutationKey: ["updateCV"],
     mutationFn: (newData: CVData) => updateCV({ cvId: params.id as string, combinedCVData: newData }),
     onMutate: async (newData) => {
       // Cancel outgoing refetches
@@ -59,12 +60,18 @@ export default function Sections() {
   });
 
   const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
+
   const setSections = (newSections: CVSection[]) => {
     if (!cv) return;
     const newData = {
       ...cv.cv_data,
       sections: newSections,
     };
+    queryClient.setQueryData(["cv", params.id], (old: any) => ({
+      ...old,
+      cv_data: newData,
+    }));
+
     debouncedUpdateCVMutation(newData);
   };
 
@@ -135,18 +142,18 @@ export default function Sections() {
     switch (type) {
       case "profile":
         return <PersonalSection handleChange={handleChange} {...section} />;
-      // case "summary":
-      //   return <SummarySection {...section} />;
-      // case "educations":
-      //   return <EducationSection {...section} />;
-      // case "workExperiences":
-      //   return <WorkExperienceSection {...section} />;
-      // case "projects":
-      //   return <ProjectsSection {...section} />;
-      // case "skills":
-      //   return <SkillsSection {...section} />;
-      // case "custom":
-      //   return <CustomSection {...section} />;
+      case "summary":
+        return <SummarySection {...section} handleChange={handleChange} />;
+      case "educations":
+        return <EducationSection {...section} handleChange={handleChange} />;
+      case "workExperiences":
+        return <WorkExperienceSection {...section} handleChange={handleChange} />;
+      case "projects":
+        return <ProjectsSection {...section} handleChange={handleChange} />;
+      case "skills":
+        return <SkillsSection {...section} handleChange={handleChange} />;
+      case "custom":
+        return <CustomSection {...section} handleChange={handleChange} />;
       default:
         return null;
     }

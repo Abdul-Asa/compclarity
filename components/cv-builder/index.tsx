@@ -1,6 +1,7 @@
 "use client";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { ResizableHandle, ResizablePanel } from "../ui/resizable";
+import CVPreview from "./cv-preview";
 import { ResizablePanelGroup } from "../ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import CVForm from "./cv-form";
@@ -19,7 +20,7 @@ export default function CVBuilder() {
           <CVForm />
         </TabsContent>
         <TabsContent value="preview" className="h-[calc(100%-2.5rem)] overflow-y-auto">
-          {/* <CVPreview /> */}
+          <CVPreview />
         </TabsContent>
       </Tabs>
     );
@@ -34,7 +35,9 @@ export default function CVBuilder() {
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={55} minSize={40} collapsible collapsedSize={0}>
-        <div className="h-full overflow-y-auto">{/* <CVPreview data={cvData} /> */}</div>
+        <div className="h-full overflow-y-auto">
+          <CVPreview />
+        </div>
       </ResizablePanel>
     </ResizablePanelGroup>
   );
