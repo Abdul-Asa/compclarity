@@ -350,7 +350,7 @@ const components = {
     variants: [
       {
         title: "Default CTA Badge",
-        component: <CTABadge intro="Get started" main="for free" link="/auth/sign-in" />,
+        component: <CTABadge intro="Get started" main="for free" link="/login" />,
       },
     ],
   },

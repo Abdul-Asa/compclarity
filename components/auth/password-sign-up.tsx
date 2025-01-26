@@ -48,7 +48,7 @@
 //         title: "Success",
 //         description: "Check your email for a verification link",
 //       });
-//       router.push("/auth/sign-in");
+//       router.push("/login");
 //     }
 //   };
 

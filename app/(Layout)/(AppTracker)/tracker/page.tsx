@@ -15,7 +15,7 @@ const page = async () => {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
-    redirect("/auth/sign-in");
+    redirect("/login");
   }
 
   // Fetch cards from the database

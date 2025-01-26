@@ -50,7 +50,7 @@ export function MobileMenu({ user }: { user: User | null }) {
             <AccountMenu user={user} />
           ) : (
             <Link
-              href="/auth/sign-in"
+              href="/login"
               className="w-full py-5 text-lg font-medium text-center hover:bg-accent"
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
             >

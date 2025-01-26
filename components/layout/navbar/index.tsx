@@ -20,7 +20,7 @@ export async function Navbar() {
         <div className="justify-end hidden gap-2 lg:flex">
           <ModeToggle />
           <Button asChild size="lg" variant="outline">
-            {user ? <AccountMenu user={user} /> : <Link href="/auth/sign-in">Login</Link>}
+            {user ? <AccountMenu user={user} /> : <Link href="/login">Login</Link>}
           </Button>
         </div>
 
