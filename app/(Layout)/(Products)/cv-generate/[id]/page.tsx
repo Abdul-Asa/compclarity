@@ -13,6 +13,10 @@ export default async function CVBuilderPage({ params }: { params: { id: string }
   if (!user) {
     redirect("/auth/sign-in");
   }
+  const cv = await getCV(params.id);
+  if (!cv) {
+    return <div>CV not found</div>;
+  }
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
