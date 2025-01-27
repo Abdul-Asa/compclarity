@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { Sortable, SortableDragHandle, SortableItem } from "@/components/ui/sortable";
 import { Card, CardContent } from "@/components/ui/card";
 import { GripVerticalIcon, PlusIcon, TrashIcon } from "lucide-react";
@@ -21,7 +21,7 @@ export function EducationSection({
   const { isVisible, data } = section;
   const form = useForm<{ data: EducationData }>({
     resolver: zodResolver(z.object({ data: educationSchema })),
-    values: { data: data as EducationData },
+    defaultValues: { data: data as EducationData },
     disabled: !isVisible,
   });
 
@@ -30,28 +30,17 @@ export function EducationSection({
     name: "data",
   });
 
-  // Memoize the form change handler
-  const handleFormChange = useCallback(
-    (formData: { data: EducationData }) => {
-      handleChange({
-        ...section,
-        data: formData.data,
-      });
-    },
-    [handleChange, section]
-  );
-
-  // Watch form changes and trigger update
   useEffect(() => {
     if (isVisible) {
       const subscription = form.watch((formData) => {
-        if (formData.data) {
-          handleFormChange(formData as { data: EducationData });
-        }
+        handleChange({
+          ...section,
+          data: formData.data as EducationData,
+        });
       });
       return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible, handleFormChange]);
+  }, [form.watch, isVisible, handleChange, section]);
 
   const handleAppend = () => {
     append({
@@ -65,10 +54,30 @@ export function EducationSection({
     });
   };
 
+  const handleMove = (activeIndex: number, overIndex: number) => {
+    move(activeIndex, overIndex);
+    // Trigger form update manually after reordering
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData.data as EducationData,
+    });
+  };
+
   return (
     <Form {...form}>
       <div className="space-y-4">
-        <Sortable value={fields} onMove={({ activeIndex, overIndex }) => move(activeIndex, overIndex)}>
+        <Sortable
+          value={fields}
+          onMove={({ activeIndex, overIndex }) => handleMove(activeIndex, overIndex)}
+          overlay={
+            <Card>
+              <CardContent className="pt-6">
+                <div className="w-full h-[400px] rounded-sm bg-muted/10" />
+              </CardContent>
+            </Card>
+          }
+        >
           <div className="flex flex-col gap-4">
             {fields.map((field, index) => (
               <SortableItem key={field.id} value={field.id} disabled={!isVisible}>
@@ -84,7 +93,15 @@ export function EducationSection({
                         size="icon"
                         className="size-8"
                         disabled={fields.length <= 1}
-                        onClick={() => fields.length > 1 && remove(index)}
+                        onClick={() => {
+                          if (fields.length > 1) {
+                            remove(index);
+                            handleChange({
+                              ...section,
+                              data: form.getValues().data as EducationData,
+                            });
+                          }
+                        }}
                       >
                         <TrashIcon className="size-4" />
                         <span className="sr-only">Remove education</span>

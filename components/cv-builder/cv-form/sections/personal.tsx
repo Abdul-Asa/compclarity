@@ -17,10 +17,9 @@ import { CVSection, ProfileData, profileSchema } from "../../types";
 
 export function PersonalSection({ handleChange, ...section }: CVSection & { handleChange: (data: CVSection) => void }) {
   const { isVisible, data } = section;
-
   const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
-    values: data as ProfileData,
+    defaultValues: data as ProfileData,
     disabled: !isVisible,
   });
 
@@ -39,7 +38,7 @@ export function PersonalSection({ handleChange, ...section }: CVSection & { hand
       });
       return () => subscription.unsubscribe();
     }
-  }, [form.watch, isVisible]);
+  }, [form.watch, isVisible, handleChange, section]);
 
   const determinePlaceholder = (index: number) => {
     const platformName = form.watch(`links.${index}.name`);
@@ -54,6 +53,16 @@ export function PersonalSection({ handleChange, ...section }: CVSection & { hand
       default:
         return "https://example.com";
     }
+  };
+
+  const handleMove = (activeIndex: number, overIndex: number) => {
+    move(activeIndex, overIndex);
+    // Trigger form update manually after reordering
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData as ProfileData,
+    });
   };
 
   return (
@@ -160,7 +169,7 @@ export function PersonalSection({ handleChange, ...section }: CVSection & { hand
 
           <Sortable
             value={fields}
-            onMove={({ activeIndex, overIndex }) => move(activeIndex, overIndex)}
+            onMove={({ activeIndex, overIndex }) => handleMove(activeIndex, overIndex)}
             overlay={
               <div className="grid grid-cols-[1fr,1fr,auto,auto] items-center gap-2">
                 <div className="w-full h-8 rounded-sm bg-muted/10" />
@@ -204,7 +213,14 @@ export function PersonalSection({ handleChange, ...section }: CVSection & { hand
                       variant="destructive"
                       size="icon"
                       className="size-8 shrink-0"
-                      onClick={() => remove(index)}
+                      onClick={() => {
+                        remove(index);
+                        const formData = form.getValues();
+                        handleChange({
+                          ...section,
+                          data: formData as ProfileData,
+                        });
+                      }}
                     >
                       <TrashIcon className="size-4" aria-hidden="true" />
                       <span className="sr-only">Remove</span>

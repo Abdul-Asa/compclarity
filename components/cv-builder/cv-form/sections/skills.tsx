@@ -19,7 +19,7 @@ export function SkillsSection({ handleChange, ...section }: CVSection & { handle
 
   const form = useForm<{ data: SkillsData }>({
     resolver: zodResolver(z.object({ data: skillsSchema })),
-    values: { data: data as SkillsData },
+    defaultValues: { data: data as SkillsData },
     disabled: !isVisible,
   });
 
@@ -55,6 +55,11 @@ export function SkillsSection({ handleChange, ...section }: CVSection & { handle
       form.setValue(`data.${index}.skills`, [...currentSkills, skillInput.value.trim()]);
       skillInput.value = "";
     }
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData.data as SkillsData,
+    });
   };
 
   const handleRemoveSkill = (categoryIndex: number, skillIndex: number) => {
@@ -63,12 +68,37 @@ export function SkillsSection({ handleChange, ...section }: CVSection & { handle
       `data.${categoryIndex}.skills`,
       currentSkills.filter((_, index) => index !== skillIndex)
     );
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData.data as SkillsData,
+    });
+  };
+
+  const handleMove = (activeIndex: number, overIndex: number) => {
+    move(activeIndex, overIndex);
+    // Trigger form update manually after reordering
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData.data as SkillsData,
+    });
   };
 
   return (
     <Form {...form}>
       <div className="space-y-4">
-        <Sortable value={fields} onMove={({ activeIndex, overIndex }) => move(activeIndex, overIndex)}>
+        <Sortable
+          value={fields}
+          onMove={({ activeIndex, overIndex }) => handleMove(activeIndex, overIndex)}
+          overlay={
+            <Card>
+              <CardContent className="pt-6">
+                <div className="w-full h-[200px] rounded-sm bg-muted/10" />
+              </CardContent>
+            </Card>
+          }
+        >
           <div className="flex flex-col gap-4">
             {fields.map((field, index) => (
               <SortableItem key={field.id} value={field.id} disabled={!isVisible}>
@@ -84,7 +114,16 @@ export function SkillsSection({ handleChange, ...section }: CVSection & { handle
                         size="icon"
                         className="size-8"
                         disabled={fields.length <= 1}
-                        onClick={() => fields.length > 1 && remove(index)}
+                        onClick={() => {
+                          if (fields.length > 1) {
+                            remove(index);
+                            const formData = form.getValues();
+                            handleChange({
+                              ...section,
+                              data: formData.data as SkillsData,
+                            });
+                          }
+                        }}
                       >
                         <TrashIcon className="size-4" />
                         <span className="sr-only">Remove category</span>

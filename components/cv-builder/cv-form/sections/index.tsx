@@ -2,7 +2,7 @@
 import { getCV, updateCV } from "@/lib/actions/server-actions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CVData, CVSection } from "../../types";
 import { PersonalSection } from "./personal";
 import { CustomSection } from "./custom";
@@ -19,17 +19,28 @@ import { GripVertical, XIcon, CheckIcon, PencilIcon, PlusIcon } from "lucide-rea
 import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
 import { useToast } from "@/lib/hooks/useToast";
+import { useAtom } from "jotai";
+import { sectionsAtom } from "../../constants";
+
 export default function Sections() {
   const params = useParams();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
+  const [sections, setSections] = useAtom(sectionsAtom);
 
   // Query for fetching CV data
-  const { data: cv } = useQuery({
+  const { data: cv, isLoading } = useQuery({
     queryKey: ["cv", params.id],
     queryFn: () => getCV(params.id as string),
   });
+
+  // Set sections when CV data changes
+  useEffect(() => {
+    if (cv?.cv_data?.sections) {
+      setSections(cv.cv_data.sections);
+    }
+  }, [cv, setSections]);
 
   // Mutation for updating CV
   const { mutate: updateCVMutation } = useMutation({
@@ -61,36 +72,27 @@ export default function Sections() {
 
   const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
 
-  const setSections = (newSections: CVSection[]) => {
-    if (!cv) return;
-    const newData = {
-      ...cv.cv_data,
-      sections: newSections,
-    };
-    queryClient.setQueryData(["cv", params.id], (old: any) => ({
-      ...old,
-      cv_data: newData,
-    }));
+  useEffect(() => {
+    if (cv && sections) {
+      debouncedUpdateCVMutation({
+        ...cv.cv_data,
+        sections: sections,
+      });
+    }
+  }, [sections]);
 
-    debouncedUpdateCVMutation(newData);
-  };
+  if (isLoading || !cv || !sections) {
+    return <div>Loading...</div>;
+  }
 
   const handleSectionExpand = (sectionId: string, isExpanded: boolean) => {
-    if (!cv) return;
-
-    const newSections = cv.cv_data.sections.map((section) =>
-      section.id === sectionId ? { ...section, isExpanded } : section
-    );
+    const newSections = sections.map((section) => (section.id === sectionId ? { ...section, isExpanded } : section));
 
     setSections(newSections);
   };
 
   const handleSectionVisibility = (sectionId: string, isVisible: boolean) => {
-    if (!cv) return;
-
-    const newSections = cv.cv_data.sections.map((section) =>
-      section.id === sectionId ? { ...section, isVisible } : section
-    );
+    const newSections = sections.map((section) => (section.id === sectionId ? { ...section, isVisible } : section));
 
     setSections(newSections);
   };
@@ -98,7 +100,7 @@ export default function Sections() {
   const handleTitleEdit = (sectionId: string, newTitle: string) => {
     if (!cv || !newTitle.trim()) return;
 
-    const newSections = cv.cv_data.sections.map((section) =>
+    const newSections = sections.map((section) =>
       section.id === sectionId ? { ...section, title: newTitle } : section
     );
 
@@ -107,7 +109,6 @@ export default function Sections() {
   };
 
   const handleAddCustomSection = () => {
-    if (!cv) return;
     const newSection: CVSection = {
       id: crypto.randomUUID(),
       type: "custom",
@@ -124,15 +125,17 @@ export default function Sections() {
       },
     };
 
-    const newSections = [...cv.cv_data.sections, newSection];
+    const newSections = [...sections, newSection];
     setSections(newSections);
   };
 
   const handleChange = (data: CVSection) => {
-    if (!cv) return;
-    const newSections = cv.cv_data.sections.map((section) =>
-      section.id === data.id ? { ...section, data: data.data } : section
-    );
+    const newSections = sections.map((section) => (section.id === data.id ? { ...section, data: data.data } : section));
+    setSections(newSections);
+  };
+
+  const handleSectionChange = (section: CVSection) => {
+    const newSections = sections.map((s) => (s.id === section.id ? section : s));
     setSections(newSections);
   };
 
@@ -153,20 +156,11 @@ export default function Sections() {
       case "skills":
         return <SkillsSection {...section} handleChange={handleChange} />;
       case "custom":
-        return <CustomSection {...section} handleChange={handleChange} />;
+        return <CustomSection {...section} handleChange={handleSectionChange} />;
       default:
         return null;
     }
   };
-
-  const sections = cv?.cv_data.sections || [];
-
-  // return (
-  //   <div>
-  //     {isPending && <p>Updating CV...</p>}
-  //     <pre>{JSON.stringify(cv, null, 2)}</pre>
-  //   </div>
-  // );
 
   return (
     <div className="w-full max-w-screen-md p-4 mx-auto space-y-4">

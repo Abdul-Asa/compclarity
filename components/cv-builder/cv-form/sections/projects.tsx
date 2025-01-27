@@ -21,7 +21,7 @@ export function ProjectsSection({ handleChange, ...section }: CVSection & { hand
 
   const form = useForm<{ data: ProjectData }>({
     resolver: zodResolver(z.object({ data: projectSchema })),
-    values: { data: data as ProjectData },
+    defaultValues: { data: data as ProjectData },
     disabled: !isVisible,
   });
 
@@ -29,6 +29,16 @@ export function ProjectsSection({ handleChange, ...section }: CVSection & { hand
     control: form.control,
     name: "data",
   });
+
+  const handleMove = (activeIndex: number, overIndex: number) => {
+    move(activeIndex, overIndex);
+    // Trigger form update manually after reordering
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData.data as ProjectData,
+    });
+  };
 
   // Watch form changes and trigger update
   useEffect(() => {
@@ -77,7 +87,7 @@ export function ProjectsSection({ handleChange, ...section }: CVSection & { hand
   return (
     <Form {...form}>
       <div className="space-y-4">
-        <Sortable value={fields} onMove={({ activeIndex, overIndex }) => move(activeIndex, overIndex)}>
+        <Sortable value={fields} onMove={({ activeIndex, overIndex }) => handleMove(activeIndex, overIndex)}>
           <div className="flex flex-col gap-4">
             {fields.map((field, index) => (
               <SortableItem key={field.id} value={field.id} disabled={!isVisible}>
@@ -93,7 +103,15 @@ export function ProjectsSection({ handleChange, ...section }: CVSection & { hand
                         size="icon"
                         className="size-8"
                         disabled={fields.length <= 1}
-                        onClick={() => fields.length > 1 && remove(index)}
+                        onClick={() => {
+                          if (fields.length > 1) {
+                            handleChange({
+                              ...section,
+                              data: form.getValues().data as ProjectData,
+                            });
+                            remove(index);
+                          }
+                        }}
                       >
                         <TrashIcon className="size-4" />
                         <span className="sr-only">Remove project</span>

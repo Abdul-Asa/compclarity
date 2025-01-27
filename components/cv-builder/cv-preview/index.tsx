@@ -1,11 +1,10 @@
 "use client";
 
-import { getCV } from "@/lib/actions/server-actions";
-import { useQuery, useIsMutating } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useIsMutating } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useEffect } from "react";
-
+import { useAtom } from "jotai";
+import { sectionsAtom } from "../constants";
 // import { useAtom } from "jotai";
 // import dynamic from "next/dynamic";
 // import { Toolbar } from "./toolbar";
@@ -22,14 +21,9 @@ import { useState, useEffect } from "react";
 // }
 
 const CVPreview = () => {
-  const params = useParams();
+  const [cvData] = useAtom(sectionsAtom);
   const [lastSavedTime, setLastSavedTime] = useState<Date | null>();
   const [lastSavedText, setLastSavedText] = useState<string>("Not saved yet");
-
-  const { data: cvData } = useQuery({
-    queryKey: ["cv", params.id],
-    queryFn: () => getCV(params.id as string),
-  });
 
   const isMutating = useIsMutating({ mutationKey: ["updateCV"] });
 

@@ -1,3 +1,6 @@
+import { atom } from "jotai";
+import { CVSection } from "./types";
+
 export const INITIAL_CV_DATA = {
     "sections": [
       {
@@ -241,8 +244,8 @@ export const INITIAL_CV_DATA = {
       "displayFullLinks": false,
       "bulletPoints": "•"
     }
-  }
-
+}
+export const sectionsAtom = atom<CVSection[]>();
 export const fontFamilies = ["Inter", "Roboto", "Open Sans", "Lato", "Montserrat", "Source Sans Pro", "Nunito"];
 
 export const alignments = [

@@ -23,7 +23,7 @@ export function WorkExperienceSection({
 
   const form = useForm<{ data: WorkExperienceData }>({
     resolver: zodResolver(z.object({ data: workExperienceSchema })),
-    values: { data: data as WorkExperienceData },
+    defaultValues: { data: data as WorkExperienceData },
     disabled: !isVisible,
   });
 
@@ -66,10 +66,30 @@ export function WorkExperienceSection({
     });
   };
 
+  const handleMove = (activeIndex: number, overIndex: number) => {
+    move(activeIndex, overIndex);
+    // Trigger form update manually after reordering
+    const formData = form.getValues();
+    handleChange({
+      ...section,
+      data: formData.data as WorkExperienceData,
+    });
+  };
+
   return (
     <Form {...form}>
       <div className="space-y-4">
-        <Sortable value={fields} onMove={({ activeIndex, overIndex }) => move(activeIndex, overIndex)}>
+        <Sortable
+          value={fields}
+          onMove={({ activeIndex, overIndex }) => handleMove(activeIndex, overIndex)}
+          overlay={
+            <Card>
+              <CardContent className="pt-6">
+                <div className="w-full h-[400px] rounded-sm bg-muted/10" />
+              </CardContent>
+            </Card>
+          }
+        >
           <div className="flex flex-col gap-4">
             {fields.map((field, index) => (
               <SortableItem key={field.id} value={field.id} disabled={!isVisible}>
@@ -85,7 +105,16 @@ export function WorkExperienceSection({
                         size="icon"
                         className="size-8"
                         disabled={fields.length <= 1}
-                        onClick={() => fields.length > 1 && remove(index)}
+                        onClick={() => {
+                          if (fields.length > 1) {
+                            remove(index);
+                            const formData = form.getValues();
+                            handleChange({
+                              ...section,
+                              data: formData.data as WorkExperienceData,
+                            });
+                          }
+                        }}
                       >
                         <TrashIcon className="size-4" />
                         <span className="sr-only">Remove experience</span>

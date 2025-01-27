@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { InfoIcon } from "lucide-react";
 import { Tooltip } from "react-tooltip";
-import { SectionSchema } from "../../types";
+import { SectionSchema, WorkExperienceData, SummaryData, EducationData, SkillsData } from "../../types";
 import { CVSection } from "../../types";
 import { SummarySection } from "./summary";
 import { EducationSection } from "./education";
@@ -12,10 +12,10 @@ import { WorkExperienceSection } from "./work-experience";
 import { SkillsSection } from "./skills";
 
 export const sectionTypes = [
-  { label: "Text", value: "summary" },
-  { label: "Experience", value: "workExperiences" },
-  { label: "Education", value: "educations" },
-  { label: "Skills", value: "skills" },
+  { label: "Text", value: "summary", data: { content: "" } as SummaryData },
+  { label: "Experience", value: "workExperiences", data: [] as WorkExperienceData[] },
+  { label: "Education", value: "educations", data: [] as EducationData[] },
+  { label: "Skills", value: "skills", data: [] as SkillsData[] },
 ] as const;
 
 export function CustomSection({ handleChange, ...section }: CVSection & { handleChange: (data: CVSection) => void }) {
@@ -46,10 +46,11 @@ export function CustomSection({ handleChange, ...section }: CVSection & { handle
       <Select
         value={section.schema as string}
         onValueChange={(value) => {
+          const newSchema = value as SectionSchema;
           handleChange({
             ...section,
-            schema: value as SectionSchema,
-            data: value === "summary" ? { content: "" } : [],
+            schema: newSchema,
+            data: sectionTypes.find((type) => type.value === newSchema)?.data as any,
           });
         }}
       >
