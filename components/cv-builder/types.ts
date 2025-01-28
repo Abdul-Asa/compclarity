@@ -143,7 +143,6 @@ export type CVSettings = {
   // Format Settings
   dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
   displayFullLinks: boolean;
-  bulletPoints: "•" | "◦" | "▪" | "▫" | "‣" | "-";
 }
 
 export type CVData = {

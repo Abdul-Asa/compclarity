@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { CVSection } from "./types";
+import { CVSection, CVSettings } from "./types";
 
 export const INITIAL_CV_DATA = {
     "sections": [
@@ -242,11 +242,19 @@ export const INITIAL_CV_DATA = {
       },
       "dateFormat": "words-short",
       "displayFullLinks": false,
-      "bulletPoints": "•"
     }
 }
 export const sectionsAtom = atom<CVSection[]>();
-export const fontFamilies = ["Inter", "Roboto", "Open Sans", "Lato", "Montserrat", "Source Sans Pro", "Nunito"];
+export const settingsAtom = atom<CVSettings>();
+export const fontFamilies = [
+  { name: "Inter", value: "Inter" },
+  { name: "Roboto", value: "Roboto" },
+  { name: "Open Sans", value: "Open Sans" },
+  { name: "Lato", value: "Lato" },
+  { name: "Montserrat", value: "Montserrat" },
+  { name: "Source Sans Pro", value: "Source Sans Pro" },
+  { name: "Nunito", value: "Nunito" },
+];
 
 export const alignments = [
   { value: "left", label: "Left" },

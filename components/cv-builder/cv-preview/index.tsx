@@ -4,7 +4,7 @@ import { useIsMutating } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
-import { sectionsAtom } from "../constants";
+import { sectionsAtom, settingsAtom } from "../constants";
 // import { useAtom } from "jotai";
 // import dynamic from "next/dynamic";
 // import { Toolbar } from "./toolbar";
@@ -22,6 +22,7 @@ import { sectionsAtom } from "../constants";
 
 const CVPreview = () => {
   const [cvData] = useAtom(sectionsAtom);
+  const [settings] = useAtom(settingsAtom);
   const [lastSavedTime, setLastSavedTime] = useState<Date | null>();
   const [lastSavedText, setLastSavedText] = useState<string>("Not saved yet");
 
@@ -55,7 +56,7 @@ const CVPreview = () => {
   return (
     <div className="relative flex flex-col h-full border-b border-r">
       <p className="text-sm text-muted-foreground">{lastSavedText}</p>
-      <pre>{JSON.stringify(cvData, null, 2)}</pre>
+      <pre>{JSON.stringify(settings, null, 2)}</pre>
       {/* <Toolbar onDownload={onDownload} className={className} />
       <div className="flex-1 p-6 overflow-auto">
         <CVIFrame scale={settings.scale} documentSize={settings.documentSize}>

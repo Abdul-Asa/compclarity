@@ -142,6 +142,39 @@ export const updateCV = actionClient.schema(updateCVSchema).action(
   }
 );
 
+const updateCVNameSchema = z.object({
+  cvId: z.string(),
+  name: z.string().min(1, "Name cannot be empty"),
+});
+
+export const updateCVName = actionClient.schema(updateCVNameSchema).action(
+  async ({ parsedInput: { cvId, name } }) => {
+    const supabase = await createClient();
+    
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { data, error } = await supabase
+      .from("cvs")
+      .update({
+        name: name,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", cvId)
+      .select()
+
+    if (error) {
+      console.error(error);
+      throw new Error("Failed to update CV name");
+    }
+
+    revalidatePath("/");
+    return data;
+  }
+);
+
 // const signUpSchema = z.object({
 //   email: z.string().email(),
 //   password: z.string().min(8, "Password must be at least 8 characters"),
