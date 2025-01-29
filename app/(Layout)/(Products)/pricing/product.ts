@@ -28,7 +28,7 @@ export const pricingTiers = [
     cta: "Get this package",
     isPopular: true,
     isAvailable: true,
-    link: "/cv/cv-full-package",
+    link: "/pricing/cv-full-package",
     features: [
       "Set notifications for new job postings",
       "Full access to CompClarity AI Suite",
