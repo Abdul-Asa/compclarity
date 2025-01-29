@@ -33,7 +33,7 @@ export async function createApplicationCard(formData: CreateApplicationSchema) {
     .from("todos")
     .select("kanban_order")
     .eq("user_id", userInfo.data.user.id)
-    .eq("todo_level", 0)
+    .eq("todo_level", "0")
     .order("kanban_order", { ascending: false })
     .limit(1);
   // Get the last kanban order and increment it by 1
