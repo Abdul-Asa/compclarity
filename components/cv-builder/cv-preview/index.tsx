@@ -5,11 +5,21 @@ import { Toolbar } from "./toolbar";
 import { CVIFrame } from "./iframe";
 import { useAtom } from "jotai";
 import { pdf } from "@react-pdf/renderer";
-import { Font } from "@react-pdf/renderer";
 import Resume from "./resume";
 import { useToast } from "@/lib/hooks/useToast";
 import { useUser } from "@/lib/hooks/useUser";
-import { useLoadFonts } from "./resume/utils";
+import { useLoadFonts, SuppressResumePDFErrorMessage } from "./resume/utils";
+import { Document, Page, Text } from "@react-pdf/renderer";
+
+const TestDocument = () => {
+  return (
+    <Document title="Test Document" author="Test Author" producer="Test Producer">
+      <Page style={{ fontFamily: "Roboto", fontSize: 12, fontWeight: "bold" }}>
+        <Text>Hello World</Text>
+      </Page>
+    </Document>
+  );
+};
 
 const CVPreview = () => {
   const [settings] = useAtom(settingsAtom);
@@ -21,24 +31,48 @@ const CVPreview = () => {
   if (!combinedData || !settings || !user) return null;
   const handleDownload = async () => {
     try {
-      // Generate PDF blob
-      const blob = await pdf(
-        <Resume combinedData={combinedData} settings={settings} user={user} isPDF={true} />
-      ).toBlob();
+      const iframe = document.querySelector("iframe");
+      if (!iframe?.contentWindow?.document.body) {
+        throw new Error("Cannot find iframe content");
+      }
 
-      // Create download link
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${settings?.name || "resume"}.pdf`;
+      const content = iframe.contentWindow.document.body.cloneNode(true) as HTMLElement;
 
-      // Trigger download
-      document.body.appendChild(link);
-      link.click();
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) {
+        throw new Error("Pop-up blocked. Please allow pop-ups for this site.");
+      }
 
-      // Cleanup
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Set the document title and add styles to hide the default header
+      printWindow.document.title = "CV Preview";
+      const style = printWindow.document.createElement("style");
+      style.textContent = `
+        @media print {
+          @page {
+            margin: 0;
+            size: auto;
+          }
+          body {
+            margin: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        }
+      `;
+      printWindow.document.head.appendChild(style);
+
+      // Add the content and existing styles
+      printWindow.document.body.appendChild(content);
+      const styles = iframe.contentWindow.document.getElementsByTagName("style");
+      Array.from(styles).forEach((style) => {
+        printWindow.document.head.appendChild(style.cloneNode(true));
+      });
+
+      printWindow.print();
+
+      printWindow.onafterprint = () => {
+        printWindow.close();
+      };
     } catch (error) {
       toast({
         title: "Error",
@@ -53,6 +87,7 @@ const CVPreview = () => {
 
   return (
     <div className="relative flex flex-col h-full border-b border-r">
+      <SuppressResumePDFErrorMessage />
       <Toolbar onDownload={handleDownload} />
       <div className="flex-1 p-6 overflow-auto">
         <CVIFrame scale={settings.scale} documentSize={settings.documentSize}>

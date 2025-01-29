@@ -17,9 +17,7 @@ export const ResumePDFProfile = ({
   const { font, color, align } = title;
   const { size, weight, family } = font;
   const { lineHeight } = spacing;
-  if (isPDF) {
-    console.log("isPDF", "reached here profile");
-  }
+
   return (
     <View
       style={{
@@ -34,7 +32,6 @@ export const ResumePDFProfile = ({
           fontSize: size,
           fontWeight: mapFontWeight(weight),
           textTransform: "uppercase",
-          marginBottom: lineHeight,
           textAlign: align,
           color: color,
         }}
@@ -49,6 +46,7 @@ export const ResumePDFProfile = ({
           justifyContent: styles[align].justifyContent,
           textAlign: align,
           flexWrap: "wrap",
+          paddingTop: lineHeight,
           gap: 6,
         }}
       >
@@ -58,7 +56,7 @@ export const ResumePDFProfile = ({
         {phone && <Text>{phone}</Text>}
         {phone && email && <Text>|</Text>}
         {email && (
-          <ResumePDFLink src={`mailto:${email}`} isPDF={isPDF}>
+          <ResumePDFLink src={`mailto:${email}`} isPDF={isPDF} style={{ color: color }}>
             {email}
           </ResumePDFLink>
         )}
@@ -66,7 +64,7 @@ export const ResumePDFProfile = ({
         {links &&
           links.map((link, index) => (
             <React.Fragment key={link.url}>
-              <ResumePDFLink src={link.url} isPDF={isPDF}>
+              <ResumePDFLink src={link.url} isPDF={isPDF} style={{ color: color }}>
                 {displayFullLinks ? link.url : link.name}
               </ResumePDFLink>
               {index < links.length - 1 && <Text>|</Text>}

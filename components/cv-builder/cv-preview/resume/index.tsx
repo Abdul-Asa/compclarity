@@ -24,9 +24,7 @@ const Resume = ({
   isPDF: boolean;
 }) => {
   const visibleSections = combinedData.filter((section) => section.isVisible);
-  if (isPDF) {
-    console.log("isPDF", mapFontWeight(settings.body.font.weight));
-  }
+
   return (
     <Document title={`${settings.name}`} author={`${user?.first_name} ${user?.last_name}`} producer={"CompClarity"}>
       <Page
@@ -36,7 +34,7 @@ const Resume = ({
           ...styles.column,
           fontFamily: settings.body.font.family,
           fontSize: settings.body.font.size,
-          fontWeight: mapFontWeight(settings.body.font.weight),
+          fontWeight: settings.body.font.weight,
           color: settings.body.color,
           lineHeight: settings.spacing.lineHeight,
           margin: `${settings.margins.top}px ${settings.margins.right}px ${settings.margins.bottom}px ${settings.margins.left}px`,
@@ -46,7 +44,7 @@ const Resume = ({
           {visibleSections.map((section) => {
             if (!section.isVisible) return null;
 
-            switch (section.type) {
+            switch (section.schema) {
               case "profile":
                 return <ResumePDFProfile key={section.id} info={section} settings={settings} isPDF={isPDF} />;
               case "summary":

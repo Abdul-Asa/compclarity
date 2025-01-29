@@ -103,7 +103,7 @@ export const createCV = actionClient.schema(createCVSchema).action(
     }
 
     revalidatePath("/");
-    redirect(`/cv-generate/${data.id}i`)
+    redirect(`/cv-generate/${data.id}`)
   }
 );
 
@@ -172,6 +172,35 @@ export const updateCVName = actionClient.schema(updateCVNameSchema).action(
 
     revalidatePath("/");
     return data;
+  }
+);
+
+const deleteCVSchema = z.object({
+  cvId: z.string(),
+});
+
+export const deleteCV = actionClient.schema(deleteCVSchema).action(
+  async ({ parsedInput: { cvId } }) => {
+    const supabase = await createClient();
+    
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { error } = await supabase
+      .from("cvs")
+      .delete()
+      .eq("id", cvId)
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error(error);
+      throw new Error("Failed to delete CV");
+    }
+
+    revalidatePath("/");
+    return { success: true };
   }
 );
 

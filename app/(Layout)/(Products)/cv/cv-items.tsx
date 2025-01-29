@@ -13,30 +13,32 @@ import CTABadge from "@/components/ui/cta-badge";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { pricingTiers } from "./product";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 export const HeroSection = () => {
   return (
     <div className="mx-auto flex flex-col md:flex-row w-full items-center min-h-screen md:min-h-fit md:h-[calc(100vh-150px)] justify-center container gap-20 p-6 md:px-10">
       <div className="flex flex-col items-center justify-center gap-5">
-        <div className="group relative rounded-full border self-start">
+        <div className="relative self-start border rounded-full group">
           <CTABadge intro="Ready to land that dream job?" link="#pricing" target="_self" />
         </div>
-        <div className="p-2 max-w-4xl text-left space-y-5 ">
-          <h1 className="animate-fade-in text-wrap text-5xl font-bold tracking-tight transition lg:text-7xl">
-            <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
+        <div className="max-w-4xl p-2 space-y-5 text-left ">
+          <h1 className="text-5xl font-bold tracking-tight transition animate-fade-in text-wrap lg:text-7xl">
+            <span className="inline-block transition text-emerald-700 dark:text-emerald-500 hover:-translate-y-3">
               Increase
             </span>{" "}
             your{" "}
-            <span className="inline-block text-emerald-700 dark:text-emerald-500 transition hover:-translate-y-3">
+            <span className="inline-block transition text-emerald-700 dark:text-emerald-500 hover:-translate-y-3">
               odds
             </span>{" "}
             in getting hired.
           </h1>
-          <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
+          <h2 className="text-base text-gray-600 transition delay-100 animate-fade-in text-wrap font-open dark:text-gray-200 lg:text-lg">
             Tired of not even passing the CV screening stage? We can help. Our AI Suite creates standout CV and cover
             letters that showcases your experience and strengths that will get you noticed by employers.
           </h2>
-          <Button className="bg-emerald-700 dark:bg-emerald-500 transition" asChild>
+          <Button className="transition bg-emerald-700 dark:bg-emerald-500" asChild>
             <Link href="#pricing">Get Started</Link>
           </Button>
         </div>
@@ -84,14 +86,14 @@ export const MarqueeSection = () => {
     },
   ];
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-emerald-700 text-white dark:bg-emerald-900">
+    <section className="flex flex-col items-center justify-center w-full text-white bg-emerald-700 dark:bg-emerald-900">
       <div className="w-full">
-        <h2 className="p-4 text-center font-bold md:text-3xl">Our members received offers from</h2>
+        <h2 className="p-4 font-bold text-center md:text-3xl">Our members received offers from</h2>
       </div>
 
       <Marquee className="w-full p-4">
         {companies.map((company, i) => (
-          <div key={i} className="flex cursor-default items-center gap-2 px-4">
+          <div key={i} className="flex items-center gap-2 px-4 cursor-default">
             <Image alt={company.name} src={company.icon} width={50} height={50} className="size-32" />
             {/* <p>{company.name}</p> */}
           </div>
@@ -103,34 +105,46 @@ export const MarqueeSection = () => {
 
 export const Pricing = () => {
   const router = useRouter();
+  const [isYearly, setIsYearly] = useState(false);
 
   return (
-    <section id="pricing" className="container space-y-4 mx-auto px-4 py-16">
-      <h2 className=" text-xl font-bold md:text-2xl text-center lg:text-5xl">Get shortlisted into your dream job</h2>
-      <p className=" text-center text-gray-600 dark:text-gray-200">
+    <section id="pricing" className="container px-4 py-16 mx-auto space-y-4">
+      <h2 className="text-xl font-bold text-center md:text-2xl lg:text-5xl">Get shortlisted into your dream job</h2>
+      <p className="text-center text-gray-600 dark:text-gray-200">
         Get the perfect CV with just a small fraction of your potential salary.
       </p>
-      <div className="grid pt-10  grid-cols-2 gap-8">
+
+      <div className="flex items-center justify-center gap-2">
+        <span className={cn("text-sm", !isYearly && "font-bold")}>Monthly</span>
+        <Switch checked={isYearly} onCheckedChange={setIsYearly} />
+        <span className={cn("text-sm", isYearly && "font-bold")}>Yearly (Save 17%)</span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-8 pt-10">
         {pricingTiers.map((tier) => (
           <Card key={tier.id} className="flex flex-col">
-            <CardHeader>
+            <CardHeader className="p-6">
               <CardTitle className="text-xl">{tier.title}</CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col">
+            <CardContent className="flex flex-col flex-grow">
               <div className="mb-4">
                 {tier.isFree ? (
                   <span className="text-4xl font-bold">Free</span>
                 ) : (
                   <>
-                    <span className="text-4xl font-bold">£{tier.price}</span>
-                    <span className="text-xl text-muted-foreground line-through ml-2">£{tier.originalPrice}</span>
+                    <span className="text-4xl font-bold">£{isYearly ? tier.yearlyPrice : tier.monthlyPrice}</span>
+                    <span className="ml-2 text-xl line-through text-muted-foreground">
+                      £{isYearly ? tier.originalYearlyPrice : tier.originalMonthlyPrice}
+                    </span>
+                    {isYearly && <span className="ml-2 text-sm">/ year</span>}
+                    {!isYearly && <span className="ml-2 text-sm">/ month</span>}
                   </>
                 )}
                 {tier.isPopular && <Badge className="ml-2 bg-emerald-500">MOST POPULAR</Badge>}
               </div>
-              <p className="text-red-700 mb-4 dark:text-red-500">{tier.discount}</p>
+              <p className="mb-4 text-red-700 dark:text-red-500">{tier.discount}</p>
               <Button
-                className="mb-6 bg-primary text-white"
+                className="mb-6 text-white bg-primary"
                 disabled={!tier.isAvailable}
                 onClick={() => {
                   if (tier.isAvailable) {
@@ -140,11 +154,11 @@ export const Pricing = () => {
               >
                 {tier.cta}
               </Button>
-              <h3 className="font-semibold mb-2">WHAT'S INCLUDED</h3>
-              <ul className="space-y-2 flex-grow">
+              <h3 className="mb-2 font-semibold">WHAT'S INCLUDED</h3>
+              <ul className="flex-grow space-y-2">
                 {tier.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start">
-                    <Check className="h-5 w-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
+                    <Check className="flex-shrink-0 w-5 h-5 mt-1 mr-2 text-green-500" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -179,15 +193,15 @@ export const HowItWorks = () => {
     },
   ];
   return (
-    <section id="how-it-works" className="container space-y-4 mx-auto px-4 py-16">
+    <section id="how-it-works" className="container px-4 py-16 mx-auto space-y-4">
       <div className="container px-4 md:px-6">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
+        <h2 className="mb-12 text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
           How the AI Suite works
         </h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {howItWorksSteps.map((step, index) => (
             <Card key={index}>
-              <CardHeader>
+              <CardHeader className="p-6">
                 <step.icon className="w-8 h-8 mb-2 text-primary stroke-emerald-700 dark:stroke-emerald-500" />
                 <CardTitle>{step.title}</CardTitle>
               </CardHeader>
@@ -223,8 +237,8 @@ export const FAQ = () => {
     },
   ];
   return (
-    <div className="w-full max-w-3xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">FAQ</h2>
+    <div className="w-full max-w-3xl p-6 mx-auto">
+      <h2 className="mb-6 text-2xl font-bold">FAQ</h2>
       <Accordion type="multiple" defaultValue={faqItems.map((_, index) => `item-${index}`)} className="w-full">
         {faqItems.map((item, index) => (
           <AccordionItem key={`item-${index}`} value={`item-${index}`}>
@@ -263,7 +277,7 @@ export const PDF = () => {
                 Jane Doe
               </motion.h1>
             ) : (
-              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="w-3/4 h-8" />
             )}
             <motion.div
               initial={{ width: 0 }}
@@ -277,11 +291,11 @@ export const PDF = () => {
                 BSc Computer Science, University of Tech
               </motion.p>
             ) : (
-              <Skeleton className="h-8 w-full" />
+              <Skeleton className="w-full h-8" />
             )}
             <h1 className="text-lg font-semibold text-left">Experience</h1>
             {isLoaded ? (
-              <motion.ul className="list-disc pl-5">
+              <motion.ul className="pl-5 list-disc">
                 <motion.li initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 3 }}>
                   Software Engineer Intern, TechCorp
                 </motion.li>
@@ -291,13 +305,13 @@ export const PDF = () => {
               </motion.ul>
             ) : (
               <>
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="w-full h-8" />
+                <Skeleton className="w-3/4 h-8" />
               </>
             )}
             <h1 className="text-lg font-semibold text-left">Projects</h1>
             {isLoaded ? (
-              <motion.ul className="list-disc pl-5">
+              <motion.ul className="pl-5 list-disc">
                 <motion.li initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 5 }}>
                   Web Development Portfolio
                 </motion.li>
@@ -307,8 +321,8 @@ export const PDF = () => {
               </motion.ul>
             ) : (
               <>
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="w-full h-8" />
+                <Skeleton className="w-3/4 h-8" />
               </>
             )}
           </AnimatePresence>

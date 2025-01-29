@@ -130,16 +130,26 @@ export const formatDate = (dateString: string, format: DateFormat = "words-short
   }
 };
 
-export const ResumePDFLink = ({ src, isPDF, children }: { src: string; isPDF: boolean; children: React.ReactNode }) => {
+export const ResumePDFLink = ({
+  src,
+  isPDF,
+  children,
+  style,
+}: {
+  src: string;
+  isPDF: boolean;
+  children: React.ReactNode;
+  style?: any;
+}) => {
   if (isPDF) {
     return (
-      <Link src={src} style={{ textDecoration: "none" }}>
+      <Link src={src} style={{ textDecoration: "none", ...style }}>
         {children}
       </Link>
     );
   }
   return (
-    <a href={src} style={{ textDecoration: "underline" }} target="_blank" rel="noreferrer">
+    <a href={src} style={{ textDecoration: "underline", ...style }} target="_blank" rel="noreferrer">
       {children}
     </a>
   );
@@ -154,6 +164,9 @@ export const useLoadFonts = () => {
         { src: "/fonts/Roboto/static/Roboto-Bold.ttf", fontWeight: 700 },
         { src: "/fonts/Roboto/static/Roboto-Medium.ttf", fontWeight: 500 },
         { src: "/fonts/Roboto/static/Roboto-SemiBold.ttf", fontWeight: 600 },
+        { src: "/fonts/Roboto/static/Roboto-Italic.ttf", fontWeight: 400, fontStyle: "italic" },
+        { src: "/fonts/Roboto/static/Roboto-BoldItalic.ttf", fontWeight: 700, fontStyle: "italic" },
+        { src: "/fonts/Roboto/static/Roboto-MediumItalic.ttf", fontWeight: 500, fontStyle: "italic" },
       ],
     });
 
@@ -164,6 +177,9 @@ export const useLoadFonts = () => {
         { src: "/fonts/Inter/static/Inter-Bold.ttf", fontWeight: 700 },
         { src: "/fonts/Inter/static/Inter-Medium.ttf", fontWeight: 500 },
         { src: "/fonts/Inter/static/Inter-SemiBold.ttf", fontWeight: 600 },
+        { src: "/fonts/Inter/static/Inter-Italic.ttf", fontWeight: 400, fontStyle: "italic" },
+        { src: "/fonts/Inter/static/Inter-BoldItalic.ttf", fontWeight: 700, fontStyle: "italic" },
+        { src: "/fonts/Inter/static/Inter-MediumItalic.ttf", fontWeight: 500, fontStyle: "italic" },
       ],
     });
 
@@ -204,6 +220,9 @@ export const useLoadFonts = () => {
         { src: "/fonts/Lato/Lato-Bold.ttf", fontWeight: "bold" },
         { src: "/fonts/Lato/Lato-Medium.ttf", fontWeight: "medium" },
         { src: "/fonts/Lato/Lato-SemiBold.ttf", fontWeight: "semibold" },
+        { src: "/fonts/Lato/Lato-Italic.ttf", fontStyle: "italic" },
+        { src: "/fonts/Lato/Lato-BoldItalic.ttf", fontWeight: "bold", fontStyle: "italic" },
+        { src: "/fonts/Lato/Lato-MediumItalic.ttf", fontWeight: "medium", fontStyle: "italic" },
       ],
     });
   }, []);

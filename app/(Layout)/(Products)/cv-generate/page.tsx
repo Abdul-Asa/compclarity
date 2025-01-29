@@ -1,11 +1,12 @@
 import { getCVs, getUser } from "@/lib/actions/server-actions";
 import { redirect } from "next/navigation";
-import { PlusCircle } from "lucide-react";
-import Image from "next/image";
+import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { CVData } from "@/components/cv-builder/types";
 import { CreateCVButton } from "./create-cv";
+import { Button } from "@/components/ui/button";
+import { DeleteCVButton } from "./delete-cv";
 
 export default async function CVBuilder() {
   const user = await getUser();
@@ -29,28 +30,27 @@ export default async function CVBuilder() {
           {cvs.map((cv) => {
             const cvData = cv.cv_data as unknown as CVData;
             return (
-              <Link href={`/cv-generate/${cv.id}i`} key={cv.id} className="transition-opacity group hover:opacity-90">
-                <div className="overflow-hidden border rounded-lg bg-card">
-                  {/* Placeholder Image */}
-                  <div className="relative aspect-[3/4] bg-muted">
-                    <Image
-                      src="/assets/cv-test.png"
-                      alt={`CV - ${cvData.settings.name}`}
-                      fill
-                      className="object-cover"
-                    />
+              <div key={cv.id} className="overflow-hidden border rounded-lg bg-card">
+                {/* Card Content */}
+                <div className="p-4">
+                  <h3 className="mb-2 font-medium">{cvData.settings.name}</h3>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p>Created: {formatDate(cv.created_at)}</p>
+                    <p>Updated: {formatDate(cv.updated_at)}</p>
                   </div>
 
-                  {/* Card Content */}
-                  <div className="p-4">
-                    <h3 className="mb-2 font-medium">{cvData.settings.name}</h3>
-                    <div className="space-y-1 text-sm text-muted-foreground">
-                      <p>Created: {formatDate(cv.created_at)}</p>
-                      <p>Updated: {formatDate(cv.updated_at)}</p>
-                    </div>
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 mt-4">
+                    <Button variant="outline" size="sm" className="flex-1" asChild>
+                      <Link href={`/cv-generate/${cv.id}`}>
+                        <Pencil className="w-4 h-4 mr-2" />
+                        Edit
+                      </Link>
+                    </Button>
+                    <DeleteCVButton cvId={cv.id} cvName={cvData.settings.name} />
                   </div>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

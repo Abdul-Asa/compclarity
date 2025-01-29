@@ -19,8 +19,10 @@ export const pricingTiers = [
   {
     id: "cv-full-package",
     title: "Premium",
-    price: 15,
-    originalPrice: 30,
+    monthlyPrice: 15,
+    yearlyPrice: 150,
+    originalMonthlyPrice: 30,
+    originalYearlyPrice: 300,
     discount: "50% off - Limited time offer!",
     isFree: false,
     cta: "Get this package",
