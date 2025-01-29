@@ -135,11 +135,6 @@ export type CVSettings = {
     };
     color: string;
   };
-  accent: {
-    primary: string;
-    secondary: string;
-  };
-
   // Format Settings
   dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
   displayFullLinks: boolean;

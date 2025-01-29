@@ -45,9 +45,9 @@ export function PersonalSection({ handleChange, ...section }: CVSection & { hand
 
     switch (platformName?.toLowerCase()) {
       case "github":
-        return "https://github.com/me";
+        return "github.com/me";
       case "linkedin":
-        return "https://linkedin.com/in/me";
+        return "linkedin.com/in/me";
       case "portfolio":
         return "https://me.com";
       default:

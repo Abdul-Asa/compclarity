@@ -1,93 +1,82 @@
 // "use client";
 
-// import { Text, View } from "@react-pdf/renderer";
-// import { EducationData, CVSettings, CombinedCVData } from "../../../types";
-// import { parseAndRenderHTML, formatDate } from "../utils";
-// import { styles } from "../styles";
+import { View, Text } from "@react-pdf/renderer";
+import { CVSection, CVSettings, EducationData } from "@/components/cv-builder/types";
+import { styles } from "../styles";
+import { renderHTML, formatDate, mapFontWeight } from "../utils";
 
-// interface EducationProps {
-//   section: CombinedCVData["sections"][number];
-//   settings: CVSettings;
-// }
+export const ResumePDFEducation = ({ info, settings }: { info: CVSection; settings: CVSettings }) => {
+  const { title, data } = info;
+  const { heading, dateFormat } = settings;
+  const educationData = data as EducationData;
 
-// export const Education = ({ section, settings }: EducationProps) => {
-//   const data = section.data as EducationData;
+  if (!educationData?.length) return null;
 
-//   return (
-//     <View style={styles.col}>
-//       <Text
-//         style={{
-//           ...styles.heading,
-//           fontSize: settings.heading.font.size,
-//           fontFamily: settings.heading.font.family,
-//           fontWeight: settings.heading.font.weight,
-//           color: settings.heading.color,
-//           textAlign: settings.heading.align,
-//         }}
-//       >
-//         {section.title}
-//       </Text>
+  return (
+    <View
+      style={{
+        ...styles.column,
+        marginTop: settings.spacing.sectionGap,
+      }}
+    >
+      {/* Section Title */}
+      <Text
+        style={{
+          fontSize: heading.font.size,
+          fontWeight: mapFontWeight(heading.font.weight),
+          color: heading.color,
+          fontFamily: heading.font.family,
+          textTransform: "uppercase",
+        }}
+      >
+        {title}
+      </Text>
 
-//       <View style={styles.gap4}>
-//         {data.map((education, index) => (
-//           <View key={index} style={styles.gap2}>
-//             {/* School and Degree */}
-//             <View style={{ ...styles.row, ...styles.spaceBetween, ...styles.alignCenter }}>
-//               <Text
-//                 style={{
-//                   ...styles.subtitle,
-//                   fontFamily: settings.body.font.family,
-//                   fontWeight: "semibold",
-//                   color: settings.body.color,
-//                 }}
-//               >
-//                 {education.school}
-//               </Text>
-//               <Text
-//                 style={{
-//                   ...styles.textSm,
-//                   ...styles.muted,
-//                   fontFamily: settings.body.font.family,
-//                 }}
-//               >
-//                 {education.startDate && formatDate(education.startDate, settings.dateFormat)} -{" "}
-//                 {education.endDate && formatDate(education.endDate, settings.dateFormat)}
-//               </Text>
-//             </View>
+      {/* Divider Line */}
+      <View
+        style={{
+          borderBottom: "1px solid black",
+          marginBottom: 8,
+        }}
+      />
 
-//             {/* Degree and Field */}
-//             <Text
-//               style={{
-//                 ...styles.text,
-//                 fontFamily: settings.body.font.family,
-//                 fontWeight: "medium",
-//                 color: settings.body.color,
-//               }}
-//             >
-//               {education.degree}
-//               {education.fieldOfStudy && ` in ${education.fieldOfStudy}`}
-//             </Text>
+      {/* Education Entries */}
+      <View style={styles.column}>
+        {educationData.map((education, index) => (
+          <View
+            key={index}
+            style={{
+              ...styles.column,
+              marginBottom: index < educationData.length - 1 ? 8 : 0,
+            }}
+          >
+            {/* School and Location */}
+            <View style={{ ...styles.row, justifyContent: "space-between" }}>
+              <Text style={{ fontWeight: mapFontWeight("bold") }}>{education.school}</Text>
+              <Text>
+                {education.startDate ? formatDate(education.startDate, dateFormat) : ""}
+                {education.startDate && education.endDate ? " - " : ""}
+                {education.endDate ? formatDate(education.endDate, dateFormat) : ""}
+              </Text>
+            </View>
 
-//             {/* Location */}
-//             {education.location && (
-//               <Text
-//                 style={{
-//                   ...styles.textSm,
-//                   ...styles.muted,
-//                   fontFamily: settings.body.font.family,
-//                 }}
-//               >
-//                 {education.location}
-//               </Text>
-//             )}
+            {/* Degree and Field */}
+            <View style={{ ...styles.row, justifyContent: "space-between" }}>
+              <Text>
+                {education.degree}
+                {education.degree && education.fieldOfStudy ? " in " : ""}
+                {education.fieldOfStudy}
+              </Text>
+              <Text>{education.location}</Text>
+            </View>
 
-//             {/* Description */}
-//             <View style={styles.gap2}>
-//               {education.description && parseAndRenderHTML(education.description, settings.body.font.size, settings)}
-//             </View>
-//           </View>
-//         ))}
-//       </View>
-//     </View>
-//   );
-// };
+            {/* Description */}
+            {education.description && (
+              <View style={{ marginTop: 2, marginLeft: 8, marginRight: 8 }}>{renderHTML(education.description)}</View>
+            )}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};

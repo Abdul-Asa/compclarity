@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
 import { useToast } from "@/lib/hooks/useToast";
 import { useAtom } from "jotai";
-import { sectionsAtom } from "../../constants";
+import { sectionsAtom, settingsAtom } from "../../constants";
 
 export default function Sections() {
   const params = useParams();
@@ -28,6 +28,7 @@ export default function Sections() {
   const { toast } = useToast();
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
   const [sections, setSections] = useAtom(sectionsAtom);
+  const [, setSettings] = useAtom(settingsAtom);
 
   // Query for fetching CV data
   const { data: cv, isLoading } = useQuery({
@@ -37,10 +38,11 @@ export default function Sections() {
 
   // Set sections when CV data changes
   useEffect(() => {
-    if (cv?.cv_data?.sections) {
+    if (cv?.cv_data) {
       setSections(cv.cv_data.sections);
+      setSettings(cv.cv_data.settings);
     }
-  }, [cv, setSections]);
+  }, [cv, setSections, setSettings]);
 
   // Mutation for updating CV
   const { mutate: updateCVMutation } = useMutation({

@@ -1,128 +1,243 @@
-"use client";
-
-import { Text, View } from "@react-pdf/renderer";
+import { Font, Link, Text, View } from "@react-pdf/renderer";
 import { parse } from "node-html-parser";
-import { CVSettings } from "../../types";
 import { styles } from "./styles";
+import { useEffect } from "react";
 
-export const parseAndRenderHTML = (html: string, fontSize: number, settings: CVSettings) => {
+export type FontWeight = "normal" | "medium" | "semibold" | "bold" | number;
+
+export const renderHTML = (html: string) => {
+  // Early return for empty content
   if (!html) return null;
 
   const root = parse(html);
-  const elements: JSX.Element[] = [];
 
-  root.childNodes.forEach((node, index) => {
+  const renderNode = (node: any, index?: number) => {
+    // Handle text nodes
     if (node.nodeType === 3) {
-      // Text node
-      elements.push(
-        <Text
-          key={index}
-          style={{
-            ...styles.text,
-            fontSize,
-            fontFamily: settings.body.font.family,
-            fontWeight: settings.body.font.weight,
-            color: settings.body.color,
-          }}
-        >
-          {node.text.trim()}
-        </Text>
-      );
-    } else if (node.nodeType === 1) {
-      // Element node
-      const element = node as any;
+      return <Text>{node.text}</Text>;
+    }
 
-      if (element.tagName === "UL") {
-        element.childNodes.forEach((li: any, liIndex: number) => {
-          if (li.tagName === "LI") {
-            elements.push(
-              <View key={`li-${index}-${liIndex}`} style={{ ...styles.row, ...styles.gap2 }}>
-                <Text
-                  style={{
-                    ...styles.text,
-                    fontSize,
-                    fontFamily: settings.body.font.family,
-                    fontWeight: settings.body.font.weight,
-                    color: settings.body.color,
-                  }}
-                >
-                  {settings.bulletPoints}
-                </Text>
-                <Text
-                  style={{
-                    ...styles.text,
-                    flex: 1,
-                    fontSize,
-                    fontFamily: settings.body.font.family,
-                    fontWeight: settings.body.font.weight,
-                    color: settings.body.color,
-                  }}
-                >
-                  {li.text.trim()}
-                </Text>
-              </View>
-            );
-          }
-        });
-      } else if (element.tagName === "P") {
-        elements.push(
-          <Text
-            key={`p-${index}`}
-            style={{
-              ...styles.text,
-              fontSize,
-              fontFamily: settings.body.font.family,
-              fontWeight: settings.body.font.weight,
-              color: settings.body.color,
-            }}
-          >
-            {element.text.trim()}
-          </Text>
-        );
+    // Handle element nodes
+    if (node.nodeType === 1) {
+      const children = node.childNodes.map((child: any, index: number) => renderNode(child, index));
+
+      switch (node.tagName?.toLowerCase()) {
+        case "p":
+          return <Text key={crypto.randomUUID()}>{children}</Text>;
+        case "strong":
+        case "b":
+          return (
+            <Text style={{ fontWeight: "bold" }} key={crypto.randomUUID()}>
+              {children}
+            </Text>
+          );
+        case "em":
+        case "i":
+          return (
+            <Text style={{ fontStyle: "italic" }} key={crypto.randomUUID()}>
+              {children}
+            </Text>
+          );
+        case "ul":
+          return (
+            <View style={{ ...styles.column }} key={crypto.randomUUID()}>
+              {children}
+            </View>
+          );
+        case "ol":
+          return (
+            <View style={{ ...styles.column }} key={crypto.randomUUID()}>
+              {children}
+            </View>
+          );
+        case "li":
+          const parent = node.parentNode;
+          const isOrderedList = parent?.tagName?.toLowerCase() === "ol";
+          const bulletPoint = isOrderedList ? `${parent.childNodes.indexOf(node) + 1}.` : "•";
+
+          return (
+            <View style={styles.row}>
+              <Text style={{ marginRight: 5 }}>{bulletPoint}</Text>
+              <View key={crypto.randomUUID()}>{children}</View>
+            </View>
+          );
+        case "br":
+          return <Br />;
+        case "code":
+          return (
+            <Text
+              key={crypto.randomUUID()}
+              style={{
+                fontFamily: "Courier",
+                backgroundColor: "#f5f5f5",
+                padding: "0 2px",
+              }}
+            >
+              {children}
+            </Text>
+          );
+        default:
+          return <Text key={crypto.randomUUID()}>{children}</Text>;
       }
     }
-  });
 
-  return elements;
+    return null;
+  };
+
+  return <Text>{renderNode(root)}</Text>;
 };
 
-export const formatDate = (date: string, format: string = "numbers-slash") => {
-  if (!date) return "";
+const Br = () => "\n";
 
-  const [year, month] = date.split("-");
+type DateFormat = "numbers-slash" | "numbers-dash" | "words-short" | "words-long";
+
+export const formatDate = (dateString: string, format: DateFormat = "words-short"): string => {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  const months = {
+    short: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    long: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+  };
 
   switch (format) {
     case "numbers-slash":
-      return `${month}/${year}`;
+      return `${String(month + 1).padStart(2, "0")}/${year}`;
     case "numbers-dash":
-      return `${month}-${year}`;
+      return `${String(month + 1).padStart(2, "0")}-${year}`;
     case "words-short":
-      return `${getMonthName(month, true)} ${year}`;
+      return `${months.short[month]} ${year}`;
     case "words-long":
-      return `${getMonthName(month, false)} ${year}`;
+      return `${months.long[month]} ${year}`;
     default:
-      return `${month}/${year}`;
+      return `${months.short[month]} ${year}`;
   }
 };
 
-const getMonthName = (month: string, short: boolean = false) => {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+export const ResumePDFLink = ({ src, isPDF, children }: { src: string; isPDF: boolean; children: React.ReactNode }) => {
+  if (isPDF) {
+    return (
+      <Link src={src} style={{ textDecoration: "none" }}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={src} style={{ textDecoration: "underline" }} target="_blank" rel="noreferrer">
+      {children}
+    </a>
+  );
+};
 
-  const monthIndex = parseInt(month) - 1;
-  const monthName = months[monthIndex];
+export const useLoadFonts = () => {
+  useEffect(() => {
+    Font.register({
+      family: "Roboto",
+      fonts: [
+        { src: "/fonts/Roboto/static/Roboto-Regular.ttf", fontWeight: 400 },
+        { src: "/fonts/Roboto/static/Roboto-Bold.ttf", fontWeight: 700 },
+        { src: "/fonts/Roboto/static/Roboto-Medium.ttf", fontWeight: 500 },
+        { src: "/fonts/Roboto/static/Roboto-SemiBold.ttf", fontWeight: 600 },
+      ],
+    });
 
-  return short ? monthName.slice(0, 3) : monthName;
+    Font.register({
+      family: "Inter",
+      fonts: [
+        { src: "/fonts/Inter/static/Inter-Regular.ttf", fontWeight: 400 },
+        { src: "/fonts/Inter/static/Inter-Bold.ttf", fontWeight: 700 },
+        { src: "/fonts/Inter/static/Inter-Medium.ttf", fontWeight: 500 },
+        { src: "/fonts/Inter/static/Inter-SemiBold.ttf", fontWeight: 600 },
+      ],
+    });
+
+    Font.register({
+      family: "Open Sans",
+      fonts: [
+        { src: "/fonts/Open_Sans/static/OpenSans-Regular.ttf" },
+        { src: "/fonts/Open_Sans/static/OpenSans-Bold.ttf", fontWeight: "bold" },
+        { src: "/fonts/Open_Sans/static/OpenSans-Medium.ttf", fontWeight: "medium" },
+        { src: "/fonts/Open_Sans/static/OpenSans-SemiBold.ttf", fontWeight: "semibold" },
+      ],
+    });
+
+    Font.register({
+      family: "Inter",
+      fonts: [
+        { src: "/fonts/Inter/static/Inter-Regular.ttf" },
+        { src: "/fonts/Inter/static/Inter-Bold.ttf", fontWeight: "bold" },
+        { src: "/fonts/Inter/static/Inter-Medium.ttf", fontWeight: "medium" },
+        { src: "/fonts/Inter/static/Inter-SemiBold.ttf", fontWeight: "semibold" },
+      ],
+    });
+
+    Font.register({
+      family: "Montserrat",
+      fonts: [
+        { src: "/fonts/Montserrat/static/Montserrat-Regular.ttf" },
+        { src: "/fonts/Montserrat/static/Montserrat-Bold.ttf", fontWeight: "bold" },
+        { src: "/fonts/Montserrat/static/Montserrat-Medium.ttf", fontWeight: "medium" },
+        { src: "/fonts/Montserrat/static/Montserrat-SemiBold.ttf", fontWeight: "semibold" },
+      ],
+    });
+
+    Font.register({
+      family: "Lato",
+      fonts: [
+        { src: "/fonts/Lato/Lato-Regular.ttf" },
+        { src: "/fonts/Lato/Lato-Bold.ttf", fontWeight: "bold" },
+        { src: "/fonts/Lato/Lato-Medium.ttf", fontWeight: "medium" },
+        { src: "/fonts/Lato/Lato-SemiBold.ttf", fontWeight: "semibold" },
+      ],
+    });
+  }, []);
+};
+
+export const mapFontWeight = (weight: FontWeight): number => {
+  if (typeof weight === "number") return weight;
+
+  const weightMap: Record<string, number> = {
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  };
+
+  return weightMap[weight] || 400;
+};
+
+/**
+ * Suppress ResumePDF development errors.
+ * See ResumePDF doc string for context.
+ */
+
+export const SuppressResumePDFErrorMessage = () => {
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+      const consoleError = console.error;
+      const SUPPRESSED_WARNINGS = ["DOCUMENT", "PAGE", "TEXT", "VIEW"];
+      console.error = function filterWarnings(msg, ...args) {
+        if (!SUPPRESSED_WARNINGS.some((entry) => args[0]?.includes(entry))) {
+          consoleError(msg, ...args);
+        }
+      };
+    }
+  }, []);
+  return <></>;
 };

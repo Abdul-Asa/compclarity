@@ -12,12 +12,12 @@ type LocationSearchProps = {
   disabled?: boolean;
 };
 
-export function LocationSearch({
+export const LocationSearch = ({
   value,
   onValueChange,
   placeholder = "Search location...",
   disabled,
-}: LocationSearchProps) {
+}: LocationSearchProps) => {
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -63,4 +63,4 @@ export function LocationSearch({
       showEmptyMessage={false}
     />
   );
-}
+};

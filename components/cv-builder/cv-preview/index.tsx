@@ -1,68 +1,64 @@
 "use client";
 
-import { useIsMutating } from "@tanstack/react-query";
-import { formatDistanceToNow } from "date-fns";
-import { useState, useEffect } from "react";
-import { useAtom } from "jotai";
 import { sectionsAtom, settingsAtom } from "../constants";
-// import { useAtom } from "jotai";
-// import dynamic from "next/dynamic";
-// import { Toolbar } from "./toolbar";
-// import { cvSettingsAtom } from "../store";
-// import Resume from "./resume";
-
-// const CVIFrame = dynamic(() => import("./iframe").then((mod) => mod.CVIFrame), {
-//   ssr: false,
-// });
-
-// interface CVPreviewProps {
-//   onDownload?: () => void;
-//   className?: string;
-// }
+import { Toolbar } from "./toolbar";
+import { CVIFrame } from "./iframe";
+import { useAtom } from "jotai";
+import { pdf } from "@react-pdf/renderer";
+import { Font } from "@react-pdf/renderer";
+import Resume from "./resume";
+import { useToast } from "@/lib/hooks/useToast";
+import { useUser } from "@/lib/hooks/useUser";
+import { useLoadFonts } from "./resume/utils";
 
 const CVPreview = () => {
-  const [cvData] = useAtom(sectionsAtom);
   const [settings] = useAtom(settingsAtom);
-  const [lastSavedTime, setLastSavedTime] = useState<Date | null>();
-  const [lastSavedText, setLastSavedText] = useState<string>("Not saved yet");
+  const [combinedData] = useAtom(sectionsAtom);
+  const { user } = useUser();
+  const { toast } = useToast();
 
-  const isMutating = useIsMutating({ mutationKey: ["updateCV"] });
+  useLoadFonts();
+  if (!combinedData || !settings || !user) return null;
+  const handleDownload = async () => {
+    try {
+      // Generate PDF blob
+      const blob = await pdf(
+        <Resume combinedData={combinedData} settings={settings} user={user} isPDF={true} />
+      ).toBlob();
 
-  const calculateLastSavedText = () => {
-    if (isMutating) return "Saving...";
-    if (!lastSavedTime) return "Not saved yet";
-    return `Last saved ${formatDistanceToNow(lastSavedTime, { addSuffix: true })}`;
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${settings?.name || "resume"}.pdf`;
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Error generating PDF",
+        variant: "destructive",
+      });
+      console.log("Error generating PDF:", error);
+    }
   };
 
-  useEffect(() => {
-    // Update text immediately
-    setLastSavedText(calculateLastSavedText());
-
-    // Update text every 60 seconds
-    const interval = setInterval(() => {
-      setLastSavedText(calculateLastSavedText());
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [isMutating, lastSavedTime]);
-
-  // Update lastSavedTime when mutation completes
-  useEffect(() => {
-    if (isMutating) {
-      setLastSavedTime(new Date());
-    }
-  }, [isMutating]);
+  if (!settings) return null;
 
   return (
     <div className="relative flex flex-col h-full border-b border-r">
-      <p className="text-sm text-muted-foreground">{lastSavedText}</p>
-      <pre>{JSON.stringify(settings, null, 2)}</pre>
-      {/* <Toolbar onDownload={onDownload} className={className} />
+      <Toolbar onDownload={handleDownload} />
       <div className="flex-1 p-6 overflow-auto">
         <CVIFrame scale={settings.scale} documentSize={settings.documentSize}>
-          <Resume />
+          <Resume combinedData={combinedData} settings={settings} user={user} isPDF={false} />
         </CVIFrame>
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -166,8 +166,6 @@ const Settings = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="classic">Classic</SelectItem>
-                <SelectItem value="modern">Modern</SelectItem>
-                <SelectItem value="minimal">Minimal</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -211,7 +209,8 @@ const Settings = () => {
                     value={value}
                     onChange={(e) => handleChange(`spacing.${key}`, Number(e.target.value))}
                     min={0}
-                    max={100}
+                    step={key === "lineHeight" ? 0.1 : 1}
+                    max={key === "lineHeight" ? 3 : 100}
                   />
                 </div>
               ))}
@@ -285,6 +284,19 @@ const Settings = () => {
                   onChange={(e) => handleChange("title.color", e.target.value)}
                   className="h-10"
                 />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Align</Label>
+                <Select value={settings.title.align} onValueChange={(value) => handleChange("title.align", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select alignment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="left">Left</SelectItem>
+                    <SelectItem value="center">Center</SelectItem>
+                    <SelectItem value="right">Right</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>

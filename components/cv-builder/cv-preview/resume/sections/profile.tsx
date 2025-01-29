@@ -1,63 +1,78 @@
-// "use client";
+import { View, Text, Link } from "@react-pdf/renderer";
+import { CVSection, CVSettings, ProfileData } from "@/components/cv-builder/types";
+import { styles } from "../styles";
+import React from "react";
+import { mapFontWeight, ResumePDFLink } from "../utils";
+export const ResumePDFProfile = ({
+  info,
+  settings,
+  isPDF,
+}: {
+  info: CVSection;
+  settings: CVSettings;
+  isPDF: boolean;
+}) => {
+  const { firstName, lastName, email, phone, links, location } = info.data as ProfileData;
+  const { title, spacing, displayFullLinks } = settings;
+  const { font, color, align } = title;
+  const { size, weight, family } = font;
+  const { lineHeight } = spacing;
+  if (isPDF) {
+    console.log("isPDF", "reached here profile");
+  }
+  return (
+    <View
+      style={{
+        ...styles.column,
+        justifyContent: styles[align].justifyContent,
+        fontFamily: family,
+      }}
+    >
+      {/* Name Header */}
+      <Text
+        style={{
+          fontSize: size,
+          fontWeight: mapFontWeight(weight),
+          textTransform: "uppercase",
+          marginBottom: lineHeight,
+          textAlign: align,
+          color: color,
+        }}
+      >
+        {`${firstName} ${lastName}`}
+      </Text>
 
-// import { View } from "@react-pdf/renderer";
-// import { CombinedCVData, CVSettings, ProfileData } from "../../../types";
-// import { styles, spacing } from "../styles";
-// import { CVSection, CVText, CVRow, CVLink } from "../common";
-
-// interface ProfileProps {
-//   section: CombinedCVData["sections"][number];
-//   settings: CVSettings;
-// }
-
-// export const Profile = ({ section, settings }: ProfileProps) => {
-//   const { firstName, lastName, email, phone, location, links } = section.data as ProfileData;
-
-//   return (
-//     <CVSection>
-//       {/* Name */}
-//       <CVText settings={settings} variant="title">
-//         {firstName} {lastName}
-//       </CVText>
-
-//       {/* Contact Info */}
-//       <CVRow style={{ ...styles.wrap, ...styles.gap3, marginBottom: spacing[4] }}>
-//         {email && (
-//           <CVLink src={`mailto:${email}`}>
-//             <CVText settings={settings} variant="small" style={styles.muted}>
-//               {email}
-//             </CVText>
-//           </CVLink>
-//         )}
-//         {phone && (
-//           <CVLink src={`tel:${phone}`}>
-//             <CVText settings={settings} variant="small" style={styles.muted}>
-//               {phone}
-//             </CVText>
-//           </CVLink>
-//         )}
-//         {location && (
-//           <CVText settings={settings} variant="small" style={styles.muted}>
-//             {location}
-//           </CVText>
-//         )}
-//       </CVRow>
-
-//       {/* Links */}
-//       {links && links.length > 0 && (
-//         <CVRow style={{ ...styles.wrap, ...styles.gap3 }}>
-//           {links.map(
-//             (link, index) =>
-//               link.url && (
-//                 <CVLink key={index} src={link.url}>
-//                   <CVText settings={settings} variant="small" style={styles.link}>
-//                     {settings.displayFullLinks ? link.url : link.name}
-//                   </CVText>
-//                 </CVLink>
-//               )
-//           )}
-//         </CVRow>
-//       )}
-//     </CVSection>
-//   );
-// };
+      {/* Contact Information */}
+      <View
+        style={{
+          ...styles.row,
+          justifyContent: styles[align].justifyContent,
+          textAlign: align,
+          flexWrap: "wrap",
+          gap: 6,
+        }}
+      >
+        {" "}
+        {location && <Text>{location}</Text>}
+        {location && (phone || email || links) && <Text>|</Text>}
+        {phone && <Text>{phone}</Text>}
+        {phone && email && <Text>|</Text>}
+        {email && (
+          <ResumePDFLink src={`mailto:${email}`} isPDF={isPDF}>
+            {email}
+          </ResumePDFLink>
+        )}
+        {email && links && links.length > 0 && <Text>|</Text>}
+        {links &&
+          links.map((link, index) => (
+            <React.Fragment key={link.url}>
+              <ResumePDFLink src={link.url} isPDF={isPDF}>
+                {displayFullLinks ? link.url : link.name}
+              </ResumePDFLink>
+              {index < links.length - 1 && <Text>|</Text>}
+            </React.Fragment>
+          ))}
+      </View>
+    </View>
+  );
+};

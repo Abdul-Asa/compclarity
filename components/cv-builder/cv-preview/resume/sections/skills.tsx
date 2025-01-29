@@ -1,57 +1,60 @@
-// "use client";
+import { View, Text } from "@react-pdf/renderer";
+import { CVSection, CVSettings, SkillsData } from "@/components/cv-builder/types";
+import { styles } from "../styles";
+import { mapFontWeight } from "../utils";
+export const ResumePDFSkills = ({ info, settings }: { info: CVSection; settings: CVSettings }) => {
+  const { title, data } = info;
+  const { heading } = settings;
+  const skillsData = data as SkillsData;
 
-// import { Text, View } from "@react-pdf/renderer";
-// import { SkillsData, CVSettings, CombinedCVData } from "../../../types";
-// import { styles } from "../styles";
+  if (!skillsData?.length) return null;
 
-// interface SkillsProps {
-//   section: CombinedCVData["sections"][number];
-//   settings: CVSettings;
-// }
+  return (
+    <View
+      style={{
+        ...styles.column,
+        marginTop: settings.spacing.sectionGap,
+      }}
+    >
+      {/* Section Title */}
+      <Text
+        style={{
+          fontSize: heading.font.size,
+          fontWeight: mapFontWeight(heading.font.weight),
+          color: heading.color,
+          fontFamily: heading.font.family,
+          textTransform: "uppercase",
+        }}
+      >
+        {title}
+      </Text>
 
-// export const Skills = ({ section, settings }: SkillsProps) => {
-//   const data = section.data as SkillsData;
+      {/* Divider Line */}
+      <View
+        style={{
+          borderBottom: "1px solid black",
+          marginBottom: 8,
+        }}
+      />
 
-//   return (
-//     <View style={styles.col}>
-//       <Text
-//         style={{
-//           ...styles.heading,
-//           fontSize: settings.heading.font.size,
-//           fontFamily: settings.heading.font.family,
-//           fontWeight: settings.heading.font.weight,
-//           color: settings.heading.color,
-//           textAlign: settings.heading.align,
-//         }}
-//       >
-//         {section.title}
-//       </Text>
+      {/* Skills Categories */}
+      <View style={styles.column}>
+        {skillsData.map((skillCategory, index) => (
+          <View
+            key={index}
+            style={{
+              ...styles.column,
+              marginBottom: index < skillsData.length - 1 ? 8 : 0,
+            }}
+          >
+            {/* Category Name */}
+            <Text style={{ fontWeight: mapFontWeight("bold") }}>{skillCategory.category}</Text>
 
-//       <View style={styles.gap4}>
-//         {data.map((category, index) => (
-//           <View key={index} style={styles.gap2}>
-//             <Text
-//               style={{
-//                 ...styles.subtitle,
-//                 fontFamily: settings.body.font.family,
-//                 fontWeight: "semibold",
-//                 color: settings.body.color,
-//               }}
-//             >
-//               {category.category}
-//             </Text>
-//             <Text
-//               style={{
-//                 ...styles.text,
-//                 ...styles.muted,
-//                 fontFamily: settings.body.font.family,
-//               }}
-//             >
-//               {category.skills.join(` ${settings.bulletPoints} `)}
-//             </Text>
-//           </View>
-//         ))}
-//       </View>
-//     </View>
-//   );
-// };
+            {/* Skills List */}
+            <Text style={{ marginLeft: 8, marginTop: 2 }}>{skillCategory.skills.join(", ")}</Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};

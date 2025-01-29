@@ -1,82 +1,76 @@
 // "use client";
 
-// import { Text, View } from "@react-pdf/renderer";
-// import { WorkExperienceData, CVSettings, CombinedCVData } from "../../../types";
-// import { parseAndRenderHTML, formatDate } from "../utils";
-// import { styles } from "../styles";
+import { View, Text } from "@react-pdf/renderer";
+import { CVSection, CVSettings, WorkExperienceData } from "@/components/cv-builder/types";
+import { styles } from "../styles";
+import { renderHTML, formatDate, mapFontWeight } from "../utils";
 
-// interface WorkExperienceProps {
-//   section: CombinedCVData["sections"][number];
-//   settings: CVSettings;
-// }
+export const ResumePDFWorkExperience = ({ info, settings }: { info: CVSection; settings: CVSettings }) => {
+  const { title, data } = info;
+  const { heading, dateFormat } = settings;
+  const workExperienceData = data as WorkExperienceData;
 
-// export const WorkExperience = ({ section, settings }: WorkExperienceProps) => {
-//   const data = section.data as WorkExperienceData;
+  if (!workExperienceData?.length) return null;
 
-//   return (
-//     <View style={styles.col}>
-//       <Text
-//         style={{
-//           ...styles.heading,
-//           fontSize: settings.heading.font.size,
-//           fontFamily: settings.heading.font.family,
-//           fontWeight: settings.heading.font.weight,
-//           color: settings.heading.color,
-//           textAlign: settings.heading.align,
-//         }}
-//       >
-//         {section.title}
-//       </Text>
+  return (
+    <View
+      style={{
+        ...styles.column,
+        marginTop: settings.spacing.sectionGap,
+      }}
+    >
+      {/* Section Title */}
+      <Text
+        style={{
+          fontSize: heading.font.size,
+          fontWeight: mapFontWeight(heading.font.weight),
+          textTransform: "uppercase",
+        }}
+      >
+        {title}
+      </Text>
 
-//       <View style={styles.gap4}>
-//         {data.map((experience, index) => (
-//           <View key={index} style={styles.gap2}>
-//             {/* Company and Position */}
-//             <View style={{ ...styles.row, ...styles.spaceBetween, ...styles.alignCenter }}>
-//               <Text
-//                 style={{
-//                   ...styles.subtitle,
-//                   fontFamily: settings.body.font.family,
-//                   fontWeight: "semibold",
-//                   color: settings.body.color,
-//                 }}
-//               >
-//                 {experience.position} | {experience.company}
-//               </Text>
-//               <Text
-//                 style={{
-//                   ...styles.textSm,
-//                   ...styles.muted,
-//                   fontFamily: settings.body.font.family,
-//                 }}
-//               >
-//                 {experience.startDate && formatDate(experience.startDate, settings.dateFormat)} -{" "}
-//                 {experience.current
-//                   ? "Present"
-//                   : experience.endDate && formatDate(experience.endDate, settings.dateFormat)}
-//               </Text>
-//             </View>
+      {/* Divider Line */}
+      <View
+        style={{
+          borderBottom: "1px solid black",
+          marginBottom: 8,
+        }}
+      />
 
-//             {/* Location */}
-//             {experience.location && (
-//               <Text
-//                 style={{
-//                   ...styles.textSm,
-//                   ...styles.muted,
-//                   fontFamily: settings.body.font.family,
-//                 }}
-//               >
-//                 {experience.location}
-//               </Text>
-//             )}
+      {/* Work Experience Entries */}
+      <View style={styles.column}>
+        {workExperienceData.map((experience, index) => (
+          <View
+            key={index}
+            style={{
+              ...styles.column,
+              marginBottom: index < workExperienceData.length - 1 ? 8 : 0,
+            }}
+          >
+            {/* Position and Date */}
+            <View style={{ ...styles.row, justifyContent: "space-between" }}>
+              <Text style={{ fontWeight: mapFontWeight("bold") }}>{experience.position}</Text>
+              <Text>
+                {formatDate(experience.startDate, dateFormat)}
+                {" - "}
+                {experience.current ? "Present" : experience.endDate ? formatDate(experience.endDate, dateFormat) : ""}
+              </Text>
+            </View>
 
-//             {/* Description */}
-//             <View style={styles.gap2}>
-//               {experience.description && parseAndRenderHTML(experience.description, settings.body.font.size, settings)}
-//             </View>
-//           </View>
-//         ))}
-//       </View>
-//     </View>
-//   );
-// };
+            {/* Company and Location */}
+            <View style={{ ...styles.row, justifyContent: "space-between" }}>
+              <Text style={{ fontStyle: "italic" }}>{experience.company}</Text>
+              <Text style={{ fontStyle: "italic" }}>{experience.location}</Text>
+            </View>
+
+            {/* Description */}
+            {experience.description && (
+              <View style={{ marginTop: 2, marginLeft: 8 }}>{renderHTML(experience.description)}</View>
+            )}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};
