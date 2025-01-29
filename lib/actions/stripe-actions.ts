@@ -2,7 +2,7 @@
 
 import { getUser, updateUserSubscription } from "./server-actions";
 import { stripe } from "@/lib/stripe";
-import { getTier } from "@/app/(Layout)/(Products)/cv/product";
+import { getTier } from "@/app/(Layout)/(Products)/pricing/product";
 import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 

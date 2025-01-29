@@ -8,7 +8,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { INITIAL_CV_DATA } from "@/components/cv-builder/constants";
 import { User } from "@/lib/validation/types";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
-import { pricingTiers } from "../cv/product";
+import { pricingTiers } from "../pricing/product";
 import { Switch } from "@/components/ui/switch";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
