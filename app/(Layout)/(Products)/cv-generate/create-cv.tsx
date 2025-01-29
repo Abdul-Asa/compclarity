@@ -65,7 +65,7 @@ export const CreateCVButton = ({ user }: { user: User }) => {
 
   const tier = pricingTiers[1];
 
-  if (!user.issubscribed) {
+  if (!user.is_subscribed) {
     return (
       <Modal
         className="md:max-w-screen-sm"
