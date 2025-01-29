@@ -25,7 +25,7 @@ export function OnboardingForm() {
 
   return (
     <Scoped>
-      <Card className="size-full flex flex-col justify-center items-center p-6">
+      <Card className="flex flex-col items-center justify-center p-6 size-full">
         <Stepper currentStep={stepper.current.id} />
 
         {stepper.switch({
@@ -43,7 +43,7 @@ export function OnboardingForm() {
 const WelcomeComponent = () => {
   return (
     <div className="w-full max-w-2xl">
-      <div className="text-center py-6">
+      <div className="py-6 text-center">
         <h1 className="text-2xl font-bold tracking-tight">Welcome to CompClarity!</h1>
         <p className="text-muted-foreground">Let's get to know you better</p>
       </div>
@@ -71,21 +71,21 @@ const SkillsComponent = () => {
 
 const Stepper = ({ currentStep }: { currentStep: string }) => {
   const stepper = useStepper();
-  const currentStepIndex = stepper.current.index;
+  // const currentStepIndex = stepper.current.index;
   const currentStepInfo = stepper.current;
 
   return (
     <div className="w-full p-2">
       {/* Mobile view */}
-      <div className="flex md:hidden flex-col items-center justify-center gap-2">
-        <div className="size-14 rounded-full flex items-center justify-center bg-primary text-white">
+      <div className="flex flex-col items-center justify-center gap-2 md:hidden">
+        <div className="flex items-center justify-center text-white rounded-full size-14 bg-primary">
           {currentStepInfo.icon}
         </div>
         <span className="text-sm font-medium">{currentStepInfo.text}</span>
       </div>
 
       {/* Desktop view */}
-      <div className="hidden md:flex items-center justify-center">
+      {/* <div className="items-center justify-center hidden md:flex">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <div
@@ -96,17 +96,17 @@ const Stepper = ({ currentStep }: { currentStep: string }) => {
             >
               {step.icon}
             </div>
-            {index < steps.length - 1 && (
-              <div className="w-20 h-1 mx-1 bg-muted relative flex items-center rounded-full">
+            {/* {index < steps.length - 1 && (
+              <div className="relative flex items-center w-20 h-1 mx-1 rounded-full bg-muted">
                 <div
-                  className="absolute top-0 left-0 h-full bg-primary transition-all duration-500 rounded-full"
+                  className="absolute top-0 left-0 h-full transition-all duration-500 rounded-full bg-primary"
                   style={{ width: index < currentStepIndex ? "100%" : "0%" }}
                 />
               </div>
             )}
           </React.Fragment>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
