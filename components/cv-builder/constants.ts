@@ -83,7 +83,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2020-06",
           endDate: "",
           current: true,
-          description: "• Developed a REST API using FastAPI and PostgreSQL to store data from learning management systems\n• Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data\n• Explored ways to visualize GitHub collaboration in a classroom setting"
+          description: "<ul><li>Developed a REST API using FastAPI and PostgreSQL to store data from learning management systems</li><li>Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data</li><li>Explored ways to visualize GitHub collaboration in a classroom setting</li></ul>"
         },
         {
           company: "Southwestern University",
@@ -92,7 +92,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2018-09",
           endDate: "",
           current: true,
-          description: "• Communicate with managers to set up campus computers used on campus\n• Assess and troubleshoot computer problems brought by students, faculty and staff\n• Maintain upkeep of computers, classroom equipment, and 200 printers across campus"
+          description: "<ul><li>Communicate with managers to set up campus computers used on campus</li><li>Assess and troubleshoot computer problems brought by students, faculty and staff</li><li>Maintain upkeep of computers, classroom equipment, and 200 printers across campus</li></ul>"
         },
         {
           company: "Southwestern University",
@@ -101,7 +101,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2019-05",
           endDate: "2019-07",
           current: false,
-          description: "• Explored methods to generate video game dungeons based off of The Legend of Zelda\n• Developed a game in Java to test the generated dungeons\n• Contributed 50K+ lines of code to an established codebase via Git\n• Conducted a human subject study to determine which video game dungeon generation technique is enjoyable\n• Wrote an 8-page paper and gave multiple presentations on-campus\n• Presented virtually to the World Conference on Computational Intelligence"
+          description: "<ul><li>Explored methods to generate video game dungeons based off of The Legend of Zelda</li><li>Developed a game in Java to test the generated dungeons</li><li>Contributed 50K+ lines of code to an established codebase via Git</li><li>Conducted a human subject study to determine which video game dungeon generation technique is enjoyable</li><li>Wrote an 8-page paper and gave multiple presentations on-campus</li><li>Presented virtually to the World Conference on Computational Intelligence</li></ul>"
         }
       ]
     },
@@ -125,7 +125,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2020-06",
           endDate: "",
           current: true,
-          description: "• Developed a full-stack web application using with Flask serving a REST API with React as the frontend\n• Implemented GitHub OAuth to get data from user's repositories\n• Visualized GitHub data to show collaboration\n• Used Celery and Redis for asynchronous tasks",
+          description: "<ul><li>Developed a full-stack web application using with Flask serving a REST API with React as the frontend</li><li>Implemented GitHub OAuth to get data from user's repositories</li><li>Visualized GitHub data to show collaboration</li><li>Used Celery and Redis for asynchronous tasks</li></ul>",
           technologies: ["Python", "Flask", "React", "PostgreSQL", "Docker"]
         },
         {
@@ -136,7 +136,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2018-05",
           endDate: "2020-05",
           current: false,
-          description: "• Developed a Minecraft server plugin to entertain kids during free time for a previous job\n• Published plugin to websites gaining 2K+ downloads and an average 4.5/5-star review\n• Implemented continuous delivery using TravisCI to build the plugin upon new a release\n• Collaborated with Minecraft server administrators to suggest features and get feedback about the plugin",
+          description: "<ul><li>Developed a Minecraft server plugin to entertain kids during free time for a previous job</li><li>Published plugin to websites gaining 2K+ downloads and an average 4.5/5-star review</li><li>Implemented continuous delivery using TravisCI to build the plugin upon new a release</li><li>Collaborated with Minecraft server administrators to suggest features and get feedback about the plugin</li></ul>",
           technologies: ["Spigot API", "Java", "Maven", "TravisCI", "Git"]
         }
       ]
@@ -213,8 +213,13 @@ export const INITIAL_CV_DATA = {
       color: "#374151"
     },
     dateFormat: "words-short",
-    displayFullLinks: false
+    displayFullLinks: true
   }
+};
+
+export const EMPTY_CV_DATA = {
+  sections: [],
+  settings: INITIAL_CV_DATA.settings
 };
 
 export const sectionsAtom = atom<CVSection[]>();

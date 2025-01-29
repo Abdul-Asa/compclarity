@@ -5,15 +5,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { dateFormats, fontFamilies, fontWeights, settingsAtom } from "../constants";
+import {
+  dateFormats,
+  fontFamilies,
+  fontWeights,
+  settingsAtom,
+  INITIAL_CV_DATA,
+  sectionsAtom,
+  EMPTY_CV_DATA,
+} from "../constants";
 import { getCV } from "@/lib/actions/server-actions";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { updateCV, updateCVName } from "@/lib/actions/server-actions";
 import { useToast } from "@/lib/hooks/useToast";
-import { CVData } from "../types";
+import { CVData, CVSection, CVSettings } from "../types";
+import { Modal } from "@/components/ui/modal";
+import { Button } from "@/components/ui/button";
 
 const Settings = () => {
   const params = useParams();
@@ -25,6 +35,9 @@ const Settings = () => {
   });
 
   const [settings, setSettings] = useAtom(settingsAtom);
+  const [, setSections] = useAtom(sectionsAtom);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isClearModalOpen, setIsClearModalOpen] = useState(false);
 
   // Add mutation
   const { mutate: updateCVMutation } = useMutation({
@@ -117,6 +130,28 @@ const Settings = () => {
       current[pathArray[pathArray.length - 1]] = value;
       return newSettings;
     });
+  };
+
+  const handleResetData = () => {
+    if (cv) {
+      setSections(INITIAL_CV_DATA.sections as CVSection[]);
+      setSettings(INITIAL_CV_DATA.settings as CVSettings);
+      updateCVMutation({
+        ...cv.cv_data,
+        sections: INITIAL_CV_DATA.sections as CVSection[],
+        settings: INITIAL_CV_DATA.settings as CVSettings,
+      });
+    }
+  };
+
+  const handleClearData = () => {
+    if (cv) {
+      setSections(EMPTY_CV_DATA.sections as CVSection[]);
+      updateCVMutation({
+        ...cv.cv_data,
+        sections: EMPTY_CV_DATA.sections as CVSection[],
+      });
+    }
   };
 
   return (
@@ -456,6 +491,95 @@ const Settings = () => {
               onCheckedChange={(checked) => handleChange("displayFullLinks", checked)}
             />
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Developer Tools */}
+      <Card>
+        <CardHeader className="p-6">
+          <CardTitle>Miscellaneous</CardTitle>
+          <CardDescription>Advanced options for development and debugging</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-4">
+          <Modal
+            trigger={
+              <Button variant="outline" className="flex-1">
+                Reset to Seed Data
+              </Button>
+            }
+            open={isResetModalOpen}
+            onOpenChange={setIsResetModalOpen}
+          >
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Reset to Seed Data</h2>
+              <p className="text-muted-foreground">
+                This will reset all sections and settings to their initial seed data. This action cannot be undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <Button variant="outline" onClick={() => setIsResetModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    handleResetData();
+                    setIsResetModalOpen(false);
+                  }}
+                >
+                  Reset Data
+                </Button>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal
+            trigger={
+              <Button variant="outline" className="flex-1">
+                Clear All Data
+              </Button>
+            }
+            open={isClearModalOpen}
+            onOpenChange={setIsClearModalOpen}
+          >
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Clear All Data</h2>
+              <p className="text-muted-foreground">
+                This will clear all content from all sections while preserving the structure. This action cannot be
+                undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <Button variant="outline" onClick={() => setIsClearModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    handleClearData();
+                    setIsClearModalOpen(false);
+                  }}
+                >
+                  Clear Data
+                </Button>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal
+            trigger={
+              <Button variant="outline" className="flex-1">
+                Show JSON Data
+              </Button>
+            }
+          >
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Current CV Data</h2>
+              <div className="p-4 overflow-auto rounded-lg bg-muted max-h-[60vh]">
+                <pre className="text-sm whitespace-pre-wrap">
+                  {JSON.stringify({ sections: cv.cv_data.sections, settings }, null, 2)}
+                </pre>
+              </div>
+            </div>
+          </Modal>
         </CardContent>
       </Card>
     </div>
