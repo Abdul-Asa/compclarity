@@ -38,6 +38,28 @@ export const pricingTiers = [
     description:
       "The best package for those who want to stand out in the job market.",
   },
+  {
+    id: "stripe-package",
+    title: "CompClarity AI Suite",
+    monthlyPrice: 15,
+    yearlyPrice: 150,
+    originalMonthlyPrice: 30,
+    originalYearlyPrice: 300,
+    discount: "50% off - Limited time offer!",
+    isFree: false,
+    cta: "Get this package",
+    isPopular: true,
+    isAvailable: false,
+    link: "/cv-generate",
+    features: [
+      "Set notifications for new job postings",
+      "Full access to CompClarity AI Suite",
+      "Generate unlimited CVs and cover letters",
+      "Access to AI mock interview prep (coming soon)",
+    ],
+    description:
+      "The best package for those who want to stand out in the job market.",
+  },
 ];
 
 export const getTier = (id: string) => {

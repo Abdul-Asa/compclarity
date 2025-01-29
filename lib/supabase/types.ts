@@ -150,11 +150,13 @@ export type Database = {
           email: string
           first_name: string
           id: string
+          is_subscribed: boolean
           last_name: string
           links: Json
           location: string | null
           onboarding_completed: boolean
           phonenumber: string | null
+          stripe_customer_id: string | null
           tokens: number
           username_completed: boolean
         }
@@ -164,11 +166,13 @@ export type Database = {
           email: string
           first_name: string
           id: string
+          is_subscribed?: boolean
           last_name: string
           links?: Json
           location?: string | null
           onboarding_completed?: boolean
           phonenumber?: string | null
+          stripe_customer_id?: string | null
           tokens?: number
           username_completed?: boolean
         }
@@ -178,11 +182,13 @@ export type Database = {
           email?: string
           first_name?: string
           id?: string
+          is_subscribed?: boolean
           last_name?: string
           links?: Json
           location?: string | null
           onboarding_completed?: boolean
           phonenumber?: string | null
+          stripe_customer_id?: string | null
           tokens?: number
           username_completed?: boolean
         }

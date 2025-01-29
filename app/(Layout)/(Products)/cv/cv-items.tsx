@@ -39,7 +39,7 @@ export const HeroSection = () => {
             letters that showcases your experience and strengths that will get you noticed by employers.
           </h2>
           <Button className="transition bg-emerald-700 dark:bg-emerald-500" asChild>
-            <Link href="#pricing">Get Started</Link>
+            <Link href="/cv-generate">Get Started</Link>
           </Button>
         </div>
       </div>

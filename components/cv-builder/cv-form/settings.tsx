@@ -19,7 +19,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { updateCV, updateCVName } from "@/lib/actions/server-actions";
+import { updateCV } from "@/lib/actions/server-actions";
 import { useToast } from "@/lib/hooks/useToast";
 import { CVData, CVSection, CVSettings } from "../types";
 import { Modal } from "@/components/ui/modal";
@@ -63,24 +63,6 @@ const Settings = () => {
 
   const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
 
-  // Add new mutation for name updates
-  const { mutate: updateCVNameMutation } = useMutation({
-    mutationKey: ["updateCVName"],
-    mutationFn: (name: string) => updateCVName({ cvId: params.id as string, name }),
-    onError: (err) => {
-      toast({
-        title: "Failed to update CV name",
-        description: "Please try again later",
-        variant: "destructive",
-      });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["cv", params.id] });
-    },
-  });
-
-  const debouncedUpdateCVNameMutation = useDebouncedCallback(updateCVNameMutation, 1000);
-
   useEffect(() => {
     if (cv?.cv_data?.settings) {
       setSettings(cv.cv_data.settings);
@@ -102,21 +84,10 @@ const Settings = () => {
 
   const handleChange = (path: string, value: any) => {
     if (path === "name") {
-      if (!value.trim()) {
-        toast({
-          title: "Invalid name",
-          description: "CV name cannot be empty",
-          variant: "destructive",
-        });
-        return;
-      }
-
       setSettings((prev) => {
         if (!prev) return prev;
         return { ...prev, name: value };
       });
-      debouncedUpdateCVNameMutation(value);
-      return;
     }
 
     const pathArray = path.split(".");
@@ -129,6 +100,19 @@ const Settings = () => {
       }
       current[pathArray[pathArray.length - 1]] = value;
       return newSettings;
+    });
+  };
+
+  const handleNameBlur = () => {
+    if (!settings.name.trim()) {
+      setSettings((prev) => {
+        if (!prev) return prev;
+        return { ...prev, name: "Untitled" };
+      });
+    }
+    updateCVMutation({
+      ...cv.cv_data,
+      settings: { ...settings, name: "Untitled" },
     });
   };
 
@@ -168,6 +152,7 @@ const Settings = () => {
             <Input
               value={settings.name}
               onChange={(e) => handleChange("name", e.target.value)}
+              onBlur={handleNameBlur}
               required
               placeholder="Enter CV name"
               aria-label="CV name"

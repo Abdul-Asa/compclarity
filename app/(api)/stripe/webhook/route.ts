@@ -1,36 +1,35 @@
-import { createClient } from "@/lib/supabase/server";
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
+  import {  stripe } from '@/lib/stripe';
+import { NextRequest, NextResponse } from 'next/server';
+import { handleSubscriptionChange } from '@/lib/actions/stripe-actions';
 
-export async function POST(request: Request) {
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    return new Response("STRIPE_WEBHOOK_SECRET is not configured", { status: 500 });
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+export async function POST(request: NextRequest) {
+  const payload = await request.text();
+  const signature = request.headers.get('stripe-signature') as string;
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+  } catch (err) {
+    console.error('Webhook signature verification failed.', err);
+    return NextResponse.json(
+      { error: 'Webhook signature verification failed.' },
+      { status: 400 }
+    );
   }
 
-  const signature = request.headers.get("Stripe-Signature");
-  if (!signature) {
-    return new Response("No signature", { status: 401 });
+  switch (event.type) {
+    case 'customer.subscription.updated':
+    case 'customer.subscription.deleted':
+      const subscription = event.data.object as Stripe.Subscription;
+      await handleSubscriptionChange(subscription);
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
 
-  const event = await stripe.webhooks.constructEventAsync(
-    await request.text(),
-    signature,
-    process.env.STRIPE_WEBHOOK_SECRET
-  );
-  if (
-    event.type === "checkout.session.completed" ||
-    event.type === "checkout.session.async_payment_succeeded" ||
-    event.type === "payment_intent.succeeded"
-  ) {
-    const sessionId = event.data.object.id;
-    console.log("sessionId", sessionId);
-    const supabase = await createClient();
-    const { error } = await supabase.from("payments").update({ status: "completed" }).eq("session_id", sessionId);
-
-    if (error) {
-      console.error("Error updating payment status:", error);
-      return new Response("Error updating payment status", { status: 500 });
-    }
-  }
-
-  return Response.json({ received: true });
+  return NextResponse.json({ received: true });
 }

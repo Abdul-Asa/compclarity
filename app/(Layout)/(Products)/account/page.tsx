@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Metadata } from "next";
 import AccountForm from "./AccountForm";
 import { PasswordResetForm } from "@/app/(Layout)/(Auth)/password-reset/PasswordReset";
+import { SubscriptionManager } from "./SubscriptionManager";
+import { getUser } from "@/lib/actions/server-actions";
 
 export const metadata: Metadata = {
   title: "CompClarity - Account",
@@ -12,18 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default async function page() {
-  const supabase = await createClient();
+  const user = await getUser();
 
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
+  if (!user) {
     redirect("/login");
   }
-
-  const user = {
-    email: data.user.email || "",
-    first_name: data.user.user_metadata?.first_name,
-    last_name: data.user.user_metadata?.last_name,
-  };
 
   return (
     <div className="flex flex-col max-w-5xl gap-10">
@@ -39,7 +33,23 @@ export default async function page() {
         </Card>
 
         <Card className="col-span-2 md:col-span-1">
-          <PasswordResetForm />
+          <CardHeader className="p-6">
+            <CardTitle>Password</CardTitle>
+            <CardDescription>Update your password.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PasswordResetForm />
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-2">
+          <CardHeader className="p-6">
+            <CardTitle>Subscription</CardTitle>
+            <CardDescription>Manage your subscription details.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SubscriptionManager user={user} />
+          </CardContent>
         </Card>
       </div>
     </div>
