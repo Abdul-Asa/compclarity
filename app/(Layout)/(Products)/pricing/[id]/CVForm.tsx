@@ -243,7 +243,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                 </a>{" "}
                 if needed.
               </p>
-              <Link href="/cv" className={buttonVariants({ variant: "ghost", className: "w-fit self-center" })}>
+              <Link href="/pricing" className={buttonVariants({ variant: "ghost", className: "w-fit self-center" })}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 <span className="hidden md:block">Back to services</span>
                 <span className="md:hidden">Services</span>
@@ -270,7 +270,7 @@ const steps: StepperItem[] = [
 const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: number }) => {
   return (
     <div className="flex items-center md:flex-row flex-col relativelg:px-10 px-2 border-b shadow-sm bg-white dark:bg-black dark:border-gray-800 border-gray-200 py-4 select-none">
-      <Link href="/cv" className={buttonVariants({ variant: "ghost" })}>
+      <Link href="/pricing" className={buttonVariants({ variant: "ghost" })}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         <span className="hidden md:block">Back to services</span>
         <span className="md:hidden">Services</span>
