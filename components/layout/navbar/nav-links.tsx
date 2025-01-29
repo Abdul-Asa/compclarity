@@ -36,7 +36,7 @@ export const navLinks: NavLink[] = [
   {
     title: "Services",
     children: [
-      { title: "Pricing", href: "/cv", description: "Discover our AI Suite", icon: FileText },
+      { title: "Pricing", href: "/pricing", description: "Discover our AI Suite", icon: FileText },
       // { title: "CV Generation", href: "/cv-generate", description: "Generate a CV", icon: FileText },
       {
         title: "Cover Letter",
