@@ -23,7 +23,7 @@ export default async function CVBuilder() {
       {/* Header with Create Button */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-semibold">My CVs</h1>
-        <CreateCVButton user={user} />
+        <CreateCVButton />
       </div>
 
       {/* CV Grid */}

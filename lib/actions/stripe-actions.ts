@@ -2,7 +2,7 @@
 
 import { getUser, updateUserSubscription } from "./server-actions";
 import { stripe } from "@/lib/stripe";
-import { getTier } from "@/app/(Layout)/(Products)/pricing/product";
+import { getTier } from "@/app/(Layout)/(Products)/ai/product";
 import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 
@@ -66,8 +66,8 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
           message: "CompClarity will process your subscription and provide immediate access to premium features.",
         },
       },
-      success_url: `${process.env.NEXT_PUBLIC_API_URL}/cv-generate?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_API_URL}/cv-generate?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?canceled=true`,
       metadata: {
         userId: user.id,
       },

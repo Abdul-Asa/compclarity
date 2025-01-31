@@ -10,11 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Check, FileText, Pen, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { pricingTiers } from "./product";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { createStripeSession, updateUserSubscriptionBySessionId } from "@/lib/actions/stripe-actions";
+import { useToast } from "@/lib/hooks/useToast";
+import { User } from "@/lib/validation/types";
 
 export const HeroSection = () => {
   return (
@@ -103,9 +106,67 @@ export const MarqueeSection = () => {
   );
 };
 
-export const Pricing = () => {
-  const router = useRouter();
+export const Pricing = ({ user }: { user: User | null }) => {
   const [isYearly, setIsYearly] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubscribe = async () => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "Please login to subscribe.",
+        variant: "destructive",
+      });
+      router.push("/login");
+      return;
+    }
+    if (user.is_subscribed) {
+      toast({
+        title: "Already subscribed 😉",
+        description: "You already have a subscription.",
+      });
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const { url } = await createStripeSession("stripe-package", isYearly);
+      if (url) {
+        router.push(url);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create subscription. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!user) return;
+    if (searchParams.get("success")) {
+      const sessionId = searchParams.get("session_id");
+      if (sessionId) {
+        updateUserSubscriptionBySessionId(user.id, sessionId);
+        toast({
+          title: "Subscription successful!",
+          description: "You now have access to all premium features.",
+        });
+      }
+    }
+    if (searchParams.get("canceled")) {
+      toast({
+        title: "Subscription canceled",
+        description: "Your subscription was not completed.",
+        variant: "destructive",
+      });
+    }
+  }, [searchParams, toast]);
 
   return (
     <section id="pricing" className="container px-4 py-16 mx-auto space-y-4">
@@ -117,55 +178,56 @@ export const Pricing = () => {
       <div className="flex items-center justify-center gap-2">
         <span className={cn("text-sm", !isYearly && "font-bold")}>Monthly</span>
         <Switch checked={isYearly} onCheckedChange={setIsYearly} />
-        <span className={cn("text-sm", isYearly && "font-bold")}>Yearly (Save 17%)</span>
+        <span className={cn("text-sm", isYearly && "font-bold")}>Yearly (Save 20%)</span>
       </div>
 
       <div className="grid grid-cols-2 gap-8 pt-10">
-        {pricingTiers.map((tier) => (
-          <Card key={tier.id} className="flex flex-col">
-            <CardHeader className="p-6">
-              <CardTitle className="text-xl">{tier.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col flex-grow">
-              <div className="mb-4">
-                {tier.isFree ? (
-                  <span className="text-4xl font-bold">Free</span>
-                ) : (
-                  <>
-                    <span className="text-4xl font-bold">£{isYearly ? tier.yearlyPrice : tier.monthlyPrice}</span>
-                    <span className="ml-2 text-xl line-through text-muted-foreground">
-                      £{isYearly ? tier.originalYearlyPrice : tier.originalMonthlyPrice}
-                    </span>
-                    {isYearly && <span className="ml-2 text-sm">/ year</span>}
-                    {!isYearly && <span className="ml-2 text-sm">/ month</span>}
-                  </>
-                )}
-                {tier.isPopular && <Badge className="ml-2 bg-emerald-500">MOST POPULAR</Badge>}
-              </div>
-              <p className="mb-4 text-red-700 dark:text-red-500">{tier.discount}</p>
-              <Button
-                className="mb-6 text-white bg-primary"
-                disabled={!tier.isAvailable}
-                onClick={() => {
-                  if (tier.isAvailable) {
-                    router.push(tier.link);
-                  }
-                }}
-              >
-                {tier.cta}
-              </Button>
-              <h3 className="mb-2 font-semibold">WHAT'S INCLUDED</h3>
-              <ul className="flex-grow space-y-2">
-                {tier.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-start">
-                    <Check className="flex-shrink-0 w-5 h-5 mt-1 mr-2 text-green-500" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        ))}
+        {pricingTiers.map((tier) => {
+          if (!tier.isAvailable) return null;
+          return (
+            <Card key={tier.id} className="flex flex-col">
+              <CardHeader className="p-6">
+                <CardTitle className="text-xl">{tier.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col flex-grow">
+                <div className="mb-4">
+                  {tier.isFree ? (
+                    <span className="text-4xl font-bold">Free</span>
+                  ) : (
+                    <>
+                      <span className="text-4xl font-bold">
+                        £{isYearly ? (tier.monthlyPrice ?? 12) * 0.8 : tier.monthlyPrice}
+                      </span>
+                      <span className="ml-2 text-xl line-through text-muted-foreground">
+                        £{tier.originalMonthlyPrice}
+                      </span>
+                      <span className="ml-2 text-sm">{"/ month"}</span>
+                    </>
+                  )}
+                  {tier.isPopular && <Badge className="ml-2 bg-emerald-500">MOST POPULAR</Badge>}
+                </div>
+                <p className="mb-4 text-red-700 dark:text-red-500">{tier.discount}</p>
+                <Button
+                  className="mb-6 text-white bg-primary"
+                  disabled={!tier.isAvailable}
+                  onClick={tier.link ? () => router.push(tier.link) : handleSubscribe}
+                  loading={isLoading}
+                >
+                  {tier.cta}
+                </Button>
+                <h3 className="mb-2 font-semibold">WHAT'S INCLUDED</h3>
+                <ul className="flex-grow space-y-2">
+                  {tier.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-start">
+                      <Check className="flex-shrink-0 w-5 h-5 mt-1 mr-2 text-green-500" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </section>
   );

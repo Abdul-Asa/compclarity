@@ -17,7 +17,7 @@ export const pricingTiers = [
     description: "You're already benefiting by just being a member!",
   },
   {
-    id: "cv-full-package",
+    id: "stripe-package",
     title: "Premium",
     monthlyPrice: 15,
     yearlyPrice: 150,
@@ -28,7 +28,6 @@ export const pricingTiers = [
     cta: "Get this package",
     isPopular: true,
     isAvailable: true,
-    link: "/pricing/cv-full-package",
     features: [
       "Set notifications for new job postings",
       "Full access to CompClarity AI Suite",
