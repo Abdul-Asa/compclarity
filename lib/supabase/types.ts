@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cvs: {
+        Row: {
+          created_at: string
+          cv_data: Json
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cv_data: Json
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cv_data?: Json
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           additional_info: string | null
@@ -109,22 +141,68 @@ export type Database = {
           updated_at?: number | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "todos_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
+      }
+      users: {
+        Row: {
+          birthdate: string | null
+          created_at: string | null
+          email: string
+          first_name: string
+          id: string
+          is_subscribed: boolean
+          last_name: string
+          links: Json
+          location: string | null
+          onboarding_completed: boolean
+          phonenumber: string | null
+          stripe_customer_id: string | null
+          tokens: number
+          username_completed: boolean
+        }
+        Insert: {
+          birthdate?: string | null
+          created_at?: string | null
+          email: string
+          first_name: string
+          id: string
+          is_subscribed?: boolean
+          last_name: string
+          links?: Json
+          location?: string | null
+          onboarding_completed?: boolean
+          phonenumber?: string | null
+          stripe_customer_id?: string | null
+          tokens?: number
+          username_completed?: boolean
+        }
+        Update: {
+          birthdate?: string | null
+          created_at?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          is_subscribed?: boolean
+          last_name?: string
+          links?: Json
+          location?: string | null
+          onboarding_completed?: boolean
+          phonenumber?: string | null
+          stripe_customer_id?: string | null
+          tokens?: number
+          username_completed?: boolean
+        }
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      reset_tokens: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
@@ -215,4 +293,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

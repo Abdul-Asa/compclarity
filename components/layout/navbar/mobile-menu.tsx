@@ -1,0 +1,64 @@
+"use client";
+
+import { ModeToggle } from "@/components/providers/ThemeProvider";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useState } from "react";
+import NavigationItems from "./nav-links";
+import { AccountMenu } from "./account-menu";
+import { User } from "@/lib/validation/types";
+
+export function MobileMenu({ user }: { user: User | null }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <div
+      className="flex items-center gap-2 select-none group lg:hidden"
+      aria-label="Menu"
+      aria-hidden={isMobileMenuOpen}
+    >
+      <ModeToggle />
+      <button
+        className="relative flex list-none aspect-square h-11"
+        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+        aria-expanded={isMobileMenuOpen}
+        aria-label="Toggle menu"
+      >
+        <div
+          className={cn(
+            "h-[2.5px] w-5 bg-black dark:bg-white rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2",
+            isMobileMenuOpen ? "translate-y-0 rotate-45" : "-translate-y-[4px]"
+          )}
+        />
+        <div
+          className={cn(
+            "h-[2.5px] w-5 bg-black dark:bg-white rounded-full absolute transition-all duration-200 top-1/2 left-1/2 -translate-x-1/2",
+            isMobileMenuOpen ? "translate-y-0 -rotate-45" : "translate-y-[4px]"
+          )}
+        />
+      </button>
+      <div
+        className={cn(
+          "absolute z-40 inset-x-0 flex flex-col justify-center px-4 bg-white dark:bg-black top-[77px]",
+          "pointer-events-auto transition-all border-b-2",
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+      >
+        <NavigationItems mobile />
+        <div className="flex justify-center w-full border-t">
+          {user ? (
+            <AccountMenu user={user} />
+          ) : (
+            <Link
+              href="/login"
+              className="w-full py-5 text-lg font-medium text-center hover:bg-accent"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              Login
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import { ApplicationObject } from "@/lib/types";
+import { ApplicationObject } from "@/lib/validation/types";
 import {
   Active,
   closestCorners,
@@ -21,7 +21,7 @@ const directions: string[] = [
 //from https://georgegriff.github.io/react-dnd-kit-tailwind-shadcn-ui/
 export const coordinateGetter: KeyboardCoordinateGetter = (
   event,
-  { context: { active, droppableRects, droppableContainers, collisionRect } }
+  { context: { active, droppableRects, droppableContainers, collisionRect } },
 ) => {
   if (directions.includes(event.code)) {
     event.preventDefault();
@@ -117,16 +117,16 @@ export const coordinateGetter: KeyboardCoordinateGetter = (
 // This is mainly for type support for dnd-kit
 type SortableData =
   | {
-      type: "Column";
-      column: { title: string; id: string };
-    }
+    type: "Column";
+    column: { title: string; id: string };
+  }
   | {
-      type: "Application";
-      application: ApplicationObject;
-    };
+    type: "Application";
+    application: ApplicationObject;
+  };
 
 export function hasSortableData<T extends Active | Over>(
-  entry: T | null | undefined
+  entry: T | null | undefined,
 ): entry is T & {
   data: DataRef<SortableData>;
 } {
