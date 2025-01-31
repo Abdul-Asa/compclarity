@@ -33,20 +33,20 @@ export const navLinks: NavLink[] = [
   },
   { title: "Jobs", href: "/jobs" },
   { title: "Tracker", href: "/tracker" },
-  {
-    title: "Services",
-    children: [
-      { title: "Pricing", href: "/ai", description: "Discover our AI Suite", icon: FileText },
-      // { title: "CV Generation", href: "/cv-generate", description: "Generate a CV", icon: FileText },
-      {
-        title: "Cover Letter",
-        href: "/cover-letter",
-        description: "Craft the perfect cover letter",
-        icon: FileText,
-      },
-      { title: "Tech Internship Guide", href: "/tech-guide", description: "Get your first SWE internship", icon: Book },
-    ],
-  },
+  // {
+  //   title: "Services",
+  //   children: [
+  //     { title: "Pricing", href: "/ai", description: "Discover our AI Suite", icon: FileText },
+  //     // { title: "CV Generation", href: "/cv-generate", description: "Generate a CV", icon: FileText },
+  //     {
+  //       title: "Cover Letter",
+  //       href: "/cover-letter",
+  //       description: "Craft the perfect cover letter",
+  //       icon: FileText,
+  //     },
+  //     { title: "Tech Internship Guide", href: "/tech-guide", description: "Get your first SWE internship", icon: Book },
+  //   ],
+  // },
 ];
 
 export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) => {
