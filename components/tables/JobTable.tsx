@@ -31,13 +31,13 @@ export default function JobTable({ jobsResponse, signedIn }: { jobsResponse: Job
                 </div>
               </div>
             </th>
-            <th scope="col" className="px-1 py-4 w-1/6">
+            {/* <th scope="col" className="px-1 py-4 w-1/6">
               <div className="flex items-center justify-center sm:gap-2">
                 <div className="flex flex-col items-center justify-center">
                   <div className="uppercase font-bold">Tailor CV</div>
                 </div>
               </div>
-            </th>
+            </th> */}
             <th scope="col" className="px-1 py-4 w-1/6">
               <div className="flex items-center justify-center sm:gap-2">
                 <div className="flex flex-col items-center justify-center">
