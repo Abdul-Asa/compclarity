@@ -36,7 +36,7 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
     }
 
     const session = await stripe.checkout.sessions.create({
-      customer: customerId,
+      // customer: customerId,
       customer_email: user.email,
       line_items: [
         {
@@ -66,7 +66,7 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
           message: "CompClarity will process your subscription and provide immediate access to premium features.",
         },
       },
-      success_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?success=true`,
+      success_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?canceled=true`,
       metadata: {
         userId: user.id,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 
 export const useUser = () => {
@@ -28,10 +28,14 @@ export const useUser = () => {
         staleTime: 5 * 60 * 1000, // 5 minutes
     });
 
-
     return {
         isSignedIn: data?.isSignedIn ?? false,
         user: data?.user ?? null,
         isLoading,
     };
+};
+
+// Utility function to invalidate user data
+export const invalidateUser = (queryClient: ReturnType<typeof useQueryClient>) => {
+    queryClient.invalidateQueries({ queryKey: ["user"] });
 };

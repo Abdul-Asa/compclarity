@@ -14,6 +14,8 @@ import { forgotPassword, login, signup } from "./actions";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { useRouter } from "next/navigation";
 import { toast } from "@/lib/hooks/useToast";
+import { useQueryClient } from "@tanstack/react-query";
+import { invalidateUser } from "@/lib/hooks/useUser";
 
 interface AuthFormProps {
   type: "login" | "register" | "forgot-password";
@@ -22,6 +24,7 @@ interface AuthFormProps {
 export const AuthForm = ({ type }: AuthFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -78,6 +81,9 @@ export const AuthForm = ({ type }: AuthFormProps) => {
         });
       }
     } else {
+      // Invalidate user query on successful auth
+      invalidateUser(queryClient);
+
       toast({
         title: "Success",
         description: response.message || "Success",

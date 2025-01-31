@@ -211,7 +211,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
                   className="mb-6 text-white bg-primary"
                   disabled={!tier.isAvailable}
                   onClick={tier.link ? () => router.push(tier.link) : handleSubscribe}
-                  loading={isLoading}
+                  loading={tier.isFree ? false : isLoading}
                 >
                   {tier.cta}
                 </Button>
