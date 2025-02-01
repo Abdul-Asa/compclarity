@@ -114,7 +114,7 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
             </a>
           </div>
         </td>
-        <td className="px-2 py-4">
+        {/* <td className="px-2 py-4">
           <div className="flex flex-col items-center justify-center">
             {signedIn ? (
               <TailorCVButton job={job} />
@@ -129,7 +129,7 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
               </Button>
             )}
           </div>
-        </td>
+        </td> */}
         <td className="px-2 py-4">
           <div className="flex flex-col items-center justify-center">
             <Link
