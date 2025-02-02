@@ -2,7 +2,7 @@
 
 import { Job } from "@/lib/validation/types";
 import { useEffect, useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star, File, Wand2 } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star, File, Wand2, NotebookText } from "lucide-react";
 import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
 import { toast } from "@/lib/hooks/useToast";
@@ -130,6 +130,19 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
             )}
           </div>
         </td> */}
+
+        <td className="px-2 py-4">
+          <div className="flex flex-col items-center justify-center">
+            <Link
+              className="rounded-md p-2 transition ease-in-out hover:bg-yellow-500 hover:text-white"
+              href={`/cover-letter?jobTitle=${job.title}&companyName=${job.company.name}`}
+              target="_blank"
+            >
+              <NotebookText />
+            </Link>
+          </div>
+        </td>
+        
         <td className="px-2 py-4">
           <div className="flex flex-col items-center justify-center">
             <Link
