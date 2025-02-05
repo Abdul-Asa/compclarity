@@ -7,8 +7,7 @@ import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
 import { toast } from "@/lib/hooks/useToast";
 import { sendGAEvent } from "@next/third-parties/google";
-import { TailorCVButton } from "./TailorCVButton";
-
+import { ApplyModal } from "./ApplyModal";
 export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; signedIn: boolean }) {
   const [expanded, toggleExpanded] = useState(false);
   const sponsoredJob = job.sponsoredJob || false;
@@ -83,51 +82,7 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <a
-              href={job.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-md p-2 text-center transition ease-in-out hover:bg-sky-500 hover:text-white"
-              onClick={(e) => {
-                e.stopPropagation();
-                sendGAEvent("event", "user_data", {
-                  event_type: "apply",
-                  value: 1,
-                  job_id: job.jobId,
-                  job_title: job.title,
-                  company: job.company.name,
-                  job_location: job.city,
-                  job_level: job.level,
-                  job_posted: job.addedDate,
-                });
-                sendGAEvent("event", "job_apply", {
-                  value: 1,
-                  job_id: job.jobId,
-                  job_title: job.title,
-                  company: job.company.name,
-                  job_posted: job.addedDate,
-                });
-              }}
-            >
-              <Forward />
-            </a>
-          </div>
-        </td>
-        <td className="px-2 py-4">
-          <div className="flex flex-col items-center justify-center">
-            <TailorCVButton job={job} signedIn={signedIn} />
-          </div>
-        </td>
-
-        <td className="px-2 py-4">
-          <div className="flex flex-col items-center justify-center">
-            <Link
-              className="rounded-md p-2 transition ease-in-out hover:bg-yellow-500 hover:text-white"
-              href={`/cover-letter?jobTitle=${job.title}&companyName=${job.company.name}`}
-              target="_blank"
-            >
-              <NotebookText />
-            </Link>
+            <ApplyModal job={job} />
           </div>
         </td>
 
