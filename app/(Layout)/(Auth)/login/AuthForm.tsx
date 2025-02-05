@@ -95,7 +95,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
       if (type === "register") {
         router.push("/login");
       } else if (type === "login") {
-        router.push("/tracker");
+        router.push("/");
       } else if (type === "forgot-password") {
         router.push("/login");
       }

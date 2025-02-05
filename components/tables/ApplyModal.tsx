@@ -93,7 +93,7 @@ export function ApplyModal({ job }: { job: Job }) {
               Don&apos;t show this popup again
             </label>
           </div>
-          <div className="flex justify-end gap-3 mt-6 flex-col">
+          <div className="flex justify-end gap-3 mt-6 flex-col pb-5">
             <Button onClick={handleProceedAnyway}>Check out our AI services</Button>
             <a href={job.link} className={buttonVariants({ variant: "outline" })}>
               Proceed to {job.company.name} listing
