@@ -62,7 +62,7 @@ export function SubscriptionManager({ user }: SubscriptionManagerProps) {
           Manage Subscription
         </Button>
       ) : (
-        <Button onClick={() => router.push("/pricing")} className="w-full sm:w-auto">
+        <Button onClick={() => router.push("/ai")} className="w-full sm:w-auto">
           Upgrade to Premium
         </Button>
       )}

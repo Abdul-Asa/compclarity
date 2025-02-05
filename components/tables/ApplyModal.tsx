@@ -71,7 +71,7 @@ export function ApplyModal({ job }: { job: Job }) {
       <Modal open={open && showAIPrompt} onOpenChange={setOpen}>
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Enhance Your Application</h2>
-          <p className="text-sm text-gray-600">Use our AI services to improve your application</p>
+          <p className="text-sm text-gray-600">Increase your odds of getting shortlisted for interviews with custom generated CVs and cover letters!</p>
           <div className="flex justify-center w-full">
             <Image
               src="/assets/cover-letter.png"
@@ -83,7 +83,7 @@ export function ApplyModal({ job }: { job: Job }) {
             />
           </div>
           <div className="flex items-center gap-2 mt-4">
-            <input
+            {/* <input
               type="checkbox"
               id="dontShowAgain"
               onChange={handleDontShowAgain}
@@ -91,12 +91,12 @@ export function ApplyModal({ job }: { job: Job }) {
             />
             <label htmlFor="dontShowAgain" className="text-sm text-gray-600">
               Don&apos;t show this popup again
-            </label>
+            </label> */}
           </div>
           <div className="flex justify-end gap-3 mt-6 flex-col pb-5">
-            <Button onClick={handleProceedAnyway}>Check out our AI services</Button>
-            <a href={job.link} className={buttonVariants({ variant: "outline" })}>
-              Proceed to {job.company.name} listing
+            <Button onClick={handleProceedAnyway}>Yes, I want to increase my odds</Button>
+            <a href={job.link} target="_blank" className={buttonVariants({ variant: "outline" })}>
+              No, proceed to application link
             </a>{" "}
           </div>
         </div>
@@ -113,14 +113,14 @@ export function ApplyModal({ job }: { job: Job }) {
             <div className="flex items-center justify-between p-4 border rounded-lg">
               <div>
                 <h3 className="font-medium">Tailor your CV</h3>
-                <p className="text-sm text-gray-600">Optimize your CV for this role</p>
+                <p className="text-sm text-gray-600">Generate a custom CV for this role</p>
               </div>
               <TailorCVButton job={job} signedIn={true} />
             </div>
 
             <div className="flex items-center justify-between p-4 border rounded-lg">
               <div>
-                <h3 className="font-medium">Generate Cover Letter</h3>
+                <h3 className="font-medium">Tailor your Cover Letter</h3>
                 <p className="text-sm text-gray-600">Create a custom cover letter</p>
               </div>
               <a
