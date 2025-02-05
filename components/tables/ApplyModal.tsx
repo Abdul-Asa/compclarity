@@ -137,7 +137,8 @@ export function ApplyModal({
                 href={`/cover-letter?jobTitle=${job.title}&companyName=${job.company.name}`}
                 className={buttonVariants({
                   variant: "ghost",
-                  className: "rounded-md p-2 transition ease-in-out hover:bg-yellow-500 hover:text-white",
+                  size: "icon",
+                  className: "rounded-md transition ease-in-out hover:bg-primary hover:text-white",
                 })}
               >
                 <FileText />
