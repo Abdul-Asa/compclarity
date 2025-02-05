@@ -187,6 +187,9 @@ export const tailorCV = actionClient
     if (!user) {
       throw new Error("User not authenticated");
     }
+    if (!user.is_subscribed) {
+      throw new Error("User not subscribed");
+    }
     const { data: cv, error: cvError } = await supabase
       .from("cvs")
       .select("*")

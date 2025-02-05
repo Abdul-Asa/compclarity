@@ -8,7 +8,17 @@ import Link from "next/link";
 import { toast } from "@/lib/hooks/useToast";
 import { sendGAEvent } from "@next/third-parties/google";
 import { ApplyModal } from "./ApplyModal";
-export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; signedIn: boolean }) {
+export default function JobRow({
+  job,
+  idx,
+  signedIn,
+  isSubscribed,
+}: {
+  job: Job;
+  idx: number;
+  signedIn: boolean;
+  isSubscribed: boolean;
+}) {
   const [expanded, toggleExpanded] = useState(false);
   const sponsoredJob = job.sponsoredJob || false;
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
@@ -82,7 +92,7 @@ export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; 
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <ApplyModal job={job} />
+            <ApplyModal job={job} isSubscribed={isSubscribed} isSignedIn={signedIn} />
           </div>
         </td>
 

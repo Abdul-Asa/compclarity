@@ -10,7 +10,15 @@ import { sendGAEvent } from "@next/third-parties/google";
 import { TailorCVButton } from "./TailorCVButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-export function ApplyModal({ job }: { job: Job }) {
+export function ApplyModal({
+  job,
+  isSubscribed,
+  isSignedIn,
+}: {
+  job: Job;
+  isSubscribed: boolean;
+  isSignedIn: boolean;
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showAIPrompt, setShowAIPrompt] = useState(true);
@@ -71,7 +79,9 @@ export function ApplyModal({ job }: { job: Job }) {
       <Modal open={open && showAIPrompt} onOpenChange={setOpen}>
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Enhance Your Application</h2>
-          <p className="text-sm text-gray-600">Increase your odds of getting shortlisted for interviews with custom generated CVs and cover letters!</p>
+          <p className="text-sm text-gray-600">
+            Increase your odds of getting shortlisted for interviews with custom generated CVs and cover letters!
+          </p>
           <div className="flex justify-center w-full">
             <Image
               src="/assets/cover-letter.png"
@@ -115,7 +125,7 @@ export function ApplyModal({ job }: { job: Job }) {
                 <h3 className="font-medium">Tailor your CV</h3>
                 <p className="text-sm text-gray-600">Generate a custom CV for this role</p>
               </div>
-              <TailorCVButton job={job} signedIn={true} />
+              <TailorCVButton job={job} signedIn={isSignedIn} isSubscribed={isSubscribed} />
             </div>
 
             <div className="flex items-center justify-between p-4 border rounded-lg">

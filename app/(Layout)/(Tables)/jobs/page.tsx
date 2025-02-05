@@ -3,6 +3,7 @@ import JobTableControls from "@/components/tables/JobTableControls";
 import { fetchAllJobs } from "@/lib/actions/data";
 import JobTable from "@/components/tables/JobTable";
 import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/actions/server-actions";
 
 export const metadata: Metadata = {
   title: "CompClarity - Jobs",
@@ -57,11 +58,8 @@ export default async function JobBoard({
   );
 
   let signedIn = false;
-
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (!error && data?.user) {
+  const user = await getUser();
+  if (user) {
     signedIn = true;
   }
 
@@ -75,7 +73,7 @@ export default async function JobBoard({
         <b className="text-center mb-14 mt-14">No jobs found</b>
       ) : (
         <>
-          <JobTable jobsResponse={jobsResponse} signedIn={signedIn} />
+          <JobTable jobsResponse={jobsResponse} signedIn={signedIn} isSubscribed={user?.is_subscribed || false} />
         </>
       )}
     </div>

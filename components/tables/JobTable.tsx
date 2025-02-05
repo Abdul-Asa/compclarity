@@ -4,7 +4,7 @@ import { JobsApiResponse } from "@/lib/validation/types";
 import PaginationControl from "./PaginationControl";
 import JobRow from "./JobRow";
 
-export default function JobTable({ jobsResponse, signedIn }: { jobsResponse: JobsApiResponse; signedIn: boolean }) {
+export default function JobTable({ jobsResponse, signedIn, isSubscribed }: { jobsResponse: JobsApiResponse; signedIn: boolean; isSubscribed: boolean }) {
   return (
     <div className="flex flex-col justify-center items-center w-full lg:w-[85%] 2xl:w-5/6 px-4">
       <table className="text-sm text-gray-500 dark:text-gray-100 text-center w-full">
@@ -42,7 +42,7 @@ export default function JobTable({ jobsResponse, signedIn }: { jobsResponse: Job
         </thead>
         <tbody className="text-sm">
           {jobsResponse.jobs.map((job, jobIdx) => (
-            <JobRow job={job} idx={jobIdx} key={jobIdx} signedIn={signedIn} />
+            <JobRow job={job} idx={jobIdx} key={jobIdx} signedIn={signedIn} isSubscribed={isSubscribed} />
           ))}
         </tbody>
       </table>

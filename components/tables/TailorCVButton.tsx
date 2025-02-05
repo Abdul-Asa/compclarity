@@ -7,14 +7,20 @@ import { Wand2, Loader2 } from "lucide-react";
 import { CVDbType, Job } from "@/lib/validation/types";
 import { useToast } from "@/lib/hooks/useToast";
 import { useAction } from "next-safe-action/hooks";
-import { INITIAL_CV_DATA } from "@/components/cv-builder/constants";
 import { useQuery } from "@tanstack/react-query";
 import { getCVs, tailorCV } from "@/lib/actions/server-actions";
-import { useUser } from "@/lib/hooks/useUser";
 import Link from "next/link";
 import SimpleLoader from "../layout/SimpleLoader";
 
-export function TailorCVButton({ job, signedIn }: { job: Job; signedIn: boolean }) {
+export function TailorCVButton({
+  job,
+  signedIn,
+  isSubscribed,
+}: {
+  job: Job;
+  signedIn: boolean;
+  isSubscribed: boolean;
+}) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [secondModalOpen, setSecondModalOpen] = useState(false);
@@ -32,12 +38,27 @@ export function TailorCVButton({ job, signedIn }: { job: Job; signedIn: boolean 
         variant: "destructive",
       });
       return;
+    } else if (!isSubscribed) {
+      toast({
+        title: "Not subscribed!",
+        description: "Please subscribe to tailor your CV.",
+        variant: "destructive",
+      });
+      return;
     } else {
       setOpen(true);
     }
   };
 
   const handleFetch = async (cv: CVDbType) => {
+    if (!isSubscribed) {
+      toast({
+        title: "Not subscribed!",
+        description: "Please subscribe to tailor your CV.",
+        variant: "destructive",
+      });
+      return;
+    }
     setOpen(false);
     setSecondModalOpen(true);
     const response = await handleTailorCV({
