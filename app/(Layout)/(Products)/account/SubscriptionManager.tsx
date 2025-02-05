@@ -20,9 +20,19 @@ export function SubscriptionManager({ user }: SubscriptionManagerProps) {
   const handleManageSubscription = async () => {
     try {
       setIsLoading(true);
-      const { url } = await manageSubscription();
-      if (url) {
-        router.push(url);
+      const response = await manageSubscription();
+
+      if (response.error) {
+        toast({
+          title: "Error",
+          description: response.error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (response.url) {
+        router.push(response.url);
       }
     } catch (error) {
       toast({
