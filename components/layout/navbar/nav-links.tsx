@@ -55,7 +55,7 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
       <Link
         key={link.title}
         href={link.href || "#"}
-        className="w-full py-5 text-lg font-medium text-center border-b md:pl-0"
+        className="w-full py-5 pl-10 text-lg font-medium border-b md:pl-0"
         onClick={onLinkClick}
       >
         {link.icon && <link.icon className="w-4 h-4 mr-2" />}
@@ -77,7 +77,7 @@ export const renderNavLink = ({ link, mobile, onLinkClick }: RenderLinkProps) =>
     return (
       <Accordion type="multiple" className="w-full">
         <AccordionItem value={`item-${link.title}`}>
-          <AccordionTrigger className="w-full py-5 text-lg font-medium text-center justify-center">
+          <AccordionTrigger className="w-full py-5 text-lg font-medium text-center md:justify-center">
             {link.title}
           </AccordionTrigger>
           <AccordionContent className="flex flex-col pb-0">

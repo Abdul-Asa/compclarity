@@ -20,19 +20,9 @@ export function SubscriptionManager({ user }: SubscriptionManagerProps) {
   const handleManageSubscription = async () => {
     try {
       setIsLoading(true);
-      const response = await manageSubscription();
-
-      if (response.error) {
-        toast({
-          title: "Error",
-          description: response.error,
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (response.url) {
-        router.push(response.url);
+      const { url } = await manageSubscription();
+      if (url) {
+        router.push(url);
       }
     } catch (error) {
       toast({
@@ -62,7 +52,7 @@ export function SubscriptionManager({ user }: SubscriptionManagerProps) {
           Manage Subscription
         </Button>
       ) : (
-        <Button onClick={() => router.push("/ai")} className="w-full sm:w-auto">
+        <Button onClick={() => router.push("/pricing")} className="w-full sm:w-auto">
           Upgrade to Premium
         </Button>
       )}
