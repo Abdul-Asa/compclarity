@@ -2,23 +2,15 @@
 
 import { Job } from "@/lib/validation/types";
 import { useEffect, useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star, File, Wand2, NotebookText } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star, File, Wand2 } from "lucide-react";
 import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
 import { toast } from "@/lib/hooks/useToast";
 import { sendGAEvent } from "@next/third-parties/google";
-import { ApplyModal } from "./ApplyModal";
-export default function JobRow({
-  job,
-  idx,
-  signedIn,
-  isSubscribed,
-}: {
-  job: Job;
-  idx: number;
-  signedIn: boolean;
-  isSubscribed: boolean;
-}) {
+import { TailorCVButton } from "./TailorCVButton";
+import { Button } from "../ui/button";
+
+export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; signedIn: boolean }) {
   const [expanded, toggleExpanded] = useState(false);
   const sponsoredJob = job.sponsoredJob || false;
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
@@ -92,10 +84,52 @@ export default function JobRow({
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <ApplyModal job={job} isSubscribed={isSubscribed} isSignedIn={signedIn} />
+            <a
+              href={job.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-md p-2 text-center transition ease-in-out hover:bg-sky-500 hover:text-white"
+              onClick={(e) => {
+                e.stopPropagation();
+                sendGAEvent("event", "user_data", {
+                  event_type: "apply",
+                  value: 1,
+                  job_id: job.jobId,
+                  job_title: job.title,
+                  company: job.company.name,
+                  job_location: job.city,
+                  job_level: job.level,
+                  job_posted: job.addedDate,
+                });
+                sendGAEvent("event", "job_apply", {
+                  value: 1,
+                  job_id: job.jobId,
+                  job_title: job.title,
+                  company: job.company.name,
+                  job_posted: job.addedDate,
+                });
+              }}
+            >
+              <Forward />
+            </a>
           </div>
         </td>
-
+        {/* <td className="px-2 py-4">
+          <div className="flex flex-col items-center justify-center">
+            {signedIn ? (
+              <TailorCVButton job={job} />
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-md p-2 transition ease-in-out hover:bg-yellow-500 hover:text-white"
+                onClick={handleClick}
+              >
+                <Wand2 className="h-5 w-5" />
+              </Button>
+            )}
+          </div>
+        </td> */}
         <td className="px-2 py-4">
           <div className="flex flex-col items-center justify-center">
             <Link
@@ -112,7 +146,7 @@ export default function JobRow({
 
       {expanded ? (
         <tr className="bg-white dark:bg-black">
-          <td colSpan={9} className="p-3">
+          <td colSpan={8} className="p-3">
             <JobRowContent expanded={expanded} job={job} addedDateStr={addedDateStr} idx={idx} signedIn={signedIn} />
           </td>
         </tr>

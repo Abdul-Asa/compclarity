@@ -3,19 +3,13 @@
 import { ModeToggle } from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavigationItems from "./nav-links";
 import { AccountMenu } from "./account-menu";
 import { User } from "@/lib/validation/types";
-import { usePathname } from "next/navigation";
 
 export function MobileMenu({ user }: { user: User | null }) {
-  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   return (
     <div

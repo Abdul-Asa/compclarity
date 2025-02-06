@@ -23,14 +23,14 @@ export const INITIAL_CV_DATA = {
         links: [
           {
             name: "LinkedIn",
-            url: "linkedin.com/in/jake",
+            url: "linkedin.com/in/jake"
           },
           {
             name: "GitHub",
-            url: "github.com/jake",
-          },
-        ],
-      },
+            url: "github.com/jake"
+          }
+        ]
+      }
     },
     {
       id: "education",
@@ -51,7 +51,7 @@ export const INITIAL_CV_DATA = {
           location: "Georgetown, TX",
           startDate: "2018-08",
           endDate: "2021-05",
-          description: "Minor in Business",
+          description: "Minor in Business"
         },
         {
           school: "Blinn College",
@@ -60,9 +60,9 @@ export const INITIAL_CV_DATA = {
           location: "Bryan, TX",
           startDate: "2014-08",
           endDate: "2018-05",
-          description: "",
-        },
-      ],
+          description: ""
+        }
+      ]
     },
     {
       id: "workExperience",
@@ -83,8 +83,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2020-06",
           endDate: "",
           current: true,
-          description:
-            "<ul><li>Developed a REST API using FastAPI and PostgreSQL to store data from learning management systems</li><li>Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data</li><li>Explored ways to visualize GitHub collaboration in a classroom setting</li></ul>",
+          description: "<ul><li>Developed a REST API using FastAPI and PostgreSQL to store data from learning management systems</li><li>Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data</li><li>Explored ways to visualize GitHub collaboration in a classroom setting</li></ul>"
         },
         {
           company: "Southwestern University",
@@ -93,8 +92,7 @@ export const INITIAL_CV_DATA = {
           startDate: "2018-09",
           endDate: "",
           current: true,
-          description:
-            "<ul><li>Communicate with managers to set up campus computers used on campus</li><li>Assess and troubleshoot computer problems brought by students, faculty and staff</li><li>Maintain upkeep of computers, classroom equipment, and 200 printers across campus</li></ul>",
+          description: "<ul><li>Communicate with managers to set up campus computers used on campus</li><li>Assess and troubleshoot computer problems brought by students, faculty and staff</li><li>Maintain upkeep of computers, classroom equipment, and 200 printers across campus</li></ul>"
         },
         {
           company: "Southwestern University",
@@ -103,10 +101,9 @@ export const INITIAL_CV_DATA = {
           startDate: "2019-05",
           endDate: "2019-07",
           current: false,
-          description:
-            "<ul><li>Explored methods to generate video game dungeons based off of The Legend of Zelda</li><li>Developed a game in Java to test the generated dungeons</li><li>Contributed 50K+ lines of code to an established codebase via Git</li><li>Conducted a human subject study to determine which video game dungeon generation technique is enjoyable</li><li>Wrote an 8-page paper and gave multiple presentations on-campus</li><li>Presented virtually to the World Conference on Computational Intelligence</li></ul>",
-        },
-      ],
+          description: "<ul><li>Explored methods to generate video game dungeons based off of The Legend of Zelda</li><li>Developed a game in Java to test the generated dungeons</li><li>Contributed 50K+ lines of code to an established codebase via Git</li><li>Conducted a human subject study to determine which video game dungeon generation technique is enjoyable</li><li>Wrote an 8-page paper and gave multiple presentations on-campus</li><li>Presented virtually to the World Conference on Computational Intelligence</li></ul>"
+        }
+      ]
     },
     {
       id: "projects",
@@ -128,9 +125,8 @@ export const INITIAL_CV_DATA = {
           startDate: "2020-06",
           endDate: "",
           current: true,
-          description:
-            "<ul><li>Developed a full-stack web application using with Flask serving a REST API with React as the frontend</li><li>Implemented GitHub OAuth to get data from user's repositories</li><li>Visualized GitHub data to show collaboration</li><li>Used Celery and Redis for asynchronous tasks</li></ul>",
-          technologies: ["Python", "Flask", "React", "PostgreSQL", "Docker"],
+          description: "<ul><li>Developed a full-stack web application using with Flask serving a REST API with React as the frontend</li><li>Implemented GitHub OAuth to get data from user's repositories</li><li>Visualized GitHub data to show collaboration</li><li>Used Celery and Redis for asynchronous tasks</li></ul>",
+          technologies: ["Python", "Flask", "React", "PostgreSQL", "Docker"]
         },
         {
           name: "Simple Paintball",
@@ -140,11 +136,10 @@ export const INITIAL_CV_DATA = {
           startDate: "2018-05",
           endDate: "2020-05",
           current: false,
-          description:
-            "<ul><li>Developed a Minecraft server plugin to entertain kids during free time for a previous job</li><li>Published plugin to websites gaining 2K+ downloads and an average 4.5/5-star review</li><li>Implemented continuous delivery using TravisCI to build the plugin upon new a release</li><li>Collaborated with Minecraft server administrators to suggest features and get feedback about the plugin</li></ul>",
-          technologies: ["Spigot API", "Java", "Maven", "TravisCI", "Git"],
-        },
-      ],
+          description: "<ul><li>Developed a Minecraft server plugin to entertain kids during free time for a previous job</li><li>Published plugin to websites gaining 2K+ downloads and an average 4.5/5-star review</li><li>Implemented continuous delivery using TravisCI to build the plugin upon new a release</li><li>Collaborated with Minecraft server administrators to suggest features and get feedback about the plugin</li></ul>",
+          technologies: ["Spigot API", "Java", "Maven", "TravisCI", "Git"]
+        }
+      ]
     },
     {
       id: "skills",
@@ -160,32 +155,22 @@ export const INITIAL_CV_DATA = {
       data: [
         {
           category: "Languages",
-          skills: ["Java", "Python", "C/C++", "SQL (Postgres)", "JavaScript", "HTML/CSS", "R"],
+          skills: ["Java", "Python", "C/C++", "SQL (Postgres)", "JavaScript", "HTML/CSS", "R"]
         },
         {
           category: "Frameworks",
-          skills: ["React", "Node.js", "Flask", "JUnit", "WordPress", "Material-UI", "FastAPI"],
+          skills: ["React", "Node.js", "Flask", "JUnit", "WordPress", "Material-UI", "FastAPI"]
         },
         {
           category: "Developer Tools",
-          skills: [
-            "Git",
-            "Docker",
-            "TravisCI",
-            "Google Cloud Platform",
-            "VS Code",
-            "Visual Studio",
-            "PyCharm",
-            "IntelliJ",
-            "Eclipse",
-          ],
+          skills: ["Git", "Docker", "TravisCI", "Google Cloud Platform", "VS Code", "Visual Studio", "PyCharm", "IntelliJ", "Eclipse"]
         },
         {
           category: "Libraries",
-          skills: ["pandas", "NumPy", "Matplotlib"],
-        },
-      ],
-    },
+          skills: ["pandas", "NumPy", "Matplotlib"]
+        }
+      ]
+    }
   ],
   settings: {
     documentSize: "A4",
@@ -196,75 +181,45 @@ export const INITIAL_CV_DATA = {
       top: 20,
       bottom: 20,
       left: 20,
-      right: 20,
+      right: 20
     },
     spacing: {
       sectionGap: 16,
-      lineHeight: 1.15,
+      lineHeight: 1.15
     },
     title: {
       font: {
         family: "Roboto",
         size: 28,
-        weight: "bold",
+        weight: "bold"
       },
       color: "#111827",
-      align: "center",
+      align: "center"
     },
     heading: {
       font: {
         family: "Roboto",
         size: 16,
-        weight: "semibold",
+        weight: "semibold"
       },
-      color: "#111827",
+      color: "#111827"
     },
     body: {
       font: {
         family: "Roboto",
         size: 11,
-        weight: "normal",
+        weight: "normal"
       },
-      color: "#374151",
+      color: "#374151"
     },
     dateFormat: "words-short",
-    displayFullLinks: true,
-  },
+    displayFullLinks: true
+  }
 };
 
 export const EMPTY_CV_DATA = {
-  sections: [
-    {
-      id: "profile",
-      type: "profile",
-      schema: "profile",
-      title: "Profile",
-      description: "Profile description",
-      isVisible: true,
-      isExpanded: true,
-      isDraggable: false,
-      isAlwaysVisible: true,
-      isEditable: false,
-      data: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        location: "",
-        links: [
-          {
-            name: "LinkedIn",
-            url: "",
-          },
-          {
-            name: "GitHub",
-            url: "",
-          },
-        ],
-      },
-    },
-  ],
-  settings: INITIAL_CV_DATA.settings,
+  sections: [],
+  settings: INITIAL_CV_DATA.settings
 };
 
 export const sectionsAtom = atom<CVSection[]>();
@@ -298,6 +253,7 @@ export const dateFormats = [
   { value: "words-short", label: "Jan 2024" },
   { value: "words-long", label: "January 2024" },
 ];
+
 
 export const PX_PER_PT = 4 / 3;
 export const MIN_SCALE = 0.5;

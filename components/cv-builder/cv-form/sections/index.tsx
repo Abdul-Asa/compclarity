@@ -66,6 +66,10 @@ export default function Sections() {
       });
       queryClient.setQueryData(["cv", params.id], context?.previousCV);
     },
+    onSettled: () => {
+      // Always refetch after error or success to ensure we have the latest data
+      queryClient.invalidateQueries({ queryKey: ["cv", params.id] });
+    },
   });
 
   const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
