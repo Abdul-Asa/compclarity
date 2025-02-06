@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import JobTableControls from "@/components/tables/JobTableControls";
 import JobTable from "@/components/tables/JobTable";
 import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/actions/server-actions";
 
 interface PageProps {
   params: { companyName: string };
@@ -80,11 +81,8 @@ const Page = async ({ params, searchParams }: PageProps) => {
   const jobsResponse = await getCompanyJobs(companyDetails.name, searchParams);
 
   let signedIn = false;
-
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (!error && data?.user) {
+  const user = await getUser();
+  if (user) {
     signedIn = true;
   }
 
@@ -101,7 +99,7 @@ const Page = async ({ params, searchParams }: PageProps) => {
           <b className="text-center mt-4">No jobs found for {companyDetails.name}</b>
         ) : (
           <>
-            <JobTable jobsResponse={jobsResponse} signedIn={signedIn} />
+            <JobTable jobsResponse={jobsResponse} signedIn={signedIn} isSubscribed={user?.is_subscribed || false} />
           </>
         )}
       </div>

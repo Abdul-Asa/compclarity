@@ -109,11 +109,16 @@ const Settings = () => {
         if (!prev) return prev;
         return { ...prev, name: "Untitled" };
       });
+      updateCVMutation({
+        ...cv.cv_data,
+        settings: { ...settings, name: "Untitled" },
+      });
+    } else {
+      updateCVMutation({
+        ...cv.cv_data,
+        settings: settings,
+      });
     }
-    updateCVMutation({
-      ...cv.cv_data,
-      settings: { ...settings, name: "Untitled" },
-    });
   };
 
   const handleResetData = () => {

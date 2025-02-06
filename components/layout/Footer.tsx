@@ -38,7 +38,7 @@ const Footer = () => {
           </Link>
         </div>
         <small className="flex flex-wrap justify-center items-center gap-x-2">
-          <span>&#169; CompClarity 2024</span>|
+          <span>&#169; CompClarity 2025</span>|
           <a href="/about" className="hover:underline">
             About
           </a>{" "}
