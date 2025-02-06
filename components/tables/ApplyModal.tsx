@@ -24,10 +24,10 @@ export function ApplyModal({
   const [showAIPrompt, setShowAIPrompt] = useState(true);
   const [showMainModal, setShowMainModal] = useState(false);
 
-  useEffect(() => {
-    const dontShow = localStorage.getItem("dontShowAIPrompt");
-    setShowAIPrompt(dontShow !== "true");
-  }, []);
+  //   useEffect(() => {
+  //     const dontShow = localStorage.getItem("dontShowAIPrompt");
+  //     setShowAIPrompt(dontShow !== "true");
+  //   }, []);
 
   const handleClick = (e: any) => {
     e.stopPropagation();
