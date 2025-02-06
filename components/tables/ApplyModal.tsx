@@ -106,7 +106,7 @@ export function ApplyModal({
           <div className="flex justify-end gap-3 mt-6 flex-col pb-5">
             <Button onClick={handleProceedAnyway}>Yes, I want to increase my odds</Button>
             <a href={job.link} target="_blank" className={buttonVariants({ variant: "outline" })}>
-              No, proceed to application link
+              Proceed to application link
             </a>{" "}
           </div>
         </div>
