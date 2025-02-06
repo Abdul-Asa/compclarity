@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { RegisterOptions, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { coverLetterSchema } from "@/lib/validation/schema";
@@ -23,6 +24,10 @@ export function CoverLetterForm({ user }: { user: User | null }) {
   const [hasShownAuthWarning, setHasShownAuthWarning] = useState(false);
   const supabase = createClient();
 
+  const searchParams = useSearchParams();
+  const jobTitleFromURL = searchParams.get("jobTitle") || "";
+  const companyNameFromURL = searchParams.get("companyName") || "";
+
   const {
     register,
     handleSubmit,
@@ -30,9 +35,17 @@ export function CoverLetterForm({ user }: { user: User | null }) {
   } = useForm<CoverLetterSchema>({
     resolver: zodResolver(coverLetterSchema),
     defaultValues: {
+      NewCompany: companyNameFromURL,
+      NewRole: jobTitleFromURL,
       Words: "300",
     },
   });
+
+  useEffect(() => {
+    if (jobTitleFromURL || companyNameFromURL) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, [jobTitleFromURL, companyNameFromURL]);
 
   const handleInputChange = () => {
     if (!user && !hasShownAuthWarning) {

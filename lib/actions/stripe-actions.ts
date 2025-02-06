@@ -17,7 +17,7 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
     if (!tier || !tier.yearlyPrice || !tier.monthlyPrice) throw new Error("Invalid pricing tier");
 
     let customerId = user.stripe_customer_id;
-    
+
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: user.email,
@@ -25,13 +25,10 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
           userId: user.id,
         },
       });
-      
+
       const supabase = await createClient();
-      await supabase
-        .from('users')
-        .update({ stripe_customer_id: customer.id })
-        .eq('id', user.id);
-      
+      await supabase.from("users").update({ stripe_customer_id: customer.id }).eq("id", user.id);
+
       customerId = customer.id;
     }
 
@@ -116,21 +113,32 @@ export const updateUserSubscriptionBySessionId = async (userId: string, sessionI
   const customerId = session.customer.id;
   const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
   if (!subscriptionId) {
-    throw new Error('No subscription found for this session.');
+    throw new Error("No subscription found for this session.");
   }
   await updateUserSubscription(userId, customerId, true);
 };
 
 export async function manageSubscription() {
-  const user = await getUser();
-  if (!user || !user.stripe_customer_id) {
-    throw new Error("User not found or no subscription");
+  try {
+    const user = await getUser();
+    if (!user || !user.stripe_customer_id) {
+      return { error: "User not found or no active subscription" };
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: user.stripe_customer_id,
+      return_url: `${process.env.NEXT_PUBLIC_API_URL}/account`,
+    });
+
+    if (!session.url) {
+      return { error: "Failed to create billing portal session" };
+    }
+
+    return { url: session.url };
+  } catch (error) {
+    console.error("Error managing subscription:", error);
+    return {
+      error: error instanceof Error ? error.message : "An unexpected error occurred",
+    };
   }
-
-  const session = await stripe.billingPortal.sessions.create({
-    customer: user.stripe_customer_id,
-    return_url: `${process.env.NEXT_PUBLIC_API_URL}/account`,
-  });
-
-  return { url: session.url };
 }

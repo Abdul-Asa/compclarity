@@ -38,8 +38,8 @@ export const getCVs = cache(async () => {
   }
   const { data, error } = await supabase.from("cvs").select("*").eq("user_id", user.id);
 
-  if (error || !data){
-    return null
+  if (error || !data) {
+    return null;
   }
   return data;
 });
@@ -51,12 +51,7 @@ export const getCV = cache(async (cvId: string) => {
     console.log("User not authenticated");
     return null;
   }
-  const { data, error } = await supabase
-    .from("cvs")
-    .select("*")
-    .eq("id", cvId)
-    .eq("user_id", user.id)
-    .single();
+  const { data, error } = await supabase.from("cvs").select("*").eq("id", cvId).eq("user_id", user.id).single();
 
   if (error || !data) {
     console.log(cvId, error);
@@ -76,35 +71,33 @@ const createCVSchema = z.object({
   }),
 });
 
-export const createCV = actionClient.schema(createCVSchema).action(
-  async ({ parsedInput: { combinedCVData } }) => {
-    const supabase = await createClient();
-    
-    const user = await getUser();
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
+export const createCV = actionClient.schema(createCVSchema).action(async ({ parsedInput: { combinedCVData } }) => {
+  const supabase = await createClient();
 
-    const { data, error } = await supabase
-      .from("cvs")
-      .insert({
-        user_id: user.id,
-        cv_data: combinedCVData,
-        updated_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error(error);
-      throw new Error("Failed to create CV");
-    }
-
-    revalidatePath("/");
-    redirect(`/cv-generate/${data.id}`)
+  const user = await getUser();
+  if (!user) {
+    throw new Error("User not authenticated");
   }
-);
+
+  const { data, error } = await supabase
+    .from("cvs")
+    .insert({
+      user_id: user.id,
+      cv_data: combinedCVData,
+      updated_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Failed to create CV");
+  }
+
+  revalidatePath("/");
+  redirect(`/cv-generate/${data.id}`);
+});
 
 const updateCVSchema = z.object({
   cvId: z.string(),
@@ -114,10 +107,11 @@ const updateCVSchema = z.object({
   }),
 });
 
-export const updateCV = actionClient.schema(updateCVSchema).action(
-  async ({ parsedInput: { cvId, combinedCVData } }) => {
+export const updateCV = actionClient
+  .schema(updateCVSchema)
+  .action(async ({ parsedInput: { cvId, combinedCVData } }) => {
     const supabase = await createClient();
-    
+
     const user = await getUser();
     if (!user) {
       throw new Error("User not authenticated");
@@ -129,7 +123,7 @@ export const updateCV = actionClient.schema(updateCVSchema).action(
         updated_at: new Date().toISOString(),
       })
       .eq("id", cvId)
-      .select()
+      .select();
 
     if (error) {
       console.error(error);
@@ -138,50 +132,105 @@ export const updateCV = actionClient.schema(updateCVSchema).action(
 
     revalidatePath("/");
     return data;
-  }
-);
+  });
 
 const deleteCVSchema = z.object({
   cvId: z.string(),
 });
 
-export const deleteCV = actionClient.schema(deleteCVSchema).action(
-  async ({ parsedInput: { cvId } }) => {
-    const supabase = await createClient();
-    
-    const user = await getUser();
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
+export const deleteCV = actionClient.schema(deleteCVSchema).action(async ({ parsedInput: { cvId } }) => {
+  const supabase = await createClient();
 
-    const { error } = await supabase
-      .from("cvs")
-      .delete()
-      .eq("id", cvId)
-      .eq("user_id", user.id);
-
-    if (error) {
-      console.error(error);
-      throw new Error("Failed to delete CV");
-    }
-
-    revalidatePath("/");
-    return { success: true };
+  const user = await getUser();
+  if (!user) {
+    throw new Error("User not authenticated");
   }
-);
+
+  const { error } = await supabase.from("cvs").delete().eq("id", cvId).eq("user_id", user.id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Failed to delete CV");
+  }
+
+  revalidatePath("/");
+  return { success: true };
+});
 
 export const updateUserSubscription = async (userId: string, customerId: string | null, isSubscribed: boolean) => {
   const supabase = await createClient();
-  const { error } = await supabase.from("users").update({
-    stripe_customer_id: customerId,
-    is_subscribed: isSubscribed,
-  }).eq("id", userId);
+  const { error } = await supabase
+    .from("users")
+    .update({
+      stripe_customer_id: customerId,
+      is_subscribed: isSubscribed,
+    })
+    .eq("id", userId);
 
   if (error) {
     console.error(error);
     throw new Error("Failed to update user subscription");
   }
 };
+
+const tailorCVSchema = z.object({
+  cv_id: z.string(),
+  job_name: z.string(),
+  company_name: z.string(),
+});
+
+export const tailorCV = actionClient
+  .schema(tailorCVSchema)
+  .action(async ({ parsedInput: { cv_id, job_name, company_name } }) => {
+    const supabase = await createClient();
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+    if (!user.is_subscribed) {
+      throw new Error("User not subscribed");
+    }
+    const { data: cv, error: cvError } = await supabase
+      .from("cvs")
+      .select("*")
+      .eq("id", cv_id)
+      .eq("user_id", user.id)
+      .single();
+
+    if (cvError || !cv) {
+      throw new Error("CV not found");
+    }
+    const cvData = cv.cv_data as unknown as CVData;
+    if (!cvData) {
+      throw new Error("CV data not found");
+    }
+    const response = await fetch(
+      `https://compclarity.azurewebsites.net/api/custom_cv?code=r562vGcndnHAaO1oWYiqnJP5s95wJPaxBIC82u0P2jykAzFuuvkIQw%3D%3D`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          sections: cvData.sections,
+          settings: cvData.settings,
+          job: job_name,
+          company: company_name,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.error(response);
+      throw new Error("Failed to tailor CV");
+    }
+
+    const tailoredCVData = await response.json();
+    console.log(tailoredCVData);
+    await createCV({
+      combinedCVData: {
+        sections: tailoredCVData.sections,
+        settings: { ...cvData.settings, name: `${job_name} - ${company_name} CV` },
+      },
+    });
+  });
 
 // const signUpSchema = z.object({
 //   email: z.string().email(),
