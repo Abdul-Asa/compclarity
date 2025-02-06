@@ -1,11 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { CoverLetterForm } from "./CoverLetterForm";
+import { redirect } from "next/navigation";
 
 export default async function CoverLetter() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/login");
+  }
 
   return (
     <div className="flex min-h-screen w-full p-4">

@@ -6,21 +6,16 @@ import { useToast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { invalidateUser } from "@/lib/hooks/useUser";
+import { signOutAction } from "./actions";
 
 export const SignOutButton = () => {
   const supabase = createClient();
-  const router = useRouter();
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   async function signOut() {
     await supabase.auth.signOut();
     invalidateUser(queryClient);
-    toast({
-      title: "Logged Out",
-    });
-    router.refresh();
-    router.push("/");
+    await signOutAction();
   }
 
   return (

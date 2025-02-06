@@ -39,7 +39,7 @@ const Modal = ({ open, onOpenChange, trigger, children, title, description, clas
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-        <DialogContent className={cn("sm:max-w-[425px]", className)}>
+        <DialogContent className={cn("sm:max-w-[425px]", className)} onClick={(e) => e.stopPropagation()}>
           {(title || description) && (
             <DialogHeader>
               {title && <DialogTitle>{title}</DialogTitle>}
@@ -55,7 +55,7 @@ const Modal = ({ open, onOpenChange, trigger, children, title, description, clas
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-      <DrawerContent className={cn("min-h-[425px]", className)}>
+      <DrawerContent className={cn("min-h-[425px]", className)} onClick={(e) => e.stopPropagation()}>
         {(title || description) && (
           <DrawerHeader className="text-left">
             {title && <DrawerTitle>{title}</DrawerTitle>}
