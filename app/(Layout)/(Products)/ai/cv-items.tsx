@@ -149,7 +149,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (!user) return;
-    if (searchParams.get("success")) {
+    if (searchParams.get("session_id")) {
       const sessionId = searchParams.get("session_id");
       if (sessionId) {
         updateUserSubscriptionBySessionId(user.id, sessionId);

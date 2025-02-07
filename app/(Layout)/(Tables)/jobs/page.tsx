@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import JobTableControls from "@/components/tables/JobTableControls";
 import { fetchAllJobs } from "@/lib/actions/data";
 import JobTable from "@/components/tables/JobTable";
-import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/actions/server-actions";
 
 export const metadata: Metadata = {
