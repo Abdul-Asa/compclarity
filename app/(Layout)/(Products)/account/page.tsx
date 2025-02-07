@@ -5,6 +5,7 @@ import AccountForm from "./AccountForm";
 import { PasswordResetForm } from "@/app/(Layout)/(Auth)/password-reset/PasswordReset";
 import { SubscriptionManager } from "./SubscriptionManager";
 import { getUser } from "@/lib/actions/server-actions";
+import { SignOutButton } from "@/components/layout/navbar/sign-out";
 
 export const metadata: Metadata = {
   title: "CompClarity - Account",
@@ -51,6 +52,9 @@ export default async function page() {
             <SubscriptionManager user={user} />
           </CardContent>
         </Card>
+        <div className="col-span-2 md:hidden">
+          <SignOutButton />
+        </div>
       </div>
     </div>
   );

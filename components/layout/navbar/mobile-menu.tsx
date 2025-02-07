@@ -53,7 +53,13 @@ export function MobileMenu({ user }: { user: User | null }) {
         <NavigationItems mobile />
         <div className="flex justify-center w-full border-t">
           {user ? (
-            <AccountMenu user={user} />
+            <Link
+              href="/account"
+              className="w-full py-5 text-lg font-medium text-center hover:bg-accent"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              Account
+            </Link>
           ) : (
             <Link
               href="/login"
