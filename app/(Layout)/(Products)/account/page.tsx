@@ -52,7 +52,7 @@ export default async function page() {
             <SubscriptionManager user={user} />
           </CardContent>
         </Card>
-        <div className="col-span-2 md:hidden">
+        <div className="col-span-2 lg:hidden">
           <SignOutButton />
         </div>
       </div>
