@@ -178,7 +178,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
       <div className="flex items-center justify-center gap-2">
         <span className={cn("text-sm", !isYearly && "font-bold")}>Monthly</span>
         <Switch checked={isYearly} onCheckedChange={setIsYearly} />
-        <span className={cn("text-sm", isYearly && "font-bold")}>Yearly (Save 20%)</span>
+        <span className={cn("text-sm", isYearly && "font-bold")}>Yearly (Save 40%)</span>
       </div>
 
       <div className="grid grid-cols-2 gap-8 pt-10">
@@ -196,7 +196,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
                   ) : (
                     <>
                       <span className="text-4xl font-bold">
-                        £{isYearly ? (tier.monthlyPrice ?? 12) * 0.8 : tier.monthlyPrice}
+                        £{isYearly ? (tier.monthlyPrice ?? 12) * 0.6 : tier.monthlyPrice}
                       </span>
                       <span className="ml-2 text-xl line-through text-muted-foreground">
                         £{tier.originalMonthlyPrice}
