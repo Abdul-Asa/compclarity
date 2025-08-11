@@ -1,11 +1,5 @@
 import "server-only";
-import {
-  Company,
-  Job,
-  JobsApiResponse,
-  Offer,
-  OfferApiResponse,
-} from "../validation/types";
+import { Company, Job, JobsApiResponse, Offer, OfferApiResponse } from "../validation/types";
 import { unstable_noStore as noStore } from "next/cache";
 import { formatter, memoize } from "../utils";
 import { URLSearchParams } from "url";
@@ -29,9 +23,7 @@ const LEVEL_MAPPER = {
 };
 
 export async function fetchCompanyData(company: string) {
-  const response = await fetch(
-    `${CRUNCHBASE_API_URL}/${company}?${CRUNCHBASE_API_PARAMS}`,
-  );
+  const response = await fetch(`${CRUNCHBASE_API_URL}/${company}?${CRUNCHBASE_API_PARAMS}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch data");
@@ -50,19 +42,9 @@ export async function fetchAllOffers(
   sortDir: string | null,
   minYOE: number | null,
   maxYOE: number | null,
-  resultSize: number | null,
+  resultSize: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(
-    page,
-    search,
-    verified,
-    levels,
-    sortBy,
-    sortDir,
-    minYOE,
-    maxYOE,
-    resultSize,
-  );
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
   const res = await fetchApiWithParams(params);
   res.offers.map((o) => formatOffer(o));
 
@@ -79,19 +61,9 @@ export async function fetchAllTechOffersByCompany(
   companyName: string,
   minYOE: number | null,
   maxYOE: number | null,
-  resultSize: number | null,
+  resultSize: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(
-    page,
-    search,
-    verified,
-    levels,
-    sortBy,
-    sortDir,
-    minYOE,
-    maxYOE,
-    resultSize,
-  );
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
 
   const res = await fetchApiWithParamsForCompany(params, companyName);
   res.offers.map((o) => formatOffer(o));
@@ -108,19 +80,9 @@ export async function fetchAllFinanceOffers(
   sortDir: string | null,
   minYOE: number | null,
   maxYOE: number | null,
-  resultSize: number | null,
+  resultSize: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(
-    page,
-    search,
-    verified,
-    levels,
-    sortBy,
-    sortDir,
-    minYOE,
-    maxYOE,
-    resultSize,
-  );
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
 
   const res = await fetchFinanceApiWithParams(params);
   res.offers.map((o) => formatOffer(o));
@@ -138,19 +100,9 @@ export async function fetchAllFinanceOffersByCompany(
   companyName: string,
   minYOE: number | null,
   maxYOE: number | null,
-  resultSize: number | null,
+  resultSize: number | null
 ): Promise<OfferApiResponse> {
-  const params = getUrlParams(
-    page,
-    search,
-    verified,
-    levels,
-    sortBy,
-    sortDir,
-    minYOE,
-    maxYOE,
-    resultSize,
-  );
+  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
 
   const res = await fetchApiWithParamsForFinanceCompany(params, companyName);
   res.offers.map((o) => formatOffer(o));
@@ -159,8 +111,7 @@ export async function fetchAllFinanceOffersByCompany(
 }
 
 export async function fetchOffer(id: string): Promise<Offer> {
-  const apiOffer: Offer = await fetch(`${process.env.API_V2_URL}/offers/${id}`)
-    .then((res) => res.json());
+  const apiOffer: Offer = await fetch(`${process.env.API_V2_URL}/offers/${id}`).then((res) => res.json());
 
   const offer = formatOffer(apiOffer);
 
@@ -184,45 +135,35 @@ export async function fetchCompanyByName(name: string): Promise<Company> {
 }
 
 export async function fetchFinanceOffer(id: string): Promise<Offer> {
-  const apiOffer: Offer = await fetch(
-    `${process.env.API_V2_URL}/finance/offer/${id}`,
-  ).then((res) => res.json());
+  const apiOffer: Offer = await fetch(`${process.env.API_V2_URL}/finance/offer/${id}`).then((res) => res.json());
 
   const offer = formatOffer(apiOffer);
 
   return offer;
 }
 
-async function fetchApiWithParams(
-  urlParams: URLSearchParams,
-): Promise<OfferApiResponse> {
+async function fetchApiWithParams(urlParams: URLSearchParams): Promise<OfferApiResponse> {
   noStore();
   return fetch(`${OFFERS_API}?${urlParams}`).then((res) => res.json());
 }
 
 async function fetchApiWithParamsForCompany(
   urlParams: URLSearchParams,
-  companyName: string,
+  companyName: string
 ): Promise<OfferApiResponse> {
   noStore();
-  return fetch(`${OFFERS_API}/company/${companyName}?${urlParams}`).then((
-    res,
-  ) => res.json());
+  return fetch(`${OFFERS_API}/company/${companyName}?${urlParams}`).then((res) => res.json());
 }
 
 async function fetchApiWithParamsForFinanceCompany(
   urlParams: URLSearchParams,
-  companyName: string,
+  companyName: string
 ): Promise<OfferApiResponse> {
   noStore();
-  return fetch(`${FINANCE_API}/${companyName}?${urlParams}`).then((res) =>
-    res.json()
-  );
+  return fetch(`${FINANCE_API}/${companyName}?${urlParams}`).then((res) => res.json());
 }
 
-async function fetchFinanceApiWithParams(
-  urlParams: URLSearchParams,
-): Promise<OfferApiResponse> {
+async function fetchFinanceApiWithParams(urlParams: URLSearchParams): Promise<OfferApiResponse> {
   noStore();
   return fetch(`${FINANCE_API}?${urlParams}`).then((res) => res.json());
 }
@@ -236,7 +177,7 @@ function getUrlParams(
   sortDir: string | null,
   minYOE: number | null,
   maxYOE: number | null,
-  resultSize: number | null,
+  resultSize: number | null
 ): URLSearchParams {
   const params = new URLSearchParams();
   params.append("page", page);
@@ -268,18 +209,11 @@ function formatOffer(offer: Offer): Offer {
   //   offer.baseSalary + offer.signOnBonus + offer.annualBonus + offer.rsu
 
   offer.compDetails = {
-    totalComp: memoFormatter(offer.baseSalaryCurrency).format(
-      offer.displayedTotalComp,
-    ),
+    totalComp: memoFormatter(offer.baseSalaryCurrency).format(offer.displayedTotalComp),
     base: memoFormatter(offer.baseSalaryCurrency).format(offer.baseSalary),
-    signOnBonus: memoFormatter(offer.signOnBonusCurrency).format(
-      offer.signOnBonus,
-    ),
-    annualBonus: memoFormatter(offer.annualBonusCurrency).format(
-      offer.annualBonus,
-    ),
-    averageRsu: memoFormatter(offer.equityCurrency || offer.baseSalaryCurrency)
-      .format(offer.averageRsu),
+    signOnBonus: memoFormatter(offer.signOnBonusCurrency).format(offer.signOnBonus),
+    annualBonus: memoFormatter(offer.annualBonusCurrency).format(offer.annualBonus),
+    averageRsu: memoFormatter(offer.equityCurrency || offer.baseSalaryCurrency).format(offer.averageRsu),
   };
 
   return offer;
@@ -302,9 +236,7 @@ function formatJob(job: Job): Job {
   return job;
 }
 
-async function fetchJobsApiWithParams(
-  urlParams: URLSearchParams,
-): Promise<JobsApiResponse> {
+async function fetchJobsApiWithParams(urlParams: URLSearchParams): Promise<JobsApiResponse> {
   noStore();
   return fetch(`${JOBS_API}?${urlParams}`).then((res) => res.json());
 }
@@ -316,7 +248,7 @@ function getUrlParamsForJob(
   sortBy: string | null,
   sortDir: string | null,
   industry: Set<string>,
-  resultSize: number | null,
+  resultSize: number | null
 ): URLSearchParams {
   const params = new URLSearchParams();
   params.append("page", page);
@@ -340,17 +272,9 @@ export async function fetchAllJobs(
   sortBy: string | null,
   sortDir: string | null,
   industry: Set<string>,
-  resultSize: number | null,
+  resultSize: number | null
 ): Promise<JobsApiResponse> {
-  const params = getUrlParamsForJob(
-    page,
-    search,
-    levels,
-    sortBy,
-    sortDir,
-    industry,
-    resultSize,
-  );
+  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry, resultSize);
 
   const res = await fetchJobsApiWithParams(params);
   res.jobs.map((o) => formatJob(o));
@@ -360,18 +284,14 @@ export async function fetchAllJobs(
 
 async function fetchApiWithParamsForCompanyJobs(
   urlParams: URLSearchParams,
-  companyName: string,
+  companyName: string
 ): Promise<JobsApiResponse> {
   noStore();
-  return fetch(`${JOBS_API}/company/${companyName}?${urlParams}`).then((res) =>
-    res.json()
-  );
+  return fetch(`${JOBS_API}/company/${companyName}?${urlParams}`).then((res) => res.json());
 }
 
 export async function fetchJob(id: string): Promise<Job> {
-  const apiJob: Job = await fetch(`${process.env.API_V2_URL}/jobs/${id}`).then((
-    res,
-  ) => res.json());
+  const apiJob: Job = await fetch(`${process.env.API_V2_URL}/jobs/${id}`).then((res) => res.json());
 
   const job = formatJob(apiJob);
 
@@ -386,17 +306,9 @@ export async function fetchAllJobsByCompany(
   sortDir: string | null,
   companyName: string,
   industry: Set<string>,
-  resultSize: number | null,
+  resultSize: number | null
 ): Promise<JobsApiResponse> {
-  const params = getUrlParamsForJob(
-    page,
-    search,
-    levels,
-    sortBy,
-    sortDir,
-    industry,
-    resultSize,
-  );
+  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry, resultSize);
 
   const res = await fetchApiWithParamsForCompanyJobs(params, companyName);
   res.jobs.map((o) => formatJob(o));

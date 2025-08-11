@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
-  
+
   if (!token_hash || !type) {
     return NextResponse.redirect(APP_URL + "/auth/error?message=Invalid OTP");
   }
@@ -22,10 +22,9 @@ export async function GET(request: NextRequest) {
     token_hash,
   });
 
-
   // const user = await getUser();
-  let redirect = APP_URL
-  
+  let redirect = APP_URL;
+
   // if (type === "signup" || !user || !user.onboarding_completed) {
   //   redirect = APP_URL + "/auth/onboarding";
   // } else {

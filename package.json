@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit",
     "db:types": "source .env.local && supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts",
-    "test": "npm run typecheck && npm run db:types && npm run format",
+    "test": "npm run db:types && npm run typecheck && npm run format",
     "prepare": "husky"
   },
   "dependencies": {

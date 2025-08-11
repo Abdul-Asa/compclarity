@@ -33,8 +33,8 @@ export default function ResourcesDropdownMenu() {
                 Discord
               </Link>
             )}
-            </Menu.Item>
-            <Menu.Item>
+          </Menu.Item>
+          <Menu.Item>
             {({ active }) => (
               <Link
                 className={`${
@@ -54,7 +54,7 @@ export default function ResourcesDropdownMenu() {
                 Blog
               </Link>
             )}
-            </Menu.Item>
+          </Menu.Item>
         </div>
       </Menu.Items>
     </Menu>

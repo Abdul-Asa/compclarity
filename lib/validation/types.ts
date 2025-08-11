@@ -17,8 +17,7 @@ import {
 import countryToCurrency from "country-to-currency";
 import { Database } from "../supabase/types";
 
-export type CurrencyCode =
-  (typeof countryToCurrency)[keyof typeof countryToCurrency];
+export type CurrencyCode = (typeof countryToCurrency)[keyof typeof countryToCurrency];
 
 type Company = {
   name: string;

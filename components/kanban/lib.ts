@@ -10,18 +10,13 @@ import {
   Over,
 } from "@dnd-kit/core";
 
-const directions: string[] = [
-  KeyboardCode.Down,
-  KeyboardCode.Right,
-  KeyboardCode.Up,
-  KeyboardCode.Left,
-];
+const directions: string[] = [KeyboardCode.Down, KeyboardCode.Right, KeyboardCode.Up, KeyboardCode.Left];
 
 //This is for keyboard navigation for the kanban board
 //from https://georgegriff.github.io/react-dnd-kit-tailwind-shadcn-ui/
 export const coordinateGetter: KeyboardCoordinateGetter = (
   event,
-  { context: { active, droppableRects, droppableContainers, collisionRect } },
+  { context: { active, droppableRects, droppableContainers, collisionRect } }
 ) => {
   if (directions.includes(event.code)) {
     event.preventDefault();
@@ -48,8 +43,8 @@ export const coordinateGetter: KeyboardCoordinateGetter = (
       if (data) {
         const { type, children } = data;
 
-        if (type === "Column" && children?.length > 0) {
-          if (active.data.current?.type !== "Column") {
+        if (type === "column" && children?.length > 0) {
+          if (active.data.current?.type !== "column") {
             return;
           }
         }
@@ -57,7 +52,7 @@ export const coordinateGetter: KeyboardCoordinateGetter = (
 
       switch (event.code) {
         case KeyboardCode.Down:
-          if (active.data.current?.type === "Column") {
+          if (active.data.current?.type === "column") {
             return;
           }
           if (collisionRect.top < rect.top) {
@@ -66,7 +61,7 @@ export const coordinateGetter: KeyboardCoordinateGetter = (
           }
           break;
         case KeyboardCode.Up:
-          if (active.data.current?.type === "Column") {
+          if (active.data.current?.type === "column") {
             return;
           }
           if (collisionRect.top > rect.top) {
@@ -117,16 +112,16 @@ export const coordinateGetter: KeyboardCoordinateGetter = (
 // This is mainly for type support for dnd-kit
 type SortableData =
   | {
-    type: "Column";
-    column: { title: string; id: string };
-  }
+      type: "column";
+      column: { title: string; id: string };
+    }
   | {
-    type: "Application";
-    application: ApplicationObject;
-  };
+      type: "application";
+      application: ApplicationObject;
+    };
 
 export function hasSortableData<T extends Active | Over>(
-  entry: T | null | undefined,
+  entry: T | null | undefined
 ): entry is T & {
   data: DataRef<SortableData>;
 } {
@@ -136,10 +131,38 @@ export function hasSortableData<T extends Active | Over>(
 
   const data = entry.data.current;
 
-  if (data?.type === "Column" || data?.type === "Application") {
+  if (data?.type === "column" || data?.type === "application") {
     return true;
   }
 
-  // If the data type is not "Column" or "Application", it does not have sortable data
+  // If the data type is not "column" or "Application", it does not have sortable data
   return false;
 }
+
+export const sortApplications = (applications: ApplicationObject[]): Record<string, ApplicationObject[]> => {
+  const sortedByTodoLevel = applications.reduce((acc: Record<string, ApplicationObject[]>, application) => {
+    if (!acc[application.todo_level]) {
+      acc[application.todo_level] = [];
+    }
+    acc[application.todo_level].push(application);
+    return acc;
+  }, {});
+
+  return sortedByTodoLevel;
+};
+
+// Returns a snapshot of the kanban board (The order of each application in the kanban board)
+export const getKanbanSnapshot = (sortedApplications: Record<string, ApplicationObject[]>): ApplicationObject[] => {
+  const snapshot: ApplicationObject[] = [];
+
+  for (const todo_level in sortedApplications) {
+    sortedApplications[todo_level].forEach((application, index) => {
+      snapshot.push({
+        ...application,
+        kanban_order: index,
+      });
+    });
+  }
+
+  return snapshot;
+};

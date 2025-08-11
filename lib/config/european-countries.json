@@ -1,0 +1,359 @@
+[
+  {
+    "name": "Åland Islands",
+    "code": "AX",
+    "currency": "EUR",
+    "flag": "🇦🇽",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Albania",
+    "code": "AL",
+    "currency": "ALL",
+    "flag": "🇦🇱",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Andorra",
+    "code": "AD",
+    "currency": "EUR",
+    "flag": "🇦🇩",
+    "region": "South West Europe"
+  },
+  {
+    "name": "Austria",
+    "code": "AT",
+    "currency": "EUR",
+    "flag": "🇦🇹",
+    "region": "Central Europe"
+  },
+  {
+    "name": "Belarus",
+    "code": "BY",
+    "currency": "BYN",
+    "flag": "🇧🇾",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "Belgium",
+    "code": "BE",
+    "currency": "EUR",
+    "flag": "🇧🇪",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Bosnia and Herzegovina",
+    "code": "BA",
+    "currency": "BAM",
+    "flag": "🇧🇦",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Bulgaria",
+    "code": "BG",
+    "currency": "BGN",
+    "flag": "🇧🇬",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Croatia",
+    "code": "HR",
+    "currency": "EUR",
+    "flag": "🇭🇷",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Czechia",
+    "code": "CZ",
+    "currency": "CZK",
+    "flag": "🇨🇿",
+    "region": "Central Europe"
+  },
+  {
+    "name": "Denmark",
+    "code": "DK",
+    "currency": "DKK",
+    "flag": "🇩🇰",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Estonia",
+    "code": "EE",
+    "currency": "EUR",
+    "flag": "🇪🇪",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "Faroe Islands",
+    "code": "FO",
+    "currency": "DKK",
+    "flag": "🇫🇴",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Finland",
+    "code": "FI",
+    "currency": "EUR",
+    "flag": "🇫🇮",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "France",
+    "code": "FR",
+    "currency": "EUR",
+    "flag": "🇫🇷",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Germany",
+    "code": "DE",
+    "currency": "EUR",
+    "flag": "🇩🇪",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Gibraltar",
+    "code": "GI",
+    "currency": "GIP",
+    "flag": "🇬🇮",
+    "region": "South West Europe"
+  },
+  {
+    "name": "Greece",
+    "code": "GR",
+    "currency": "EUR",
+    "flag": "🇬🇷",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Guernsey",
+    "code": "GG",
+    "currency": "GBP",
+    "flag": "🇬🇬",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Holy See",
+    "code": "VA",
+    "currency": "EUR",
+    "flag": "🇻🇦",
+    "region": "Southern Europe"
+  },
+  {
+    "name": "Hungary",
+    "code": "HU",
+    "currency": "HUF",
+    "flag": "🇭🇺",
+    "region": "Central Europe"
+  },
+  {
+    "name": "Iceland",
+    "code": "IS",
+    "currency": "ISK",
+    "flag": "🇮🇸",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Ireland",
+    "code": "IE",
+    "currency": "EUR",
+    "flag": "🇮🇪",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Isle of Man",
+    "code": "IM",
+    "currency": "GBP",
+    "flag": "🇮🇲",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Italy",
+    "code": "IT",
+    "currency": "EUR",
+    "flag": "🇮🇹",
+    "region": "Southern Europe"
+  },
+  {
+    "name": "Jersey",
+    "code": "JE",
+    "currency": "GBP",
+    "flag": "🇯🇪",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Latvia",
+    "code": "LV",
+    "currency": "EUR",
+    "flag": "🇱🇻",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "Liechtenstein",
+    "code": "LI",
+    "currency": "CHF",
+    "flag": "🇱🇮",
+    "region": "Central Europe"
+  },
+  {
+    "name": "Lithuania",
+    "code": "LT",
+    "currency": "EUR",
+    "flag": "🇱🇹",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "Luxembourg",
+    "code": "LU",
+    "currency": "EUR",
+    "flag": "🇱🇺",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Malta",
+    "code": "MT",
+    "currency": "EUR",
+    "flag": "🇲🇹",
+    "region": "Southern Europe"
+  },
+  {
+    "name": "Moldova",
+    "code": "MD",
+    "currency": "MDL",
+    "flag": "🇲🇩",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "Monaco",
+    "code": "MC",
+    "currency": "EUR",
+    "flag": "🇲🇨",
+    "region": "Western Europe"
+  },
+  {
+    "name": "Montenegro",
+    "code": "ME",
+    "currency": "EUR",
+    "flag": "🇲🇪",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Netherlands",
+    "code": "NL",
+    "currency": "EUR",
+    "flag": "🇳🇱",
+    "region": "Western Europe"
+  },
+  {
+    "name": "North Macedonia",
+    "code": "MK",
+    "currency": "MKD",
+    "flag": "🇲🇰",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Norway",
+    "code": "NO",
+    "currency": "NOK",
+    "flag": "🇳🇴",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Poland",
+    "code": "PL",
+    "currency": "PLN",
+    "flag": "🇵🇱",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "Portugal",
+    "code": "PT",
+    "currency": "EUR",
+    "flag": "🇵🇹",
+    "region": "South West Europe"
+  },
+  {
+    "name": "Romania",
+    "code": "RO",
+    "currency": "RON",
+    "flag": "🇷🇴",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Russia",
+    "code": "RU",
+    "currency": "RUB",
+    "flag": "🇷🇺",
+    "region": "Northern Asia"
+  },
+  {
+    "name": "San Marino",
+    "code": "SM",
+    "currency": "EUR",
+    "flag": "🇸🇲",
+    "region": "Southern Europe"
+  },
+  {
+    "name": "Serbia",
+    "code": "RS",
+    "currency": "RSD",
+    "flag": "🇷🇸",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Slovakia",
+    "code": "SK",
+    "currency": "EUR",
+    "flag": "🇸🇰",
+    "region": "Central Europe"
+  },
+  {
+    "name": "Slovenia",
+    "code": "SI",
+    "currency": "EUR",
+    "flag": "🇸🇮",
+    "region": "South East Europe"
+  },
+  {
+    "name": "Spain",
+    "code": "ES",
+    "currency": "EUR",
+    "flag": "🇪🇸",
+    "region": "South West Europe"
+  },
+  {
+    "name": "Svalbard and Jan Mayen",
+    "code": "SJ",
+    "currency": "NOK",
+    "flag": "🇸🇯",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Sweden",
+    "code": "SE",
+    "currency": "SEK",
+    "flag": "🇸🇪",
+    "region": "Northern Europe"
+  },
+  {
+    "name": "Switzerland",
+    "code": "CH",
+    "currency": "CHF",
+    "flag": "🇨🇭",
+    "region": "Central Europe"
+  },
+  {
+    "name": "Ukraine",
+    "code": "UA",
+    "currency": "UAH",
+    "flag": "🇺🇦",
+    "region": "Eastern Europe"
+  },
+  {
+    "name": "United Kingdom",
+    "code": "GB",
+    "currency": "GBP",
+    "flag": "🇬🇧",
+    "region": "Western Europe"
+  }
+]

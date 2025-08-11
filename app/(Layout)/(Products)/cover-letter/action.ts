@@ -2,13 +2,10 @@
 import { CoverLetterSchema } from "@/lib/validation/types";
 
 export async function generateCoverLetter(formData: CoverLetterSchema) {
-  const request = await fetch(
-    `https://compclarity.azurewebsites.net/api/process_gpt?code=${process.env.GPT_API_KEY}`,
-    {
-      method: "POST",
-      body: JSON.stringify(formData),
-    },
-  );
+  const request = await fetch(`https://compclarity.azurewebsites.net/api/process_gpt?code=${process.env.GPT_API_KEY}`, {
+    method: "POST",
+    body: JSON.stringify(formData),
+  });
 
   console.log(request);
 

@@ -1,11 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {
-  ApplicationObject,
-  ApplicationSorted,
-  CurrencyCode,
-  Func,
-} from "../validation/types";
+import { ApplicationObject, ApplicationSorted, CurrencyCode, Func } from "../validation/types";
 import React from "react";
 
 export function cn(...inputs: ClassValue[]) {
@@ -17,17 +12,13 @@ export const range: (start: number, end: number) => number[] = (start, end) => {
     return [];
   }
 
-  return [...Array(end - start + 1).keys()].map((key: number): number =>
-    key + start
-  );
+  return [...Array(end - start + 1).keys()].map((key: number): number => key + start);
 };
 
 export const memoize = <T = any>(fn: Func<T>) => {
   const cache = new Map();
   const cached = function (this: any, val: T) {
-    return cache.has(val)
-      ? cache.get(val)
-      : cache.set(val, fn.call(this, val)) && cache.get(val);
+    return cache.has(val) ? cache.get(val) : cache.set(val, fn.call(this, val)) && cache.get(val);
   };
   cached.cache = cache;
   return cached;
@@ -50,27 +41,20 @@ export const dateFormatter = (date: string): string => {
 };
 
 // Sorts applications by todo_level into an object
-export const sortApplications = (
-  applications: ApplicationObject[],
-): ApplicationSorted => {
-  const sortedByTodoLevel = applications.reduce(
-    (acc: ApplicationSorted, application) => {
-      if (!acc[application.todo_level]) {
-        acc[application.todo_level] = [];
-      }
-      acc[application.todo_level].push(application);
-      return acc;
-    },
-    {},
-  );
+export const sortApplications = (applications: ApplicationObject[]): ApplicationSorted => {
+  const sortedByTodoLevel = applications.reduce((acc: ApplicationSorted, application) => {
+    if (!acc[application.todo_level]) {
+      acc[application.todo_level] = [];
+    }
+    acc[application.todo_level].push(application);
+    return acc;
+  }, {});
 
   return sortedByTodoLevel;
 };
 
 // Returns a snapshot of the kanban board (The order of each application in the kanban board)
-export const getKanbanSnapshot = (
-  sortedApplications: ApplicationSorted,
-): ApplicationObject[] => {
+export const getKanbanSnapshot = (sortedApplications: ApplicationSorted): ApplicationObject[] => {
   const snapshot: ApplicationObject[] = [];
 
   for (const todo_level in sortedApplications) {
@@ -91,7 +75,7 @@ export function formatBytes(
   opts: {
     decimals?: number;
     sizeType?: "accurate" | "normal";
-  } = {},
+  } = {}
 ) {
   const { decimals = 0, sizeType = "normal" } = opts;
 
@@ -100,9 +84,7 @@ export function formatBytes(
   if (bytes === 0) return "0 Byte";
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
-    sizeType === "accurate"
-      ? (accurateSizes[i] ?? "Bytest")
-      : (sizes[i] ?? "Bytes")
+    sizeType === "accurate" ? (accurateSizes[i] ?? "Bytest") : (sizes[i] ?? "Bytes")
   }`;
 }
 /**
@@ -132,9 +114,7 @@ export function fromUrlFriendly(str: string): string {
 }
 
 export const capitalize = (...strings: string[]): string => {
-  return strings
-    .map((str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase())
-    .join(" ");
+  return strings.map((str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()).join(" ");
 };
 
 type Object = { [key: string]: any };
@@ -167,13 +147,11 @@ export const deepMerge = (target: Object, source: Object, level = 0) => {
 };
 
 export const getPxPerRem = () => {
-  const bodyComputedStyle = getComputedStyle(
-    document.querySelector("body")!
-  ) as any;
+  const bodyComputedStyle = getComputedStyle(document.querySelector("body")!) as any;
   return parseFloat(bodyComputedStyle["font-size"]) || 16;
 };
 
-type PossibleRef<T> = React.Ref<T> | undefined
+type PossibleRef<T> = React.Ref<T> | undefined;
 
 /**
  * Set a given ref to a given value
@@ -181,9 +159,9 @@ type PossibleRef<T> = React.Ref<T> | undefined
  */
 function setRef<T>(ref: PossibleRef<T>, value: T) {
   if (typeof ref === "function") {
-    ref(value)
+    ref(value);
   } else if (ref !== null && ref !== undefined) {
-    ;(ref as React.MutableRefObject<T>).current = value
+    (ref as React.MutableRefObject<T>).current = value;
   }
 }
 
@@ -192,7 +170,7 @@ function setRef<T>(ref: PossibleRef<T>, value: T) {
  * Accepts callback refs and RefObject(s)
  */
 function composeRefs<T>(...refs: PossibleRef<T>[]) {
-  return (node: T) => refs.forEach((ref) => setRef(ref, node))
+  return (node: T) => refs.forEach((ref) => setRef(ref, node));
 }
 
 /**
@@ -201,7 +179,7 @@ function composeRefs<T>(...refs: PossibleRef<T>[]) {
  */
 function useComposedRefs<T>(...refs: PossibleRef<T>[]) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  return React.useCallback(composeRefs(...refs), refs)
+  return React.useCallback(composeRefs(...refs), refs);
 }
 
 export function formatDate(dateString?: string) {
@@ -213,4 +191,4 @@ export function formatDate(dateString?: string) {
   });
 }
 
-export { composeRefs, useComposedRefs }
+export { composeRefs, useComposedRefs };

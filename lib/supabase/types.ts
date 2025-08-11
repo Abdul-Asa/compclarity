@@ -1,311 +1,458 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
+  // Allows to automatically instanciate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.0.2 (a4e00ff)";
+  };
   public: {
     Tables: {
-      cvs: {
+      applications: {
         Row: {
-          created_at: string
-          cv_data: Json
-          id: string
-          updated_at: string
-          user_id: string
-        }
+          company: string | null;
+          completed: boolean | null;
+          created_at: string;
+          date_applied: string;
+          date_interviewed: string | null;
+          date_offered: string | null;
+          date_rejected: string | null;
+          date_screened: string | null;
+          description: string | null;
+          id: number;
+          kanban_order: number;
+          location: string | null;
+          notifications: boolean;
+          title: string;
+          todo_level: string;
+          updated_at: string | null;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          cv_data: Json
-          id?: string
-          updated_at?: string
-          user_id: string
-        }
+          company?: string | null;
+          completed?: boolean | null;
+          created_at?: string;
+          date_applied: string;
+          date_interviewed?: string | null;
+          date_offered?: string | null;
+          date_rejected?: string | null;
+          date_screened?: string | null;
+          description?: string | null;
+          id?: number;
+          kanban_order: number;
+          location?: string | null;
+          notifications?: boolean;
+          title: string;
+          todo_level?: string;
+          updated_at?: string | null;
+          user_id: string;
+        };
         Update: {
-          created_at?: string
-          cv_data?: Json
-          id?: string
-          updated_at?: string
-          user_id?: string
-        }
+          company?: string | null;
+          completed?: boolean | null;
+          created_at?: string;
+          date_applied?: string;
+          date_interviewed?: string | null;
+          date_offered?: string | null;
+          date_rejected?: string | null;
+          date_screened?: string | null;
+          description?: string | null;
+          id?: number;
+          kanban_order?: number;
+          location?: string | null;
+          notifications?: boolean;
+          title?: string;
+          todo_level?: string;
+          updated_at?: string | null;
+          user_id?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "fk_user"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "applications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
+      cvs: {
+        Row: {
+          created_at: string;
+          cv_data: Json;
+          id: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          cv_data: Json;
+          id?: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          cv_data?: Json;
+          id?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "fk_user";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      offer_reports: {
+        Row: {
+          company: string;
+          created_at: string;
+          details: string | null;
+          email: string | null;
+          id: number;
+          job_title: string;
+          offer_row_id: string;
+          reason: string;
+          type: Database["public"]["Enums"]["offer_report_type"];
+        };
+        Insert: {
+          company: string;
+          created_at?: string;
+          details?: string | null;
+          email?: string | null;
+          id?: number;
+          job_title: string;
+          offer_row_id: string;
+          reason: string;
+          type?: Database["public"]["Enums"]["offer_report_type"];
+        };
+        Update: {
+          company?: string;
+          created_at?: string;
+          details?: string | null;
+          email?: string | null;
+          id?: number;
+          job_title?: string;
+          offer_row_id?: string;
+          reason?: string;
+          type?: Database["public"]["Enums"]["offer_report_type"];
+        };
+        Relationships: [];
+      };
+      offer_uploads: {
+        Row: {
+          company: string;
+          created_at: string;
+          discord: string | null;
+          education: string;
+          ethnicity: string;
+          file_urls: string[];
+          gender: string;
+          id: string;
+          office_location: string;
+          yoe: number;
+        };
+        Insert: {
+          company: string;
+          created_at?: string;
+          discord?: string | null;
+          education: string;
+          ethnicity: string;
+          file_urls: string[];
+          gender: string;
+          id?: string;
+          office_location: string;
+          yoe: number;
+        };
+        Update: {
+          company?: string;
+          created_at?: string;
+          discord?: string | null;
+          education?: string;
+          ethnicity?: string;
+          file_urls?: string[];
+          gender?: string;
+          id?: string;
+          office_location?: string;
+          yoe?: number;
+        };
+        Relationships: [];
+      };
       payments: {
         Row: {
-          additional_info: string | null
-          created_at: string | null
-          discord: string | null
-          email: string
-          file_names: string[] | null
-          full_name: string
-          id: number
-          phone: string | null
-          service: string
-          session_id: string | null
-          status: string
-        }
+          additional_info: string | null;
+          created_at: string | null;
+          discord: string | null;
+          email: string;
+          file_names: string[] | null;
+          full_name: string;
+          id: number;
+          phone: string | null;
+          service: string;
+          session_id: string | null;
+          status: string;
+        };
         Insert: {
-          additional_info?: string | null
-          created_at?: string | null
-          discord?: string | null
-          email: string
-          file_names?: string[] | null
-          full_name: string
-          id?: number
-          phone?: string | null
-          service: string
-          session_id?: string | null
-          status: string
-        }
+          additional_info?: string | null;
+          created_at?: string | null;
+          discord?: string | null;
+          email: string;
+          file_names?: string[] | null;
+          full_name: string;
+          id?: number;
+          phone?: string | null;
+          service: string;
+          session_id?: string | null;
+          status: string;
+        };
         Update: {
-          additional_info?: string | null
-          created_at?: string | null
-          discord?: string | null
-          email?: string
-          file_names?: string[] | null
-          full_name?: string
-          id?: number
-          phone?: string | null
-          service?: string
-          session_id?: string | null
-          status?: string
-        }
-        Relationships: []
-      }
+          additional_info?: string | null;
+          created_at?: string | null;
+          discord?: string | null;
+          email?: string;
+          file_names?: string[] | null;
+          full_name?: string;
+          id?: number;
+          phone?: string | null;
+          service?: string;
+          session_id?: string | null;
+          status?: string;
+        };
+        Relationships: [];
+      };
       todos: {
         Row: {
-          company: string | null
-          completed: boolean | null
-          country: string | null
-          created_at: number | null
-          date_applied: string
-          date_interviewed: string | null
-          date_offered: string | null
-          date_rejected: string | null
-          date_screened: string | null
-          description: string | null
-          id: number
-          kanban_order: number
-          location: string | null
-          title: string
-          todo_level: string
-          updated_at: number | null
-          user_id: string
-        }
+          company: string | null;
+          completed: boolean | null;
+          country: string | null;
+          created_at: number | null;
+          date_applied: string;
+          date_interviewed: string | null;
+          date_offered: string | null;
+          date_rejected: string | null;
+          date_screened: string | null;
+          description: string | null;
+          id: number;
+          kanban_order: number;
+          location: string | null;
+          title: string;
+          todo_level: string;
+          updated_at: number | null;
+          user_id: string;
+        };
         Insert: {
-          company?: string | null
-          completed?: boolean | null
-          country?: string | null
-          created_at?: number | null
-          date_applied: string
-          date_interviewed?: string | null
-          date_offered?: string | null
-          date_rejected?: string | null
-          date_screened?: string | null
-          description?: string | null
-          id?: number
-          kanban_order: number
-          location?: string | null
-          title: string
-          todo_level?: string
-          updated_at?: number | null
-          user_id: string
-        }
+          company?: string | null;
+          completed?: boolean | null;
+          country?: string | null;
+          created_at?: number | null;
+          date_applied: string;
+          date_interviewed?: string | null;
+          date_offered?: string | null;
+          date_rejected?: string | null;
+          date_screened?: string | null;
+          description?: string | null;
+          id?: number;
+          kanban_order: number;
+          location?: string | null;
+          title: string;
+          todo_level?: string;
+          updated_at?: number | null;
+          user_id: string;
+        };
         Update: {
-          company?: string | null
-          completed?: boolean | null
-          country?: string | null
-          created_at?: number | null
-          date_applied?: string
-          date_interviewed?: string | null
-          date_offered?: string | null
-          date_rejected?: string | null
-          date_screened?: string | null
-          description?: string | null
-          id?: number
-          kanban_order?: number
-          location?: string | null
-          title?: string
-          todo_level?: string
-          updated_at?: number | null
-          user_id?: string
-        }
-        Relationships: []
-      }
+          company?: string | null;
+          completed?: boolean | null;
+          country?: string | null;
+          created_at?: number | null;
+          date_applied?: string;
+          date_interviewed?: string | null;
+          date_offered?: string | null;
+          date_rejected?: string | null;
+          date_screened?: string | null;
+          description?: string | null;
+          id?: number;
+          kanban_order?: number;
+          location?: string | null;
+          title?: string;
+          todo_level?: string;
+          updated_at?: number | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       users: {
         Row: {
-          birthdate: string | null
-          created_at: string | null
-          email: string
-          first_name: string
-          id: string
-          is_subscribed: boolean
-          last_name: string
-          links: Json
-          location: string | null
-          onboarding_completed: boolean
-          phonenumber: string | null
-          stripe_customer_id: string | null
-          tokens: number
-          username_completed: boolean
-        }
+          created_at: string | null;
+          email: string;
+          first_name: string;
+          id: string;
+          is_subscribed: boolean;
+          last_name: string;
+          phonenumber: string | null;
+          stripe_customer_id: string | null;
+          tokens: number;
+        };
         Insert: {
-          birthdate?: string | null
-          created_at?: string | null
-          email: string
-          first_name: string
-          id: string
-          is_subscribed?: boolean
-          last_name: string
-          links?: Json
-          location?: string | null
-          onboarding_completed?: boolean
-          phonenumber?: string | null
-          stripe_customer_id?: string | null
-          tokens?: number
-          username_completed?: boolean
-        }
+          created_at?: string | null;
+          email: string;
+          first_name: string;
+          id: string;
+          is_subscribed?: boolean;
+          last_name: string;
+          phonenumber?: string | null;
+          stripe_customer_id?: string | null;
+          tokens?: number;
+        };
         Update: {
-          birthdate?: string | null
-          created_at?: string | null
-          email?: string
-          first_name?: string
-          id?: string
-          is_subscribed?: boolean
-          last_name?: string
-          links?: Json
-          location?: string | null
-          onboarding_completed?: boolean
-          phonenumber?: string | null
-          stripe_customer_id?: string | null
-          tokens?: number
-          username_completed?: boolean
-        }
-        Relationships: []
-      }
-    }
+          created_at?: string | null;
+          email?: string;
+          first_name?: string;
+          id?: string;
+          is_subscribed?: boolean;
+          last_name?: string;
+          phonenumber?: string | null;
+          stripe_customer_id?: string | null;
+          tokens?: number;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       reset_tokens: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-    }
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+    };
     Enums: {
-      [_ in never]: never
-    }
+      offer_report_type: "offer" | "job_listing";
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
-    | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never;
+
+export const Constants = {
+  public: {
+    Enums: {
+      offer_report_type: ["offer", "job_listing"],
+    },
+  },
+} as const;

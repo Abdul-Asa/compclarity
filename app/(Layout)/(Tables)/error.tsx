@@ -26,10 +26,7 @@ const ErrorPage = ({ error, reset }: errorProps) => {
       <div className="text-4xl sm:text-7xl">Error</div>
       <div className="mt-12 text-xl text-gray-500">
         Page does not exist, click{" "}
-        <span
-          onClick={handleClick}
-          className="cursor-pointer text-blue-600 underline"
-        >
+        <span onClick={handleClick} className="cursor-pointer text-blue-600 underline">
           here
         </span>{" "}
         to return.

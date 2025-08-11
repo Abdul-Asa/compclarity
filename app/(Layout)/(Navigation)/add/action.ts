@@ -3,9 +3,7 @@
 import { setTimeout } from "timers/promises";
 import { SalaryFormSchema } from "@/lib/validation/types";
 
-export async function submitFormData(
-  formData: SalaryFormSchema,
-): Promise<{ success: boolean }> {
+export async function submitFormData(formData: SalaryFormSchema): Promise<{ success: boolean }> {
   const loggedContent = `Submitted form data: ${JSON.stringify(formData)}`;
   // console.log(loggedContent)
 
