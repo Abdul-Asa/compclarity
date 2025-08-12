@@ -19,76 +19,29 @@ import { exportCSVData } from "@/lib/actions/server-actions";
 import { useToast } from "@/lib/hooks/useToast";
 import { ExportSankeyModal } from "./export-sankey-modal";
 import { ApplicationObject } from "@/lib/validation/types";
+import { useState } from "react";
 interface KanbanHeaderProps {
   applications: ApplicationObject[];
 }
 
 export function KanbanHeader({ applications }: KanbanHeaderProps) {
   const { toast } = useToast();
-  const exportCsvQuery = useQuery({
-    queryKey: ["export-csv"],
-    queryFn: exportCSVData,
-    enabled: false,
-  });
+  const [isExporting, setIsExporting] = useState(false);
 
   const handleExportCsv = async () => {
+    setIsExporting(true);
     toast({
       title: "Exporting...",
       description: "Generating your CSV file.",
     });
     try {
-      const { data: csvData, error } = await exportCsvQuery.refetch();
-      if (error) {
-        toast({ title: "Export failed", description: "Could not export CSV.", variant: "destructive" });
-        return;
-      }
-      if (!csvData || csvData.length === 0) {
+      const csvContent = await exportCSVData();
+      if (!csvContent) {
         toast({ title: "No data", description: "No applications to export." });
         return;
       }
 
-      // Convert data to CSV format
-      const headers = [
-        "Company",
-        "Title",
-        "Location",
-        "Status",
-        "Date Applied",
-        "Date Screened",
-        "Date Interviewed",
-        "Date Offered",
-        "Date Rejected",
-      ];
-      const csvRows = [
-        headers.join(","),
-        ...csvData.map((app) =>
-          [
-            app.company || "",
-            app.title || "",
-            app.location || "",
-            app.todo_level === "0"
-              ? "Applied"
-              : app.todo_level === "1"
-                ? "Screened"
-                : app.todo_level === "2"
-                  ? "Interviewed"
-                  : app.todo_level === "3"
-                    ? "Offered"
-                    : app.todo_level === "4"
-                      ? "Rejected"
-                      : "Unknown",
-            app.date_applied || "",
-            app.date_screened || "",
-            app.date_interviewed || "",
-            app.date_offered || "",
-            app.date_rejected || "",
-          ]
-            .map((field) => `"${field}"`)
-            .join(",")
-        ),
-      ];
-
-      const csvContent = csvRows.join("\n");
+      // CSV content is already formatted by the server action
       const blob = new Blob([csvContent], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -102,6 +55,7 @@ export function KanbanHeader({ applications }: KanbanHeaderProps) {
     } catch (error: any) {
       toast({ title: "Export failed", description: "Could not export CSV.", variant: "destructive" });
     }
+    setIsExporting(false);
   };
 
   return (
@@ -140,7 +94,7 @@ export function KanbanHeader({ applications }: KanbanHeaderProps) {
                     className="w-full justify-start"
                     size="sm"
                     onClick={handleExportCsv}
-                    loading={exportCsvQuery.isFetching}
+                    loading={isExporting}
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Export .csv

@@ -474,14 +474,67 @@ export const exportCSVData = cache(async () => {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("date_applied", { ascending: false });
+    .select(
+      `
+      title,
+      company,
+      location,
+      todo_level,
+      completed,
+      date_applied,
+      date_screened,
+      date_interviewed,
+      date_offered,
+      date_rejected
+    `
+    )
+    .eq("user_id", user.id);
 
   if (error) {
     console.error(error);
     return null;
   }
 
-  return data;
+  // Map todo_level and completed
+  const todoLevelMap: Record<string, string> = {
+    "0": "Applied",
+    "1": "Screen",
+    "2": "Interview",
+    "3": "Offer",
+    "4": "Rejected",
+  };
+
+  const mappedData = (data ?? []).map((row) => ({
+    title: row.title || "",
+    company: row.company || "",
+    location: row.location || "",
+    status: todoLevelMap[row.todo_level] ?? row.todo_level,
+    offered: row.completed ? "true" : "false",
+    date_applied: row.date_applied || "",
+    date_screened: row.date_screened || "",
+    date_interviewed: row.date_interviewed || "",
+    date_offered: row.date_offered || "",
+    date_rejected: row.date_rejected || "",
+  }));
+
+  // Convert to CSV format manually (similar to Papa.unparse)
+  const headers = [
+    "title",
+    "company",
+    "location",
+    "status",
+    "offered",
+    "date_applied",
+    "date_screened",
+    "date_interviewed",
+    "date_offered",
+    "date_rejected",
+  ];
+
+  const csvRows = [
+    headers.join(","),
+    ...mappedData.map((row) => headers.map((header) => `"${row[header as keyof typeof row]}"`).join(",")),
+  ];
+  console.log(csvRows);
+  return csvRows.join("\n");
 });
