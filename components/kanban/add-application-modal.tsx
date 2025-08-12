@@ -6,8 +6,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { trpc } from "@/lib/trpc/client";
-import { toast } from "@/lib/hooks/use-toast";
+import { useToast } from "@/lib/hooks/useToast";
+import { useAction } from "next-safe-action/hooks";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { createApplicationAction, getJobOffer } from "@/lib/actions/server-actions";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { LocationSearch } from "@/components/ui/location-search";
@@ -23,7 +25,8 @@ export function AddApplicationModal({ onSuccess }: AddApplicationModalProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const form = useForm<CreateApplicationSchema>({
     resolver: zodResolver(createApplicationSchema),
     defaultValues: {
@@ -35,42 +38,45 @@ export function AddApplicationModal({ onSuccess }: AddApplicationModalProps) {
     },
   });
 
-  const mutation = trpc.application.createApplication.useMutation({
+  const { executeAsync, isPending } = useAction(createApplicationAction, {
     onSuccess: (data) => {
-      utils.application.getApplications.invalidate();
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
       toast({
         title: "Application created",
-        description: data.message,
-        variant: "success",
+        description: data.data?.message || "Application created successfully",
       });
       form.reset();
       setOpen(false);
       onSuccess?.();
     },
-    onError: (error) => {
+    onError: ({ error }) => {
       toast({
         title: "Error",
-        description: error.message,
-        variant: "error",
+        description: error.serverError || "Failed to create application",
+        variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: CreateApplicationSchema) => {
-    mutation.mutate(data);
+  const onSubmit = async (data: CreateApplicationSchema) => {
+    await executeAsync(data);
   };
 
   const jobId = searchParams.get("id") ?? "";
-  const jobQuery = trpc.application.getJobOffer.useQuery({ id: jobId }, { enabled: !!jobId });
+  const jobQuery = useQuery({
+    queryKey: ["job-offer", jobId],
+    queryFn: () => getJobOffer(jobId),
+    enabled: !!jobId,
+  });
 
   // Get job id from query params to prefill the form
   useEffect(() => {
-    if (jobQuery.data) {
+    if (jobQuery.data && jobQuery.data.title) {
       setOpen(true);
       form.setValue("title", jobQuery.data.title);
-      form.setValue("companyName", jobQuery.data.company.name);
-      form.setValue("location", jobQuery.data.city + ", " + jobQuery.data.countryCode);
-      form.setValue("description", jobQuery.data.description);
+      form.setValue("companyName", jobQuery.data.company?.name || "");
+      form.setValue("location", `${jobQuery.data.city || ""}, ${jobQuery.data.countryCode || ""}`);
+      form.setValue("description", jobQuery.data.description || "");
       router.push(pathname);
     }
     // Only run when jobQuery.data changes
@@ -159,7 +165,7 @@ export function AddApplicationModal({ onSuccess }: AddApplicationModalProps) {
             )}
           />
           <div className="flex gap-2 justify-end pt-2">
-            <Button type="submit" loading={mutation.isPending} className="w-32">
+            <Button type="submit" loading={isPending} className="w-32">
               Save
             </Button>
             <Button
@@ -169,7 +175,7 @@ export function AddApplicationModal({ onSuccess }: AddApplicationModalProps) {
                 form.reset();
                 setOpen(false);
               }}
-              disabled={mutation.isPending}
+              disabled={isPending}
             >
               Cancel
             </Button>

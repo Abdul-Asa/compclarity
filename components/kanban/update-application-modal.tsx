@@ -6,13 +6,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { trpc } from "@/lib/trpc/client";
-import { toast } from "@/lib/hooks/use-toast";
+import { useToast } from "@/lib/hooks/useToast";
+import { useAction } from "next-safe-action/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { updateApplicationAction } from "@/lib/actions/server-actions";
 import { useEffect, useState } from "react";
 import { Pencil } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { LocationSearch } from "@/components/ui/location-search";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface UpdateApplicationModalProps {
@@ -21,7 +22,8 @@ interface UpdateApplicationModalProps {
 }
 export function UpdateApplicationModal({ application, onSuccess }: UpdateApplicationModalProps) {
   const [open, setOpen] = useState(false);
-  const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const form = useForm<UpdateApplicationSchema>({
     resolver: zodResolver(updateApplicationSchema),
@@ -36,32 +38,32 @@ export function UpdateApplicationModal({ application, onSuccess }: UpdateApplica
       dateInterviewed: application.date_interviewed || "",
       dateOffered: application.date_offered || "",
       dateRejected: application.date_rejected || "",
-      notify: application.notifications ?? false,
+      notify: false, // Application object doesn't have notifications field
     },
   });
-  const mutation = trpc.application.updateApplication.useMutation({
+
+  const { executeAsync, isPending } = useAction(updateApplicationAction, {
     onSuccess: (data) => {
-      utils.application.getApplications.invalidate();
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
       toast({
         title: "Application updated",
-        description: data.message,
-        variant: "success",
+        description: data.data?.message || "Application updated successfully",
       });
       form.reset();
       setOpen(false);
       onSuccess?.();
     },
-    onError: (error) => {
+    onError: ({ error }) => {
       toast({
         title: "Error",
-        description: error.message,
-        variant: "error",
+        description: error.serverError || "Failed to update application",
+        variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: UpdateApplicationSchema) => {
-    mutation.mutate({ id: application.id, data });
+  const onSubmit = async (data: UpdateApplicationSchema) => {
+    await executeAsync({ id: application.id, data });
   };
   // Before rendering the component, determine the field name based on the application's todo_level
   const fieldName = (() => {
@@ -92,7 +94,7 @@ export function UpdateApplicationModal({ application, onSuccess }: UpdateApplica
       dateInterviewed: application.date_interviewed || "",
       dateOffered: application.date_offered || "",
       dateRejected: application.date_rejected || "",
-      notify: application.notifications ?? false,
+      notify: false, // Application object doesn't have notifications field
       todoLevel: application.todo_level ?? "0",
     });
   }, [application]);
@@ -219,10 +221,10 @@ export function UpdateApplicationModal({ application, onSuccess }: UpdateApplica
             )}
           /> */}
           <div className="flex gap-2 justify-end pt-2">
-            <Button type="submit" loading={mutation.isPending} className="w-32">
+            <Button type="submit" loading={isPending} className="w-32">
               Save
             </Button>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={mutation.isPending}>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
               Cancel
             </Button>
           </div>

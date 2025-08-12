@@ -1,26 +1,37 @@
 import { Button } from "@/components/ui/button";
-import { trpc } from "@/lib/trpc/client";
-import { toast } from "@/lib/hooks/use-toast";
+import { useToast } from "@/lib/hooks/useToast";
+import { useAction } from "next-safe-action/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteAllApplicationsAction } from "@/lib/actions/server-actions";
 import { useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Trash } from "lucide-react";
 
 export function DeleteAllApplicationsModal() {
   const [open, setOpen] = useState(false);
-  const utils = trpc.useUtils();
-  const mutation = trpc.application.deleteAllApplications.useMutation({
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const { executeAsync, isPending } = useAction(deleteAllApplicationsAction, {
     onSuccess: (data) => {
-      utils.application.getApplications.invalidate();
-      toast({ title: "Success", description: data.message, variant: "success" });
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
+      toast({
+        title: "Success",
+        description: data.data?.message || "All applications deleted successfully",
+      });
       setOpen(false);
     },
-    onError: (error) => {
-      toast({ title: "Error", description: error.message, variant: "error" });
+    onError: ({ error }) => {
+      toast({
+        title: "Error",
+        description: error.serverError || "Failed to delete applications",
+        variant: "destructive",
+      });
     },
   });
 
-  const onSubmit = () => {
-    mutation.mutate();
+  const onSubmit = async () => {
+    await executeAsync({});
   };
 
   return (
@@ -39,10 +50,10 @@ export function DeleteAllApplicationsModal() {
       <div className="flex flex-col gap-4">
         <p>Are you sure you want to delete all applications? This action cannot be undone.</p>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => setOpen(false)} disabled={mutation.isPending}>
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
             Cancel
           </Button>
-          <Button variant="destructive" onClick={onSubmit} loading={mutation.isPending}>
+          <Button variant="destructive" onClick={onSubmit} loading={isPending}>
             Delete
           </Button>
         </div>

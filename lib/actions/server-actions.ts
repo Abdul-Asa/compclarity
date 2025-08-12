@@ -8,6 +8,8 @@ import { z } from "zod";
 import { actionClient } from "./safe-action";
 import { revalidatePath } from "next/cache";
 import { CVData } from "@/components/cv-builder/types";
+import { fetchJob } from "./data";
+import { ApplicationObject } from "../validation/types";
 
 export const getUser = cache(async () => {
   const supabase = await createClient();
@@ -232,72 +234,254 @@ export const tailorCV = actionClient
     });
   });
 
-// const signUpSchema = z.object({
-//   email: z.string().email(),
-//   password: z.string().min(8, "Password must be at least 8 characters"),
-//   firstName: z.string().min(1, { message: "First name cannot be empty" }),
-//   lastName: z.string().min(1, { message: "Last name cannot be empty" }),
-// });
+// Application server actions
+export const getApplications = cache(async () => {
+  const supabase = await createClient();
+  const user = await getUser();
+  if (!user) {
+    console.log("User not authenticated");
+    return null;
+  }
+  const { data, error } = await supabase
+    .from("applications")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("todo_level")
+    .order("kanban_order");
 
-// export const signUp = actionClient.schema(signUpSchema).action(async ({ parsedInput: { email, password, firstName, lastName } }) => {
-//   const supabase = await createClient();
-//   const { data, error } = await supabase.auth.signUp({
-//     email,
-//     password,
-//     options: {
-//       data: { first_name: firstName, last_name: lastName },
-//     },
-//   });
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data;
+});
 
-//   if (error || !data) {
-//     console.error(error);
-//     throw new Error("Failed to sign up");
-//   }
+const createApplicationActionSchema = z.object({
+  companyName: z.string().min(1, { message: "Company name cannot be empty" }),
+  title: z.string().min(1, { message: "Title cannot be empty" }),
+  dateApplied: z.string().min(1, { message: "Date of application cannot be empty" }),
+  location: z.string().min(1, { message: "Location cannot be empty" }),
+  description: z.string().optional(),
+});
 
-//   return data;
-// });
+export const createApplicationAction = actionClient
+  .schema(createApplicationActionSchema)
+  .action(async ({ parsedInput: formData }) => {
+    const supabase = await createClient();
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-// const passwordSignInSchema = z.object({
-//   email: z.string().email(),
-//   password: z.string().min(8, "Password must be at least 8 characters"),
-// });
+    const { data } = await supabase
+      .from("applications")
+      .select("kanban_order")
+      .eq("user_id", user.id)
+      .eq("todo_level", "0")
+      .order("kanban_order", { ascending: false })
+      .single();
 
-// export const passwordSignIn = actionClient.schema(passwordSignInSchema).action(async ({ parsedInput: { email, password } }) => {
-//   const supabase = await createClient();
-//   const { data, error } = await supabase.auth.signInWithPassword({
-//     email,
-//     password,
-//   });
-// });
+    const kanbanOrder = data ? data.kanban_order + 1 : 0;
+    const { error } = await supabase.from("applications").insert({
+      user_id: user.id,
+      kanban_order: kanbanOrder,
+      todo_level: "0",
+      title: formData.title,
+      company: formData.companyName,
+      location: formData.location,
+      description: formData.description,
+      date_applied: formData.dateApplied,
+      date_screened: null,
+      date_interviewed: null,
+      date_offered: null,
+      date_rejected: null,
+    });
 
-// const otpSignInSchema = z.object({
-//   email: z.string().email(),
-//   token: z.string().min(1, { message: "Token cannot be empty" }),
-// });
+    if (error) {
+      console.error(error);
+      throw new Error(error.message);
+    }
 
-// export const verifyOTP = actionClient.schema(otpSignInSchema).action(async ({ parsedInput: { email, token } }) => {
-//   console.log("verifyOTP");
-//   console.log(email, token);
-//   const supabase = await createClient();
-//   const { error } = await supabase.auth.verifyOtp({
-//     email,
-//     token,
-//     type: "email",
-//   });
+    revalidatePath("/tracker", "layout");
+    return { message: "Application created" };
+  });
 
-//   cookies().set("preferred_signin_provider", "email", {
-//     expires: addYears(new Date(), 1),
-//   });
+const updateApplicationActionSchema = z.object({
+  id: z.number(),
+  data: z.object({
+    companyName: z.string().min(1, { message: "Company name cannot be empty" }),
+    title: z.string().min(1, { message: "Title cannot be empty" }),
+    location: z.string().min(1, { message: "Location cannot be empty" }),
+    description: z.string().optional(),
+    dateScreened: z.string().optional(),
+    dateApplied: z.string().optional(),
+    dateInterviewed: z.string().optional(),
+    dateOffered: z.string().optional(),
+    dateRejected: z.string().optional(),
+    todoLevel: z.string().optional(),
+    notify: z.boolean().optional(),
+  }),
+});
 
-//   if (error) {
-//     redirect(`/auth/error?message=${error.message}`);
-//   }
+export const updateApplicationAction = actionClient
+  .schema(updateApplicationActionSchema)
+  .action(async ({ parsedInput: { id, data: formData } }) => {
+    const supabase = await createClient();
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-//   // const user = await getUser();
-//   // if (!user || !user.onboarding_completed) {
-//   //   redirect(`/auth/onboarding`);
-//   // } else {
-//   //   redirect("/account");
-//   // }
-//   redirect("/");
-// });
+    const updateObject: Partial<ApplicationObject> = {
+      title: formData.title,
+      company: formData.companyName,
+      location: formData.location,
+      description: formData.description,
+      notifications: formData.notify,
+      todo_level: formData.todoLevel,
+      kanban_order: 0,
+      completed: formData.todoLevel === "4" ? true : false,
+    };
+    if (formData.dateApplied) {
+      updateObject.date_applied = formData.dateApplied;
+    }
+    if (formData.dateScreened) {
+      updateObject.date_screened = formData.dateScreened;
+    }
+    if (formData.dateOffered) {
+      updateObject.date_offered = formData.dateOffered;
+    }
+    if (formData.dateInterviewed) {
+      updateObject.date_interviewed = formData.dateInterviewed;
+    }
+    if (formData.dateRejected) {
+      updateObject.date_rejected = formData.dateRejected;
+    }
+    // You can use notify here for notification logic if needed
+    const { error } = await supabase.from("applications").update(updateObject).eq("id", id).select();
+
+    if (error) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+
+    revalidatePath("/", "layout");
+    return { message: "Application updated" };
+  });
+
+const deleteApplicationActionSchema = z.object({
+  id: z.number(),
+});
+
+export const deleteApplicationAction = actionClient
+  .schema(deleteApplicationActionSchema)
+  .action(async ({ parsedInput: { id } }) => {
+    const supabase = await createClient();
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { error } = await supabase.from("applications").delete().eq("id", id).eq("user_id", user.id);
+
+    if (error) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+
+    revalidatePath("/tracker", "layout");
+    return { message: "Application deleted" };
+  });
+
+const updateApplicationsActionSchema = z.object({
+  applications: z.array(z.custom<ApplicationObject>()),
+});
+
+export const updateApplicationsAction = actionClient
+  .schema(updateApplicationsActionSchema)
+  .action(async ({ parsedInput: { applications } }) => {
+    const supabase = await createClient();
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { error } = await supabase.from("applications").upsert(applications).eq("user_id", user.id);
+
+    if (error) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+
+    return { message: "Applications updated" };
+  });
+
+const deleteAllApplicationsActionSchema = z.object({});
+
+export const deleteAllApplicationsAction = actionClient.schema(deleteAllApplicationsActionSchema).action(async () => {
+  const supabase = await createClient();
+  const user = await getUser();
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const { error } = await supabase.from("applications").delete().eq("user_id", user.id);
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/tracker", "layout");
+  return { message: "All applications deleted" };
+});
+
+const deleteRejectedApplicationsActionSchema = z.object({});
+
+export const deleteRejectedApplicationsAction = actionClient
+  .schema(deleteRejectedApplicationsActionSchema)
+  .action(async () => {
+    const supabase = await createClient();
+    const user = await getUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { error } = await supabase.from("applications").delete().eq("user_id", user.id).eq("todo_level", "4");
+
+    if (error) {
+      console.error(error);
+      throw new Error(error.message);
+    }
+
+    revalidatePath("/tracker", "layout");
+    return { message: "Rejected applications deleted" };
+  });
+
+export const getJobOffer = cache(async (id: string) => {
+  // Use the existing fetchJob function from data.ts
+  const job = await fetchJob(id);
+  return job;
+});
+
+export const exportCSVData = cache(async () => {
+  const supabase = await createClient();
+  const user = await getUser();
+  if (!user) {
+    console.log("User not authenticated");
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("applications")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("date_applied", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+});

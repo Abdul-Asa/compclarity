@@ -5,8 +5,10 @@ import { KanbanColumn } from "./kanban-column";
 import { defaultColumns } from "@/lib/config/constants";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { trpc } from "@/lib/trpc/client";
-import { toast } from "@/lib/hooks/use-toast";
+import { useToast } from "@/lib/hooks/useToast";
+import { useAction } from "next-safe-action/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { updateApplicationsAction } from "@/lib/actions/server-actions";
 import React from "react";
 import {
   type DragOverEvent,
@@ -36,17 +38,18 @@ export function KanbanBoard({ applications }: KanbanBoardProps) {
   const [prevColumn, setPrevColumn] = useState<string | null>(null);
   const [activeApplication, setActiveApplication] = useState<ApplicationObject | null>(null);
   const id = React.useId();
-  const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
-  const updateApplicationsMutation = trpc.application.updateApplications.useMutation({
+  const { executeAsync: updateApplications } = useAction(updateApplicationsAction, {
     onSuccess: () => {
-      utils.application.getApplications.invalidate();
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
     },
-    onError: (error) => {
+    onError: ({ error }) => {
       toast({
         title: "Error",
-        description: error.message,
-        variant: "error",
+        description: error.serverError || "Failed to update applications",
+        variant: "destructive",
       });
     },
   });
@@ -75,7 +78,7 @@ export function KanbanBoard({ applications }: KanbanBoardProps) {
   function onDragEnd(event: DragEndEvent) {
     if (!hasSortableData(event.active)) return;
     const snapShot: ApplicationObject[] = getKanbanSnapshot(sortApplications(columns));
-    updateApplicationsMutation.mutate(snapShot);
+    updateApplications({ applications: snapShot });
     if (activeApplication && prevColumn && activeApplication.todo_level === "3" && prevColumn !== "3") {
       triggerConfetti({ duration: 1400 });
     }

@@ -14,8 +14,9 @@ import { Separator } from "@/components/ui/separator";
 import { AddApplicationModal } from "./add-application-modal";
 import { DeleteRejectedApplicationsModal } from "./delete-rejected-applications-modal";
 import { DeleteAllApplicationsModal } from "./delete-all-applications-modal";
-import { trpc } from "@/lib/trpc/client";
-import { toast } from "@/lib/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
+import { exportCSVData } from "@/lib/actions/server-actions";
+import { useToast } from "@/lib/hooks/useToast";
 import { ExportSankeyModal } from "./export-sankey-modal";
 import { ApplicationObject } from "@/lib/validation/types";
 interface KanbanHeaderProps {
@@ -23,25 +24,72 @@ interface KanbanHeaderProps {
 }
 
 export function KanbanHeader({ applications }: KanbanHeaderProps) {
-  const exportCsvQuery = trpc.application.exportCSV.useQuery(undefined, { enabled: false });
+  const { toast } = useToast();
+  const exportCsvQuery = useQuery({
+    queryKey: ["export-csv"],
+    queryFn: exportCSVData,
+    enabled: false,
+  });
 
   const handleExportCsv = async () => {
     toast({
       title: "Exporting...",
       description: "Generating your CSV file.",
-      variant: "info",
     });
     try {
-      const { data: csv, error } = await exportCsvQuery.refetch();
+      const { data: csvData, error } = await exportCsvQuery.refetch();
       if (error) {
-        toast({ title: "Export failed", description: error?.message || "Could not export CSV.", variant: "error" });
+        toast({ title: "Export failed", description: "Could not export CSV.", variant: "destructive" });
         return;
       }
-      if (!csv) {
-        toast({ title: "No data", description: "No applications to export.", variant: "warning" });
+      if (!csvData || csvData.length === 0) {
+        toast({ title: "No data", description: "No applications to export." });
         return;
       }
-      const blob = new Blob([csv], { type: "text/csv" });
+
+      // Convert data to CSV format
+      const headers = [
+        "Company",
+        "Title",
+        "Location",
+        "Status",
+        "Date Applied",
+        "Date Screened",
+        "Date Interviewed",
+        "Date Offered",
+        "Date Rejected",
+      ];
+      const csvRows = [
+        headers.join(","),
+        ...csvData.map((app) =>
+          [
+            app.company || "",
+            app.title || "",
+            app.location || "",
+            app.todo_level === "0"
+              ? "Applied"
+              : app.todo_level === "1"
+                ? "Screened"
+                : app.todo_level === "2"
+                  ? "Interviewed"
+                  : app.todo_level === "3"
+                    ? "Offered"
+                    : app.todo_level === "4"
+                      ? "Rejected"
+                      : "Unknown",
+            app.date_applied || "",
+            app.date_screened || "",
+            app.date_interviewed || "",
+            app.date_offered || "",
+            app.date_rejected || "",
+          ]
+            .map((field) => `"${field}"`)
+            .join(",")
+        ),
+      ];
+
+      const csvContent = csvRows.join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -50,9 +98,9 @@ export function KanbanHeader({ applications }: KanbanHeaderProps) {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-      toast({ title: "Exported", description: "CSV file downloaded.", variant: "success" });
+      toast({ title: "Exported", description: "CSV file downloaded." });
     } catch (error: any) {
-      toast({ title: "Export failed", description: error?.message || "Could not export CSV.", variant: "error" });
+      toast({ title: "Export failed", description: "Could not export CSV.", variant: "destructive" });
     }
   };
 
