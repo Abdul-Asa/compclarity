@@ -535,6 +535,5 @@ export const exportCSVData = cache(async () => {
     headers.join(","),
     ...mappedData.map((row) => headers.map((header) => `"${row[header as keyof typeof row]}"`).join(",")),
   ];
-  console.log(csvRows);
   return csvRows.join("\n");
 });
