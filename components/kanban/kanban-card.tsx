@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 import { UpdateApplicationModal } from "./update-application-modal";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { cn } from "@/lib/utils";
+import { cn, newDateFormatter } from "@/lib/utils";
 import { DeleteApplicationModal } from "./delete-application-modal";
 import { todoLevelVerbs } from "@/lib/config/constants";
-import { dateFormatter } from "@/lib/utils";
 
 interface KanbanCardProps {
   application: ApplicationObject;
@@ -127,7 +126,7 @@ export function KanbanCard({ application, isOverlay }: KanbanCardProps) {
         <div className="flex items-center justify-between text-sm text-muted-foreground pb-1">
           <span>{levelInfo.dateLabel} date:</span>
           <span className="tabular-nums ">
-            {dateFormatter(application[levelInfo.dateKey as keyof ApplicationObject] as string | Date)}
+            {newDateFormatter(application[levelInfo.dateKey as keyof ApplicationObject] as string | Date)}
           </span>
         </div>
       </CardContent>

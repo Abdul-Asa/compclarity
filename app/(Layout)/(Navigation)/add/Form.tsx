@@ -5,7 +5,7 @@ import { submitFormData } from "@/app/(Layout)/(Navigation)/add/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { salaryFormSchema } from "@/lib/validation/schema";
 import { SalaryFormSchema } from "@/lib/validation/types";
-import { currencies, months, years, euCountries } from "@/lib/config";
+import { currencies, months, years, euCountries } from "@/lib/config/constants";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { toast } from "@/lib/hooks/useToast";
 

@@ -40,6 +40,12 @@ export const dateFormatter = (date: string): string => {
   return new Date(date).toLocaleDateString("en-UK");
 };
 
+// Returns a date in UK format
+export const newDateFormatter = (date: string | Date, options?: Intl.DateTimeFormatOptions): string => {
+  if (!date) return new Date().toLocaleDateString("en-UK", options);
+  return new Date(date).toLocaleDateString("en-UK", options);
+};
+
 // Sorts applications by todo_level into an object
 export const sortApplications = (applications: ApplicationObject[]): ApplicationSorted => {
   const sortedByTodoLevel = applications.reduce((acc: ApplicationSorted, application) => {
