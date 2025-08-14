@@ -5,7 +5,7 @@ import { submitFormData } from "@/app/(Layout)/(Navigation)/add/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { salaryFormSchema } from "@/lib/validation/schema";
 import { SalaryFormSchema } from "@/lib/validation/types";
-import { currencies, months, years, euCountries } from "@/lib/config";
+import { currencies, months, years, euCountries } from "@/lib/config/constants";
 import { SpinnerButton } from "@/components/Buttons/SpinnerButton";
 import { toast } from "@/lib/hooks/useToast";
 
@@ -71,6 +71,7 @@ export const Form = ({ toggleSalaryChoice }: FormProps) => {
   return (
     <div className="flex items-center justify-center bg-[inherit]">
       <form
+        // @ts-ignore
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4 bg-white dark:bg-black dark:text-white dark:border dark:border-gray-800  p-8 rounded-lg shadow-md w-full max-w-xl"
       >

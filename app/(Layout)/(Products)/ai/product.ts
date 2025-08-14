@@ -9,11 +9,7 @@ export const pricingTiers = [
     cta: "Join the Discord",
     link: "https://discord.gg/AuAvjpTTnm",
     isAvailable: true,
-    features: [
-      "Access to latest salaries",
-      "Access to job board",
-      "Access to job applications tracker",
-    ],
+    features: ["Access to latest salaries", "Access to job board", "Access to job applications tracker"],
     description: "You're already benefiting by just being a member!",
   },
   {
@@ -34,8 +30,7 @@ export const pricingTiers = [
       "Generate unlimited CVs and cover letters",
       "Access to AI mock interview prep (coming soon)",
     ],
-    description:
-      "The best package for those who want to stand out in the job market.",
+    description: "The best package for those who want to stand out in the job market.",
   },
   {
     id: "stripe-package",
@@ -56,8 +51,7 @@ export const pricingTiers = [
       "Generate unlimited CVs and cover letters",
       "Access to AI mock interview prep (coming soon)",
     ],
-    description:
-      "The best package for those who want to stand out in the job market.",
+    description: "The best package for those who want to stand out in the job market.",
   },
 ];
 

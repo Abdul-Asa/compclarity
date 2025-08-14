@@ -8,19 +8,11 @@ interface SpinnerButtonProps extends ComponentProps<"button"> {
   name: string;
 }
 
-export const SpinnerButton = ({
-  state,
-  name,
-  ...props
-}: SpinnerButtonProps) => {
+export const SpinnerButton = ({ state, name, ...props }: SpinnerButtonProps) => {
   const loading = state || false;
 
   return (
-    <Button
-      {...props}
-      disabled={loading}
-      className="bg-emerald-700 text-white shadow"
-    >
+    <Button {...props} disabled={loading} className="bg-emerald-700 text-white shadow">
       {loading ? <Loader2 className="animate-spin" /> : <span>{name}</span>}
     </Button>
   );

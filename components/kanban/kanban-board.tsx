@@ -1,7 +1,15 @@
 "use client";
-import { Column } from "./Column";
-import { defaultColumns } from "@/lib/config";
-import { cn, getKanbanSnapshot, sortApplications } from "@/lib/utils";
+
+import type { ApplicationObject } from "@/lib/validation/types";
+import { KanbanColumn } from "./kanban-column";
+import { defaultColumns } from "@/lib/config/constants";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useEffect, useState } from "react";
+import { useToast } from "@/lib/hooks/useToast";
+import { useAction } from "next-safe-action/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { updateApplicationsAction } from "@/lib/actions/server-actions";
+import React from "react";
 import {
   type DragOverEvent,
   type DragStartEvent,
@@ -14,25 +22,37 @@ import {
   DragOverlay,
   DragEndEvent,
 } from "@dnd-kit/core";
-import { coordinateGetter, hasSortableData } from "./lib";
+import { cn } from "@/lib/utils";
 import { createPortal } from "react-dom";
-import { useEffect, useRef, useState } from "react";
+import { triggerConfetti } from "@/components/ui/confetti";
+import { KanbanCard } from "./kanban-card";
+import { coordinateGetter, hasSortableData, sortApplications, getKanbanSnapshot } from "./lib";
 import { arrayMove } from "@dnd-kit/sortable";
-import { updateApplications } from "../../app/(Layout)/(AppTracker)/tracker/actions";
-import { ApplicationCard } from "./ApplicationCard";
-import { ApplicationObject } from "@/lib/validation/types";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { triggerConfetti } from "../ui/confetti";
 
-interface TrackerProps {
-  initialData: ApplicationObject[];
+interface KanbanBoardProps {
+  applications: ApplicationObject[];
 }
 
-export default function Kanban({ initialData }: TrackerProps) {
-  const [applicationState, setApplicationState] = useState<ApplicationObject[]>(initialData);
-  const [activeApplication, setActiveApplication] = useState<ApplicationObject | null>(null);
+export function KanbanBoard({ applications }: KanbanBoardProps) {
+  const [columns, setColumns] = useState(applications);
   const [prevColumn, setPrevColumn] = useState<string | null>(null);
-  // const scrollContainerRef = useRef<HTMLDivElement>(null); // Add this line
+  const [activeApplication, setActiveApplication] = useState<ApplicationObject | null>(null);
+  const id = React.useId();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const { executeAsync: updateApplications } = useAction(updateApplicationsAction, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
+    },
+    onError: ({ error }) => {
+      toast({
+        title: "Error",
+        description: error.serverError || "Failed to update applications",
+        variant: "destructive",
+      });
+    },
+  });
 
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -47,7 +67,7 @@ export default function Kanban({ initialData }: TrackerProps) {
     if (!hasSortableData(event.active)) return;
 
     const data = event.active.data.current;
-    if (data?.type === "Application") {
+    if (data?.type === "application") {
       setActiveApplication(data.application);
       setPrevColumn(data.application.todo_level);
       return;
@@ -55,10 +75,10 @@ export default function Kanban({ initialData }: TrackerProps) {
   }
 
   // Update the db state with kanban snapshot when dragging ends
-  async function onDragEnd(event: DragEndEvent) {
+  function onDragEnd(event: DragEndEvent) {
     if (!hasSortableData(event.active)) return;
-    const snapShot: ApplicationObject[] = getKanbanSnapshot(sortApplications(applicationState));
-    updateApplications(snapShot);
+    const snapShot: ApplicationObject[] = getKanbanSnapshot(sortApplications(columns));
+    updateApplications({ applications: snapShot });
     if (activeApplication && prevColumn && activeApplication.todo_level === "3" && prevColumn !== "3") {
       triggerConfetti({ duration: 1400 });
     }
@@ -80,14 +100,14 @@ export default function Kanban({ initialData }: TrackerProps) {
     const activeData = active.data.current;
     const overData = over.data.current;
 
-    const isActiveApp = activeData?.type === "Application";
-    const isOverApp = overData?.type === "Application";
+    const isActiveApp = activeData?.type === "application";
+    const isOverApp = overData?.type === "application";
 
     if (!isActiveApp) return;
 
     // Dropping an App card over another card
     if (isActiveApp && isOverApp) {
-      setApplicationState((app) => {
+      setColumns((app) => {
         const activeIndex = app.findIndex((t) => t.id === activeId);
         const overIndex = app.findIndex((t) => t.id === overId);
         const activeApp = app[activeIndex];
@@ -114,11 +134,11 @@ export default function Kanban({ initialData }: TrackerProps) {
       });
     }
 
-    const isOverAColumn = overData?.type === "Column";
+    const isOverAColumn = overData?.type === "column";
 
     // Dropping an App card over a column
     if (isActiveApp && isOverAColumn) {
-      setApplicationState((app) => {
+      setColumns((app) => {
         const activeIndex = app.findIndex((t) => t.id === activeId);
         const activeApp = app[activeIndex];
         if (activeApp) {
@@ -143,41 +163,33 @@ export default function Kanban({ initialData }: TrackerProps) {
   }
 
   useEffect(() => {
-    setApplicationState(initialData);
-  }, [initialData]);
+    setColumns(applications);
+  }, [applications]);
 
   return (
-    <ScrollArea className="pb-3">
-      <DndContext
-        id="unique-id-to-get-rid-of-bug"
-        sensors={sensors}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        onDragOver={onDragOver}
-      >
+    <DndContext id={id} sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
+      <ScrollArea className="w-full overflow-x-auto pb-3">
         <div
           className={cn(
             "flex h-[calc(100vh-173px)] w-full gap-4 px-2",
             activeApplication ? "snap-x snap-mandatory" : "snap-none"
           )}
         >
-          {defaultColumns.map((column, index) => {
-            const cards = sortApplications(applicationState);
+          {defaultColumns.map((col, index) => {
+            const cards = sortApplications(columns);
             const columnCards = cards[index] || [];
-            return <Column key={index} column={column} applicationCards={columnCards} />;
+            return <KanbanColumn key={col.id} id={col.id} title={col.title} items={columnCards} />;
           })}
-          {/* This is the overlay that will be shown when dragging an application card */}
-          {typeof window !== "undefined" &&
-            "document" in window &&
-            createPortal(
-              <DragOverlay>
-                {activeApplication && <ApplicationCard application={activeApplication} isOverlay />}
-              </DragOverlay>,
-              document.body
-            )}
         </div>
-      </DndContext>
-      <ScrollBar orientation="horizontal" className="mt-2" />
-    </ScrollArea>
+        {/* This is the overlay that will be shown when dragging an application card */}
+        {typeof window !== "undefined" &&
+          "document" in window &&
+          createPortal(
+            <DragOverlay>{activeApplication && <KanbanCard application={activeApplication} isOverlay />}</DragOverlay>,
+            document.body
+          )}
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </DndContext>
   );
 }

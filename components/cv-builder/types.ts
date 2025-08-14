@@ -10,10 +10,12 @@ export const profileSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   location: z.string().optional(),
-  links: z.array(z.object({
-    name: z.string(),
-    url: z.string()
-  })),
+  links: z.array(
+    z.object({
+      name: z.string(),
+      url: z.string(),
+    })
+  ),
 });
 
 export const summarySchema = z.object({
@@ -32,37 +34,45 @@ export const educationSchema = z.array(
   })
 );
 
-export const workExperienceSchema = z.array(z.object({
-  company: z.string().min(2, "Company name is required"),
-  position: z.string().min(2, "Position is required"),
-  startDate: z.string(),
-  location: z.string().optional(),
-  endDate: z.string().optional(),
-  current: z.boolean().default(false),
-  description: z.string().optional(),
-})) ;
+export const workExperienceSchema = z.array(
+  z.object({
+    company: z.string().min(2, "Company name is required"),
+    position: z.string().min(2, "Position is required"),
+    startDate: z.string(),
+    location: z.string().optional(),
+    endDate: z.string().optional(),
+    current: z.boolean().default(false),
+    description: z.string().optional(),
+  })
+);
 
-export const skillsSchema = z.array(z.object({
-  category: z.string().min(2, "Category is required"),
-  skills: z.array(z.string()),
-}));
+export const skillsSchema = z.array(
+  z.object({
+    category: z.string().min(2, "Category is required"),
+    skills: z.array(z.string()),
+  })
+);
 
-export const projectSchema = z.array(z.object({
-  name: z.string().min(2, "Project name is required"),
-  role: z.string().optional(),
-  url: z.string().url().optional().or(z.string().length(0)),
-  organization: z.string().optional(),
-  startDate: z.string(),
-  endDate: z.string().optional(),
-  current: z.boolean().default(false),
-  description: z.string().optional(),
-  technologies: z.array(z.string()).default([]),
-}));
+export const projectSchema = z.array(
+  z.object({
+    name: z.string().min(2, "Project name is required"),
+    role: z.string().optional(),
+    url: z.string().url().optional().or(z.string().length(0)),
+    organization: z.string().optional(),
+    startDate: z.string(),
+    endDate: z.string().optional(),
+    current: z.boolean().default(false),
+    description: z.string().optional(),
+    technologies: z.array(z.string()).default([]),
+  })
+);
 
-export const customSchema = z.array(z.object({
-  id: z.string(),
-  data: z.union([summarySchema, educationSchema, workExperienceSchema, skillsSchema, projectSchema])
-}));
+export const customSchema = z.array(
+  z.object({
+    id: z.string(),
+    data: z.union([summarySchema, educationSchema, workExperienceSchema, skillsSchema, projectSchema]),
+  })
+);
 
 // Create types from schemas
 export type ProfileData = z.infer<typeof profileSchema>;
@@ -95,7 +105,7 @@ export type CVSettings = {
   autoScale: boolean;
 
   // Layout Settings
-  template: 'classic' | 'modern' | 'minimal';
+  template: "classic" | "modern" | "minimal";
   margins: {
     top: number;
     bottom: number;
@@ -136,11 +146,11 @@ export type CVSettings = {
     color: string;
   };
   // Format Settings
-  dateFormat: 'numbers-slash' | 'numbers-dash' | 'words-short' | 'words-long';
+  dateFormat: "numbers-slash" | "numbers-dash" | "words-short" | "words-long";
   displayFullLinks: boolean;
-}
+};
 
 export type CVData = {
   settings: CVSettings;
   sections: CVSection[];
-}
+};

@@ -89,6 +89,8 @@ export const updateApplicationSchema = z.object({
   dateInterviewed: z.string().optional(),
   dateOffered: z.string().optional(),
   dateRejected: z.string().optional(),
+  todoLevel: z.string().optional(),
+  notify: z.boolean().optional(),
 });
 
 export const cvServiceSchema = z.object({

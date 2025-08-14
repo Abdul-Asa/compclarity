@@ -4,7 +4,15 @@ import { JobsApiResponse } from "@/lib/validation/types";
 import PaginationControl from "./PaginationControl";
 import JobRow from "./JobRow";
 
-export default function JobTable({ jobsResponse, signedIn, isSubscribed }: { jobsResponse: JobsApiResponse; signedIn: boolean; isSubscribed: boolean }) {
+export default function JobTable({
+  jobsResponse,
+  signedIn,
+  isSubscribed,
+}: {
+  jobsResponse: JobsApiResponse;
+  signedIn: boolean;
+  isSubscribed: boolean;
+}) {
   return (
     <div className="flex flex-col justify-center items-center w-full lg:w-[85%] 2xl:w-5/6 px-4">
       <table className="text-sm text-gray-500 dark:text-gray-100 text-center w-full">

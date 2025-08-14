@@ -34,24 +34,23 @@ export default function PageResultsButton() {
           <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </span>
       </Listbox.Button>
-      <Transition 
-        as={Fragment} 
-        leave="transition ease-in duration-100" 
-        leaveFrom="opacity-100" 
-        leaveTo="opacity-0"
-      >
+      <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
         <Listbox.Options className="absolute bottom-full mb-1 w-full rounded-md bg-white dark:bg-gray-900 dark:border-gray-700 py-4 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
           {pageSizeOptions.map((option) => (
-            <Listbox.Option 
-              key={option} 
-              value={option} 
-              className={({ active }) => `cursor-pointer select-none relative py-2 pl-10 pr-4 ${
-                active ? 'text-emerald-600 bg-emerald-50 dark:text-emerald-100 dark:bg-emerald-900' : 'text-gray-900 dark:text-gray-300'
-              }`}
+            <Listbox.Option
+              key={option}
+              value={option}
+              className={({ active }) =>
+                `cursor-pointer select-none relative py-2 pl-10 pr-4 ${
+                  active
+                    ? "text-emerald-600 bg-emerald-50 dark:text-emerald-100 dark:bg-emerald-900"
+                    : "text-gray-900 dark:text-gray-300"
+                }`
+              }
             >
               {({ selected }) => (
                 <>
-                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                  <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
                     {option} per page
                   </span>
                 </>

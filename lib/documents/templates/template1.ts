@@ -1,25 +1,23 @@
-import { stripIndent, source } from 'common-tags'
-import { WHITESPACE } from './constants'
-import { FormValues, Generator } from '../types'
+import { stripIndent, source } from "common-tags";
+import { WHITESPACE } from "./constants";
+import { FormValues, Generator } from "../types";
 
 const generator: Generator = {
   profileSection(basics) {
     if (!basics) {
-      return ''
+      return "";
     }
 
-    const { name, email, phone, location, website } = basics
-    const address = location?.address || ''
-    const websiteLine = website ? `\\href{${website}}{${website}}` : ''
+    const { name, email, phone, location, website } = basics;
+    const address = location?.address || "";
+    const websiteLine = website ? `\\href{${website}}{${website}}` : "";
 
-    let line1 = name ? `{\\Huge \\scshape {${name}}}` : ''
-    let line2 = [address, email, phone, websiteLine]
-      .filter(Boolean)
-      .join(' $\\cdot$ ')
+    let line1 = name ? `{\\Huge \\scshape {${name}}}` : "";
+    let line2 = [address, email, phone, websiteLine].filter(Boolean).join(" $\\cdot$ ");
 
     if (line1 && line2) {
-      line1 += '\\\\'
-      line2 += '\\\\'
+      line1 += "\\\\";
+      line2 += "\\\\";
     }
 
     return stripIndent`
@@ -29,112 +27,104 @@ const generator: Generator = {
         ${line1}
         ${line2}
       \\end{center}
-    `
+    `;
   },
 
   educationSection(education, heading) {
     if (!education) {
-      return ''
+      return "";
     }
 
     return source`
       %==== Education ====%
-      \\header{${heading || 'Education'}}
+      \\header{${heading || "Education"}}
       ${education.map((school) => {
-        const {
-          institution,
-          location,
-          studyType,
-          area,
-          score,
-          startDate,
-          endDate
-        } = school
+        const { institution, location, studyType, area, score, startDate, endDate } = school;
 
-        let line1 = ''
-        let line2 = ''
+        let line1 = "";
+        let line2 = "";
 
         if (institution) {
-          line1 += `\\textbf{${institution}}`
+          line1 += `\\textbf{${institution}}`;
         }
 
         if (location) {
-          line1 += `\\hfill ${location}`
+          line1 += `\\hfill ${location}`;
         }
 
         if (studyType) {
-          line2 += studyType
+          line2 += studyType;
         }
 
         if (area) {
-          line2 += studyType ? ` ${area}` : `Degree in ${area}`
+          line2 += studyType ? ` ${area}` : `Degree in ${area}`;
         }
 
         if (score) {
-          line2 += ` \\textit{GPA: ${score}}`
+          line2 += ` \\textit{GPA: ${score}}`;
         }
 
         if (startDate || endDate) {
-          const gradLine = `${startDate || ''} - ${endDate || ''}`
-          line2 += line2 ? ` \\hfill ${gradLine}` : gradLine
+          const gradLine = `${startDate || ""} - ${endDate || ""}`;
+          line2 += line2 ? ` \\hfill ${gradLine}` : gradLine;
         }
 
         if (line1) {
-          line1 += '\\\\'
+          line1 += "\\\\";
         }
 
         if (line2) {
-          line2 += '\\\\'
+          line2 += "\\\\";
         }
 
         return stripIndent`
           ${line1}
           ${line2.trim()}
           \\vspace{2mm}
-        `
+        `;
       })}
-    `
+    `;
   },
 
   workSection(work, heading) {
     if (!work) {
-      return ''
+      return "";
     }
 
     return source`
       %==== Experience ====%
-      \\header{${heading || 'Experience'}}
+      \\header{${heading || "Experience"}}
       \\vspace{1mm}
 
       ${work.map((job) => {
-        const { name, position, location, startDate, endDate, highlights } = job
+        const { name, position, location, startDate, endDate, highlights } = job;
 
-        let line1 = ''
-        let line2 = ''
-        let highlightLines = ''
+        let line1 = "";
+        let line2 = "";
+        let highlightLines = "";
 
         if (name) {
-          line1 += `\\textbf{${name}}`
+          line1 += `\\textbf{${name}}`;
         }
 
         if (location) {
-          line1 += ` \\hfill ${location}`
+          line1 += ` \\hfill ${location}`;
         }
 
         if (position) {
-          line2 += `\\textit{${position}}`
+          line2 += `\\textit{${position}}`;
         }
 
         if (startDate && endDate) {
-          line2 += ` \\hfill ${startDate} - ${endDate}`
+          line2 += ` \\hfill ${startDate} - ${endDate}`;
         } else if (startDate) {
-          line2 += ` \\hfill ${startDate} - Present`
+          line2 += ` \\hfill ${startDate} - Present`;
         } else if (endDate) {
-          line2 += ` \\hfill ${endDate}`
+          line2 += ` \\hfill ${endDate}`;
         }
 
-        if (line1) line1 += '\\\\'
-        if (line2) line2 += '\\\\'
+        if (line1) line1 += "\\\\";
+        if (line2) line2 += "\\\\";
 
         if (highlights) {
           highlightLines = source`
@@ -142,116 +132,119 @@ const generator: Generator = {
               \\begin{itemize} \\itemsep 1pt
                 ${highlights.map((highlight) => `\\item ${highlight}`)}
               \\end{itemize}
-            `
+            `;
         }
 
         return stripIndent`
           ${line1}
           ${line2}
           ${highlightLines}
-        `
+        `;
       })}
-    `
+    `;
   },
 
   skillsSection(skills, heading) {
     if (!skills) {
-      return ''
+      return "";
     }
 
     return source`
-      \\header{${heading || 'Skills'}}
+      \\header{${heading || "Skills"}}
       \\begin{tabular}{ l l }
       ${skills.map((skill) => {
-        const { name = 'Misc', keywords = [] } = skill
-        return `${name}: & ${keywords.join(', ')} \\\\`
+        const { name = "Misc", keywords = [] } = skill;
+        return `${name}: & ${keywords.join(", ")} \\\\`;
       })}
       \\end{tabular}
       \\vspace{2mm}
-    `
+    `;
   },
 
   projectsSection(projects, heading) {
     if (!projects) {
-      return ''
+      return "";
     }
 
     return source`
-      \\header{${heading || 'Projects'}}
-      ${projects.map((project) => {
-        if (Object.keys(project).length === 0) {
-          return ''
-        }
+      \\header{${heading || "Projects"}}
+      ${projects
+        .map((project) => {
+          if (Object.keys(project).length === 0) {
+            return "";
+          }
 
-        const { name, description, keywords, url } = project
+          const { name, description, keywords, url } = project;
 
-        let line1 = ''
-        let line2 = description || ''
+          let line1 = "";
+          let line2 = description || "";
 
-        if (name) {
-          line1 += `{\\textbf{${name}}}`
-        }
+          if (name) {
+            line1 += `{\\textbf{${name}}}`;
+          }
 
-        if (keywords && keywords.length > 0 && keywords.some(k => k.trim())) {
-          line1 += ` {\\sl ${keywords.filter(k => k.trim()).join(', ')}} `
-        }
+          if (keywords && keywords.length > 0 && keywords.some((k) => k.trim())) {
+            line1 += ` {\\sl ${keywords.filter((k) => k.trim()).join(", ")}} `;
+          }
 
-        if (url) {
-          line1 += `\\hfill \\href{${url}}{${url}}`
-        }
+          if (url) {
+            line1 += `\\hfill \\href{${url}}{${url}}`;
+          }
 
-        if (line1) {
-          line1 += '\\\\'
-        }
+          if (line1) {
+            line1 += "\\\\";
+          }
 
-        if (line2) {
-          line2 += '\\\\'
-        }
+          if (line2) {
+            line2 += "\\\\";
+          }
 
-        return stripIndent`
+          return stripIndent`
           ${line1}
           ${line2}
           \\vspace*{2mm}
-        `
-      }).filter(Boolean).join('\n')}
-    `
+        `;
+        })
+        .filter(Boolean)
+        .join("\n")}
+    `;
   },
 
   awardsSection(awards, heading) {
     if (!awards) {
-      return ''
+      return "";
     }
 
     return source`
-      \\header{${heading || 'Awards'}}
+      \\header{${heading || "Awards"}}
       ${awards.map((award) => {
-        const { title, summary, date, awarder } = award
+        const { title, summary, date, awarder } = award;
 
-        let line1 = ''
-        let line2 = summary || ''
+        let line1 = "";
+        let line2 = summary || "";
 
         if (title) {
-          line1 += `\\textbf{${title}}`
+          line1 += `\\textbf{${title}}`;
         }
 
         if (awarder) {
-          line1 += ` \\hfill ${awarder}`
+          line1 += ` \\hfill ${awarder}`;
         }
 
         if (date) {
-          line2 += ` \\hfill ${date}`
+          line2 += ` \\hfill ${date}`;
         }
 
-        if (line1) line1 += '\\\\'
-        if (line2) line2 += '\\\\'
+        if (line1) line1 += "\\\\";
+        if (line2) line2 += "\\\\";
 
         return stripIndent`
           ${line1}
           ${line2}
           \\vspace*{2mm}
-        `
+        `;
       })}
-    `
+    `;
   },
 
   resumeHeader() {
@@ -310,12 +303,12 @@ const generator: Generator = {
           #4 \\\\
       }
       % END RESUME DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%
-    `
-  }
-}
+    `;
+  },
+};
 
 function template1(values: FormValues) {
-  const { headings } = values
+  const { headings } = values;
 
   return stripIndent`
     \\documentclass[a4paper]{article}
@@ -339,36 +332,33 @@ function template1(values: FormValues) {
     ${values.sections
       .map((section) => {
         switch (section) {
-          case 'profile':
-            return generator.profileSection(values.basics)
+          case "profile":
+            return generator.profileSection(values.basics);
 
-          case 'education':
-            return generator.educationSection(
-              values.education,
-              headings.education
-            )
+          case "education":
+            return generator.educationSection(values.education, headings.education);
 
-          case 'work':
-            return generator.workSection(values.work, headings.work)
+          case "work":
+            return generator.workSection(values.work, headings.work);
 
-          case 'skills':
-            return generator.skillsSection(values.skills, headings.skills)
+          case "skills":
+            return generator.skillsSection(values.skills, headings.skills);
 
-          case 'projects':
-            return generator.projectsSection(values.projects, headings.projects)
+          case "projects":
+            return generator.projectsSection(values.projects, headings.projects);
 
-          case 'awards':
-            return generator.awardsSection(values.awards, headings.awards)
+          case "awards":
+            return generator.awardsSection(values.awards, headings.awards);
 
           default:
-            return ''
+            return "";
         }
       })
-      .join('\n\n')}
+      .join("\n\n")}
 
     ${WHITESPACE}
     \\end{document}
-  `
+  `;
 }
 
-export default template1
+export default template1;

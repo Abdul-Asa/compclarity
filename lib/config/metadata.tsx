@@ -1,27 +1,27 @@
 import { Metadata } from "next";
-import { MAIN_URL } from "./env";
+import { getMainUrl } from "./env";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(MAIN_URL),
+  metadataBase: new URL(getMainUrl()),
   title: {
     default: "CompClarity",
     template: "%s | CompClarity",
   },
   description:
     "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "CompClarity",
-  //   description:
-  //     "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-  //   images: ["/assets/og.png"],
-  // },
-  // openGraph: {
-  //   title: "CompClarity",
-  //   description:
-  //     "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
-  //   images: ["/assets/og.png"],
-  // },
+  twitter: {
+    card: "summary_large_image",
+    title: "CompClarity",
+    description:
+      "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    images: ["/assets/og.png"],
+  },
+  openGraph: {
+    title: "CompClarity",
+    description:
+      "Your guide to fair pay from day one. Compare salaries across Europe and make informed career choices with comprehensive, community-driven data!",
+    images: ["/assets/og.png"],
+  },
   keywords: [
     "CompClarity",
     "Compensation",

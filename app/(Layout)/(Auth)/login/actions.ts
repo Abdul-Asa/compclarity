@@ -3,11 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
-import {
-  ForgotPasswordSchema,
-  LoginFormSchema,
-  SignUpFormSchema,
-} from "@/lib/validation/types";
+import { ForgotPasswordSchema, LoginFormSchema, SignUpFormSchema } from "@/lib/validation/types";
 
 export async function login(formData: LoginFormSchema) {
   const supabase = await createClient();
@@ -57,8 +53,7 @@ export async function signup(formData: SignUpFormSchema) {
   } else
     return {
       error: false,
-      message:
-        "Sign up successful. Please check your email (including spam) to verify your account.",
+      message: "Sign up successful. Please check your email (including spam) to verify your account.",
     };
 }
 

@@ -16,5 +16,3 @@ export const fetchUserProfile = async () => {
 
   return data;
 };
-
-

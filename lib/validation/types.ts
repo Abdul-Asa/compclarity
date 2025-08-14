@@ -17,8 +17,7 @@ import {
 import countryToCurrency from "country-to-currency";
 import { Database } from "../supabase/types";
 
-export type CurrencyCode =
-  (typeof countryToCurrency)[keyof typeof countryToCurrency];
+export type CurrencyCode = (typeof countryToCurrency)[keyof typeof countryToCurrency];
 
 type Company = {
   name: string;
@@ -102,7 +101,7 @@ export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 export type CreateApplicationSchema = z.infer<typeof createApplicationSchema>;
 export type UpdateApplicationSchema = z.infer<typeof updateApplicationSchema>;
-export type ApplicationObject = Database["public"]["Tables"]["todos"]["Row"];
+export type ApplicationObject = Database["public"]["Tables"]["applications"]["Row"];
 export type ApplicationSorted = Record<string, ApplicationObject[]>;
 export type CVServiceSchema = z.infer<typeof cvServiceSchema>;
 export type CoverLetterSchema = z.infer<typeof coverLetterSchema>;

@@ -1,4 +1,4 @@
-import template1 from './template1'
+import template1 from "./template1";
 import {
   TEMPLATE1,
   TEMPLATE2,
@@ -8,9 +8,9 @@ import {
   TEMPLATE6,
   TEMPLATE7,
   TEMPLATE8,
-  TEMPLATE9
-} from './constants'
-import { FormValues, TemplateData } from '../types'
+  TEMPLATE9,
+} from "./constants";
+import { FormValues, TemplateData } from "../types";
 
 /**
  * Generates the LaTeX document based on the selected template
@@ -26,9 +26,9 @@ export default function getTemplateData(data: FormValues): TemplateData {
       return {
         texDoc: template1(data),
         opts: {
-          cmd: 'pdflatex'
-        }
-      }
+          cmd: "pdflatex",
+        },
+      };
 
     // case TEMPLATE2:
     //   return {
@@ -166,8 +166,8 @@ export default function getTemplateData(data: FormValues): TemplateData {
       return {
         texDoc: template1(data),
         opts: {
-          cmd: 'pdflatex'
-        }
-      }
+          cmd: "pdflatex",
+        },
+      };
   }
 }
