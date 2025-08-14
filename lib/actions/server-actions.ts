@@ -340,7 +340,7 @@ export const updateApplicationAction = actionClient
       notifications: formData.notify,
       todo_level: formData.todoLevel,
       kanban_order: 0,
-      completed: formData.todoLevel === "4" ? true : false,
+      completed: formData.todoLevel === "4",
     };
     if (formData.dateApplied) {
       updateObject.date_applied = formData.dateApplied;
