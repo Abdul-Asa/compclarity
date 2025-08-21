@@ -66,8 +66,8 @@ const Footer = () => {
         </small>
         <small>
           Logos provided by{" "}
-          <Link href="https://clearbit.com" target="_blank" className="hover:underline">
-            Clearbit
+          <Link href="https://logo.dev" target="_blank" className="hover:underline">
+            Logo.dev
           </Link>
         </small>
         <small>
