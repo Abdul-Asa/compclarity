@@ -13,7 +13,7 @@ export default function LogoImage({
   size: string;
   className?: string;
 }) {
-  const [src, setSrc] = useState(`https://logo.clearbit.com/${companyDomain}?size=${200}`);
+  const [src, setSrc] = useState(`https://img.logo.dev/${companyDomain}?token=pk_Ez-J4YOpSS-Bjtug_T41Dw`);
 
   const dimensions = size === "large" ? { width: 100, height: 100 } : { width: 45, height: 45 };
 
