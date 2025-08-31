@@ -33,7 +33,7 @@ export const navLinks: NavLink[] = [
   },
   { title: "Jobs", href: "/jobs" },
   { title: "Tracker", href: "/tracker" },
-  { title: "Copilot", href: "/ai" },
+  { title: "AI", href: "/ai" },
   // {
   //   title: "Services",
   //   children: [
