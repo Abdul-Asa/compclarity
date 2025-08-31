@@ -15,10 +15,10 @@ export function Announcement() {
     if (!hasDisplayed) {
       const timeoutId = setTimeout(() => {
         toast({
-          title: (<p className="font-semibold">📢 Share your salary!</p>) as React.ReactNode,
+          title: (<p className="font-semibold">📢 AI to increase your odds!</p>) as React.ReactNode,
           description: (
             <p className="text-xs">
-              Received an offer this year? Share your salary to help improve transparency for all!
+              Use our generative AI tools to help you pass screening so you get your first interview!
             </p>
           ),
           action: (
@@ -31,7 +31,7 @@ export function Announcement() {
                 dismiss();
               }}
             >
-              <Link href="/add">Share offer</Link>
+              <Link href="/ai">Enhance now</Link>
             </Button>
           ),
           onOpenChange: (open) => {
