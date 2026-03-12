@@ -1,10 +1,14 @@
 export function getMainUrl() {
-  if (process.env.NODE_ENV === "production" && process.env.AWS_BRANCH === "main") {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+
+  if (process.env.VERCEL_ENV === "production") {
     return "https://compclarity.com";
   }
 
-  if (process.env.NODE_ENV === "production" && process.env.AWS_BRANCH === "staging") {
-    return "https://staging.d3pn1r5falbsbv.amplifyapp.com";
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
   }
 
   return "http://localhost:3000";

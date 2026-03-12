@@ -45,7 +45,7 @@ const WelcomeComponent = () => {
     <div className="w-full max-w-2xl">
       <div className="py-6 text-center">
         <h1 className="text-2xl font-bold tracking-tight">Welcome to CompClarity!</h1>
-        <p className="text-muted-foreground">Let's get to know you better</p>
+        <p className="text-muted-foreground">Let&apos;s get to know you better</p>
       </div>
 
       <IntroForm />

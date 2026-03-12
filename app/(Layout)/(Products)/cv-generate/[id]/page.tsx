@@ -33,7 +33,7 @@ export default async function CVBuilderPage({ params }: { params: { id: string }
     return (
       <div className="flex flex-col items-center justify-center w-full min-h-screen gap-4 p-4">
         <h1 className="text-4xl font-bold ">CV Not Found</h1>
-        <p>The CV you're looking for doesn't exist or has been removed.</p>
+        <p>The CV you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         <Link
           href="/cv-generate"
           className="px-4 py-2 text-sm font-medium text-white transition-colors rounded-md bg-primary hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"

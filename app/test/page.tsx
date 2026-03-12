@@ -149,7 +149,7 @@ const components = {
         component: (
           <div className="flex gap-4 items-center">
             <Button>Default</Button>
-            <code className="text-sm bg-muted p-2 rounded">size="default"</code>
+            <code className="text-sm bg-muted p-2 rounded">size=&quot;default&quot;</code>
           </div>
         ),
       },

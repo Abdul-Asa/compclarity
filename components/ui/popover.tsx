@@ -27,6 +27,7 @@ const Popover = React.forwardRef<React.ElementRef<typeof PopoverPrimitive.Root>,
     );
   }
 );
+Popover.displayName = "Popover";
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
 

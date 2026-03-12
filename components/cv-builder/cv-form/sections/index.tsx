@@ -341,7 +341,7 @@ export default function Sections({ isPublic = false, user }: { isPublic?: boolea
         <div className="mt-6 p-4 bg-muted rounded-lg">
           <h3 className="text-lg font-semibold mb-2">Save Your CV</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            To save your CV and access it later, you'll need to create a free account.
+            To save your CV and access it later, you&apos;ll need to create a free account.
           </p>
           <SaveCVButton sections={sections} user={user} />
         </div>

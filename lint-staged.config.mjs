@@ -1,3 +1,3 @@
 export default {
-  "**/*.{ts,tsx,js,jsx,mdx}": ["npm run format"],
+  "**/*.{ts,tsx,js,jsx,mdx}": ["bun run format"],
 };

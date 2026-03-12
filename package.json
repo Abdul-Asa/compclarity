@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit",
-    "db:types": "source .env.local && supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts",
-    "test": "npm run db:types && npm run typecheck && npm run format",
+    "db:types": "source .env.local && bunx supabase gen types --lang=typescript --project-id $SUPABASE_PROJECT_ID --schema public > lib/supabase/types.ts",
+    "test": "bun run typecheck && bun run format",
     "prepare": "husky"
   },
   "dependencies": {
@@ -54,7 +54,7 @@
     "@stepperize/react": "^4.0.1",
     "@stripe/react-stripe-js": "^2.8.0",
     "@stripe/stripe-js": "^4.5.0",
-    "@supabase/ssr": "^0.5.2",
+    "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.47.7",
     "@tanstack/react-query": "^5.62.10",
     "@tiptap/core": "^2.11.2",

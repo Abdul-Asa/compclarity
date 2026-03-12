@@ -34,11 +34,6 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   const [loading, setLoading] = useState(false);
   const service = getTier(serviceId);
 
-  if (!service) {
-    router.replace("/404");
-    return null;
-  }
-
   const {
     register,
     handleSubmit,
@@ -66,6 +61,11 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
       window.removeEventListener("beforeunload", beforeUnload);
     };
   }, [isDirty, currentStep]);
+
+  if (!service) {
+    router.replace("/404");
+    return null;
+  }
 
   const fetchCheckoutSession = async () => {
     setLoading(true);
@@ -208,7 +208,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
                   <Label htmlFor="info">Additional Information</Label>
                   <Textarea
                     id="info"
-                    placeholder="Any additional information i.e. LinkedIn, GitHub, etc. or Word/Latex requirement"
+                    placeholder="Any additional information i.e. LinkedIn, GitHub, etc. or Word/LaTeX requirement"
                     rows={4}
                     {...register("extraInformation")}
                   />
@@ -236,7 +236,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
             <div className=" flex flex-col justify-center gap-2 text-center rounded-sm max-w-screen-md">
               <h1 className="text-2xl font-bold">Thank you for your purchase!</h1>
               <p>
-                We will email you with more info within the next 48 hours, you don't need to do anything. You can
+                We will email you with more info within the next 48 hours, you don&apos;t need to do anything. You can
                 contact us at{" "}
                 <a className="underline" href="mailto:contact@compclarity.com">
                   contact@compclarity.com

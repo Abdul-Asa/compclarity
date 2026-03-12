@@ -207,7 +207,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
                 >
                   {tier.cta}
                 </Button>
-                <h3 className="mb-2 font-semibold">WHAT'S INCLUDED</h3>
+                <h3 className="mb-2 font-semibold">WHAT&apos;S INCLUDED</h3>
                 <ul className="flex-grow space-y-2">
                   {tier.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start">

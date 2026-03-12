@@ -22,9 +22,9 @@ export const Heading = () => {
         .
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-        Noticed your company's salary being posted? That means your next hire is already looking at you. Streamline your
-        hiring process and discover exceptional early career candidates with ease. We showcase your job listings to the
-        right talent, so you can focus on the more exciting stuff.
+        Noticed your company&apos;s salary being posted? That means your next hire is already looking at you. Streamline
+        your hiring process and discover exceptional early career candidates with ease. We showcase your job listings to
+        the right talent, so you can focus on the more exciting stuff.
       </h2>
     </section>
   );
@@ -131,7 +131,7 @@ export const ContactForm = () => {
         with us.
       </h1>
       <h2 className="animate-fade-in text-wrap font-open text-base text-gray-600 dark:text-gray-200 transition delay-100 lg:text-lg">
-        Don't let your perfect candidate slip away, get in touch today.
+        Don&apos;t let your perfect candidate slip away, get in touch today.
       </h2>
       <Link href="mailto:contact@compclarity.com" className={cn(buttonVariants(), "bg-emerald-700 text-white w-80")}>
         Contact

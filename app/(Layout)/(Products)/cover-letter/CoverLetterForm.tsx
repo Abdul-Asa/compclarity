@@ -172,13 +172,13 @@ export function CoverLetterForm({ user }: { user: User | null }) {
             <h2 className="text-lg font-semibold mb-6">New Experience</h2>
             <div className="space-y-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="newCompany">Company you're applying to</Label>
+                <Label htmlFor="newCompany">Company you&apos;re applying to</Label>
                 <Input id="newCompany" {...registerWithAuth("NewCompany")} placeholder="Company applying to" />
                 <ErrorMessage message={errors.NewCompany?.message} />
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label htmlFor="newRole">Role you're applying for</Label>
+                <Label htmlFor="newRole">Role you&apos;re applying for</Label>
                 <Input id="newRole" {...registerWithAuth("NewRole")} placeholder="Role applying for" />
                 <ErrorMessage message={errors.NewRole?.message} />
               </div>

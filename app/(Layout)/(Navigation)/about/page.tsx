@@ -18,12 +18,12 @@ export default function About() {
           <i>Your Guide to Fair Pay from Day One</i>
         </p>
         <p className="center font-open mt-3 whitespace-pre-line text-pretty text-center text-sm leading-loose">
-          Salary transparency isn't just about comparing paychecks, it's ensuring you're fairly compensated as your
-          colleagues for the same role within the same company. In a world where salary discussions are shrouded in
-          secrecy, CompClarity shines a light of transparency, empowering professionals with the knowledge they need to
-          navigate their careers. Our platform is dedicated to demystifying compensation packages across the tech and
-          finance industries in Europe, ensuring that you have all the information required to know your worth and make
-          informed decisions.
+          Salary transparency isn&apos;t just about comparing paychecks, it&apos;s ensuring you&apos;re fairly
+          compensated as your colleagues for the same role within the same company. In a world where salary discussions
+          are shrouded in secrecy, CompClarity shines a light of transparency, empowering professionals with the
+          knowledge they need to navigate their careers. Our platform is dedicated to demystifying compensation packages
+          across the tech and finance industries in Europe, ensuring that you have all the information required to know
+          your worth and make informed decisions.
         </p>
       </div>
       <div className="flex flex-col items-center justify-center">
