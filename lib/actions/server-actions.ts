@@ -159,22 +159,6 @@ export const deleteCV = actionClient.schema(deleteCVSchema).action(async ({ pars
   return { success: true };
 });
 
-export const updateUserSubscription = async (userId: string, customerId: string | null, isSubscribed: boolean) => {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("users")
-    .update({
-      stripe_customer_id: customerId,
-      is_subscribed: isSubscribed,
-    })
-    .eq("id", userId);
-
-  if (error) {
-    console.error(error);
-    throw new Error("Failed to update user subscription");
-  }
-};
-
 const tailorCVSchema = z.object({
   cv_id: z.string(),
   job_name: z.string(),
@@ -188,9 +172,6 @@ export const tailorCV = actionClient
     const user = await getUser();
     if (!user) {
       throw new Error("User not authenticated");
-    }
-    if (!user.is_subscribed) {
-      throw new Error("User not subscribed");
     }
     const { data: cv, error: cvError } = await supabase
       .from("cvs")

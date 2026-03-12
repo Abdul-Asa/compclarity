@@ -88,6 +88,29 @@ type OfferApiResponse = {
   totalResults: number;
 };
 
+/** Salary range from job postings (e.g. Adzuna). Replaces granular Offer for /tech and /finance. */
+export type SalaryEstimate = {
+  id: string;
+  company: Company;
+  title: string;
+  city: string;
+  countryCode: string;
+  level: string;
+  salaryMin: number;
+  salaryMax: number;
+  salaryAvg: number;
+  currency: CurrencyCode;
+  category: string;
+  addedDate: Date;
+  formattedSalary: { min: string; max: string; avg: string };
+  link?: string;
+};
+
+export type SalaryApiResponse = {
+  salaries: SalaryEstimate[];
+  totalResults: number;
+};
+
 export type { Company, Job, JobsApiResponse, Offer, OfferApiResponse };
 
 export type Func<T = any> = (...args: T[]) => any;

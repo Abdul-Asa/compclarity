@@ -44,7 +44,7 @@ export default async function FinanceOffers({
   }
 
   const offersResponse = await fetchAllFinanceOffers(
-    (currentPage - 1).toString(),
+    currentPage.toString(),
     searchTerm,
     verified,
     roles,

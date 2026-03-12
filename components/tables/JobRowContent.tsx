@@ -7,7 +7,6 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { Flag, Share, Forward, Briefcase } from "lucide-react";
 import React from "react";
 import { FaUserTie, FaIndustry, FaLocationDot } from "react-icons/fa6";
-import { sendGAEvent } from "@next/third-parties/google";
 import { toast } from "@/lib/hooks/useToast";
 
 interface JobRowContentProps {
@@ -30,16 +29,6 @@ export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedI
       });
       return;
     }
-    sendGAEvent("event", "user_data", {
-      event_type: "track_job",
-      value: 1,
-      job_id: job.jobId,
-      job_title: job.title,
-      company: job.company.name,
-      job_location: job.city,
-      job_level: job.level,
-      job_posted: job.addedDate,
-    });
   };
 
   return expanded ? (
@@ -89,26 +78,7 @@ export const JobRowContent = ({ expanded = true, job, addedDateStr, idx, signedI
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-md p-2 text-center transition ease-in-out hover:bg-sky-500 hover:text-white"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  sendGAEvent("event", "user_data", {
-                    event_type: "apply",
-                    value: 1,
-                    job_id: job.jobId,
-                    job_title: job.title,
-                    company: job.company.name,
-                    job_location: job.city,
-                    job_level: job.level,
-                    job_posted: job.addedDate,
-                  });
-                  sendGAEvent("event", "job_apply", {
-                    value: 1,
-                    job_id: job.jobId,
-                    job_title: job.title,
-                    company: job.company.name,
-                    job_posted: job.addedDate,
-                  });
-                }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <Forward />
               </a>

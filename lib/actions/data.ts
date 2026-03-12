@@ -1,269 +1,31 @@
 import "server-only";
-import { Company, Job, JobsApiResponse, Offer, OfferApiResponse } from "../validation/types";
 import { unstable_noStore as noStore } from "next/cache";
-import { formatter, memoize } from "../utils";
-import { URLSearchParams } from "url";
+import {
+  Company,
+  Job,
+  JobsApiResponse,
+  Offer,
+  OfferApiResponse,
+  SalaryEstimate,
+  SalaryApiResponse,
+} from "../validation/types";
+import {
+  fetchAdzunaJobs,
+  fetchAdzunaJobsByCompany,
+  fetchAdzunaJobById,
+  fetchAdzunaSalaryEstimates,
+  fetchAdzunaSalaryEstimatesByCompany,
+} from "./adzuna";
 
-const API_URL = process.env.API_V2_URL || "";
-const OFFERS_API = API_URL + "/offers";
-const FINANCE_API = API_URL + "/finance";
-const JOBS_API = API_URL + "/jobs";
-const VIEWS_API = API_URL + "/viewership";
+const ADZUNA_VIEWS_FALLBACK = 0;
 
-const CRUNCHBASE_API_URL = process.env.CRUNCHBASE_API;
-const CRUNCHBASE_API_PARAMS = process.env.CRUNCHBASE_PARAMS;
-
-const LEVEL_MAPPER = {
-  INTERN: "Intern",
-  JUNIOR: "Junior",
-  MID_LEVEL: "Mid-Level",
-  SENIOR: "Senior",
-  PRINCIPAL: "Principal",
-  DIRECTOR: "Director",
-};
-
-export async function fetchCompanyData(company: string) {
-  const response = await fetch(`${CRUNCHBASE_API_URL}/${company}?${CRUNCHBASE_API_PARAMS}`);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  const data = await response.json();
-  return data.properties;
+function buildJobSearchTerm(search: string, levels: Set<string>): string {
+  const levelKeyword = levels.size > 0 ? Array.from(levels)[0].toLowerCase().replace(/_/g, "-") : null;
+  const parts = [search, levelKeyword].filter(Boolean);
+  return parts.join(" ").trim() || "";
 }
 
-export async function fetchAllOffers(
-  page: string,
-  search: string,
-  verified: number,
-  levels: Set<string>,
-  sortBy: string | null,
-  sortDir: string | null,
-  minYOE: number | null,
-  maxYOE: number | null,
-  resultSize: number | null
-): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
-  const res = await fetchApiWithParams(params);
-  res.offers.map((o) => formatOffer(o));
-
-  return res;
-}
-
-export async function fetchAllTechOffersByCompany(
-  page: string,
-  search: string,
-  verified: number,
-  levels: Set<string>,
-  sortBy: string | null,
-  sortDir: string | null,
-  companyName: string,
-  minYOE: number | null,
-  maxYOE: number | null,
-  resultSize: number | null
-): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
-
-  const res = await fetchApiWithParamsForCompany(params, companyName);
-  res.offers.map((o) => formatOffer(o));
-
-  return res;
-}
-
-export async function fetchAllFinanceOffers(
-  page: string,
-  search: string,
-  verified: number,
-  levels: Set<string>,
-  sortBy: string | null,
-  sortDir: string | null,
-  minYOE: number | null,
-  maxYOE: number | null,
-  resultSize: number | null
-): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
-
-  const res = await fetchFinanceApiWithParams(params);
-  res.offers.map((o) => formatOffer(o));
-
-  return res;
-}
-
-export async function fetchAllFinanceOffersByCompany(
-  page: string,
-  search: string,
-  verified: number,
-  levels: Set<string>,
-  sortBy: string | null,
-  sortDir: string | null,
-  companyName: string,
-  minYOE: number | null,
-  maxYOE: number | null,
-  resultSize: number | null
-): Promise<OfferApiResponse> {
-  const params = getUrlParams(page, search, verified, levels, sortBy, sortDir, minYOE, maxYOE, resultSize);
-
-  const res = await fetchApiWithParamsForFinanceCompany(params, companyName);
-  res.offers.map((o) => formatOffer(o));
-
-  return res;
-}
-
-export async function fetchOffer(id: string): Promise<Offer> {
-  const apiOffer: Offer = await fetch(`${process.env.API_V2_URL}/offers/${id}`).then((res) => res.json());
-
-  const offer = formatOffer(apiOffer);
-
-  return offer;
-}
-
-export async function fetchCompanyByName(name: string): Promise<Company> {
-  const apiUrl = `${process.env.API_V2_URL}/company?name=${name}`;
-  try {
-    const companies: Company[] = await fetch(apiUrl).then((res) => res.json());
-
-    if (companies.length > 0) {
-      const company = companies[0];
-      return company;
-    } else {
-      throw new Error("Company not found");
-    }
-  } catch (error) {
-    throw new Error("Error fetching company data");
-  }
-}
-
-export async function fetchFinanceOffer(id: string): Promise<Offer> {
-  const apiOffer: Offer = await fetch(`${process.env.API_V2_URL}/finance/offer/${id}`).then((res) => res.json());
-
-  const offer = formatOffer(apiOffer);
-
-  return offer;
-}
-
-async function fetchApiWithParams(urlParams: URLSearchParams): Promise<OfferApiResponse> {
-  noStore();
-  return fetch(`${OFFERS_API}?${urlParams}`).then((res) => res.json());
-}
-
-async function fetchApiWithParamsForCompany(
-  urlParams: URLSearchParams,
-  companyName: string
-): Promise<OfferApiResponse> {
-  noStore();
-  return fetch(`${OFFERS_API}/company/${companyName}?${urlParams}`).then((res) => res.json());
-}
-
-async function fetchApiWithParamsForFinanceCompany(
-  urlParams: URLSearchParams,
-  companyName: string
-): Promise<OfferApiResponse> {
-  noStore();
-  return fetch(`${FINANCE_API}/${companyName}?${urlParams}`).then((res) => res.json());
-}
-
-async function fetchFinanceApiWithParams(urlParams: URLSearchParams): Promise<OfferApiResponse> {
-  noStore();
-  return fetch(`${FINANCE_API}?${urlParams}`).then((res) => res.json());
-}
-
-function getUrlParams(
-  page: string,
-  search: string,
-  verified: number,
-  levels: Set<string>,
-  sortBy: string | null,
-  sortDir: string | null,
-  minYOE: number | null,
-  maxYOE: number | null,
-  resultSize: number | null
-): URLSearchParams {
-  const params = new URLSearchParams();
-  params.append("page", page);
-  params.append("search", search);
-  if (verified) params.append("verified", "1");
-  if (resultSize !== null) params.append("size", resultSize.toString());
-  levels.forEach((l) => params.append("levels", l));
-
-  if (sortBy === "totalComp" && (sortDir === "asc" || sortDir == "desc")) {
-    params.append("sortBy", "normTotalComp");
-    params.append("sortDir", sortDir);
-  }
-
-  if (minYOE !== null) {
-    params.append("minYOE", minYOE.toString());
-  }
-
-  if (maxYOE !== null) {
-    params.append("maxYOE", maxYOE.toString());
-  }
-
-  return params;
-}
-
-function formatOffer(offer: Offer): Offer {
-  offer.addedDate = new Date(offer.addedDate);
-  offer.level = LEVEL_MAPPER[offer.level as keyof typeof LEVEL_MAPPER];
-  // const totalComp =
-  //   offer.baseSalary + offer.signOnBonus + offer.annualBonus + offer.rsu
-
-  offer.compDetails = {
-    totalComp: memoFormatter(offer.baseSalaryCurrency).format(offer.displayedTotalComp),
-    base: memoFormatter(offer.baseSalaryCurrency).format(offer.baseSalary),
-    signOnBonus: memoFormatter(offer.signOnBonusCurrency).format(offer.signOnBonus),
-    annualBonus: memoFormatter(offer.annualBonusCurrency).format(offer.annualBonus),
-    averageRsu: memoFormatter(offer.equityCurrency || offer.baseSalaryCurrency).format(offer.averageRsu),
-  };
-
-  return offer;
-}
-
-const memoFormatter = memoize(formatter);
-
-// jobs data below
-
-const JOB_TYPE_MAPPER = {
-  TECHNOLOGY: "Technology",
-  FINANCE: "Finance",
-};
-
-function formatJob(job: Job): Job {
-  job.addedDate = new Date(job.addedDate);
-  job.level = LEVEL_MAPPER[job.level as keyof typeof LEVEL_MAPPER];
-  job.industry = JOB_TYPE_MAPPER[job.industry as keyof typeof JOB_TYPE_MAPPER];
-
-  return job;
-}
-
-async function fetchJobsApiWithParams(urlParams: URLSearchParams): Promise<JobsApiResponse> {
-  noStore();
-  return fetch(`${JOBS_API}?${urlParams}`).then((res) => res.json());
-}
-
-function getUrlParamsForJob(
-  page: string,
-  search: string,
-  levels: Set<string>,
-  sortBy: string | null,
-  sortDir: string | null,
-  industry: Set<string>,
-  resultSize: number | null
-): URLSearchParams {
-  const params = new URLSearchParams();
-  params.append("page", page);
-  params.append("search", search);
-  if (resultSize !== null) params.append("size", resultSize.toString());
-  levels.forEach((l) => params.append("levels", l));
-  industry.forEach((i) => params.append("industries", i));
-
-  if (sortBy === "addedDate" && (sortDir === "asc" || sortDir == "desc")) {
-    params.append("sortBy", "addedDate");
-    params.append("sortDir", sortDir);
-  }
-
-  return params;
-}
+// ----- Jobs (Adzuna) -----
 
 export async function fetchAllJobs(
   page: string,
@@ -274,28 +36,19 @@ export async function fetchAllJobs(
   industry: Set<string>,
   resultSize: number | null
 ): Promise<JobsApiResponse> {
-  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry, resultSize);
-
-  const res = await fetchJobsApiWithParams(params);
-  res.jobs.map((o) => formatJob(o));
-
-  return res;
-}
-
-async function fetchApiWithParamsForCompanyJobs(
-  urlParams: URLSearchParams,
-  companyName: string
-): Promise<JobsApiResponse> {
-  noStore();
-  return fetch(`${JOBS_API}/company/${companyName}?${urlParams}`).then((res) => res.json());
-}
-
-export async function fetchJob(id: string): Promise<Job> {
-  const apiJob: Job = await fetch(`${process.env.API_V2_URL}/jobs/${id}`).then((res) => res.json());
-
-  const job = formatJob(apiJob);
-
-  return job;
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  // null = both tech + finance (default when no filter or both selected)
+  const category =
+    industry.size === 0 || (industry.has("Technology") && industry.has("Finance"))
+      ? null
+      : industry.has("Technology")
+        ? "it-jobs"
+        : industry.has("Finance")
+          ? "accounting-finance-jobs"
+          : null;
+  const size = resultSize ?? 20;
+  const levelKeyword = levels.size > 0 ? Array.from(levels)[0].toLowerCase().replace(/_/g, "-") : null;
+  return fetchAdzunaJobs(pageNum, search, category, size, levelKeyword, sortBy, sortDir);
 }
 
 export async function fetchAllJobsByCompany(
@@ -308,14 +61,194 @@ export async function fetchAllJobsByCompany(
   industry: Set<string>,
   resultSize: number | null
 ): Promise<JobsApiResponse> {
-  const params = getUrlParamsForJob(page, search, levels, sortBy, sortDir, industry, resultSize);
-
-  const res = await fetchApiWithParamsForCompanyJobs(params, companyName);
-  res.jobs.map((o) => formatJob(o));
-
-  return res;
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const category = industry.has("Technology") ? "it-jobs" : industry.has("Finance") ? "accounting-finance-jobs" : null;
+  const size = resultSize ?? 20;
+  const searchTerm = buildJobSearchTerm(search, levels);
+  return fetchAdzunaJobsByCompany(pageNum, searchTerm, companyName, category, size);
 }
 
+export async function fetchJob(id: string): Promise<Job | null> {
+  const job = await fetchAdzunaJobById(id);
+  return job;
+}
+
+// ----- Salaries from job postings (Adzuna) - replaces Offers -----
+
+export async function fetchAllOffers(
+  page: string,
+  search: string,
+  _verified: number,
+  _levels: Set<string>,
+  sortBy: string | null,
+  sortDir: string | null,
+  _minYOE: number | null,
+  _maxYOE: number | null,
+  resultSize: number | null
+): Promise<OfferApiResponse> {
+  const salaryRes = await fetchAdzunaSalaryEstimates(
+    Math.max(1, parseInt(page, 10) || 1),
+    search,
+    "it-jobs",
+    resultSize ?? 20
+  );
+  return salaryEstimateToOfferApiResponse(salaryRes);
+}
+
+export async function fetchAllTechOffersByCompany(
+  page: string,
+  search: string,
+  _verified: number,
+  _levels: Set<string>,
+  sortBy: string | null,
+  sortDir: string | null,
+  companyName: string,
+  _minYOE: number | null,
+  _maxYOE: number | null,
+  resultSize: number | null
+): Promise<OfferApiResponse> {
+  const salaryRes = await fetchAdzunaSalaryEstimatesByCompany(
+    Math.max(1, parseInt(page, 10) || 1),
+    search,
+    companyName,
+    "it-jobs",
+    resultSize ?? 20
+  );
+  return salaryEstimateToOfferApiResponse(salaryRes);
+}
+
+export async function fetchAllFinanceOffers(
+  page: string,
+  search: string,
+  _verified: number,
+  _levels: Set<string>,
+  sortBy: string | null,
+  sortDir: string | null,
+  _minYOE: number | null,
+  _maxYOE: number | null,
+  resultSize: number | null
+): Promise<OfferApiResponse> {
+  const salaryRes = await fetchAdzunaSalaryEstimates(
+    Math.max(1, parseInt(page, 10) || 1),
+    search,
+    "accounting-finance-jobs",
+    resultSize ?? 20
+  );
+  return salaryEstimateToOfferApiResponse(salaryRes);
+}
+
+export async function fetchAllFinanceOffersByCompany(
+  page: string,
+  search: string,
+  _verified: number,
+  _levels: Set<string>,
+  sortBy: string | null,
+  sortDir: string | null,
+  companyName: string,
+  _minYOE: number | null,
+  _maxYOE: number | null,
+  resultSize: number | null
+): Promise<OfferApiResponse> {
+  const salaryRes = await fetchAdzunaSalaryEstimatesByCompany(
+    Math.max(1, parseInt(page, 10) || 1),
+    search,
+    companyName,
+    "accounting-finance-jobs",
+    resultSize ?? 20
+  );
+  return salaryEstimateToOfferApiResponse(salaryRes);
+}
+
+function salaryEstimateToOfferApiResponse(res: SalaryApiResponse): OfferApiResponse {
+  const offers: Offer[] = res.salaries.map((s) => ({
+    rowId: s.id,
+    verified: false,
+    addedDate: s.addedDate,
+    company: s.company,
+    title: s.title,
+    city: s.city,
+    countryCode: s.countryCode,
+    level: s.level,
+    gender: undefined,
+    ethnicity: undefined,
+    other: undefined,
+    arrangement: undefined,
+    yoe: 0,
+    sector: undefined,
+    education: undefined,
+    extra: undefined,
+    rsu: 0,
+    averageRsu: s.salaryAvg,
+    offerYear: new Date().getFullYear(),
+    baseSalaryCurrency: s.currency,
+    signOnBonusCurrency: s.currency,
+    annualBonusCurrency: s.currency,
+    equityCurrency: s.currency,
+    normTotalComp: s.salaryAvg,
+    displayedTotalComp: s.salaryAvg,
+    baseSalary: s.salaryMin,
+    signOnBonus: 0,
+    annualBonus: 0,
+    vestingPeriod: 0,
+    percentage: undefined,
+    compDetails: {
+      totalComp: s.formattedSalary.avg,
+      base: s.formattedSalary.min,
+      signOnBonus: "—",
+      annualBonus: "—",
+      averageRsu: "—",
+    },
+  }));
+  return { offers, totalResults: res.totalResults };
+}
+
+export async function fetchOffer(id: string): Promise<Offer> {
+  const job = await fetchAdzunaJobById(id);
+  if (job) {
+    const salaryRes = await fetchAdzunaSalaryEstimates(1, job.title, "it-jobs", 1);
+    const match = salaryRes.salaries.find((s) => s.id === id);
+    if (match) {
+      const converted = salaryEstimateToOfferApiResponse({ salaries: [match], totalResults: 1 });
+      return converted.offers[0];
+    }
+  }
+  throw new Error("Offer not found");
+}
+
+export async function fetchFinanceOffer(id: string): Promise<Offer> {
+  const salaryRes = await fetchAdzunaSalaryEstimates(1, "", "accounting-finance-jobs", 50);
+  const match = salaryRes.salaries.find((s) => s.id === id);
+  if (match) {
+    const converted = salaryEstimateToOfferApiResponse({ salaries: [match], totalResults: 1 });
+    return converted.offers[0];
+  }
+  throw new Error("Finance offer not found");
+}
+
+// ----- Company -----
+
+export async function fetchCompanyByName(name: string): Promise<Company> {
+  const decoded = decodeURIComponent(name).replace(/-/g, " ");
+  const res = await fetchAdzunaJobsByCompany(1, "", decoded, null, 1);
+  if (res.jobs.length > 0) {
+    return res.jobs[0].company;
+  }
+  const domain =
+    decoded
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[^a-z0-9]/g, "") + ".com";
+  return { name: decoded, domain };
+}
+
+/** @deprecated Crunchbase removed. Returns minimal placeholder. */
+export async function fetchCompanyData(company: string) {
+  return { short_description: "", name: company, location_identifiers: [], linkedin: null };
+}
+
+// ----- Misc -----
+
 export async function fetchViewers() {
-  return fetch(`${VIEWS_API}`).then((res) => res.json());
+  noStore();
+  return { count: ADZUNA_VIEWS_FALLBACK };
 }

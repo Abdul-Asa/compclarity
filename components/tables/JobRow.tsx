@@ -6,19 +6,8 @@ import { ChevronDownIcon, ChevronUpIcon, Forward, Briefcase, Star, File, Wand2, 
 import { JobRowContent } from "./JobRowContent";
 import Link from "next/link";
 import { toast } from "@/lib/hooks/useToast";
-import { sendGAEvent } from "@next/third-parties/google";
 import { ApplyModal } from "./ApplyModal";
-export default function JobRow({
-  job,
-  idx,
-  signedIn,
-  isSubscribed,
-}: {
-  job: Job;
-  idx: number;
-  signedIn: boolean;
-  isSubscribed: boolean;
-}) {
+export default function JobRow({ job, idx, signedIn }: { job: Job; idx: number; signedIn: boolean }) {
   const [expanded, toggleExpanded] = useState(false);
   const sponsoredJob = job.sponsoredJob || false;
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
@@ -34,16 +23,6 @@ export default function JobRow({
       });
       return;
     }
-    sendGAEvent("event", "user_data", {
-      event_type: "track_job",
-      value: 1,
-      job_id: job.jobId,
-      job_title: job.title,
-      company: job.company.name,
-      job_location: job.city,
-      job_level: job.level,
-      job_posted: job.addedDate,
-    });
   };
 
   useEffect(() => {
@@ -92,7 +71,7 @@ export default function JobRow({
         </td>
         <td className="px-1 py-4">
           <div className="flex flex-col items-center justify-center">
-            <ApplyModal job={job} isSubscribed={isSubscribed} isSignedIn={signedIn} />
+            <ApplyModal job={job} isSignedIn={signedIn} />
           </div>
         </td>
 

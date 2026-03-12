@@ -46,10 +46,10 @@ export default async function page() {
         <Card className="col-span-2">
           <CardHeader className="p-6">
             <CardTitle>Subscription</CardTitle>
-            <CardDescription>Manage your subscription details.</CardDescription>
+            <CardDescription>All CompClarity features are free to use.</CardDescription>
           </CardHeader>
           <CardContent>
-            <SubscriptionManager user={user} />
+            <SubscriptionManager />
           </CardContent>
         </Card>
         <div className="col-span-2 lg:hidden">

@@ -2,7 +2,6 @@
 import { FaDiscord, FaLinkedin, FaInstagram, FaXTwitter, FaTiktok, FaBlog } from "react-icons/fa6";
 import PrivacyPolicyLink from "../tables/PrivacyPolicyLink";
 import Link from "next/link";
-import { sendGAEvent } from "@next/third-parties/google";
 import { ModeToggle } from "../providers/ThemeProvider";
 import { ArrowUp } from "lucide-react";
 import { Button } from "../ui/button";

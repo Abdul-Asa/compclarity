@@ -4,9 +4,8 @@ import { Menu } from "@headlessui/react";
 import { FaLaptopCode, FaChartLine } from "react-icons/fa6";
 
 import Link from "next/link";
-import { sendGAEvent } from "@next/third-parties/google";
 
-export default function ResourcesDropdownMenu() {
+export default function SalaryDropdownMenu() {
   return (
     <Menu as="div" className="relative z-50">
       <Menu.Button className="font-bold hover:underline">Salaries</Menu.Button>
@@ -19,13 +18,6 @@ export default function ResourcesDropdownMenu() {
                   active ? "bg-gray-100" : "text-gray-900 hover:bg-gray-100"
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 href="/tech"
-                onClick={() =>
-                  sendGAEvent({
-                    event: "click",
-                    name: "nav_click",
-                    value: "trackr",
-                  })
-                }
               >
                 <FaLaptopCode className="mr-2 h-5 w-5" aria-hidden="true" />
                 Tech Salaries
@@ -39,13 +31,6 @@ export default function ResourcesDropdownMenu() {
                   active ? "bg-gray-100" : "text-gray-900 hover:bg-gray-100"
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 href="/finance"
-                onClick={() =>
-                  sendGAEvent({
-                    event: "click",
-                    name: "nav_click",
-                    value: "tech_academia",
-                  })
-                }
               >
                 <FaChartLine className="mr-2 h-5 w-5" aria-hidden="true" />
                 Finance Salaries

@@ -39,7 +39,7 @@ async function getCompanyOffers(companyName: string, searchParams?: PageProps["s
     }
   }
   const offersResponse = await fetchAllFinanceOffersByCompany(
-    (currentPage - 1).toString(),
+    currentPage.toString(),
     searchTerm,
     verified,
     roles,

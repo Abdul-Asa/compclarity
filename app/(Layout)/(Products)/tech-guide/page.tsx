@@ -65,7 +65,7 @@ export default async function EbookPage() {
             <h2 className="text-2xl font-bold mb-4">{cardContent.title}</h2>
             <div className="flex items-center mb-4">
               <StarRating rating={averageRating} activeColor="rgb(34 197 94)" />
-              <span className="ml-2 text-gray-600">19 reviews ({viewCount} people viewing)</span>
+              <span className="ml-2 text-gray-600">19 reviews ({viewCount.count} people viewing)</span>
             </div>
             <ul className="space-y-2 mb-6">
               {cardContent.features.map((feature, index) => (

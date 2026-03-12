@@ -6,17 +6,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Marquee from "@/components/ui/marquee";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Check, FileText, Pen, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTABadge from "@/components/ui/cta-badge";
-import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { pricingTiers } from "./product";
-import { cn } from "@/lib/utils";
-import { createStripeSession, updateUserSubscriptionBySessionId } from "@/lib/actions/stripe-actions";
-import { useToast } from "@/lib/hooks/useToast";
-import { User } from "@/lib/validation/types";
 
 export const HeroSection = () => {
   return (
@@ -105,72 +99,12 @@ export const MarqueeSection = () => {
   );
 };
 
-export const Pricing = ({ user }: { user: User | null }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-
-  const handlePurchase = async () => {
-    if (!user) {
-      toast({
-        title: "Error",
-        description: "Please login to purchase.",
-        variant: "destructive",
-      });
-      router.push("/login");
-      return;
-    }
-    if (user.is_subscribed) {
-      toast({
-        title: "Already have premium access! 😉",
-        description: "You already have premium access.",
-      });
-      return;
-    }
-    try {
-      setIsLoading(true);
-      const { url } = await createStripeSession("stripe-package", true);
-      if (url) {
-        router.push(url);
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create payment session. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!user) return;
-    if (searchParams.get("session_id")) {
-      const sessionId = searchParams.get("session_id");
-      if (sessionId) {
-        updateUserSubscriptionBySessionId(user.id, sessionId);
-        toast({
-          title: "Subscription successful!",
-          description: "You now have access to all premium features.",
-        });
-      }
-    }
-    if (searchParams.get("canceled")) {
-      toast({
-        title: "Subscription canceled",
-        description: "Your subscription was not completed.",
-        variant: "destructive",
-      });
-    }
-  }, [searchParams, toast]);
-
+export function Pricing() {
   return (
     <section id="pricing" className="container px-4 py-16 mx-auto space-y-4">
-      <h2 className="text-xl font-bold text-center md:text-2xl lg:text-5xl">Get shortlisted into your dream job</h2>
+      <h2 className="text-xl font-bold text-center md:text-2xl lg:text-5xl">All features free</h2>
       <p className="text-center text-gray-600 dark:text-gray-200">
-        Get the perfect CV with just a small fraction of your potential salary.
+        Access our full AI Suite at no cost. Create tailored CVs and cover letters to stand out.
       </p>
 
       <div className="grid grid-cols-2 gap-8 pt-10">
@@ -183,29 +117,11 @@ export const Pricing = ({ user }: { user: User | null }) => {
               </CardHeader>
               <CardContent className="flex flex-col flex-grow">
                 <div className="mb-4">
-                  {tier.isFree ? (
-                    <span className="text-4xl font-bold">Free</span>
-                  ) : (
-                    <>
-                      <span className="text-4xl font-bold">£{tier.lifetimePrice || tier.monthlyPrice}</span>
-                      {tier.originalLifetimePrice && (
-                        <span className="ml-2 text-xl line-through text-muted-foreground">
-                          £{tier.originalLifetimePrice}
-                        </span>
-                      )}
-                      <span className="ml-2 text-sm">{tier.lifetimePrice ? "lifetime" : "/ month"}</span>
-                    </>
-                  )}
-                  {tier.isPopular && <Badge className="ml-2 bg-emerald-500">MOST POPULAR</Badge>}
+                  <span className="text-4xl font-bold">Free</span>
                 </div>
-                <p className="mb-4 text-red-700 dark:text-red-500">{tier.discount}</p>
-                <Button
-                  className="mb-6 text-white bg-primary"
-                  disabled={!tier.isAvailable}
-                  onClick={tier.link ? () => router.push(tier.link) : handlePurchase}
-                  loading={tier.isFree ? false : isLoading}
-                >
-                  {tier.cta}
+                <p className="mb-4 text-muted-foreground">{tier.discount}</p>
+                <Button className="mb-6 text-white bg-primary" asChild>
+                  <Link href={tier.link || "/ai"}>{tier.cta}</Link>
                 </Button>
                 <h3 className="mb-2 font-semibold">WHAT&apos;S INCLUDED</h3>
                 <ul className="flex-grow space-y-2">
@@ -223,7 +139,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
       </div>
     </section>
   );
-};
+}
 
 export const HowItWorks = () => {
   const howItWorksSteps = [
@@ -281,9 +197,9 @@ export const FAQ = () => {
         "The early bird catches the worm. Most employers recruit on a rolling basis, meaning they review candidates in the order they applied and close applications once headcount is reached.",
     },
     {
-      question: "Can I cancel my subscription?",
+      question: "Do I need to pay for anything?",
       answer:
-        "Yes, you can cancel your subscription at any time. Your subscription will remain active until the end of the billing cycle.",
+        "No. All CompClarity AI features—CV generation, cover letter creation, job board, and tracker—are free to use.",
     },
     {
       question: "What differentiates you from other career coaching services?",

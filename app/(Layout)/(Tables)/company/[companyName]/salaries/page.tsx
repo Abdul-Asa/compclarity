@@ -40,7 +40,7 @@ async function getCompanyOffers(companyName: string, searchParams?: PageProps["s
   }
 
   const offersResponse = await fetchAllTechOffersByCompany(
-    (currentPage - 1).toString(),
+    currentPage.toString(),
     searchTerm,
     verified,
     roles,

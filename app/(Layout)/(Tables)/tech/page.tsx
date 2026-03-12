@@ -44,7 +44,7 @@ export default async function Offers({
   }
 
   const offersResponse = await fetchAllOffers(
-    (currentPage - 1).toString(),
+    currentPage.toString(),
     searchTerm,
     verified,
     roles,

@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Check, CreditCard, InfoIcon, Loader2, User } from "lucide-react";
+import { ArrowLeft, Check, InfoIcon, Loader2, User } from "lucide-react";
 import Link from "next/link";
-import { cn, toUrlFriendly } from "@/lib/utils";
+import { toUrlFriendly } from "@/lib/utils";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { FileUploader } from "@/components/ui/file-upload";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,8 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { cvServiceSchema } from "@/lib/validation/schema";
 import { Controller, useForm } from "react-hook-form";
 import { CVServiceSchema } from "@/lib/validation/types";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import getStripe from "@/lib/stripe/load-stripe";
 import { toast } from "sonner";
 import { Tooltip } from "react-tooltip";
 import { createClient } from "@/lib/supabase/client";
@@ -23,21 +21,17 @@ import { useRouter } from "next/navigation";
 
 interface CVServiceFormProps {
   serviceId: string;
-  // session: any;
 }
 
 export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [clientSecret, setClientSecret] = useState("");
-  const [sessionId, setSessionId] = useState("");
   const [loading, setLoading] = useState(false);
   const service = getTier(serviceId);
 
   const {
     register,
     handleSubmit,
-    getValues,
     control,
     formState: { isValid, errors, isDirty },
   } = useForm<CVServiceSchema>({
@@ -49,7 +43,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   });
 
   useEffect(() => {
-    if (!isDirty || currentStep === 2) return;
+    if (!isDirty || currentStep === 1) return;
 
     function beforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -66,18 +60,6 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
     router.replace("/404");
     return null;
   }
-
-  const fetchCheckoutSession = async () => {
-    setLoading(true);
-    const response = await fetch("/stripe/checkout", {
-      method: "POST",
-      body: JSON.stringify({ service, origin: window.location.href, email: getValues("email") }),
-    });
-    const data = await response.json();
-    setClientSecret(data.clientSecret);
-    setSessionId(data.sessionId);
-    setLoading(false);
-  };
 
   const uploadFilesToSupabase = async (data: CVServiceSchema) => {
     const supabase = createClient();
@@ -107,7 +89,7 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
       file_names: fileNames,
       service: serviceId,
       status: "open",
-      session_id: sessionId,
+      session_id: null,
       additional_info: data.extraInformation,
     });
     if (error) {
@@ -117,19 +99,25 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
   };
 
   const onSubmit = async (data: CVServiceSchema) => {
+    setLoading(true);
     const fileNames = await uploadFilesToSupabase(data);
     if (!fileNames) {
       toast.error("Failed to upload files");
+      setLoading(false);
       return;
     }
     await saveDataToSupabase(data, fileNames)
       .then(() => {
-        setCurrentStep(2);
+        setCurrentStep(1);
       })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+      .catch(() => {})
+      .finally(() => setLoading(false));
   };
+
+  const steps = [
+    { id: 0, text: "Information", icon: <User /> },
+    { id: 1, text: "Complete", icon: <Check /> },
+  ];
 
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -216,37 +204,31 @@ export const CVServiceForm = ({ serviceId }: CVServiceFormProps) => {
               </div>
               <div className="flex justify-end">
                 <Button
-                  type="button"
+                  type="submit"
                   className="w-full lg:w-60 bg-emerald-500 dark:bg-emerald-700 text-white"
-                  disabled={!isValid}
-                  onClick={() => {
-                    setCurrentStep(1);
-                    fetchCheckoutSession();
-                  }}
+                  disabled={!isValid || loading}
                 >
-                  {loading ? <Loader2 className="animate-spin size-4" /> : "Proceed to Payment"}
+                  {loading ? <Loader2 className="animate-spin size-4" /> : "Submit"}
                 </Button>
               </div>
             </form>
           </div>
         )}
-        {currentStep === 1 && <PaymentForm clientSecret={clientSecret} onComplete={() => onSubmit(getValues())} />}
-        {currentStep === 2 && (
-          <div className=" bg-white dark:bg-black w-full p-4 flex justify-center items-center ">
-            <div className=" flex flex-col justify-center gap-2 text-center rounded-sm max-w-screen-md">
-              <h1 className="text-2xl font-bold">Thank you for your purchase!</h1>
+        {currentStep === 1 && (
+          <div className="bg-white dark:bg-black w-full p-4 flex justify-center items-center">
+            <div className="flex flex-col justify-center gap-2 text-center rounded-sm max-w-screen-md">
+              <h1 className="text-2xl font-bold">Thank you!</h1>
               <p>
-                We will email you with more info within the next 48 hours, you don&apos;t need to do anything. You can
-                contact us at{" "}
+                We will email you with more info within the next 48 hours. You can contact us at{" "}
                 <a className="underline" href="mailto:contact@compclarity.com">
                   contact@compclarity.com
                 </a>{" "}
                 if needed.
               </p>
-              <Link href="/pricing" className={buttonVariants({ variant: "ghost", className: "w-fit self-center" })}>
+              <Link href="/ai" className={buttonVariants({ variant: "ghost", className: "w-fit self-center" })}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                <span className="hidden md:block">Back to services</span>
-                <span className="md:hidden">Services</span>
+                <span className="hidden md:block">Back to AI Suite</span>
+                <span className="md:hidden">AI Suite</span>
               </Link>
             </div>
           </div>
@@ -262,30 +244,24 @@ interface StepperItem {
   icon?: React.ReactNode;
 }
 
-const steps: StepperItem[] = [
-  { id: 0, text: "Information", icon: <User /> },
-  { id: 1, text: "Payment", icon: <CreditCard /> },
-  { id: 2, text: "Complete", icon: <Check /> },
-];
 const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: number }) => {
   return (
     <div className="flex items-center md:flex-row flex-col relativelg:px-10 px-2 border-b shadow-sm bg-white dark:bg-black dark:border-gray-800 border-gray-200 py-4 select-none">
-      <Link href="/pricing" className={buttonVariants({ variant: "ghost" })}>
+      <Link href="/ai" className={buttonVariants({ variant: "ghost" })}>
         <ArrowLeft className="mr-2 h-4 w-4" />
-        <span className="hidden md:block">Back to services</span>
-        <span className="md:hidden">Services</span>
+        <span className="hidden md:block">Back to AI Suite</span>
+        <span className="md:hidden">AI Suite</span>
       </Link>
       <div className="px-4 py-2 md:absolute md:left-1/2 md:-translate-x-1/2 right-0">
         <div className="flex items-center justify-center">
           {steps.map((step, index) => (
             <React.Fragment key={step.id}>
               <div
-                className={cn(
-                  "md:size-12 size-10 rounded-full flex items-center justify-center p-3 transition-all duration-500 ",
+                className={`md:size-12 size-10 rounded-full flex items-center justify-center p-3 transition-all duration-500 ${
                   index <= currentStep
                     ? "bg-emerald-500 dark:bg-emerald-700 text-white"
                     : "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
-                )}
+                }`}
               >
                 {step.icon || index + 1}
               </div>
@@ -303,31 +279,6 @@ const Stepper = ({ steps, currentStep }: { steps: StepperItem[]; currentStep: nu
         </div>
       </div>
       <div />
-    </div>
-  );
-};
-
-const PaymentForm = ({ clientSecret, onComplete }: { clientSecret: string; onComplete: () => void }) => {
-  const stripePromise = getStripe();
-
-  if (clientSecret === "")
-    return (
-      <div className="bg-white dark:bg-black flex w-full min-h-full items-center justify-center">
-        <Loader2 className="animate-spin size-20" />
-      </div>
-    );
-
-  return (
-    <div id="checkout" className="w-full border-2 p-1 stripe-issue">
-      <EmbeddedCheckoutProvider
-        stripe={stripePromise}
-        options={{
-          clientSecret,
-          onComplete,
-        }}
-      >
-        <EmbeddedCheckout />
-      </EmbeddedCheckoutProvider>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { JobRowContent } from "@/components/tables/JobRowContent";
 import { fetchJob } from "@/lib/actions/data";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +12,7 @@ interface pageProps {
 
 export async function generateMetadata({ params }: pageProps): Promise<Metadata> {
   const job = await fetchJob(params.id);
+  if (!job) return { title: "Job Not Found", description: "Job not found." };
 
   return {
     title: `Job Details - ${job.company.name} ${job.title} (${job.city}, ${job.countryCode})`,
@@ -20,6 +22,7 @@ export async function generateMetadata({ params }: pageProps): Promise<Metadata>
 
 const page = async ({ params }: pageProps) => {
   const job = await fetchJob(params.id);
+  if (!job) notFound();
 
   const addedDateStr = job.addedDate.toLocaleDateString("en-UK");
 

@@ -47,7 +47,7 @@ export default async function JobBoard({
   }
 
   const jobsResponse = await fetchAllJobs(
-    (currentPage - 1).toString(),
+    currentPage.toString(),
     searchTerm,
     roles,
     sortBy,
@@ -72,7 +72,7 @@ export default async function JobBoard({
         <b className="text-center mb-14 mt-14">No jobs found</b>
       ) : (
         <>
-          <JobTable jobsResponse={jobsResponse} signedIn={signedIn} isSubscribed={user?.is_subscribed || false} />
+          <JobTable jobsResponse={jobsResponse} signedIn={signedIn} />
         </>
       )}
     </div>

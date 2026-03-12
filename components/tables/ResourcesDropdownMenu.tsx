@@ -5,7 +5,6 @@ import { FaSchool, FaTableCells, FaPenClip } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 
 import Link from "next/link";
-import { sendGAEvent } from "@next/third-parties/google";
 
 export default function ResourcesDropdownMenu() {
   return (
@@ -21,13 +20,6 @@ export default function ResourcesDropdownMenu() {
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 href="https://discord.gg/AuAvjpTTnm"
                 target="_blank"
-                onClick={() =>
-                  sendGAEvent({
-                    event: "click",
-                    name: "nav_click",
-                    value: "discord",
-                  })
-                }
               >
                 <FaDiscord className="mr-2 h-5 w-5" aria-hidden="true" />
                 Discord
@@ -42,13 +34,6 @@ export default function ResourcesDropdownMenu() {
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 href="https://compclarity.substack.com/"
                 target="_blank"
-                onClick={() =>
-                  sendGAEvent({
-                    event: "click",
-                    name: "nav_click",
-                    value: "blog",
-                  })
-                }
               >
                 <FaPenClip className="mr-2 h-5 w-5" aria-hidden="true" />
                 Blog

@@ -99,7 +99,7 @@ const Page = async ({ params, searchParams }: PageProps) => {
           <b className="text-center mt-4">No jobs found for {companyDetails.name}</b>
         ) : (
           <>
-            <JobTable jobsResponse={jobsResponse} signedIn={signedIn} isSubscribed={user?.is_subscribed || false} />
+            <JobTable jobsResponse={jobsResponse} signedIn={signedIn} />
           </>
         )}
       </div>

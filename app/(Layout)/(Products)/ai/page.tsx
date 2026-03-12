@@ -1,6 +1,5 @@
 import { HeroSection, FAQ, MarqueeSection, Pricing, HowItWorks } from "./cv-items";
 import { Metadata } from "next";
-import { getUser } from "@/lib/actions/server-actions";
 
 // Edit the metadata for the page
 export const metadata: Metadata = {
@@ -10,12 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default async function CVPage() {
-  const user = await getUser();
   return (
     <div className="flex min-h-screen w-full flex-col scroll-smooth pb-20">
       <HeroSection />
       <MarqueeSection />
-      <Pricing user={user} />
+      <Pricing />
       <HowItWorks />
       <FAQ />
     </div>

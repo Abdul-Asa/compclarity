@@ -12,15 +12,7 @@ import { getCVs, tailorCV } from "@/lib/actions/server-actions";
 import Link from "next/link";
 import SimpleLoader from "../layout/SimpleLoader";
 
-export function TailorCVButton({
-  job,
-  signedIn,
-  isSubscribed,
-}: {
-  job: Job;
-  signedIn: boolean;
-  isSubscribed: boolean;
-}) {
+export function TailorCVButton({ job, signedIn }: { job: Job; signedIn: boolean }) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [secondModalOpen, setSecondModalOpen] = useState(false);
@@ -38,27 +30,11 @@ export function TailorCVButton({
         variant: "destructive",
       });
       return;
-    } else if (!isSubscribed) {
-      toast({
-        title: "Not subscribed!",
-        description: "Please subscribe to tailor your CV.",
-        variant: "destructive",
-      });
-      return;
-    } else {
-      setOpen(true);
     }
+    setOpen(true);
   };
 
   const handleFetch = async (cv: CVDbType) => {
-    if (!isSubscribed) {
-      toast({
-        title: "Not subscribed!",
-        description: "Please subscribe to tailor your CV.",
-        variant: "destructive",
-      });
-      return;
-    }
     setOpen(false);
     setSecondModalOpen(true);
     const response = await handleTailorCV({

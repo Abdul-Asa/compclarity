@@ -1,6 +1,5 @@
 import Script from "next/script";
 import { Open_Sans, Space_Grotesk, Courier_Prime } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { rootStructuredData } from "@/lib/config/structuredData";
 import { metadata as metadataConfig } from "@/lib/config/metadata";
 import Providers from "@/components/providers";
@@ -23,7 +22,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <Providers>{children}</Providers>
       </body>
 
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       <Script
         id="WebSite Structured Data"
         type="application/ld+json"

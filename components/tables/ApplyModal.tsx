@@ -6,19 +6,10 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Forward, FileText } from "lucide-react";
 import { Job } from "@/lib/validation/types";
 import { useToast } from "@/lib/hooks/useToast";
-import { sendGAEvent } from "@next/third-parties/google";
 import { TailorCVButton } from "./TailorCVButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-export function ApplyModal({
-  job,
-  isSubscribed,
-  isSignedIn,
-}: {
-  job: Job;
-  isSubscribed: boolean;
-  isSignedIn: boolean;
-}) {
+export function ApplyModal({ job, isSignedIn }: { job: Job; isSignedIn: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showAIPrompt, setShowAIPrompt] = useState(true);
@@ -31,23 +22,6 @@ export function ApplyModal({
 
   const handleClick = (e: any) => {
     e.stopPropagation();
-    sendGAEvent("event", "user_data", {
-      event_type: "apply",
-      value: 1,
-      job_id: job.jobId,
-      job_title: job.title,
-      company: job.company.name,
-      job_location: job.city,
-      job_level: job.level,
-      job_posted: job.addedDate,
-    });
-    sendGAEvent("event", "job_apply", {
-      value: 1,
-      job_id: job.jobId,
-      job_title: job.title,
-      company: job.company.name,
-      job_posted: job.addedDate,
-    });
     if (showAIPrompt) {
       setOpen(true);
     } else {
@@ -125,7 +99,7 @@ export function ApplyModal({
                 <h3 className="font-medium">Tailor your CV</h3>
                 <p className="text-sm text-gray-600">Generate a custom CV for this role</p>
               </div>
-              <TailorCVButton job={job} signedIn={isSignedIn} isSubscribed={isSubscribed} />
+              <TailorCVButton job={job} signedIn={isSignedIn} />
             </div>
 
             <div className="flex items-center justify-between p-4 border rounded-lg">
