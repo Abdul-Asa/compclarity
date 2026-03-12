@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Sections from "./sections";
 import Settings from "./settings";
 
-export default function CVForm() {
+export default function CVForm({ isPublic = false, user }: { isPublic?: boolean; user?: any }) {
   return (
     <Tabs defaultValue="sections">
       <TabsList>
@@ -12,11 +12,11 @@ export default function CVForm() {
       </TabsList>
 
       <TabsContent value="sections">
-        <Sections />
+        <Sections isPublic={isPublic} user={user} />
       </TabsContent>
 
       <TabsContent value="settings">
-        <Settings />
+        <Settings isPublic={isPublic} user={user} />
       </TabsContent>
     </Tabs>
   );

@@ -15,13 +15,11 @@ export const pricingTiers = [
   {
     id: "stripe-package",
     title: "Premium",
-    monthlyPrice: 15,
-    yearlyPrice: 108,
-    originalMonthlyPrice: 20,
-    originalYearlyPrice: 240,
-    discount: "Limited time offer!",
+    lifetimePrice: 15,
+    originalLifetimePrice: 30,
+    discount: "50% off - Limited time offer!",
     isFree: false,
-    cta: "Get this package",
+    cta: "Get lifetime access",
     isPopular: true,
     isAvailable: true,
     features: [
@@ -30,7 +28,7 @@ export const pricingTiers = [
       "Generate unlimited CVs and cover letters",
       "Access to AI mock interview prep (coming soon)",
     ],
-    description: "The best package for those who want to stand out in the job market.",
+    description: "One-time payment for lifetime access. Perfect for students and professionals.",
   },
   {
     id: "stripe-package",

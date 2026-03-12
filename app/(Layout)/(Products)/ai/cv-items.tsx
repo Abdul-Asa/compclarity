@@ -13,7 +13,6 @@ import CTABadge from "@/components/ui/cta-badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { pricingTiers } from "./product";
-import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { createStripeSession, updateUserSubscriptionBySessionId } from "@/lib/actions/stripe-actions";
 import { useToast } from "@/lib/hooks/useToast";
@@ -107,17 +106,16 @@ export const MarqueeSection = () => {
 };
 
 export const Pricing = ({ user }: { user: User | null }) => {
-  const [isYearly, setIsYearly] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubscribe = async () => {
+  const handlePurchase = async () => {
     if (!user) {
       toast({
         title: "Error",
-        description: "Please login to subscribe.",
+        description: "Please login to purchase.",
         variant: "destructive",
       });
       router.push("/login");
@@ -125,21 +123,21 @@ export const Pricing = ({ user }: { user: User | null }) => {
     }
     if (user.is_subscribed) {
       toast({
-        title: "Already subscribed 😉",
-        description: "You already have a subscription.",
+        title: "Already have premium access! 😉",
+        description: "You already have premium access.",
       });
       return;
     }
     try {
       setIsLoading(true);
-      const { url } = await createStripeSession("stripe-package", isYearly);
+      const { url } = await createStripeSession("stripe-package", true);
       if (url) {
         router.push(url);
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to create subscription. Please try again.",
+        description: "Failed to create payment session. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -175,12 +173,6 @@ export const Pricing = ({ user }: { user: User | null }) => {
         Get the perfect CV with just a small fraction of your potential salary.
       </p>
 
-      <div className="flex items-center justify-center gap-2">
-        <span className={cn("text-sm", !isYearly && "font-bold")}>Monthly</span>
-        <Switch checked={isYearly} onCheckedChange={setIsYearly} />
-        <span className={cn("text-sm", isYearly && "font-bold")}>Yearly (Save 40%)</span>
-      </div>
-
       <div className="grid grid-cols-2 gap-8 pt-10">
         {pricingTiers.map((tier) => {
           if (!tier.isAvailable) return null;
@@ -195,13 +187,13 @@ export const Pricing = ({ user }: { user: User | null }) => {
                     <span className="text-4xl font-bold">Free</span>
                   ) : (
                     <>
-                      <span className="text-4xl font-bold">
-                        £{isYearly ? (tier.monthlyPrice ?? 12) * 0.6 : tier.monthlyPrice}
-                      </span>
-                      <span className="ml-2 text-xl line-through text-muted-foreground">
-                        £{tier.originalMonthlyPrice}
-                      </span>
-                      <span className="ml-2 text-sm">{"/ month"}</span>
+                      <span className="text-4xl font-bold">£{tier.lifetimePrice || tier.monthlyPrice}</span>
+                      {tier.originalLifetimePrice && (
+                        <span className="ml-2 text-xl line-through text-muted-foreground">
+                          £{tier.originalLifetimePrice}
+                        </span>
+                      )}
+                      <span className="ml-2 text-sm">{tier.lifetimePrice ? "lifetime" : "/ month"}</span>
                     </>
                   )}
                   {tier.isPopular && <Badge className="ml-2 bg-emerald-500">MOST POPULAR</Badge>}
@@ -210,7 +202,7 @@ export const Pricing = ({ user }: { user: User | null }) => {
                 <Button
                   className="mb-6 text-white bg-primary"
                   disabled={!tier.isAvailable}
-                  onClick={tier.link ? () => router.push(tier.link) : handleSubscribe}
+                  onClick={tier.link ? () => router.push(tier.link) : handlePurchase}
                   loading={tier.isFree ? false : isLoading}
                 >
                   {tier.cta}

@@ -11,6 +11,20 @@ const CVBuilder = dynamic(() => import("@/components/cv-builder"), {
 
 export default async function CVBuilderPage({ params }: { params: { id: string } }) {
   const user = await getUser();
+
+  // For public editor (id === 'public'), don't require authentication
+  if (params.id === "public") {
+    const queryClient = new QueryClient();
+    return (
+      <div className="w-full h-screen p-2 mx-auto sm:p-4 max-w-screen-2xl">
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <CVBuilder isPublic={true} user={user} />
+        </HydrationBoundary>
+      </div>
+    );
+  }
+
+  // For private CVs, require authentication
   if (!user) {
     redirect("/login");
   }
@@ -41,7 +55,7 @@ export default async function CVBuilderPage({ params }: { params: { id: string }
   return (
     <div className="w-full h-screen p-2 mx-auto sm:p-4 max-w-screen-2xl">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <CVBuilder />
+        <CVBuilder isPublic={false} user={user} />
       </HydrationBoundary>
     </div>
   );

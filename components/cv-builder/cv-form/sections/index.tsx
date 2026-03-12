@@ -20,9 +20,71 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
 import { useToast } from "@/lib/hooks/useToast";
 import { useAtom } from "jotai";
-import { sectionsAtom, settingsAtom } from "../../constants";
+import { sectionsAtom, settingsAtom, INITIAL_CV_DATA } from "../../constants";
+import { CVSettings } from "../../types";
+import Link from "next/link";
+import { createCV } from "@/lib/actions/server-actions";
 
-export default function Sections() {
+// Save CV Button Component
+function SaveCVButton({ sections, user }: { sections: CVSection[]; user?: any }) {
+  const [settings] = useAtom(settingsAtom);
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSaveCV = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to save your CV",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await createCV({
+        combinedCVData: {
+          sections,
+          settings: settings || INITIAL_CV_DATA.settings,
+        },
+      });
+      toast({
+        title: "CV saved successfully!",
+        description: "Your CV has been saved to your account.",
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to save CV",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="flex gap-2">
+        <Button asChild variant="default" className="flex-1">
+          <Link href="/login">Sign In</Link>
+        </Button>
+        <Button asChild variant="outline" className="flex-1">
+          <Link href="/signup">Sign Up</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Button onClick={handleSaveCV} disabled={isLoading} className="w-full">
+      {isLoading ? "Saving..." : "Save CV to Account"}
+    </Button>
+  );
+}
+
+export default function Sections({ isPublic = false, user }: { isPublic?: boolean; user?: any }) {
   const params = useParams();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -30,25 +92,32 @@ export default function Sections() {
   const [sections, setSections] = useAtom(sectionsAtom);
   const [, setSettings] = useAtom(settingsAtom);
 
-  // Query for fetching CV data
+  // Query for fetching CV data (only for private CVs)
   const { data: cv, isLoading } = useQuery({
     queryKey: ["cv", params.id],
     queryFn: () => getCV(params.id as string),
+    enabled: !isPublic && params.id !== "public",
   });
 
-  // Set sections when CV data changes
+  // Set sections when CV data changes or initialize for public mode
   useEffect(() => {
-    if (cv?.cv_data) {
+    if (isPublic) {
+      // For public mode, use default data
+      setSections(INITIAL_CV_DATA.sections as CVSection[]);
+      setSettings(INITIAL_CV_DATA.settings as CVSettings);
+    } else if (cv?.cv_data) {
       setSections(cv.cv_data.sections);
       setSettings(cv.cv_data.settings);
     }
-  }, [cv, setSections, setSettings]);
+  }, [cv, setSections, setSettings, isPublic]);
 
-  // Mutation for updating CV
+  // Mutation for updating CV (only for private CVs)
   const { mutate: updateCVMutation } = useMutation({
     mutationKey: ["updateCV"],
     mutationFn: (newData: CVData) => updateCV({ cvId: params.id as string, combinedCVData: newData }),
     onMutate: async (newData) => {
+      if (isPublic) return; // Skip for public mode
+
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["cv", params.id] });
 
@@ -58,6 +127,8 @@ export default function Sections() {
       return { previousCV };
     },
     onError: (err, newData, context) => {
+      if (isPublic) return; // Skip for public mode
+
       // If the mutation fails, use the context returned from onMutate to roll back
       toast({
         title: "Failed to update CV",
@@ -71,15 +142,16 @@ export default function Sections() {
   const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
 
   useEffect(() => {
-    if (cv && sections) {
+    // Only auto-save for private CVs
+    if (!isPublic && cv && sections) {
       debouncedUpdateCVMutation({
         ...cv.cv_data,
         sections: sections,
       });
     }
-  }, [sections]);
+  }, [sections, isPublic, cv, debouncedUpdateCVMutation]);
 
-  if (isLoading || !cv || !sections) {
+  if ((!isPublic && (isLoading || !cv)) || !sections) {
     return <div>Loading...</div>;
   }
 
@@ -264,6 +336,16 @@ export default function Sections() {
         <PlusIcon className="mr-2 size-4" />
         Add Custom Section
       </Button>
+
+      {isPublic && (
+        <div className="mt-6 p-4 bg-muted rounded-lg">
+          <h3 className="text-lg font-semibold mb-2">Save Your CV</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            To save your CV and access it later, you'll need to create a free account.
+          </p>
+          <SaveCVButton sections={sections} user={user} />
+        </div>
+      )}
     </div>
   );
 }

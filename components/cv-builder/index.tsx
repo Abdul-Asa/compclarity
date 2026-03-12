@@ -6,7 +6,7 @@ import { ResizablePanelGroup } from "../ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import CVForm from "./cv-form";
 
-export default function CVBuilder() {
+export default function CVBuilder({ isPublic = false, user }: { isPublic?: boolean; user?: any }) {
   const isMobile = useMediaQuery("mobile");
 
   if (isMobile) {
@@ -17,10 +17,10 @@ export default function CVBuilder() {
           <TabsTrigger value="preview">Preview</TabsTrigger>
         </TabsList>
         <TabsContent value="form" className="h-[calc(100%-2.5rem)] overflow-y-auto">
-          <CVForm />
+          <CVForm isPublic={isPublic} user={user} />
         </TabsContent>
         <TabsContent value="preview" className="h-[calc(100%-2.5rem)] overflow-y-auto">
-          <CVPreview />
+          <CVPreview isPublic={isPublic} />
         </TabsContent>
       </Tabs>
     );
@@ -30,13 +30,13 @@ export default function CVBuilder() {
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={45} minSize={30} collapsible collapsedSize={0}>
         <div className="h-full overflow-y-auto">
-          <CVForm />
+          <CVForm isPublic={isPublic} user={user} />
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={55} minSize={40} collapsible collapsedSize={0}>
         <div className="h-full overflow-y-auto">
-          <CVPreview />
+          <CVPreview isPublic={isPublic} />
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

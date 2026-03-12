@@ -25,13 +25,14 @@ import { CVData, CVSection, CVSettings } from "../types";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 
-const Settings = () => {
+const Settings = ({ isPublic = false, user }: { isPublic?: boolean; user?: any }) => {
   const params = useParams();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { data: cv, isLoading } = useQuery({
     queryKey: ["cv", params.id],
     queryFn: () => getCV(params.id as string),
+    enabled: !isPublic && params.id !== "public",
   });
 
   const [settings, setSettings] = useAtom(settingsAtom);
@@ -39,16 +40,20 @@ const Settings = () => {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
 
-  // Add mutation
+  // Add mutation (only for private CVs)
   const { mutate: updateCVMutation } = useMutation({
     mutationKey: ["updateCV"],
     mutationFn: (newData: CVData) => updateCV({ cvId: params.id as string, combinedCVData: newData }),
     onMutate: async (newData) => {
+      if (isPublic) return; // Skip for public mode
+
       await queryClient.cancelQueries({ queryKey: ["cv", params.id] });
       const previousCV = queryClient.getQueryData(["cv", params.id]);
       return { previousCV };
     },
     onError: (err, newData, context) => {
+      if (isPublic) return; // Skip for public mode
+
       toast({
         title: "Failed to update CV",
         description: "Please try again later",
@@ -57,28 +62,34 @@ const Settings = () => {
       queryClient.setQueryData(["cv", params.id], context?.previousCV);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["cv", params.id] });
+      if (!isPublic) {
+        queryClient.invalidateQueries({ queryKey: ["cv", params.id] });
+      }
     },
   });
 
   const debouncedUpdateCVMutation = useDebouncedCallback(updateCVMutation, 3000);
 
   useEffect(() => {
-    if (cv?.cv_data?.settings) {
+    if (isPublic) {
+      // For public mode, use default settings
+      setSettings(INITIAL_CV_DATA.settings as CVSettings);
+    } else if (cv?.cv_data?.settings) {
       setSettings(cv.cv_data.settings);
     }
-  }, [cv, setSettings]);
+  }, [cv, setSettings, isPublic]);
 
   useEffect(() => {
-    if (cv && settings) {
+    // Only auto-save for private CVs
+    if (!isPublic && cv && settings) {
       debouncedUpdateCVMutation({
         ...cv.cv_data,
         settings: settings,
       });
     }
-  }, [settings]);
+  }, [settings, isPublic, cv, debouncedUpdateCVMutation]);
 
-  if (isLoading || !cv || !settings) {
+  if ((!isPublic && (isLoading || !cv)) || !settings) {
     return <div>Loading...</div>;
   }
 
@@ -109,20 +120,24 @@ const Settings = () => {
         if (!prev) return prev;
         return { ...prev, name: "Untitled" };
       });
-      updateCVMutation({
-        ...cv.cv_data,
-        settings: { ...settings, name: "Untitled" },
-      });
+      if (!isPublic && cv) {
+        updateCVMutation({
+          ...cv.cv_data,
+          settings: { ...settings, name: "Untitled" },
+        });
+      }
     } else {
-      updateCVMutation({
-        ...cv.cv_data,
-        settings: settings,
-      });
+      if (!isPublic && cv) {
+        updateCVMutation({
+          ...cv.cv_data,
+          settings: settings,
+        });
+      }
     }
   };
 
   const handleResetData = () => {
-    if (cv) {
+    if (!isPublic && cv) {
       setSections(INITIAL_CV_DATA.sections as CVSection[]);
       setSettings(INITIAL_CV_DATA.settings as CVSettings);
       updateCVMutation({
@@ -130,16 +145,21 @@ const Settings = () => {
         sections: INITIAL_CV_DATA.sections as CVSection[],
         settings: INITIAL_CV_DATA.settings as CVSettings,
       });
+    } else if (isPublic) {
+      setSections(INITIAL_CV_DATA.sections as CVSection[]);
+      setSettings(INITIAL_CV_DATA.settings as CVSettings);
     }
   };
 
   const handleClearData = () => {
-    if (cv) {
+    if (!isPublic && cv) {
       setSections(EMPTY_CV_DATA.sections as CVSection[]);
       updateCVMutation({
         ...cv.cv_data,
         sections: EMPTY_CV_DATA.sections as CVSection[],
       });
+    } else if (isPublic) {
+      setSections(EMPTY_CV_DATA.sections as CVSection[]);
     }
   };
 
@@ -164,14 +184,18 @@ const Settings = () => {
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Created</Label>
-              <Input value={new Date(cv.created_at).toLocaleDateString()} disabled />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Last Modified</Label>
-              <Input value={new Date(cv.updated_at).toLocaleDateString()} disabled />
-            </div>
+            {!isPublic && cv && (
+              <>
+                <div className="flex flex-col gap-2">
+                  <Label>Created</Label>
+                  <Input value={new Date(cv.created_at).toLocaleDateString()} disabled />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label>Last Modified</Label>
+                  <Input value={new Date(cv.updated_at).toLocaleDateString()} disabled />
+                </div>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -565,7 +589,7 @@ const Settings = () => {
               <h2 className="text-xl font-semibold">Current CV Data</h2>
               <div className="p-4 overflow-auto rounded-lg bg-muted max-h-[60vh]">
                 <pre className="text-sm whitespace-pre-wrap">
-                  {JSON.stringify({ sections: cv.cv_data.sections, settings }, null, 2)}
+                  {JSON.stringify({ sections: cv?.cv_data.sections || [], settings }, null, 2)}
                 </pre>
               </div>
             </div>

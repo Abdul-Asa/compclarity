@@ -6,7 +6,7 @@ import { getTier } from "@/app/(Layout)/(Products)/ai/product";
 import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 
-export async function createStripeSession(priceId: string, isYearly: boolean) {
+export async function createStripeSession(priceId: string, isLifetime: boolean = true) {
   try {
     const user = await getUser();
     if (!user) {
@@ -14,7 +14,7 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
     }
 
     const tier = getTier("stripe-package");
-    if (!tier || !tier.yearlyPrice || !tier.monthlyPrice) throw new Error("Invalid pricing tier");
+    if (!tier || !tier.lifetimePrice) throw new Error("Invalid pricing tier");
 
     let customerId = user.stripe_customer_id;
 
@@ -47,31 +47,23 @@ export async function createStripeSession(priceId: string, isYearly: boolean) {
                 company: "CompClarity",
               },
             },
-            unit_amount: isYearly ? tier.yearlyPrice * 100 : tier.monthlyPrice * 100,
-            recurring: {
-              interval: isYearly ? "year" : "month",
-            },
+            unit_amount: tier.lifetimePrice * 100,
           },
           quantity: 1,
         },
       ],
-      mode: "subscription",
+      mode: "payment",
       payment_method_types: ["card"],
       billing_address_collection: "required",
       custom_text: {
         submit: {
-          message: "CompClarity will process your subscription and provide immediate access to premium features.",
+          message: "CompClarity will process your payment and provide immediate lifetime access to premium features.",
         },
       },
       success_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_API_URL}/ai?canceled=true`,
       metadata: {
         userId: user.id,
-      },
-      subscription_data: {
-        metadata: {
-          userId: user.id,
-        },
       },
     });
 

@@ -21,14 +21,14 @@ const TestDocument = () => {
   );
 };
 
-const CVPreview = () => {
+const CVPreview = ({ isPublic = false }: { isPublic?: boolean }) => {
   const [settings] = useAtom(settingsAtom);
   const [combinedData] = useAtom(sectionsAtom);
   const { user } = useUser();
   const { toast } = useToast();
 
   useLoadFonts();
-  if (!combinedData || !settings || !user) return null;
+  if (!combinedData || !settings || (!isPublic && !user)) return null;
   const handleDownload = async () => {
     try {
       const iframe = document.querySelector("iframe");
@@ -91,7 +91,24 @@ const CVPreview = () => {
       <Toolbar onDownload={handleDownload} />
       <div className="flex-1 p-6 overflow-auto">
         <CVIFrame scale={settings.scale} documentSize={settings.documentSize}>
-          <Resume combinedData={combinedData} settings={settings} user={user} isPDF={false} />
+          <Resume
+            combinedData={combinedData}
+            settings={settings}
+            user={
+              user || {
+                id: "",
+                email: "",
+                first_name: "",
+                last_name: "",
+                created_at: null,
+                is_subscribed: false,
+                phonenumber: null,
+                stripe_customer_id: null,
+                tokens: 0,
+              }
+            }
+            isPDF={false}
+          />
         </CVIFrame>
       </div>
     </div>
